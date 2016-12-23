@@ -60,7 +60,7 @@
     <div class="container">
         <div class="section welcome">
             <div>
-                <img src="/static/openshift-logo.png" alt="OpenShift Logo" />
+                <img src="static/openshift-logo.png" alt="OpenShift Logo" />
             </div>
             <h1>Welcome!</h1>
             <p>You are running PHP <?php echo phpversion(); ?></p>
