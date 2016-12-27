@@ -1,0 +1,97 @@
+#topo {
+	height: 36px;
+	background-color: #2196F3;
+}
+
+#abreMenu{
+    background-image: url(../img/menu.png);
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    cursor: pointer;
+    padding: 0 12px 4px 14px;
+    background-repeat: no-repeat;
+    background-position-x: 13px;
+
+}
+
+#logo{
+	margin-top: 5px;
+}
+
+nav {
+	float: left;
+	width: 45px;
+	/*width: 186px;*/
+	transition: width 0.3s;
+	transition-timing-function: ease-out;
+	height: calc(100% - 36px);
+	background-color: #2B2B2B;
+	overflow: hidden;
+	position: relative;
+}
+
+nav a{
+	display: block;
+	text-decoration: none;
+	color: #FFF;
+	font-size: 16px;
+	padding: 10px 0;
+	text-indent: 45px;
+	background-repeat: no-repeat;
+    background-position: 6px 5px;
+    width: 100%;
+    white-space: nowrap;
+}
+
+nav a:hover{
+	background-color: #296a9e;
+}
+
+nav .selected{
+	border-left: solid 5px #2196F3;
+	background-color: #296a9e;
+	cursor: default;
+	background-position: 1px 5px;
+	text-indent: 40px;
+}
+
+nav .home{
+	background-image: url(../img/icon_home.png);
+}
+
+nav .prj{
+	background-image: url(../img/icon_projetos.png);
+}
+
+nav .usu{
+	background-image: url(../img/icon_usuarios.png);
+}
+
+nav .doc{
+	background-image: url(../img/icon_documentos.png);
+}
+
+nav .dsc{
+	background-image: url(../img/icon_disciplinas.png);
+}
+
+nav .cal{
+	background-image: url(../img/icon_calendario.png);
+}
+
+nav .cfg{
+	background-image: url(../img/icon_configuracoes.png);
+	position: absolute;
+	bottom: 0;
+}
+
+#view {
+	margin: 0;
+	width: calc(100% - 186px);
+	transition: width 0.3s;
+	transition-timing-function: ease-out;
+	padding: 0;
+	position: relative;
+	float: left;
+}

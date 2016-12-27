@@ -1,0 +1,2 @@
+var API_ROOT = '../api/v1';
+var TOKEN_REFRESH_IN = 600000; //10 MINUTOS
