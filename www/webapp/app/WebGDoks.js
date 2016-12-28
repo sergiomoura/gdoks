@@ -9,7 +9,7 @@ WebGDoks.config(
 			'/home',
 			{
 				controller: 'HomeController',
-				templateUrl: 'app/views/home.html'
+				templateUrl: 'app/views/aFazer.php'
 			}
 		)
 		.when(
