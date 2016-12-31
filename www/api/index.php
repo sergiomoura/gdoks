@@ -45,9 +45,8 @@
 
 		// LOGIN REFRESH ROUTE DEFINITION - - - - - - - - -
 		$app->get('/refresh',function() use ($app,$db){
-			die("ok");
 			$token = $app->request->headers->get('Authorization');
-			$rs = $db->query('select id from gdoks_usuarios where token=? and validade_de_token>now()','s',$token);
+			$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
 			if(sizeof($rs) == 0){
 				$app->response->setStatus(401);
 				$response = new response(1,'Refresh failed!');
@@ -57,7 +56,7 @@
 				$new_token = uniqid('',true);
 				$id = $rs[0]['id'];
 				try {
-					$db->query('update gdoks_usuarios set token=?, validade_de_token=? where id=?','ssi',$new_token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$id);
+					$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$new_token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$id);
 					$app->response->setStatus(200);
 					$response = new response(0,'ok');
 					$response->token = $new_token;
