@@ -13,10 +13,10 @@
 	<link rel="stylesheet" href="css/WebGDoks.css">
 </head>
 <body>
-	
 	<div id="topo" ng-controller="TopoController">
 		<a ng-click="toggleSideMenu()" id="abreMenu"></a>
 		<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
+
 	</div>
 
 	<nav id="menu" ng-controller="NavController">
@@ -29,6 +29,12 @@
 		<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == selectedIndex }" href="#/configuracoes">Configurações</a>
 	</nav>
 	<div id="view" ng-view></div>
+
+	<div id="ua">
+		<?php
+			echo('Última Atualização: '.date('d/m/Y H:i:s',filemtime(realpath('../../.git'))));
+		?>
+	</div>
 	<!-- Scripts externos -->
 	<script src="js/angular/angular.min.js"></script>
 	<script src="js/angular/angular-route.min.js"></script>
@@ -42,5 +48,7 @@
 	<script src="app/services/Factory.js"></script>
 	<script src="app/controllers/controllers.js"></script>
 	<script src="app/directives/directives.js"></script>
+
+
 </body>
 </html>

@@ -100,3 +100,11 @@ nav .cfg{
 	text-decoration: line-through;
 	color: #AAA;
 }
+
+#ua{
+	position: fixed;
+    bottom: 1px;
+    right: 2px;
+    font-size: 12px;
+    color: #999;
+}
