@@ -32,7 +32,7 @@
 
 	<div id="ua">
 		<?php
-			echo('Última Atualização: '.date('d/m/Y H:i:s',filemtime(realpath('../../.git'))));
+			echo('Última Atualização: '.date('d/m/Y H:i:s',filemtime(realpath('../'))));
 		?>
 	</div>
 	<!-- Scripts externos -->
