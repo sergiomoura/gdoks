@@ -10,7 +10,7 @@
 		<li>
 			Tela Inicial:
 			<ul>
-				<li>Mostrar data de última atualização do sistema</li>
+				<li class="feito">Mostrar data de última atualização do sistema</li>
 				<li>Botão para Trocar senha/sair</li>
 			</ul>
 		</li>

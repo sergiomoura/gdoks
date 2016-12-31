@@ -4,7 +4,6 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>GDoks</title>
-		<link rel="icon" href="images/favicon.png" type="image/png" />
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/login.css">
