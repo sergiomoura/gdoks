@@ -95,3 +95,8 @@ nav .cfg{
 	position: relative;
 	float: left;
 }
+
+#afazer .feito{
+	text-decoration: line-through;
+	color: #AAA;
+}
