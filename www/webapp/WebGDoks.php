@@ -1,3 +1,7 @@
+<?php
+	// Incluindo bloqueador de acesso externo a página.
+	require('../../includes/blocker.php');
+?>
 <!DOCTYPE html>
 <html lang="pt-br" ng-app="WebGDoks">
 <head>
