@@ -3,11 +3,12 @@
 	position: relative;
 	left: 50%;
 	margin-left: -220px;
-	top: 100px;
+	top: 50px;
 	font-size: 20px;
 }
 
 img {
+	height: 113px;
 	width: 420px;
 	margin-left: 10px;
 }
@@ -20,7 +21,7 @@ label{
 form{
 	padding: 40px;
 	margin-top: 5px;
-	height: 216px;
+	height: 285px;
 	position: relative;
 }
 

@@ -7,7 +7,7 @@
 		<link rel="icon" href="images/favicon.png" type="image/png" />
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="css/geral.css">
-		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="css/login.css">
 		<script src="js/angular/angular.min.js"></script>
 		<script src="js/angular/angular-cookies.min.js"></script>
 	</head>
@@ -16,8 +16,12 @@
 			<img src="img/logo.png" alt="GDoks">
 			<form class="bloco_conteudo" ng-submit="getToken()">
 				<div>
+					<label for="cliente">Cliente</label>
+					<input type="text" name="cliente" id="cliente" value="" ng-model="cliente" focus />
+				</div>
+				<div>
 					<label for="login">Login</label>
-					<input type="text" name="login" id="login" value="" ng-model="login" focus />
+					<input type="text" name="login" id="login" value="" ng-model="login" />
 				</div>
 				<div>
 					<label for="Senha">Senha</label>
@@ -42,6 +46,7 @@
 					var data = {}
 					data.login = $scope.login;
 					data.senha = $scope.senha;
+					data.cliente = $scope.cliente;
 					$http.post(API_ROOT+'/login',data).
 					then(function(response) {
 						if(response.data.error === 0){

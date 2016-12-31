@@ -20,16 +20,25 @@
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
 		$app->post('/login',function() use ($app,$db){
 			$data = json_decode($app->request->getBody());
-			$ok = $db->query('select count(*)=1 as ok from gdoks_usuarios where login=? and senha=PASSWORD(?)','ss',$data->login,$data->senha)[0]['ok'] == 1;
+			$sql = 'SELECT b.id,
+					       count(*)=1 AS ok
+					FROM gdoks_clientes a
+					INNER JOIN gdoks_usuarios b ON a.id=b.id_cliente
+					WHERE login=?
+					  AND senha=PASSWORD(?)
+					  AND ucase(a.nome)=ucase(?)';
+			$result = $db->query($sql,'sss',$data->login,$data->senha,$data->cliente)[0];
+			$ok = $result['ok'] == 1;
+			$id = $result['id'];
 			if($ok){
 				$token = uniqid('',true);
 				$app->response->setStatus(200);
 				$response = new response(0,'ok');
 				$response->token = $token;
-				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where login=? and senha=PASSWORD(?)','ssss',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$data->login,$data->senha);
+				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$id);
 			} else {
 				$app->response->setStatus(401);
-				$response = new response(1,'Login failed');
+				$response = new response(1,'Login falhou');
 			}
 			$response->flush();
 		});
