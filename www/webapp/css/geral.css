@@ -30,3 +30,140 @@ button {
 	background-color: #2196F3;
 	color: #FFF;
 }
+
+.bloco_central_50{
+	width: 50%;
+	top: 50px;
+	left: 25%;
+	position: relative;
+	padding-bottom: 15px;
+}
+
+.bloco_central_80{
+	width: 80%;
+	top: 50px;
+	left: 10%;
+	position: relative;
+}
+
+.bloco_conteudo h1{
+	font-size: 26px;
+	margin: 0;
+	font-weight: normal;
+	padding: 20px;
+	cursor:default;
+}
+
+.bloco_conteudo h1 img{
+	vertical-align: middle;
+    margin-right: 15px;
+}
+
+.bloco_conteudo h2{
+	font-size: 18px;
+}
+
+.bloco_conteudo h3{
+	font-size: 14px;
+	color: #666;
+}
+
+.bloco_conteudo .item{
+	border-top: 1px solid #DDD;
+	width: calc(100% - 24px);
+	padding:12px;
+}
+
+.bloco_conteudo .item label{
+	display:inline-block;
+	width:180px;
+	text-align:right;
+	margin-right:5px;
+}
+
+.bloco_conteudo .item input{
+	background-color:#ffffff;
+	border:none;
+	padding:5px;
+	color:#555;
+	width:200px;
+}
+
+.bloco_conteudo .item input::-webkit-input-placeholder {
+   color: #929292;
+   font-style:italic;
+}
+
+.bloco_conteudo .item input:-moz-placeholder { /* Firefox 18- */
+   color: #929292;  
+}
+
+.bloco_conteudo .item input::-moz-placeholder {  /* Firefox 19+ */
+   color: #929292;  
+}
+
+.bloco_conteudo .item input:-ms-input-placeholder {  
+   color: #929292;
+}
+
+.bloco_conteudo .item:last-child{
+	border-bottom: 1px solid #DDD;
+	margin-bottom:15px;
+}
+
+.bloco_conteudo .bt_salvar{
+	background-color:#2196F3;
+	border:none;
+	height:27px;
+	font-size:12px;
+	border-radius:5px;
+	color:#FFF;
+	width:100px;
+	cursor:pointer;
+}
+
+.bloco_conteudo .bt_salvar:disabled{
+	background-color:#CCCCCC !important;
+	color:#666 !important;
+	cursor: default !important;
+}
+
+.bloco_conteudo .bt_salvar:hover{
+	background-color:#40aaff;
+}
+
+.bloco_conteudo .bt_cancelar{
+	background-color:#FF5722;
+	border:none;
+	height:27px;
+	font-size:12px;
+	border-radius:5px;
+	color:#FFF;
+	width:100px;
+	cursor:pointer;
+}
+
+.bloco_conteudo .bt_cancelar:hover{
+	background-color:#fb9630;
+}
+
+#view .avisa_resultado_50{
+	width: calc(50% - 20px);
+	top: 25px;
+	left: 25%;
+	position: relative;
+	font-size:14px;
+	
+	padding: 10px;
+	text-align: center;
+}
+
+#view .positivo{
+	background-color: #00E12D;
+	color: #437d00;
+}
+
+#view .negativo{
+	background-color: #ff5722;
+	color: #FFF;
+}

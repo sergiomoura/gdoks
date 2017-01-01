@@ -19,13 +19,18 @@
 	margin-top: 5px;
 }
 
+#container_horizontal{
+	min-width: 800px;
+	height: calc(100% - 36px);
+}
+
 nav {
 	float: left;
 	width: 45px;
 	/*width: 186px;*/
 	transition: width 0.3s;
 	transition-timing-function: ease-out;
-	height: calc(100% - 36px);
+	height: 100%;
 	background-color: #2B2B2B;
 	overflow: hidden;
 	position: relative;
@@ -86,14 +91,18 @@ nav .cfg{
 	bottom: 0;
 }
 
-#view {
-	margin: 0;
-	width: calc(100% - 186px);
+#view_container{
+	width: calc(100% - 45px);
+	position: relative;
 	transition: width 0.3s;
 	transition-timing-function: ease-out;
-	padding: 0;
-	position: relative;
 	float: left;
+	min-width: 755px;
+}
+
+#view {
+	width: 100%;
+	position: relative;
 }
 
 #afazer .feito{
@@ -108,3 +117,66 @@ nav .cfg{
     font-size: 12px;
     color: #999;
 }
+
+#lk_opcoes{
+    background-image: url(../img/min-menu.png);
+    display: block;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: 17px 11px;
+}
+
+#opcoes{
+    background-color: #2196f3;
+    position: absolute;
+    top: -85px;
+    /*top: 36px;*/
+    right: 0;
+    width: 200px;
+    height: 90px;
+    color: #FFF;
+    transition: top 0.5s;
+    transition-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+
+#opcoes a{
+	display: block;
+	background-repeat: no-repeat;
+	background-position: 5px 8px;
+	text-indent: 36px;
+	cursor: pointer;
+	padding: 10px;
+	text-decoration: none;
+	color: #FFF;
+}
+
+#opcoes a:hover{
+	background-color: rgba(255,255,255,0.3);
+}
+
+#opcoes .trocar_senha{
+	background-image: url(../img/chpass.png);
+	background-position: 5px 8px;
+}
+
+#opcoes .sair{
+	background-image: url(../img/onoff.png);
+	background-position: 8px 5px;
+}
+
+#senha_container .bt_cancelar{
+    margin-left:15px
+}
+
+#senha_container .bt_salvar{
+    position:absolute;
+    right:15px;
+    min-width: 100px;
+    width: auto;
+}
+

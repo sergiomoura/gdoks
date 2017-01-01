@@ -69,6 +69,47 @@
 			}
 		});
 
+		// DEFINIÇÃO DE MUDA LOGIN/SENHA
+			$app->post('/mudaLoginSenha',function() use ($app,$db){
+				// lendo dados da requisição
+				$token = $app->request->headers->get('Authorization');
+				$data = json_decode($app->request->getBody());
+				
+				// Verificando se o token existe e se ele ainda é válido.
+				$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
+				if(sizeof($rs)==0){
+					// Retonando não autorizado
+					$app->response->setStatus(401);
+					$response = new response(1,'Não autorizado.');
+					$response->flush();
+					return;
+				} else {
+					// Atualizando informações do usuário
+					$id = $rs[0]['id'];
+					if($data->novaSenha == ''){
+						// Altera só o login sem alterar senha.
+						$sql = "UPDATE gdoks_usuarios set login=? WHERE id=?";
+						try {
+							$db->query($sql,'si',$data->novoLogin,$id);
+							$response = new response(0,'ok');	
+						} catch (Exception $e) {
+							$app->response->setStatus(402);
+							$response = new response(1,'Login já cadastrado para outro usuário.');
+						}
+					} else {
+						// Altera login e senha.
+						$sql = "UPDATE gdoks_usuarios set login=?,senha=PASSWORD(?) WHERE id=?";
+						try {
+							$db->query($sql,'ssi',$data->novoLogin,$data->novaSenha,$id);
+							$response = new response(0,'ok');	
+						} catch (Exception $e) {
+							$app->response->setStatus(402);
+							$response = new response(1,'Login já cadastrado para outro usuário.');
+						}
+					}
+					$response->flush();
+				}
+			});
 		// CAIXAS ROUTE DEFINITION - - - - - - - - - - - - -
 			$app->get('/caixas',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');

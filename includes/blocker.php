@@ -3,9 +3,7 @@
 	// verificando se o token está setado no Cookie
 	if(!isset($_COOKIE['token'])){
 		// redirecionando para página inicial.
-		die('acolá');
 		header("Location: /webapp/login.php");
-		
 	}
 
 	// Incluindo script de conexão com DB.
@@ -16,9 +14,7 @@
 	$resultado = $db->query($sql,'s',$_COOKIE['token']);
 	if(sizeof($resultado) == 0){
 		// redirecionando para página inicial.
-		die('aqui');
 		header("Location: /webapp/login.php");
-		
 	}
 
 	// definindo o IDU como sendo o id do usuário

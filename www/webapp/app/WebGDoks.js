@@ -53,6 +53,13 @@ WebGDoks.config(
 				templateUrl: 'app/views/configuracoes.html'
 			}
 		)
+		.when(
+			'/senha',
+			{
+				controller: 'SenhaController',
+				templateUrl: 'app/views/senha.html'
+			}
+		)
 		.otherwise({redirectTo:'/home'});
 	}
 )
