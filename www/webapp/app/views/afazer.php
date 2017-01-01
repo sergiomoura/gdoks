@@ -1,6 +1,13 @@
 
 	<ul id="afazer">
 		<li>
+			BUGS Conhecidos:
+			<ul>
+				<li>Menu opções (sair/trocar senha) deve sumir quando clicar em qualquer lugar da página.</li>
+				<li>Tirar destaque de todos os itens do menu principal quando estiver na tela de trocar senha.</li>
+			</ul>
+		</li>
+		<li>
 			Tela de login
 			<ul>
 				<li class="feito">Bloquear acesso a página interna sem login.</li>
@@ -11,7 +18,7 @@
 			Tela Inicial:
 			<ul>
 				<li class="feito">Mostrar data de última atualização do sistema</li>
-				<li>Botão para Trocar senha/sair</li>
+				<li class="feito">Botão para Trocar senha/sair</li>
 			</ul>
 		</li>
 		<li>
