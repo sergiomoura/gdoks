@@ -5,10 +5,22 @@
 	// Required files - - - - - - - - - - - - - - - - - - -
 	require('../../includes/Slim/vendor/autoload.php');
 	require('../../includes/db.php');
+	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 	
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas
+
+	// definindo função que realiza log
+	function registrarAcao($db,$idUsuario,$idAcao,$parametros = ''){
+		if($parametros == ''){
+			$sql = 'INSERT INTO gdoks_log (id_usuario,id_acao,data) values (?,?,now())';
+			$result = $db->query($sql,'ii',$idUsuario,$idAcao);
+		} else {
+			$sql = 'INSERT INTO gdoks_log (id_usuario,id_acao,data,parametros) values (?,?,now(),?)';
+			$result = $db->query($sql,'iis',$idUsuario,$idAcao,$parametros);
+		}
+	}
 
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
@@ -36,6 +48,7 @@
 				$response = new response(0,'ok');
 				$response->token = $token;
 				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$id);
+				registrarAcao($db,$id,ACAO_LOGOU);
 			} else {
 				$app->response->setStatus(401);
 				$response = new response(1,'Login falhou');
@@ -91,21 +104,30 @@
 						$sql = "UPDATE gdoks_usuarios set login=? WHERE id=?";
 						try {
 							$db->query($sql,'si',$data->novoLogin,$id);
-							$response = new response(0,'ok');	
+							$response = new response(0,'ok');
+							$ok = true;
 						} catch (Exception $e) {
 							$app->response->setStatus(402);
 							$response = new response(1,'Login já cadastrado para outro usuário.');
+							$ok = false;
 						}
+
+						// registrando ação no log caso tenha obtido sucesso
+						if($ok){registrarAcao($db,$id,ACAO_ALTEROU_DADOS_PESSOAIS);};
 					} else {
 						// Altera login e senha.
 						$sql = "UPDATE gdoks_usuarios set login=?,senha=PASSWORD(?) WHERE id=?";
 						try {
 							$db->query($sql,'ssi',$data->novoLogin,$data->novaSenha,$id);
-							$response = new response(0,'ok');	
+							$response = new response(0,'ok');
+							$ok = true;
 						} catch (Exception $e) {
 							$app->response->setStatus(402);
 							$response = new response(1,'Login já cadastrado para outro usuário.');
+							$ok = false;
 						}
+						// registrando ação no log caso tenha obtido sucesso
+						if($ok){registrarAcao($db,$id,ACAO_ALTEROU_DADOS_PESSOAIS);};
 					}
 					$response->flush();
 				}
