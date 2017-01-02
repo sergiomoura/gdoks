@@ -180,3 +180,27 @@ nav .cfg{
     width: auto;
 }
 
+#usuarios_container button{
+	position: absolute;
+	left: 0;
+	top: 16px;
+}
+
+#lista_de_usuarios{
+	position: relative;
+	top: 60px;
+}
+
+#lista_de_usuarios .usuario{
+	display: block;
+	width: calc(50% - 50px);
+	float: left;
+	margin-bottom: 20px;
+	padding: 20px;
+	text-decoration: none;
+}
+
+#lista_de_usuarios .usuario:nth-last-child(even){
+	margin-right:20px;
+}
+

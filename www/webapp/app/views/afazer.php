@@ -5,6 +5,8 @@
 			<ul>
 				<li>Menu opções (sair/trocar senha) deve sumir quando clicar em qualquer lugar da página.</li>
 				<li>Tirar destaque de todos os itens do menu principal quando estiver na tela de trocar senha.</li>
+				<li>Acertar o fuso horário do registro no log</li>
+				<li>Acertar o fuso horário do última atualização</li>
 			</ul>
 		</li>
 		<li>
