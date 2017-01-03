@@ -1,15 +1,49 @@
 var controllers = {};
 
+controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
+	// definindo o objeto root.
+	$scope.root = {};
+
+	// Definindo valores padrão para a interface
+	$scope.root.itemSelecionadoDoMenu = 0;
+	$scope.root.user = $cookies.getObject('user');
+
+	// Definindo funções que renovam o token
+	var refreshToken = function(){
+		GDoksFactory.refreshToken()
+		.success(
+			function(response){
+				$scope.root.user.token = response.token;
+				$cookies.putObject('user',$scope.root.user);
+			}
+		)
+		.error(
+			function(error){
+				console.dir(error);
+				// window.location="/";
+			}
+		);
+	}
+
+	// Acionando timer que renova o token de tempo em tempo
+	$interval(refreshToken,TOKEN_REFRESH_IN);
+
+	// renovando o token agora.
+	refreshToken();
+}
+
 controllers.TopoController = function($scope){
 	$scope.toggleSideMenu = function(){
 		$scope.mostrandoMenu = !$scope.mostrandoMenu;
 		if($scope.mostrandoMenu){
 			document.getElementById("menu").style.width = "186px";
-			document.getElementById("view_container").style.width = "calc(100% - 186px)"
-			document.getElementById("view_container").style.minWidth = "614px"
+			document.getElementById("view_container").style.width = "calc(100% - 186px)";
+			document.getElementById("view_container").style.minWidth = "614px";
+			document.getElementById("view_container").style.left = "186px";
 		} else {
 			document.getElementById("menu").style.width = "45px";
 			document.getElementById("view_container").style.width = "calc(100% - 45px)"
+			document.getElementById("view_container").style.left = "45px";
 			document.getElementById("view_container").style.minWidth = "755px"
 		}
 	}
@@ -25,13 +59,16 @@ controllers.TopoController = function($scope){
 }
 
 controllers.OpcoesController = function($scope,$cookies){
+	$scope.onTrocarSenhaClick  = function(){
+		$scope.root.itemSelecionadoDoMenu = null;
+	}
 	$scope.logout = function(){
 		$cookies.put('token',null);
 		window.location = '/';
 	}
 }
 
-controllers.SenhaController = function($scope,GDoksFactory){
+controllers.SenhaController = function($scope,$rootScope,GDoksFactory){
 	// Inicializando o objeto data;
 	$scope.data = {};
 	$scope.data.login = '';
@@ -64,29 +101,11 @@ controllers.SenhaController = function($scope,GDoksFactory){
 	}
 }
 
-controllers.NavController = function($scope,$interval,$cookies,GDoksFactory){
-	// Item 0 do menu, por padrão, vem selecionado.
-	$scope.selectedIndex = 0;
-
-	var refreshToken = function(){
-		GDoksFactory.refreshToken()
-		.success(
-			function(response){
-				$cookies.put('token',response.token);
-			}
-		)
-		.error(
-			function(error){
-				window.location="/";
-			}
-		);
-	}
-
+controllers.NavController = function($scope){
+	// Função que altera o item do menu selecionado
 	$scope.itemClicked = function(index){
-		$scope.selectedIndex = index;
+		$scope.root.itemSelecionadoDoMenu = index;
 	}
-	$interval(refreshToken,TOKEN_REFRESH_IN);
-	refreshToken();
 };
 
 controllers.HomeController = function($scope){}

@@ -31,8 +31,14 @@
 
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
 		$app->post('/login',function() use ($app,$db){
+			// lendo dados da requisição
 			$data = json_decode($app->request->getBody());
+
+			// Verificando se é usuário é válido e carregando suas informações se for o caso.
 			$sql = 'SELECT b.id,
+						   b.nome,
+						   b.login,
+						   b.email,
 					       count(*)=1 AS ok
 					FROM gdoks_clientes a
 					INNER JOIN gdoks_usuarios b ON a.id=b.id_cliente
@@ -40,19 +46,40 @@
 					  AND senha=PASSWORD(?)
 					  AND ucase(a.nome)=ucase(?)';
 			$result = $db->query($sql,'sss',$data->login,$data->senha,$data->cliente)[0];
-			$ok = $result['ok'] == 1;
-			$id = $result['id'];
-			if($ok){
+
+			// perguntando se usuário é válido
+			if($result['ok'] == 1){
+				// SIM, usuário é válido
+				// gerando novo token
 				$token = uniqid('',true);
+
+				// atualizando o token na base de dados
+				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$result['id']);
+
+				// Arrumando dados do usuário
+				$user = new stdClass();
+				$user->id = $result['id'];
+				$user->nome = $result['nome'];
+				$user->email = $result['email'];
+				$user->token = $token;
+
+				// definindo resposta http como 200
 				$app->response->setStatus(200);
 				$response = new response(0,'ok');
-				$response->token = $token;
-				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$id);
-				registrarAcao($db,$id,ACAO_LOGOU);
+
+				// Adicionando as informações do usuário no response
+				$response->user = $user;
+				
+				// registrando a ação no log
+				registrarAcao($db,$user->id,ACAO_LOGOU);
 			} else {
+				// Não! usuário não é válido.
+				// Preparando resposta negativa
 				$app->response->setStatus(401);
 				$response = new response(1,'Login falhou');
 			}
+
+			// Enviando resposta.
 			$response->flush();
 		});
 
@@ -132,6 +159,7 @@
 					$response->flush();
 				}
 			});
+		
 		// CAIXAS ROUTE DEFINITION - - - - - - - - - - - - -
 			$app->get('/caixas',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');

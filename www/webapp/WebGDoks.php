@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="css/normalizer.css">
 	<link rel="stylesheet" href="css/WebGDoks.css">
 </head>
-<body>
+<body ng-controller="RootController">
 	<div id="topo" ng-controller="TopoController">
 		<a ng-click="toggleSideMenu()" id="abreMenu"></a>
 		<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
@@ -21,20 +21,20 @@
 	</div>
 	<div id="container_horizontal">
 		<nav id="menu" ng-controller="NavController">
-			<a ng-click="itemClicked(0)" class="home" ng-class="{ 'selected': 0 == selectedIndex }" href="#/home">Home</a>
-			<a ng-click="itemClicked(1)" class="prj" ng-class="{ 'selected': 1 == selectedIndex }" href="#/projetos">Projetos</a>
-			<a ng-click="itemClicked(2)" class="usu" ng-class="{ 'selected': 2 == selectedIndex }" href="#/usuarios">Usuários</a>
-			<a ng-click="itemClicked(3)" class="doc" ng-class="{ 'selected': 3 == selectedIndex }" href="#/documentos">Documentos</a>
-			<a ng-click="itemClicked(4)" class="dsc" ng-class="{ 'selected': 4 == selectedIndex }" href="#/disciplinas">Disciplinas</a>
-			<a ng-click="itemClicked(5)" class="cal" ng-class="{ 'selected': 5 == selectedIndex }" href="#/afazer">A Fazer</a>
-			<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == selectedIndex }" href="#/configuracoes">Configurações</a>
+			<a ng-click="itemClicked(0)" class="home" ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/home">Home</a>
+			<a ng-click="itemClicked(1)" class="prj" ng-class="{ 'selected': 1 == root.itemSelecionadoDoMenu }" href="#/projetos">Projetos</a>
+			<a ng-click="itemClicked(2)" class="usu" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/usuarios">Usuários</a>
+			<a ng-click="itemClicked(3)" class="doc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos</a>
+			<a ng-click="itemClicked(4)" class="dsc" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
+			<a ng-click="itemClicked(5)" class="cal" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/afazer">A Fazer</a>
+			<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
 		</nav>
 		<div id="view_container">
 			<div id="view" ng-view></div>
 		</div>
 	</div>
 	<div id="opcoes" ng-controller="OpcoesController">
-		<a class="trocar_senha" href="#/senha">Trocar Senha</a>
+		<a class="trocar_senha" ng-click="onTrocarSenhaClick()" href="#/senha">Trocar Senha</a>
 		<a class="sair" ng-click="logout()">Sair</a>
 	</div>
 	<div id="ua">
