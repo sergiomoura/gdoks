@@ -4,7 +4,7 @@
 			BUGS Conhecidos:
 			<ul>
 				<li>Menu opções (sair/trocar senha) deve sumir quando clicar em qualquer lugar da página.</li>
-				<li>Tirar destaque de todos os itens do menu principal quando estiver na tela de trocar senha.</li>
+				<li class="feito">Tirar destaque de todos os itens do menu principal quando estiver na tela de trocar senha.</li>
 				<li>Acertar o fuso horário do registro no log</li>
 				<li>Acertar o fuso horário do última atualização</li>
 			</ul>
@@ -37,4 +37,5 @@
 		<li>Tela de Cadastro de Disciplinas [9/1 a 11/1] </li>
 		<li>Tela de Cadstro de Projetos [16/1 a 18/1]</li>
 		<li>Tela de Gestão de Documentos[21/1 a 25/1]</li>
+		<li>Exibir LOG de atividades dos usuários</li>
 	</ul>
