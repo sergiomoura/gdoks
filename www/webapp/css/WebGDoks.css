@@ -1,6 +1,10 @@
 #topo {
 	height: 36px;
 	background-color: #2196F3;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
 }
 
 #abreMenu{
@@ -20,20 +24,27 @@
 }
 
 #container_horizontal{
+	position: fixed;
+	top: 36px;
+	left: 0;
 	min-width: 800px;
 	height: calc(100% - 36px);
+	width: 100%;
+	overflow: auto;
 }
 
 nav {
-	float: left;
+	position: fixed;
+	left: 0;
+	top: 36px;
 	width: 45px;
 	/*width: 186px;*/
 	transition: width 0.3s;
 	transition-timing-function: ease-out;
-	height: 100%;
+	height: calc(100% - 36px);
 	background-color: #2B2B2B;
 	overflow: hidden;
-	position: relative;
+	
 }
 
 nav a{
@@ -94,10 +105,14 @@ nav .cfg{
 #view_container{
 	width: calc(100% - 45px);
 	position: relative;
-	transition: width 0.3s;
+	transition: width 0.3s, left 0.3s;
 	transition-timing-function: ease-out;
-	float: left;
+	left: 45px;
 	min-width: 755px;
+	top: 0px;
+	overflow-y: auto;
+	z-index: -1;
+	height: 100%;
 }
 
 #view {
@@ -112,10 +127,12 @@ nav .cfg{
 
 #ua{
 	position: fixed;
-    bottom: 1px;
-    right: 2px;
+    bottom: 0px;
+    right: 0px;
     font-size: 12px;
     color: #999;
+	padding: 2px 2px 2px 3px;
+	background-color: #EAEAEA;
 }
 
 #lk_opcoes{
