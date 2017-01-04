@@ -160,6 +160,24 @@
 				}
 			});
 		
+		// ROTA QUE RETORNA A LISTA DE USUÁRIOS - - - - - - -
+			$app->get('/usuarios',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$sql = 'SELECT a.id,
+						       a.login,
+						       a.nome,
+						       a.email,
+						       a.ativo
+						FROM gdoks_usuarios a
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?) b ON a.id_cliente=b.id_cliente';
+				$response = new response(0,'ok');
+				$response->usuarios = $db->query($sql,'s',$token);
+				$response->flush();
+			});
+
 		// CAIXAS ROUTE DEFINITION - - - - - - - - - - - - -
 			$app->get('/caixas',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');

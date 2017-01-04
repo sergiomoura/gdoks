@@ -27,6 +27,13 @@ WebGDoks.config(
 			}
 		)
 		.when(
+			'/usuarios/:id',
+			{
+				controller: 'UsuarioController',
+				templateUrl: 'app/views/usuario.html'
+			}
+		)
+		.when(
 			'/documentos',
 			{
 				controller: 'DocumentosController',

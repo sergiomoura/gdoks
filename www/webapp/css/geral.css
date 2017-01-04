@@ -86,12 +86,15 @@ button {
 	margin-right:5px;
 }
 
-.bloco_conteudo .item input{
-	background-color:#ffffff;
+.bloco_conteudo .item input[type=text],.bloco_conteudo .item input[type=password]{
+	background-color:#FFF;
 	border:none;
 	padding:5px;
 	color:#555;
-	width:200px;
+	width:calc(100% - 200px);
+}
+
+.bloco_conteudo .item input[type=checkbox]{
 }
 
 .bloco_conteudo .item input::-webkit-input-placeholder {

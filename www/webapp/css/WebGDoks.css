@@ -217,7 +217,11 @@ nav .cfg{
 	text-decoration: none;
 }
 
-#lista_de_usuarios .usuario:nth-last-child(even){
+#lista_de_usuarios .usuario:nth-child(odd){
 	margin-right:20px;
+}
+
+#usuario_container .aviso{
+	color: #FF5722;
 }
 

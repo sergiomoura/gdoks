@@ -1,39 +1,9 @@
 <div id="usuarios_container" class="container_80">
-
 	<button class="bt_salvar">+ Adicionar Usuário</button>
-	
 	<div id="lista_de_usuarios">
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
-		</a>
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
-		</a>
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
-		</a>
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
-		</a>
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
-		</a>
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
-		</a>
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
-		</a>
-		<a href="" class="bloco_conteudo usuario">
-			<h2>Sérgio Moura</h2>
-			<h3>smouracalmon@gmail.com</h3>
+		<a ng-repeat="u in root.usuarios" href="#/usuarios/{{u.id}}" class="bloco_conteudo usuario">
+			<h2>{{u.nome}}</h2>
+			<h3>{{u.email}}</h3>
 		</a>
 	</div>
 </div>

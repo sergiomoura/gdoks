@@ -14,6 +14,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/refresh', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.loadUsuarios = function(){
+				return $http.get(API_ROOT+'/usuarios', {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

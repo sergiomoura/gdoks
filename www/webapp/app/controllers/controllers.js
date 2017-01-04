@@ -6,7 +6,12 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 
 	// Definindo valores padrão para a interface
 	$scope.root.itemSelecionadoDoMenu = 0;
+
+	// definindo o objeto que guarda as info do usuário logado.
 	$scope.root.user = $cookies.getObject('user');
+
+	// Definindo o vetor que guarda as informações públicas dos usuários do cliente
+	$scope.root.usarios = [];
 
 	// Definindo funções que renovam o token
 	var refreshToken = function(){
@@ -110,7 +115,30 @@ controllers.NavController = function($scope){
 
 controllers.HomeController = function($scope){}
 
-controllers.UsuariosController = function($scope){};
+controllers.UsuariosController = function($scope,GDoksFactory){
+	// Carregando os usuários do servidor
+	GDoksFactory.loadUsuarios()
+		.success(
+			function(response){
+				$scope.root.usuarios = response.usuarios;
+				for (var i = $scope.root.usuarios.length - 1; i >= 0; i--) {
+					$scope.root.usuarios[i].ativo = ($scope.root.usuarios[i].ativo==1);
+				};
+			}
+		)
+		.error(
+			function(error){
+			}
+		);
+};
+
+controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
+	// Buscando o usuário que tem como id o id passado
+	$scope.usuario = angular.copy($scope.root.usuarios.filter(function(u){return u.id==this},$routeParams.id)[0]);
+
+	// guardando estado inicial do atributo "ativo"
+	$scope.inicialmenteAtivo = ($scope.usuario.ativo == true);
+};
 
 controllers.ProjetosController = function($scope){};
 
