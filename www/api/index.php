@@ -160,7 +160,7 @@
 				}
 			});
 		
-		// ROTA QUE RETORNA A LISTA DE USUÁRIOS - - - - - - -
+		// ROTAS DE USUÁRIOS - - - - - - - - - - - - - - - -
 			$app->get('/usuarios',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');
 				$sql = 'SELECT a.id,
@@ -176,6 +176,92 @@
 				$response = new response(0,'ok');
 				$response->usuarios = $db->query($sql,'s',$token);
 				$response->flush();
+			});
+
+			$app->put('/usuarios/:id',function($id) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id = 1*$id;
+				$usuario = json_decode($app->request->getBody());
+
+				// verificando se o usário enviado é do mesmo cliente do usuário atual
+				$sql = 'SELECT
+							COUNT(*) as ok
+						FROM (
+							SELECT
+								id_cliente
+							FROM gdoks.gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+							SELECT
+								id_cliente
+							FROM gdoks.gdoks_usuarios
+								WHERE id=?) B on A.id_cliente=B.id_cliente;';
+				$ok = $db->query($sql,'si',$token,$id)[0]['ok'];
+				if($ok == 1){
+					// Tudo ok! O usuário a ser alterado é do cliente
+					
+					// atualizando dados do usuário.
+					if(!isset($usuario->senha1) || $usuario->senha1 == ''){
+						// NÃO alterar senha do usuário
+						$sql = 'UPDATE gdoks_usuarios SET nome=?,email=?,login=?,ativo=? WHERE id=?';
+						try {
+							$db->query($sql,'sssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->ativo,$usuario->id);	
+							$response = new response(0,'Usuário alterado com sucesso.');
+							$response->flush();
+						} catch (Exception $e) {
+							$app->response->setStatus(401);
+							$response = new response(1,'Já existe um usuário cadastrado com este login.');
+							$response->flush();
+							return;
+						}
+					} else {
+						// Alterar a senha do usuário
+						$sql = 'UPDATE gdoks_usuarios SET nome=?, email=?, login=?, senha=PASSWORD(?), ativo=? WHERE id=?';
+						try {
+							$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$usuario->ativo,$usuario->id);	
+							$response = new response(0,'Usuário alterado com sucesso.');
+							$response->flush();
+						} catch (Exception $e) {
+							$app->response->setStatus(401);
+							$response = new response(1,'Já existe um usuário cadastrado com este login');
+							$response->flush();
+							return;
+						}
+					}
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outro cliente.');	
+				}
+			});
+
+			$app->post('/usuarios',function() use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$usuario = json_decode($app->request->getBody());
+
+				// Capturando o id_cliente do usuário atual
+				$sql = 'SELECT
+							id_cliente
+						FROM 
+							gdoks_usuarios
+						WHERE
+							token=? and validade_do_token>now()';
+				$id_cliente = $db->query($sql,'s',$token)[0]['id_cliente'];
+
+				// Inserindo novo usuário.
+				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_cliente,ativo) VALUES (?,?,?,?,?,?)';
+				try {
+					$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$id_cliente,$usuario->ativo);
+					$response = new response(0,'Usuário criado com sucesso.');
+					$response->newId = $db->insert_id;
+					$response->flush();
+				} catch (Exception $e) {
+					$app->response->setStatus(401);
+					$response = new response(1,'Já existe um usuário cadastrado com este login '.$e->getMessage());
+					$response->flush();
+					return;
+				}
 			});
 
 		// CAIXAS ROUTE DEFINITION - - - - - - - - - - - - -

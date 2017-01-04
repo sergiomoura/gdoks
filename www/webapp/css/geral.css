@@ -86,7 +86,7 @@ button {
 	margin-right:5px;
 }
 
-.bloco_conteudo .item input[type=text],.bloco_conteudo .item input[type=password]{
+.bloco_conteudo .item input[type=text],.bloco_conteudo .item input[type=email],.bloco_conteudo .item input[type=password]{
 	background-color:#FFF;
 	border:none;
 	padding:5px;

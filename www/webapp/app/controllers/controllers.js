@@ -24,8 +24,7 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 		)
 		.error(
 			function(error){
-				console.dir(error);
-				// window.location="/";
+				window.location="/";
 			}
 		);
 	}
@@ -103,6 +102,7 @@ controllers.SenhaController = function($scope,$rootScope,GDoksFactory){
 
 	$scope.cancel = function(){
 		window.location = "WebGDoks.php#/home"
+		$scope.root.itemSelecionadoDoMenu = 0;
 	}
 }
 
@@ -130,14 +130,83 @@ controllers.UsuariosController = function($scope,GDoksFactory){
 			function(error){
 			}
 		);
+
+	// função que leva para a tela de adicionar usuário
+	$scope.goToAddUsuario = function(){
+		window.location = '#/usuarios/0';
+	}
 };
 
 controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
-	// Buscando o usuário que tem como id o id passado
-	$scope.usuario = angular.copy($scope.root.usuarios.filter(function(u){return u.id==this},$routeParams.id)[0]);
+	// Capturando o id passado na url
+	var id = $routeParams.id;
 
-	// guardando estado inicial do atributo "ativo"
-	$scope.inicialmenteAtivo = ($scope.usuario.ativo == true);
+	// se id== 0, adicionar um novo usuário. se não carregar o usuario de id passado
+	if(id == 0) {
+		// Criando um usuário vazio.
+		$scope.usuario = {};
+		$scope.usuario.id = 0;
+		$scope.usuario.nome = '';
+		$scope.usuario.email = '';
+		$scope.usuario.login = '';
+		$scope.usuario.ativo = true;
+		$scope.inicialmenteAtivo = true;
+	} else {
+		// Buscando o usuário que tem como id o id passado
+		$scope.usuario = angular.copy($scope.root.usuarios.filter(function(u){return u.id==this},$routeParams.id)[0]);
+
+		// guardando estado inicial do atributo "ativo"
+		$scope.inicialmenteAtivo = ($scope.usuario.ativo == true);	
+	}
+	
+
+	// Definindo função que cancela as alterações
+	$scope.cancel = function(){
+		window.location = "WebGDoks.php#/home";
+		$scope.root.itemSelecionadoDoMenu = 0;
+	}
+
+	$scope.salvarUsuario = function(){
+		if($scope.usuario.id == 0){
+			GDoksFactory.adicionarUsuario($scope.usuario)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
+
+					$scope.usuario.id = response.newId;
+					$scope.root.usuarios.push($scope.usuario);
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		} else {
+			GDoksFactory.atualizarUsuario($scope.usuario)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
+
+					// atualizando usuário alterado no root
+					$scope.root.usuarios.filter(function(u){return u.id==this},$scope.usuario.id)[0] = $scope.usuario;
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		}
+	}
 };
 
 controllers.ProjetosController = function($scope){};

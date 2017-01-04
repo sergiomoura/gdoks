@@ -1,35 +1,36 @@
 <div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
-
-<div id="usuario_container" class="bloco_conteudo bloco_central_50">
-	<h1><img src="img/usuario.png">Dados de {{usuario.nome}}</h1>
-	<div>
-		<div class="item">
-			<label for="login">Nome:</label>
-			<input type="text" placeholder="Digite o nome" ng-model="usuario.nome">
+<form name="form" novalidate="">
+	<div id="usuario_container" class="bloco_conteudo bloco_central_50">
+		<h1><img src="img/usuario.png">Dados de {{ usuario.id==0 ? 'Novo Usuário' : usuario.nome}}</h1>
+		<div>
+			<div class="item">
+				<label for="login">Nome:</label>
+				<input type="text" placeholder="Digite o nome" ng-model="usuario.nome" required>
+			</div>
+			<div class="item">
+				<label for="email">E-mail:</label>
+				<input type="email" name="email" placeholder="Digite o e-mail" ng-model="usuario.email" required>
+			</div>
+			<div class="item">
+				<label for="login">Login:</label>
+				<input type="text" placeholder="Digite o login" ng-model="usuario.login" required>
+			</div>
+			<div class="item">
+				<label for="login">Senha:</label>
+				<input type="password" placeholder="Digite a senha" ng-model="usuario.senha1" ng-required="usuario.id == 0">
+			</div>
+			<div class="item">
+				<label for="login">Confirme a senha:</label>
+				<input type="password" placeholder="Confirme a senha" ng-model="usuario.senha2"  ng-required="usuario.id == 0">
+			</div>
+			<div class="item">
+				<label for="ativo">Ativo:</label>
+				<input type="checkbox" name="ativo" ng-model="usuario.ativo">
+				<span ng-if="usuario.ativo != inicialmenteAtivo" class="aviso">O usuário será {{usuario.ativo?'ATIVADO':'INATIVADO'}}</span>
+			</div>
 		</div>
-		<div class="item">
-			<label for="email">E-mail:</label>
-			<input type="text" name="email" placeholder="Digite o e-mail" ng-model="usuario.email">
-		</div>
-		<div class="item">
-			<label for="login">Login:</label>
-			<input type="text" placeholder="Digite o login" ng-model="usuario.login">
-		</div>
-		<div class="item">
-			<label for="login">Senha:</label>
-			<input type="password" placeholder="Digite a senha" ng-model="usuario.senha1">
-		</div>
-		<div class="item">
-			<label for="login">Confirme a senha:</label>
-			<input type="password" placeholder="Confirme a senha" ng-model="usuario.senha2">
-		</div>
-		<div class="item">
-			<label for="ativo">Ativo:</label>
-			<input type="checkbox" name="ativo" ng-model="usuario.ativo">
-			<span class="aviso">O usuário será inativado.</span>
-		</div>
+		<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
+		<button	class="bt_salvar" ng-click="salvarUsuario()" ng-disabled="form.$invalid || usuario.senha1!=usuario.senha2">
+			{{usuario.senha1!=usuario.senha2?"Confirme a senha corretamente":"Salvar"}}</button>
 	</div>
-	<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
-	<button	class="bt_salvar" ng-click="salvarUsuario()">
-		{{data.senha1!=data.senha2?"Confirme a senha corretamente":"Salvar"}}</button>
-</div>
+</form>
