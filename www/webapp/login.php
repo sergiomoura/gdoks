@@ -48,7 +48,6 @@
 					data.cliente = $scope.cliente;
 					$http.post(API_ROOT+'/login',data).
 					then(function(response) {
-						console.dir(response);
 						$scope.loginFail = false;
 						if(response.data.error === 0){
 							$cookies.putObject('user',response.data.user);

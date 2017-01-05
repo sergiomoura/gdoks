@@ -1,4 +1,6 @@
 <?php
 	define('ACAO_LOGOU', 1);
 	define('ACAO_ALTEROU_DADOS_PESSOAIS', 2);
+	define('ACAO_ALTEROU_DADOS_DE_USUARIO', 3);
+	define('ACAO_CRIOU_USUARIO',4);
 ?>

@@ -186,10 +186,10 @@
 
 				// verificando se o usário enviado é do mesmo cliente do usuário atual
 				$sql = 'SELECT
-							COUNT(*) as ok
+							A.id,COUNT(*) as ok
 						FROM (
 							SELECT
-								id_cliente
+								id,id_cliente
 							FROM gdoks.gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
@@ -197,18 +197,24 @@
 								id_cliente
 							FROM gdoks.gdoks_usuarios
 								WHERE id=?) B on A.id_cliente=B.id_cliente;';
-				$ok = $db->query($sql,'si',$token,$id)[0]['ok'];
+				$rs = $db->query($sql,'si',$token,$id)[0];
+				$ok = $rs['ok'];
+				$id = $rs['id'];
 				if($ok == 1){
 					// Tudo ok! O usuário a ser alterado é do cliente
 					
 					// atualizando dados do usuário.
 					if(!isset($usuario->senha1) || $usuario->senha1 == ''){
+
 						// NÃO alterar senha do usuário
 						$sql = 'UPDATE gdoks_usuarios SET nome=?,email=?,login=?,ativo=? WHERE id=?';
 						try {
 							$db->query($sql,'sssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->ativo,$usuario->id);	
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
+
+							// Registrando a ação
+							registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
 						} catch (Exception $e) {
 							$app->response->setStatus(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login.');
@@ -222,6 +228,9 @@
 							$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$usuario->ativo,$usuario->id);	
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
+
+							// Registrando a ação
+							registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
 						} catch (Exception $e) {
 							$app->response->setStatus(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login');
@@ -240,14 +249,16 @@
 				$token = $app->request->headers->get('Authorization');
 				$usuario = json_decode($app->request->getBody());
 
-				// Capturando o id_cliente do usuário atual
+				// Capturando o id e o id_cliente do usuário atual
 				$sql = 'SELECT
-							id_cliente
+							id,id_cliente
 						FROM 
 							gdoks_usuarios
 						WHERE
 							token=? and validade_do_token>now()';
-				$id_cliente = $db->query($sql,'s',$token)[0]['id_cliente'];
+				$rs = $db->query($sql,'s',$token)[0];
+				$id_cliente = $rs['id_cliente'];
+				$id = $rs['id'];
 
 				// Inserindo novo usuário.
 				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_cliente,ativo) VALUES (?,?,?,?,?,?)';
@@ -256,9 +267,13 @@
 					$response = new response(0,'Usuário criado com sucesso.');
 					$response->newId = $db->insert_id;
 					$response->flush();
+
+					// Registrando a ação
+					registrarAcao($db,$id,ACAO_CRIOU_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
+
 				} catch (Exception $e) {
 					$app->response->setStatus(401);
-					$response = new response(1,'Já existe um usuário cadastrado com este login '.$e->getMessage());
+					$response = new response(1,'Já existe um usuário cadastrado com este login.');
 					$response->flush();
 					return;
 				}
