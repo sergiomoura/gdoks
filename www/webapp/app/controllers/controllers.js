@@ -13,6 +13,9 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 	// Definindo o vetor que guarda as informações públicas dos usuários do cliente
 	$scope.root.usarios = [];
 
+	// Definindo vetor que guarda as disciplinas;
+	$scope.root.disciplinas = [];
+
 	// Definindo funções que renovam o token
 	var refreshToken = function(){
 		GDoksFactory.refreshToken()
@@ -162,7 +165,7 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 
 	// Definindo função que cancela as alterações
 	$scope.cancel = function(){
-		window.location = "WebGDoks.php#/home";
+		window.location = "WebGDoks.php#/usuarios";
 		$scope.root.itemSelecionadoDoMenu = 0;
 	}
 
@@ -213,8 +216,98 @@ controllers.ProjetosController = function($scope){};
 
 controllers.DocumentosController = function($scope){};
 
-controllers.DisciplinasController = function($scope){};
+controllers.DisciplinasController = function($scope,GDoksFactory){
+	GDoksFactory.getDisciplinas()
+		.success(
+			function(response){
+				$scope.root.disciplinas = response.disciplinas;
+				for (var i = $scope.root.disciplinas.length - 1; i >= 0; i--) {
+					$scope.root.disciplinas[i].ativa = ($scope.root.disciplinas[i].ativa==1);
+				};
+			}
+		)
+		.error(
+			function(error){
+			}
+		);
 
+	// função que leva para a tela de adicionar disciplina
+	$scope.goToAddDisciplina = function(){
+		window.location = '#/disciplinas/0';
+	}
+};
+
+controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
+	// Capturando o id passado na url
+	var id = $routeParams.id;
+
+	// se id== 0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
+	if(id == 0) {
+		// Criando um usuário vazio.
+		$scope.disciplina = {};
+		$scope.disciplina.id = 0;
+		$scope.disciplina.nome = '';
+		$scope.disciplina.ativa = true;
+		$scope.inicialmenteAtiva = true;
+	} else {
+		// Buscando o usuário que tem como id o id passado
+		$scope.disciplinaRef = $scope.root.disciplinas.filter(function(d){return d.id==this},$routeParams.id)[0];
+		$scope.disciplina = angular.copy($scope.disciplinaRef);
+
+		// guardando estado inicial do atributo "ativa"
+		$scope.inicialmenteAtiva = ($scope.disciplina.ativa == true);	
+	}
+
+	$scope.salvarDisciplina = function(){
+		if($scope.disciplina.id == 0){
+			GDoksFactory.adicionarDisciplina($scope.disciplina)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
+
+					$scope.disciplina.id = response.newId;
+					$scope.root.disciplinas.push($scope.disciplina);
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		} else {
+			GDoksFactory.atualizarDisciplina($scope.disciplina)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
+
+					// atualizando usuário alterado no root
+					$scope.root.disciplinas.filter(function(d){return d.id==this},$scope.disciplina.id)[0] = $scope.disciplina;
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		}
+	}
+	
+
+	// Definindo função que cancela as alterações
+	$scope.cancel = function(){
+		window.location = "WebGDoks.php#/disciplinas";
+		$scope.root.itemSelecionadoDoMenu = 0;
+	}
+
+};
 controllers.AFazerController = function($scope){};
 
 controllers.ConfiguracoesController = function($scope){};

@@ -1,0 +1,23 @@
+<div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
+<form name="form" novalidate="">
+	<div id="disciplina_container" class="bloco_conteudo bloco_central_50">
+		<h1><img src="img/disciplina.png">Dados de {{ disciplina.id==0 ? 'Nova Disciplina' : disciplina.nome}}</h1>
+		<div>
+			<div class="item">
+				<label for="disciplina">Nome:</label>
+				<input type="text" placeholder="Digite o nome da disciplina" ng-model="disciplina.nome" required>
+			</div>
+			<div class="item">
+				<label for="sigla">Sigla:</label>
+				<input type="text" name="sigla" placeholder="Digite a sigla da disciplina (4 caracteres)" ng-model="disciplina.sigla" required>
+			</div>
+			<div class="item">
+				<label for="ativa">Ativa:</label>
+				<input type="checkbox" name="ativa" ng-model="disciplina.ativa">
+				<span ng-if="disciplina.ativa != inicialmenteAtiva" class="aviso">A disciplina será {{disciplina.ativa?'ATIVADA':'INATIVADA'}}</span>
+			</div>
+		</div>
+		<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
+		<button	class="bt_salvar" ng-click="salvarDisciplina()" ng-disabled="form.$invalid || (disciplina.nome==disciplinaRef.nome && disciplinaRef.sigla==disciplina.sigla)">Salvar</button>
+	</div>
+</form>

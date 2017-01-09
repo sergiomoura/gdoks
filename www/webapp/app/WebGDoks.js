@@ -46,7 +46,15 @@ WebGDoks.config(
 				controller: 'DisciplinasController',
 				templateUrl: 'app/views/disciplinas.html'
 			}
-		).when(
+		)
+		.when(
+			'/disciplinas/:id',
+			{
+				controller: 'DisciplinaController',
+				templateUrl: 'app/views/disciplina.html'
+			}
+		)
+		.when(
 			'/afazer',
 			{
 				controller: 'AFazerController',

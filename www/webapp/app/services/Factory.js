@@ -27,6 +27,22 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/usuarios',usuario,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getDisciplinas = function(){
+				return $http.get(API_ROOT+'/disciplinas', {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			// Faz requisição para atualizar o usuario enviado
+			GDoksFactory.atualizarDisciplina = function(disciplina){
+				return $http.put(API_ROOT+'/disciplinas/'+disciplina.id,disciplina,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			// Faz requisição para adicionar nova disciplina
+			GDoksFactory.adicionarDisciplina = function(disciplina){
+				return $http.post(API_ROOT+'/disciplinas',disciplina,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

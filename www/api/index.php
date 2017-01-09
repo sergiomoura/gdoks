@@ -44,7 +44,8 @@
 					INNER JOIN gdoks_usuarios b ON a.id=b.id_cliente
 					WHERE login=?
 					  AND senha=PASSWORD(?)
-					  AND ucase(a.nome)=ucase(?)';
+					  AND ucase(a.nome)=ucase(?)
+					  AND ativo';
 			$result = $db->query($sql,'sss',$data->login,$data->senha,$data->cliente)[0];
 
 			// perguntando se usuário é válido
@@ -172,7 +173,8 @@
 						INNER JOIN
 						  (SELECT id_cliente
 						   FROM gdoks.gdoks_usuarios
-						   WHERE token=?) b ON a.id_cliente=b.id_cliente';
+						   WHERE token=?) b ON a.id_cliente=b.id_cliente
+							ORDER by a.nome';
 				$response = new response(0,'ok');
 				$response->usuarios = $db->query($sql,'s',$token);
 				$response->flush();
@@ -212,15 +214,14 @@
 							$db->query($sql,'sssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->ativo,$usuario->id);	
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
-
-							// Registrando a ação
-							registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
 						} catch (Exception $e) {
 							$app->response->setStatus(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login.');
 							$response->flush();
 							return;
 						}
+						// Registrando a ação
+						registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.($usuario->ativo==true?1:0));
 					} else {
 						// Alterar a senha do usuário
 						$sql = 'UPDATE gdoks_usuarios SET nome=?, email=?, login=?, senha=PASSWORD(?), ativo=? WHERE id=?';
@@ -228,15 +229,14 @@
 							$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$usuario->ativo,$usuario->id);	
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
-
-							// Registrando a ação
-							registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
 						} catch (Exception $e) {
 							$app->response->setStatus(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login');
 							$response->flush();
 							return;
 						}
+						// Registrando a ação
+						registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
 					}
 				} else {
 					$app->response->setStatus(401);
@@ -267,128 +267,110 @@
 					$response = new response(0,'Usuário criado com sucesso.');
 					$response->newId = $db->insert_id;
 					$response->flush();
-
-					// Registrando a ação
-					registrarAcao($db,$id,ACAO_CRIOU_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
-
 				} catch (Exception $e) {
 					$app->response->setStatus(401);
 					$response = new response(1,'Já existe um usuário cadastrado com este login.');
 					$response->flush();
 					return;
 				}
+				// Registrando a ação
+				registrarAcao($db,$id,ACAO_CRIOU_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
 			});
-
-		// CAIXAS ROUTE DEFINITION - - - - - - - - - - - - -
-			$app->get('/caixas',function() use ($app,$db){
+		// FIM DE ROTAS DE USUÁRIOS
+		
+		// ROTAS DE DISCIPLINAS
+			$app->get('/disciplinas',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');
-				$sql = '
-					SELECT a.id,
-					       a.nome,
-					       a.sigla,
-					       a.e_cartao,
-					       vencimento,
-					       fechamento,
-					       saldo,
-					       limite_inferior
-					FROM geff_caixas a
-						INNER JOIN geff_nucleos b ON a.id_nucleo=b.id
-						INNER JOIN geff_usuarios c ON (c.id_nucleo=b.id
-					                               AND c.token=?
-					                               AND token_expiration>now())';
+				$sql = 'SELECT a.id,
+						       a.nome,
+						       a.sigla,
+						       a.ativa
+						FROM gdoks_disciplinas a
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?) b ON a.id_cliente=b.id_cliente
+							ORDER by a.nome';
 				$response = new response(0,'ok');
-				$response->caixas = $db->query($sql,'s',$token);
+				$response->disciplinas = $db->query($sql,'s',$token);
 				$response->flush();
 			});
 
-			$app->get('/caixas/:id',function($id) use ($app,$db){
+			$app->put('/disciplinas/:id',function($id) use ($app,$db){
+				// Lendo e saneando as informações da requisição
 				$token = $app->request->headers->get('Authorization');
-				$sql = 'select a.id,a.nome,a.sigla,a.e_cartao,vencimento,fechamento,saldo,limite_inferior from geff_caixas a inner join geff_nucleos b on a.id_nucleo=b.id inner join geff_usuarios c on (c.id_nucleo=b.id and c.token=? and token_expiration>now()) where a.id=?';
-				$caixa = $db->query($sql,'si',$token,$id);
-				if(sizeof($caixa) == 0){
-					$app->response->setStatus(401);
-					$response = new response(1,'Caixa inexistente ou não autorizado');
-				} else {
-					$app->response->setStatus(200);
-					$response = new response(0,'ok');
-					$response->caixa = $caixa[0];
-				}
-				$response->flush();
-			});
+				$id = 1*$id;
+				$disciplina = json_decode($app->request->getBody());
 
-			$app->post('/caixas',function() use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
-				$rs = $db->query('select id_nucleo from geff_usuarios where token=? and token_expiration>now()','s',$token);
-				if(sizeof($rs)==0){
-					$app->response->setStatus(401);
-					$response = new response(1,'Não autorizado.');
-					$response->flush();
-					return;
-				} else {
-					$id_nucleo = $rs[0]['id_nucleo'];
-					$d = json_decode($app->request->getBody());
-					if($d->e_cartao==1){
-						$sql = "insert into geff_caixas (nome,sigla,e_cartao,vencimento,fechamento,saldo,limite_inferior,id_nucleo) VALUES (?,?,?,?,?,?,?,?)";
-						$db->query($sql,'ssiiiddi',$d->nome,$d->sigla,$d->e_cartao,$d->vencimento,$d->fechamento,0,$d->limite_inferior,$id_nucleo);
-					} else {
-						$sql = "insert into geff_caixas (nome,sigla,e_cartao,saldo,limite_inferior,id_nucleo) VALUES (?,?,?,?,?,?)";
-						$db->query($sql,'ssiddi',$d->nome,$d->sigla,$d->e_cartao,0,$d->limite_inferior,$id_nucleo);
-					}
-					$response = new response(0,'ok');
-					$response->id_caixa = $db->insert_id;
-					$response->flush();
-				}
-			});
-
-			$app->put('/caixas/:id',function($id) use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
-				// Verificando se o caixa a ser alterado é do mesmo núcleo do usuário
-				$sql = "select count(*)=1 as ok from geff_caixas a inner join geff_nucleos b on a.id_nucleo=b.id inner join geff_usuarios c on (c.id_nucleo=b.id and c.token=? and token_expiration>now()) where a.id=?";
-				$ok = $db->query($sql,'si',$token,$id)[0]['ok'];
-				if($ok==0){
-					$app->response->setStatus(401);
-					$response = new response(1,'Não autorizado.');
-					$response->flush();
-					return;
-				} else {
-					$d = json_decode($app->request->getBody());
-					if($d->e_cartao==1){
-						$sql = "update geff_caixas set nome=?,sigla=?,e_cartao=?,vencimento=?,fechamento=?,limite_inferior=? where id=?";
-						$db->query($sql,'ssiiidi',$d->nome,$d->sigla,$d->e_cartao,$d->vencimento,$d->fechamento,$d->limite_inferior,$id);
-					} else {
-						$sql = "update geff_caixas set nome=?,sigla=?,e_cartao=?,vencimento=null,fechamento=null,limite_inferior=? where id=?";
-						$db->query($sql,'ssidi',$d->nome,$d->sigla,$d->e_cartao,$d->limite_inferior,$id);
-					}
-					$response = new response(0,'ok');
-					$response->flush();
-				}
-			});
-
-			$app->delete('/caixas/:id',function($id) use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
-				// Verificando se o caixa a ser alterado é do mesmo núcleo do usuário
-				$sql = "select count(*)=1 as ok from geff_caixas a inner join geff_nucleos b on a.id_nucleo=b.id inner join geff_usuarios c on (c.id_nucleo=b.id and c.token=? and token_expiration>now()) where a.id=?";
-				$ok = $db->query($sql,'si',$token,$id)[0]['ok'];
-				if($ok==0){
-					$app->response->setStatus(401);
-					$response = new response(1,'Não autorizado.');
-					$response->flush();
-					return;
-				} else {
-					$sql = "delete from geff_caixas where id=?";
+				// verificando se o usário enviado é do mesmo cliente do usuário atual
+				$sql = 'SELECT A.id,
+						       COUNT(*) AS ok
+						FROM
+						  ( SELECT id,
+						           id_cliente
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  ( SELECT id_cliente
+						   FROM gdoks.gdoks_disciplinas
+						   WHERE id=?) B ON A.id_cliente=B.id_cliente;';
+				$rs = $db->query($sql,'si',$token,$id)[0];
+				$ok = $rs['ok'];
+				$id = $rs['id'];
+				if($ok == 1){
+					// Tudo ok! A disciplina a ser alterada é do mesmo cliente do usuário
+					$sql = 'UPDATE gdoks_disciplinas SET nome=?,sigla=?,ativa=? WHERE id=?';
 					try {
-						$db->query($sql,'i',$id);	
-						$response = new response(0,'ok');
-						$response->flush();	
+						$db->query($sql,'ssii',$disciplina->nome,$disciplina->sigla,$disciplina->ativa,$id);
+						$response = new response(0,'Disciplina alterada com sucesso.');
+						$response->flush();
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
-						$response = new response(1,'Impossível remover caixa. Verifique se ele não possui movimentações associadas a ele ou se o seu saldo é ZERO.');
-						$response->flush();	
+						$response = new response(1,'Já existe uma disciplina cadastrado com esta sigla.');
+						$response->flush();
+						return;
 					}
+					// Registrando a ação
+					registrarAcao($db,$id,ACAO_ALTEROU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa == true?1:0));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outro cliente.');	
 				}
 			});
-		// FIM DE CAIXAS ROUTE DEFINITION - -- - - - - - - -
 
+			$app->post('/disciplinas',function() use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$disciplina = json_decode($app->request->getBody());
+
+				// Capturando o id e o id_cliente do usuário atual
+				$sql = 'SELECT
+							id,id_cliente
+						FROM 
+							gdoks_usuarios
+						WHERE
+							token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token)[0];
+				$id_cliente = $rs['id_cliente'];
+				$id = $rs['id'];
+
+				// Inserindo nova disciplina.
+				$sql = 'INSERT INTO gdoks_disciplinas (nome,sigla,id_cliente,ativa) VALUES (?,?,?,?)';
+				try {
+					$db->query($sql,'ssii',$disciplina->nome,$disciplina->sigla,$id_cliente,$disciplina->ativa);
+					$response = new response(0,'Disciplina criada com sucesso.');
+					$response->newId = $db->insert_id;
+					$response->flush();
+				} catch (Exception $e) {
+					$app->response->setStatus(401);
+					$response = new response(1,'Já existe uma disciplina cadastrado com este nome ou sigla.');
+					$response->flush();
+					return;
+				}
+				// Registrando a ação
+				registrarAcao($db,$id,ACAO_CRIOU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa==true?1:0));
+			});
 		// CLASSES ROUTE DEFINITION - - - - - - - - - - - - -
 			$app->get('/classes',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');
@@ -794,122 +776,121 @@
 		});
 
 		// CONCILIACOES ROUTE DEFINITION - - - - - - - - - - - -
-		
-		$app->post('/conciliacoes',function() use ($app,$db){
-			$token = $app->request->headers->get('Authorization');
-			$rs = $db->query('select id,id_nucleo from geff_usuarios where token=? and token_expiration>now()','s',$token);
-			if(sizeof($rs)==0){
-				$app->response->setStatus(401);
-				$response = new response(1,'Não autorizado.');
-				$response->flush();
-				return;
-			} else {
-				$id_nucleo = $rs[0]['id_nucleo'];
-				$id_usuario = $rs[0]['id'];
-				$movimentos = json_decode($app->request->getBody());
-
-				// Salvando movimentos
-				foreach ($movimentos as $i => $m) {
-					$m->data = (new DateTime())->format('d/m/Y');
-					if($m->caixa->e_cartao == 0){
-						// movimento de caixa que não é cartão.
-						try {
-							$m->id_usuario = $id_usuario;
-							$m->id_caixa = $m->caixa->id;
-							$m = insereMovimento($m);
-							$m->erro = 0;
-						} catch (Exception $e) {
-							$m->erro = 1;
-							$m->msg = "Impossível inserir movimento: ".$e->getMessage();
-						}
-					} else {
-						// movimento de cartão em $m->nx vezes 
-						// verificando se existe saldo para o movimento
-						$rs = $db->query('select saldo - limite_inferior as max from geff_caixas where id=?','i',$m->caixa->id);
-						if($m->valor > $rs[0]['max']){
-							// não existe saldo para o movimento
-							$m->erro = 1;
-							$m->msg = "Impossível inserir movimento. Saldo insuficiente.";
-						} else {
-							// existe saldo
-							// Como é um movimento conciliatório, estabelecendo nx=1
-							$m->nx = 1;
-							$m->id_caixa = $m->caixa->id;
-							// salvando movimento de cartão
-							$parcelas = salva_movimento_de_cartao($m,$id_usuario);
-							$movimentos[$i]->id = $parcelas[0]->id;
-						}
-					}
-				}
-
-				// Salvando conciliação
-				$registrada_em = new DateTime();
-				$registrada_em = $registrada_em->format('Y-m-d H:i:s');
-				$db->query("insert into geff_conciliacoes (registrada_em,id_nucleo) VALUES (?,?)",'si',$registrada_em,$id_nucleo);
-				$id_conciliacao = $db->insert_id;
-
-				// Associando movimentos salvos a conciliação
-				foreach ($movimentos as $m) {
-					if(property_exists($m,'id')){
-						$db->query('update geff_movimentos set id_conciliacao=? where id=?','ii',$id_conciliacao,$m->id);
-					}
-				}
-
-
-				// Salvando saldos de todos os caixas.
-				$db->query('insert into geff_conciliacoes_x_saldos (id_conciliacao,id_caixa,saldo) (select ? as id_conciliacao, id as id_caixa, saldo from geff_caixas where id_nucleo=?)','ii',$id_conciliacao,$id_nucleo);
-				
-				// Preparando resposta
-				$response = new response(0,'Ok');
-				$response->conciliacao = new stdClass();
-				$response->conciliacao->id_conciliacao = $id_conciliacao;
-				$response->conciliacao->registrada_em = str_replace(' ', 'T',$registrada_em);
-				$response->flush();
-			}
-		});
-		
-		$app->get('/conciliacoes',function() use ($app,$db){
-			$token = $app->request->headers->get('Authorization');
-			$rs = $db->query('select id,id_nucleo from geff_usuarios where token=? and token_expiration>now()','s',$token);
-			if(sizeof($rs)==0){
-				$app->response->setStatus(401);
-				$response = new response(1,'Não autorizado.');
-				$response->flush();
-				return;
-			} else {
-				$id_nucleo = $rs[0]['id_nucleo'];
-				$rs = $db->query('select DATE_FORMAT(registrada_em,"%Y-%m-%dT%H:%i:%s") as ultimaConciliacao from geff_conciliacoes where id_nucleo=? order by registrada_em desc limit 1','i',$id_nucleo);
-				$response = new response(0,'Ok');
-				if(sizeof($rs) == 0){
-					$response->ultimaConciliacao = null;
+			$app->post('/conciliacoes',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$rs = $db->query('select id,id_nucleo from geff_usuarios where token=? and token_expiration>now()','s',$token);
+				if(sizeof($rs)==0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Não autorizado.');
+					$response->flush();
+					return;
 				} else {
-					$response->ultimaConciliacao = $rs[0]['ultimaConciliacao'];
-				}
-				$response->flush();
-			}
-		});
+					$id_nucleo = $rs[0]['id_nucleo'];
+					$id_usuario = $rs[0]['id'];
+					$movimentos = json_decode($app->request->getBody());
 
-		$app->delete('/conciliacoes',function() use ($app,$db){
-			$token = $app->request->headers->get('Authorization');
-			$rs = $db->query('select id,id_nucleo from geff_usuarios where token=? and token_expiration>now()','s',$token);
-			if(sizeof($rs)==0){
-				$app->response->setStatus(401);
-				$response = new response(1,'Não autorizado.');
-				$response->flush();
-				return;
-			} else {
-				$id_nucleo = $rs[0]['id_nucleo'];
-				// levantndo o id da ultima conciliação
-				$rs = $db->query('select id from geff_conciliacoes where id_nucleo=? order by registrada_em desc limit 1','i',$id_nucleo);
-				$id_ultimaConciliacao = $rs[0]['id'];
-				// removendo última conciliação
-				$db->query('delete from geff_conciliacoes where id=?;','i',$id_ultimaConciliacao);
-				// Removendo movimentos conciliatórios desta conciliação.
-				$db->query('delete from geff_movimentos where id_conciliacao=?;','i',$id_ultimaConciliacao);
-				$response = new response(0,'Ok');
-				$response->flush();
-			}
-		});
+					// Salvando movimentos
+					foreach ($movimentos as $i => $m) {
+						$m->data = (new DateTime())->format('d/m/Y');
+						if($m->caixa->e_cartao == 0){
+							// movimento de caixa que não é cartão.
+							try {
+								$m->id_usuario = $id_usuario;
+								$m->id_caixa = $m->caixa->id;
+								$m = insereMovimento($m);
+								$m->erro = 0;
+							} catch (Exception $e) {
+								$m->erro = 1;
+								$m->msg = "Impossível inserir movimento: ".$e->getMessage();
+							}
+						} else {
+							// movimento de cartão em $m->nx vezes 
+							// verificando se existe saldo para o movimento
+							$rs = $db->query('select saldo - limite_inferior as max from geff_caixas where id=?','i',$m->caixa->id);
+							if($m->valor > $rs[0]['max']){
+								// não existe saldo para o movimento
+								$m->erro = 1;
+								$m->msg = "Impossível inserir movimento. Saldo insuficiente.";
+							} else {
+								// existe saldo
+								// Como é um movimento conciliatório, estabelecendo nx=1
+								$m->nx = 1;
+								$m->id_caixa = $m->caixa->id;
+								// salvando movimento de cartão
+								$parcelas = salva_movimento_de_cartao($m,$id_usuario);
+								$movimentos[$i]->id = $parcelas[0]->id;
+							}
+						}
+					}
+
+					// Salvando conciliação
+					$registrada_em = new DateTime();
+					$registrada_em = $registrada_em->format('Y-m-d H:i:s');
+					$db->query("insert into geff_conciliacoes (registrada_em,id_nucleo) VALUES (?,?)",'si',$registrada_em,$id_nucleo);
+					$id_conciliacao = $db->insert_id;
+
+					// Associando movimentos salvos a conciliação
+					foreach ($movimentos as $m) {
+						if(property_exists($m,'id')){
+							$db->query('update geff_movimentos set id_conciliacao=? where id=?','ii',$id_conciliacao,$m->id);
+						}
+					}
+
+
+					// Salvando saldos de todos os caixas.
+					$db->query('insert into geff_conciliacoes_x_saldos (id_conciliacao,id_caixa,saldo) (select ? as id_conciliacao, id as id_caixa, saldo from geff_caixas where id_nucleo=?)','ii',$id_conciliacao,$id_nucleo);
+					
+					// Preparando resposta
+					$response = new response(0,'Ok');
+					$response->conciliacao = new stdClass();
+					$response->conciliacao->id_conciliacao = $id_conciliacao;
+					$response->conciliacao->registrada_em = str_replace(' ', 'T',$registrada_em);
+					$response->flush();
+				}
+			});
+			
+			$app->get('/conciliacoes',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$rs = $db->query('select id,id_nucleo from geff_usuarios where token=? and token_expiration>now()','s',$token);
+				if(sizeof($rs)==0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Não autorizado.');
+					$response->flush();
+					return;
+				} else {
+					$id_nucleo = $rs[0]['id_nucleo'];
+					$rs = $db->query('select DATE_FORMAT(registrada_em,"%Y-%m-%dT%H:%i:%s") as ultimaConciliacao from geff_conciliacoes where id_nucleo=? order by registrada_em desc limit 1','i',$id_nucleo);
+					$response = new response(0,'Ok');
+					if(sizeof($rs) == 0){
+						$response->ultimaConciliacao = null;
+					} else {
+						$response->ultimaConciliacao = $rs[0]['ultimaConciliacao'];
+					}
+					$response->flush();
+				}
+			});
+
+			$app->delete('/conciliacoes',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$rs = $db->query('select id,id_nucleo from geff_usuarios where token=? and token_expiration>now()','s',$token);
+				if(sizeof($rs)==0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Não autorizado.');
+					$response->flush();
+					return;
+				} else {
+					$id_nucleo = $rs[0]['id_nucleo'];
+					// levantndo o id da ultima conciliação
+					$rs = $db->query('select id from geff_conciliacoes where id_nucleo=? order by registrada_em desc limit 1','i',$id_nucleo);
+					$id_ultimaConciliacao = $rs[0]['id'];
+					// removendo última conciliação
+					$db->query('delete from geff_conciliacoes where id=?;','i',$id_ultimaConciliacao);
+					// Removendo movimentos conciliatórios desta conciliação.
+					$db->query('delete from geff_movimentos where id_conciliacao=?;','i',$id_ultimaConciliacao);
+					$response = new response(0,'Ok');
+					$response->flush();
+				}
+			});
 		// CONCILIACOES ROUTE DEFINITION - - - - - - - - - - - -
 	});
 

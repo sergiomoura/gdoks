@@ -234,3 +234,43 @@ nav .cfg{
 	position: relative;
 	left: 15px;
 }
+
+
+#disciplinas_container button{
+	position: absolute;
+	left: 0;
+	top: 16px;
+}
+
+#lista_de_disciplinas{
+	position: relative;
+	top: 60px;
+}
+
+#lista_de_disciplinas .disciplina{
+	display: block;
+	width: calc(25% - 60px);
+	float: left;
+	margin-bottom: 20px;
+	padding: 20px;
+	text-decoration: none;
+	margin-right:20px;
+}
+
+#lista_de_disciplinas .disciplina:nth-child(4n){
+	margin-right:0px;
+}
+
+#disciplina_container .aviso{
+	color: #FF5722;
+}
+
+#disciplina_container .bt_salvar{
+	position: absolute;
+	right: 15px;
+}
+
+#disciplina_container .bt_cancelar{
+	position: relative;
+	left: 15px;
+}
