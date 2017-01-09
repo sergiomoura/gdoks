@@ -317,7 +317,7 @@
 						   WHERE id=?) B ON A.id_cliente=B.id_cliente;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
-				$id = $rs['id'];
+				$id_usuario = $rs['id'];
 				if($ok == 1){
 					// Tudo ok! A disciplina a ser alterada é do mesmo cliente do usuário
 					$sql = 'UPDATE gdoks_disciplinas SET nome=?,sigla=?,ativa=? WHERE id=?';
@@ -327,12 +327,12 @@
 						$response->flush();
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
-						$response = new response(1,'Já existe uma disciplina cadastrado com esta sigla.');
+						$response = new response(1,'Já existe uma disciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
 						return;
 					}
 					// Registrando a ação
-					registrarAcao($db,$id,ACAO_ALTEROU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa == true?1:0));
+					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa == true?1:0));
 				} else {
 					$app->response->setStatus(401);
 					$response = new response(1,'Não altera dados de outro cliente.');	
