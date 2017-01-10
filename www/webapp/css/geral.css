@@ -37,6 +37,7 @@ button {
 	left: 25%;
 	position: relative;
 	padding-bottom: 15px;
+	margin-bottom: 50px;
 }
 
 .bloco_central_80{
@@ -44,6 +45,8 @@ button {
 	top: 50px;
 	left: 10%;
 	position: relative;
+	margin-bottom: 50px;
+	padding-bottom: 15px;
 }
 
 .bloco_conteudo h1{

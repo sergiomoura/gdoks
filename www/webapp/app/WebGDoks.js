@@ -6,13 +6,6 @@ WebGDoks.config(
 	function ($routeProvider){
 		$routeProvider
 		.when(
-			'/home',
-			{
-				controller: 'HomeController',
-				templateUrl: 'app/views/afazer.php'
-			}
-		)
-		.when(
 			'/projetos',
 			{
 				controller: 'ProjetosController',
@@ -75,6 +68,6 @@ WebGDoks.config(
 				templateUrl: 'app/views/senha.html'
 			}
 		)
-		.otherwise({redirectTo:'/home'});
+		.otherwise({redirectTo:'/afazer'});
 	}
 )

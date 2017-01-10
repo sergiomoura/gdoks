@@ -5,7 +5,7 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 	$scope.root = {};
 
 	// Definindo valores padrão para a interface
-	$scope.root.itemSelecionadoDoMenu = 0;
+	$scope.root.itemSelecionadoDoMenu = 4;
 
 	// definindo o objeto que guarda as info do usuário logado.
 	$scope.root.user = $cookies.getObject('user');

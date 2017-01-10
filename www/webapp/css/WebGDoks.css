@@ -274,3 +274,49 @@ nav .cfg{
 	position: relative;
 	left: 15px;
 }
+
+#projetos_container .topo{
+	position: fixed;
+	top: 36px;
+	left: 45px;
+	background-color: #296A9E;
+	width: calc(100% - 45px);
+	height:42px;
+	z-index:1;
+	min-width: 750px;
+}
+
+#projetos_container .topo .menu {
+	display: inline-block;
+	margin-left: 30px;
+}
+
+#projetos_container .topo .menu a{
+	color: #FFF;
+	text-decoration:none;
+	padding: 10px 10px;
+	display: inline-block;
+}
+
+#projetos_container .topo .menu .selected{
+	border-bottom: 5px solid #2196F3 !important;
+	padding: 6px 10px;
+}
+
+#projetos_container .topo .menu a:hover{
+	padding: 6px 10px;
+	border-bottom: 5px solid #2196F3;
+}
+
+
+#projetos_container .content{
+	position: relative;
+	top: 43px;
+}
+
+#projetos_container .topo select{
+	height: 26px;
+	position: absolute;
+	right: 8px;
+	top: 8px;
+}
