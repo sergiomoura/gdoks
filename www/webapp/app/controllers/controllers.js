@@ -231,10 +231,20 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 controllers.ProjetosController = function($scope,$location){
 	$scope.onPrjMenuClick = function(anchor){
 		$location.hash(anchor);
-		$("#container_horizontal").animate({scrollTop: $('#'+anchor).position().top - 40}, "slow",function(){});
+		var scroll = $('#'+anchor).position().top - 40;
+		$("#container_horizontal").animate({scrollTop: scroll}, "slow",function(){});
 		$scope.root.itemSelecionadoDoPrjMenu = anchor;
 	}
+
+	// Fazendo com que página se mostre o ponto correto.
 	$scope.onPrjMenuClick($location.hash());
+
+	// posicionando o menu de projeto corretamente, de acordo com o $scope.root.mostrandoMenu
+	if($scope.root.mostrandoMenu){
+		document.getElementById("prj_menu").style.marginLeft = "141px"
+	} else {
+		document.getElementById("prj_menu").style.marginLeft = "31px"
+	}
 };
 
 controllers.DocumentosController = function($scope){};

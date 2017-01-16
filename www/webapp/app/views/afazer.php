@@ -3,7 +3,7 @@
 		<li>
 			Tela de Cadstro de Projetos [16/1 a 18/1]
 			<ul>
-				<li>Fazer o menu funcionar</li>
+				<li class="feito">Fazer o menu funcionar</li>
 				<li>Fazer o select de projetos funcionar</li>
 				<li>Bloco de dados do projeto</li>
 				<li>Bloco cadastro de áreas</li>
@@ -21,6 +21,7 @@
 				<li class="feito">Tirar destaque de todos os itens do menu principal quando estiver na tela de trocar senha.</li>
 				<li>Acertar o fuso horário do registro no log</li>
 				<li>Acertar o fuso horário do última atualização</li>
+				<li>Submenu projetos se move para direita para se posicionar corretamente quando a página de projetos é carregada enquanto o menu principal está sendo exibido.</li>
 			</ul>
 		</li>
 		<li>

@@ -364,7 +364,7 @@
 					$response->flush();
 				} catch (Exception $e) {
 					$app->response->setStatus(401);
-					$response = new response(1,'Já existe uma disciplina cadastrado com este nome ou sigla.');
+					$response = new response(1,'Já existe uma disciplina cadastrado com este nome ou sigla. '.$e->getMessage());
 					$response->flush();
 					return;
 				}
