@@ -5,7 +5,13 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 	$scope.root = {};
 
 	// Definindo valores padrão para a interface
-	$scope.root.itemSelecionadoDoMenu = 4;
+	$scope.root.itemSelecionadoDoMenu = 0;
+
+	// Defininfo valor inicial do item do submenu de projetos.
+	$scope.root.itemSelecionadoDoPrjMenu = "prj_documentos";
+
+	// definindo valor inicial para mostrandoMenu
+	$scope.root.mostrandoMenu = false;
 
 	// definindo o objeto que guarda as info do usuário logado.
 	$scope.root.user = $cookies.getObject('user');
@@ -41,17 +47,27 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 
 controllers.TopoController = function($scope){
 	$scope.toggleSideMenu = function(){
-		$scope.mostrandoMenu = !$scope.mostrandoMenu;
-		if($scope.mostrandoMenu){
+		$scope.root.mostrandoMenu = !$scope.root.mostrandoMenu;
+		if($scope.root.mostrandoMenu){
+			// aumentando menu lateral esquerdo e diminuindo o view_container;
 			document.getElementById("menu").style.width = "186px";
 			document.getElementById("view_container").style.width = "calc(100% - 186px)";
 			document.getElementById("view_container").style.minWidth = "614px";
 			document.getElementById("view_container").style.left = "186px";
+
+			// movendo o submenu de projetos caso ele esteja carregado.
+			var menu = document.getElementById("prj_menu");
+			if(menu){menu.style.marginLeft = "141px"};
+
 		} else {
 			document.getElementById("menu").style.width = "45px";
 			document.getElementById("view_container").style.width = "calc(100% - 45px)"
 			document.getElementById("view_container").style.left = "45px";
 			document.getElementById("view_container").style.minWidth = "755px"
+
+			// movendo o submenu de projetos caso ele esteja carregado.
+			var menu = document.getElementById("prj_menu");
+			if(menu){menu.style.marginLeft = "31px"};
 		}
 	}
 
@@ -212,7 +228,14 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 	}
 };
 
-controllers.ProjetosController = function($scope){};
+controllers.ProjetosController = function($scope,$location){
+	$scope.onPrjMenuClick = function(anchor){
+		$location.hash(anchor);
+		$("#container_horizontal").animate({scrollTop: $('#'+anchor).position().top - 40}, "slow",function(){});
+		$scope.root.itemSelecionadoDoPrjMenu = anchor;
+	}
+	$scope.onPrjMenuClick($location.hash());
+};
 
 controllers.DocumentosController = function($scope){};
 
@@ -306,8 +329,8 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 		window.location = "WebGDoks.php#/disciplinas";
 		$scope.root.itemSelecionadoDoMenu = 0;
 	}
-
 };
+
 controllers.AFazerController = function($scope){};
 
 controllers.ConfiguracoesController = function($scope){};

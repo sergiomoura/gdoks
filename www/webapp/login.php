@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>GDoks</title>
 		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="stylesheet" href="css/normalizer.css">
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/login.css">
 		<script src="js/angular/angular.min.js"></script>

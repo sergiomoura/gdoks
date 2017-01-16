@@ -68,6 +68,19 @@ WebGDoks.config(
 				templateUrl: 'app/views/senha.html'
 			}
 		)
-		.otherwise({redirectTo:'/afazer'});
+		.otherwise({redirectTo:'/projetos'});
 	}
 )
+
+WebGDoks.run(function($rootScope, $location, $anchorScroll) {
+	//when the route is changed scroll to the proper element.
+	$rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
+		var hash = $location.hash();
+
+		// verificando se o item clicado é um item da página de projetos;
+		if(hash && hash.indexOf('prj_') == 0){
+			// É um item da página de projetos. Ajeitando posicionamento do scroll.
+			setTimeout(function(){document.getElementById('container_horizontal').scrollTop -= 70;},25);
+		}
+	});
+});

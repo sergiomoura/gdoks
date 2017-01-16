@@ -110,7 +110,6 @@ nav .cfg{
 	left: 45px;
 	min-width: 755px;
 	top: 0px;
-	overflow-y: auto;
 	z-index: -1;
 	height: 100%;
 }
@@ -283,7 +282,7 @@ nav .cfg{
 	width: calc(100% - 45px);
 	height:42px;
 	z-index:1;
-	min-width: 750px;
+	min-width: 900px;
 }
 
 #projetos_container .topo .menu {
@@ -296,6 +295,7 @@ nav .cfg{
 	text-decoration:none;
 	padding: 10px 10px;
 	display: inline-block;
+	cursor: pointer;
 }
 
 #projetos_container .topo .menu .selected{
@@ -312,6 +312,7 @@ nav .cfg{
 #projetos_container .content{
 	position: relative;
 	top: 43px;
+	padding-bottom: 60px;
 }
 
 #projetos_container .topo select{
@@ -319,4 +320,9 @@ nav .cfg{
 	position: absolute;
 	right: 8px;
 	top: 8px;
+}
+
+#prj_menu{
+	transition: margin-left 0.3s;
+	transition-timing-function: ease-out;
 }

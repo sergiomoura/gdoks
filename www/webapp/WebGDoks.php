@@ -21,7 +21,7 @@
 	</div>
 	<div id="container_horizontal">
 		<nav id="menu" ng-controller="NavController">
-			<a ng-click="itemClicked(0)" class="prj" ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/projetos">Projetos</a>
+			<a ng-click="itemClicked(0)" class="prj" ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/projetos#prj_documentos">Projetos</a>
 			<a ng-click="itemClicked(1)" class="usu" ng-class="{ 'selected': 1 == root.itemSelecionadoDoMenu }" href="#/usuarios">Usuários</a>
 			<a ng-click="itemClicked(2)" class="doc" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos</a>
 			<a ng-click="itemClicked(3)" class="dsc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
@@ -47,7 +47,7 @@
 	<script src="js/angular/angular-cookies.min.js"></script>
 	<script src="js/angular/angular-resource.min.js"></script>
 	<script src="js/angular/ng-currency.min.js"></script>
-	
+	<script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
 	<!-- Scripts do app -->
 	<script src="app/services/constants.js"></script>
 	<script src="app/WebGDoks.js"></script>
