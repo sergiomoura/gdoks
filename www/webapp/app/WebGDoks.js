@@ -68,7 +68,7 @@ WebGDoks.config(
 				templateUrl: 'app/views/senha.html'
 			}
 		)
-		.otherwise({redirectTo:'/projetos'});
+		.otherwise({redirectTo:'/afazer'});
 	}
 )
 

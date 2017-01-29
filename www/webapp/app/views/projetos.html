@@ -7,17 +7,17 @@
 			<a ng-class="{ selected: ('prj_usuarios' 	== root.itemSelecionadoDoPrjMenu) }" ng-click="onPrjMenuClick('prj_usuarios')">Usuários</a>
 			<a ng-class="{ selected: ('prj_dados'		== root.itemSelecionadoDoPrjMenu) }" ng-click="onPrjMenuClick('prj_dados')">Dados do  Projeto</a>
 		</div>
-		<select name="select_projeto" id="select_projeto">
-			<option value="0">Adicionar novo...</option>
-			<option value="1" selected="selected">Aratuba dos Palmares</option>
-			<option value="2">Mangueira de Fornalhas</option>
-			<option value="3">Saúde de Repousos</option>
+		<select
+			name="select_projeto"
+			id="select_projeto"
+			ng-model="opcaoSelecionada"
+			ng-options="prj.nome_projeto for prj in opcoesDeProjeto track by prj.id_projeto">
 		</select>
 	</div>
 	<div class="content">
 
 		<div id="prj_documentos" class="documentos bloco_conteudo bloco_central_80">
-			<h1><img src="img/documentos.png">Documentos de "Aratuba do Pombal"</h1>
+			<h1><img src="img/documentos.png">Documentos de "{{opcaoSelecionada.nome_projeto}}"</h1>
 			<div class="item">kajshdkashdj 1</div>
 			<div class="item">kajshdkashdj 2</div>
 			<div class="item">kajshdkashdj 3</div>

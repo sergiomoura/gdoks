@@ -42,12 +42,13 @@
 		?>
 	</div>
 	<!-- Scripts externos -->
+	<script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
 	<script src="js/angular/angular.min.js"></script>
 	<script src="js/angular/angular-route.min.js"></script>
 	<script src="js/angular/angular-cookies.min.js"></script>
 	<script src="js/angular/angular-resource.min.js"></script>
 	<script src="js/angular/ng-currency.min.js"></script>
-	<script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
+	
 	<!-- Scripts do app -->
 	<script src="app/services/constants.js"></script>
 	<script src="app/WebGDoks.js"></script>

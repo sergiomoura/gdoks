@@ -5,7 +5,7 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 	$scope.root = {};
 
 	// Definindo valores padrão para a interface
-	$scope.root.itemSelecionadoDoMenu = 0;
+	$scope.root.itemSelecionadoDoMenu = 4;
 
 	// Defininfo valor inicial do item do submenu de projetos.
 	$scope.root.itemSelecionadoDoPrjMenu = "prj_documentos";
@@ -18,6 +18,12 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 
 	// Definindo o vetor que guarda as informações públicas dos usuários do cliente
 	$scope.root.usarios = [];
+
+	// Definindo vetor que manterá os projetos que são visíveis pelo usuário.
+	$scope.root.projetos = [];
+
+	// Definindo objeto que representa o projeto selecionado
+	// $scope.root.projetoSelecionado = null;
 
 	// Definindo vetor que guarda as disciplinas;
 	$scope.root.disciplinas = [];
@@ -228,7 +234,7 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 	}
 };
 
-controllers.ProjetosController = function($scope,$location){
+controllers.ProjetosController = function($scope,$location,GDoksFactory){
 	$scope.onPrjMenuClick = function(anchor){
 		$location.hash(anchor);
 		var scroll = $('#'+anchor).position().top - 40;
@@ -245,6 +251,38 @@ controllers.ProjetosController = function($scope,$location){
 	} else {
 		document.getElementById("prj_menu").style.marginLeft = "31px"
 	}
+
+	// Carregando os projetos do servidor
+	GDoksFactory.getProjetos()
+		.success(
+			function(response){
+				$scope.root.projetos = response.projetos;
+				for (var i = $scope.root.projetos.length - 1; i >= 0; i--) {
+					$scope.root.projetos[i].ativo = ($scope.root.projetos[i].ativo==1);
+				};
+
+				// Criando um projeto 'vazio'
+				var prjVazio = {
+					'id_projeto':0,
+					'nome_projeto':'Adicionar novo projeto...',
+					'ativo':true,
+					'permissao':3
+				};
+
+				// Configurando as opções do menu de projeto
+				$scope.opcoesDeProjeto = angular.copy($scope.root.projetos);
+				$scope.opcoesDeProjeto.unshift(prjVazio);
+
+				// Definindo o projeto que vai aparecer inicialmente selecionado
+				$scope.opcaoSelecionada = ($scope.root.projetos.length > 0)?$scope.root.projetos[0]:prjVazio;
+				
+			}
+		)
+		.error(
+			function(error){
+			}
+		);
+
 };
 
 controllers.DocumentosController = function($scope){};
