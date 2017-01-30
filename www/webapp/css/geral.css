@@ -3,7 +3,7 @@ html {
 }
 
 body {
-	background-color: #E6E6E6;
+	background-color: RGBA(229, 229, 229, 0.9);
 	font-family: "Century Gothic", sans-serif;
 	margin: 0;
 	padding: 0;
@@ -16,6 +16,9 @@ input[type=text],input[type=password]{
 	background-color: #FFF;
 }
 
+input[type=checkbox]{
+	margin-right: 5px;
+}
 button {
 	font-family: "Century Gothic", sans-serif;
 }
@@ -159,6 +162,35 @@ button {
 	background-color:#fb9630;
 }
 
+#view .bt_alterar{
+	background-color:#FF8000;
+	border:none;
+	height:27px;
+	font-size:12px;
+	border-radius:5px;
+	color:#FFF;
+	width:100px;
+	cursor:pointer;
+}
+
+#view .bt_alterar:hover{
+	background-color:#fb9630;
+}
+
+#view .bt_adicionar{
+	background-color:#009F00;
+	border:none;
+	height:27px;
+	font-size:12px;
+	border-radius:5px;
+	color:#FFF;
+	cursor:pointer;
+}
+
+#view .bt_adicionar:hover{
+	background-color:#06C306;
+}
+
 #view .avisa_resultado_50{
 	width: calc(50% - 20px);
 	top: 25px;
@@ -185,4 +217,71 @@ button {
 	position: relative;
 	left: 10%;
 }
+
+.bloco_conteudo table{
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.bloco_conteudo table>thead>tr>td{
+	color:#2196F3;
+	font-size: 18px;
+}
+
+.bloco_conteudo table>tbody>tr>td{
+	color:#2B2B2B;
+	font-size: 14px;
+}
+
+.bloco_conteudo table td{
+	border-bottom:1px solid #DDD;
+	padding: 12px
+}
+.bloco_conteudo table td:first-child{
+	padding-left: 40px
+}
+.bloco_conteudo table td:last-child{
+	text-align: right;
+}
+
+help{
+	display: block;
+}
+
+help:after{
+	content: "?";
+	display: block;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+  text-align: center;
+	background-color: #E6E6E6;
+	width: 23px;
+	height: 23px;
+	border-radius: 11px;
+	line-height: 23px;
+	color: #999;
+	font-family: Arial;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+help>text{
+	display:none;
+}
+
+help:hover>text{
+	display:block;
+	background-color: RGBA(229, 229, 229, 0.9) ;
+	position: absolute;
+	top: 20px;
+	width: 360px;
+	right: 5px;
+	padding: 20px;
+	color: #333;
+	font-size: 14px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px -5px;
+}
+
 

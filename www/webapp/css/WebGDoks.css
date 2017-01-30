@@ -326,3 +326,20 @@ nav .cfg{
 	transition: margin-left 0.3s;
 	transition-timing-function: ease-out;
 }
+
+#subdisciplina_container .bt_adicionar{
+	position: absolute;
+	right: 15px;
+	bottom:15px;
+}
+
+#subdisciplina_container{
+	padding-bottom: 55px;
+	margin-bottom: 100px;
+}
+
+#subdisciplina_container table td:nth-child(1),
+#subdisciplina_container table td:nth-child(2),
+#subdisciplina_container table td:nth-child(3){
+	width: 20%;
+}

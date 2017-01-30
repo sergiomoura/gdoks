@@ -1,6 +1,6 @@
 <div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
-<form name="form" novalidate="">
-	<div id="disciplina_container" class="bloco_conteudo bloco_central_50">
+<form name="form_disciplina" novalidate="">
+	<div id="disciplina_container" class="bloco_conteudo bloco_central_80">
 		<h1><img src="img/disciplina.png">Dados de {{ disciplina.id==0 ? 'Nova Disciplina' : disciplina.nome}}</h1>
 		<div>
 			<div class="item">
@@ -18,6 +18,58 @@
 			</div>
 		</div>
 		<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
-		<button	class="bt_salvar" ng-click="salvarDisciplina()" ng-disabled="form.$invalid || (disciplina.nome==disciplinaRef.nome && disciplinaRef.sigla==disciplina.sigla)">Salvar</button>
+		<button	class="bt_salvar" ng-click="salvarDisciplina()" ng-disabled="form.$invalid || (disciplina.nome==disciplinaRef.nome && disciplinaRef.sigla==disciplina.sigla && disciplina.ativa==disciplinaRef.ativa)">Salvar</button>
 	</div>
 </form>
+
+<div class="avisa_resultado_50 negativo" ng-show="erroEmOperacaoDeSubdisciplina!=null">{{erroEmOperacaoDeSubdisciplina}}</div>
+<div ng-if="disciplina.id!=0" id="subdisciplina_container" class="bloco_conteudo bloco_central_80">
+	<h1>Subdisciplinas de {{disciplina.nome}}</h1>
+	<help>
+		<text>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis expedita magni commodi voluptatibus
+			perspiciatis voluptatum reiciendis molestias officiaLorem ipsum dolor sit amet, consectetur adipisicing
+			elit. Quis expedita magni commodi voluptatibus perspiciatis voluptatum reiciendis molestias officiaLorem
+			ipsum dolor sit amet, consectetur adipisicing elit. Quis expedita magni commodi voluptatibus
+			perspiciatis <a href="http://www.google.com.br">aqui!</a> voluptatum reiciendis molestias officia
+		</text>
+	</help>
+	
+	<table>
+		<thead>
+			<tr>
+				<td>Nome</td>
+				<td>Sigla</td>
+				<td>Status</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="sub in disciplina.subs track by $index">
+				<!-- Campo de nome -->
+				<td ng-if="sub.id != subdisciplinaEditada.id">{{sub.nome}}</td>
+				<td ng-if="sub.id == subdisciplinaEditada.id"><input type="text" name="nome_{{sub.id}}" id="nome_{{sub.id}}" ng-model="subdisciplinaEditada.nome"></td>
+				
+				<!-- Campo de sigla -->
+				<td ng-if="sub.id != subdisciplinaEditada.id">{{sub.sigla}}</td>
+				<td ng-if="sub.id == subdisciplinaEditada.id"><input type="text" maxlength="4" name="sigla_{{sub.id}}" ng-model="subdisciplinaEditada.sigla"></td>
+				
+				<!-- Campo de Status -->
+				<td ng-if="sub.id != subdisciplinaEditada.id">{{sub.ativa?"Ativa":"Inativa"}}</td>
+				<td ng-if="sub.id == subdisciplinaEditada.id"><input type="checkbox" name="ativa_{{sub.id}}" ng-model="subdisciplinaEditada.ativa">{{subdisciplinaEditada.ativa?"Ativa":"Inativa"}}</td>
+
+				<!-- botões -->
+				<td>
+					<!-- em modo normal: botões de remover e alterar -->
+					<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_cancelar" ng-click="removerSubdisciplina(sub.id)">Remover</button>
+					<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_alterar" ng-click="editarSubdisciplina(sub.id)">Alterar</button>
+
+					<!-- em modo edição: botões de salvar e cancelar -->
+					<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_cancelar" ng-click="cancelarAlteracoesEmSubdisciplina(sub.id)">x</button>
+					<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_salvar" ng-click="salvarSubdisciplina(sub.id)">Salvar</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<button class="bt_adicionar" ng-click="editarSubdisciplina(0)">+ Adicionar Subdisciplina</button>
+</div>

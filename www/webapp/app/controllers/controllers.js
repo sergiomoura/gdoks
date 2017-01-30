@@ -311,22 +311,41 @@ controllers.DisciplinasController = function($scope,GDoksFactory){
 controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 	// Capturando o id passado na url
 	var id = $routeParams.id;
+	$scope.subdisciplinaEditada = null;
+	$scope.erroEmOperacaoDeSubdisciplina = null;
+
 
 	// se id== 0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
 	if(id == 0) {
-		// Criando um usuário vazio.
+		// Criando uma disciplina vazia.
 		$scope.disciplina = {};
 		$scope.disciplina.id = 0;
 		$scope.disciplina.nome = '';
 		$scope.disciplina.ativa = true;
 		$scope.inicialmenteAtiva = true;
+		$scope.disciplina.subs = [];
+		$scope.disciplina.especialistas = [];
+		$scope.disciplina.validadores = [];
 	} else {
-		// Buscando o usuário que tem como id o id passado
-		$scope.disciplinaRef = $scope.root.disciplinas.filter(function(d){return d.id==this},$routeParams.id)[0];
-		$scope.disciplina = angular.copy($scope.disciplinaRef);
-
-		// guardando estado inicial do atributo "ativa"
-		$scope.inicialmenteAtiva = ($scope.disciplina.ativa == true);	
+		// Carregando dados da disciplina no servidor
+		GDoksFactory.getDisciplina(id)
+			.success(
+				function(response){
+					$scope.disciplina = response.disciplina;
+					$scope.disciplina.ativa = ($scope.disciplina.ativa==1);
+					for (var i = $scope.disciplina.subs.length - 1; i >= 0; i--) {
+						$scope.disciplina.subs[i].ativa = ($scope.disciplina.subs[i].ativa==1);
+					};
+					$scope.disciplinaRef = angular.copy(response.disciplina);
+					$scope.root.disciplinas.filter(function(a){return a.id == this},id)[0] = $scope.disciplinaRef;
+					$scope.inicialmenteAtiva = $scope.disciplina.ativa;
+				}
+			)
+			.error(
+				function(error){
+					
+				}
+			);
 	}
 
 	$scope.salvarDisciplina = function(){
@@ -337,7 +356,6 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 					$scope.obteve_resposta = true;
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
-
 					$scope.disciplina.id = response.newId;
 					$scope.root.disciplinas.push($scope.disciplina);
 				}
@@ -370,13 +388,95 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 			);
 		}
 	}
-	
 
 	// Definindo função que cancela as alterações
 	$scope.cancel = function(){
 		window.location = "WebGDoks.php#/disciplinas";
 		$scope.root.itemSelecionadoDoMenu = 0;
 	}
+
+	// definindo função que remove subdisciplina
+	$scope.removerSubdisciplina = function(id){
+		if(confirm("Tem certeza que deseja excluir a subdisciplina? A ação não poderá ser desfeita.")){
+			var sub = $scope.disciplina.subs.find(function(a){return a.id == this},id);
+			sub.id_disciplina = $scope.disciplina.id;
+			GDoksFactory.removerSubdisciplina(sub)
+				.success(
+					function(response){
+						$scope.disciplina.subs = $scope.disciplina.subs.filter(function(a){return a.id!=this},id);
+					}
+				)
+				.error(
+					function(error){
+						$scope.erroEmOperacaoDeSubdisciplina = error.msg;
+					}
+				);
+		}
+	}
+
+	// definindo função que edita subdisciplina
+	$scope.editarSubdisciplina = function(id){
+		if(id != 0){
+			$scope.subdisciplinaEditada = angular.copy($scope.disciplina.subs.filter(function(a){return a.id == this},id)[0]);
+			$scope.subdisciplinaEditada.id_disciplina = $scope.disciplina.id;
+			setTimeout(function(){document.getElementById("nome_"+id).focus()},10);
+		} else {
+			$scope.subdisciplinaEditada = {};
+			$scope.subdisciplinaEditada.id = 0;
+			$scope.subdisciplinaEditada.id_disciplina = $scope.disciplina.id;
+			$scope.subdisciplinaEditada.nome = "";
+			$scope.subdisciplinaEditada.sigla = "";
+			$scope.subdisciplinaEditada.ativa = true;
+			$scope.disciplina.subs.push($scope.subdisciplinaEditada);
+			setTimeout(function(){document.getElementById("nome_0").focus()},10);
+		}
+	}
+
+	// definindo função que cancela alterações em subdisciplina
+	$scope.cancelarAlteracoesEmSubdisciplina = function(){
+		if($scope.subdisciplinaEditada.id == 0){
+			$scope.disciplina.subs = $scope.disciplina.subs.filter(function(a){return a.id!=0});
+		}
+		$scope.subdisciplinaEditada = null;
+	}
+
+	// definindo função que salva alterações em subdisciplinas
+	$scope.salvarSubdisciplina = function(){
+		if($scope.subdisciplinaEditada != null){
+			if($scope.subdisciplinaEditada.id != 0){
+				GDoksFactory.atualizarSubdisciplina($scope.subdisciplinaEditada)
+					.success(
+						function(response){
+							var sub = $scope.disciplina.subs.find(function(a){return a.id == this},$scope.subdisciplinaEditada.id);
+							sub.nome = $scope.subdisciplinaEditada.nome;
+							sub.sigla = $scope.subdisciplinaEditada.sigla;
+							sub.ativa = $scope.subdisciplinaEditada.ativa;
+							$scope.subdisciplinaEditada = null;
+							$scope.erroEmOperacaoDeSubdisciplina = null;
+						}
+					)
+					.error(
+						function(error){
+							$scope.erroEmOperacaoDeSubdisciplina = error.msg;
+						}
+					);
+			} else {
+				GDoksFactory.adicionarSubdisciplina($scope.subdisciplinaEditada)
+					.success(
+						function(response){
+							$scope.subdisciplinaEditada.id = response.newId;
+							$scope.subdisciplinaEditada = null;
+						}
+					)
+					.error(
+						function(error){
+							$scope.erroEmOperacaoDeSubdisciplina = error.msg;
+						}
+					);
+			}
+		}
+	}
+
 };
 
 controllers.AFazerController = function($scope){};

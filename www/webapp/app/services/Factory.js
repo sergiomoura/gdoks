@@ -31,6 +31,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/disciplinas', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getDisciplina = function(id_disciplina){
+				return $http.get(API_ROOT+'/disciplinas/'+id_disciplina, {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			// Faz requisição para atualizar o usuario enviado
 			GDoksFactory.atualizarDisciplina = function(disciplina){
 				return $http.put(API_ROOT+'/disciplinas/'+disciplina.id,disciplina,{headers: {'Authorization': $cookies.getObject('user').token}});
@@ -41,10 +45,21 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/disciplinas',disciplina,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.atualizarSubdisciplina = function(subdisciplina){
+				return $http.put(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/'+subdisciplina.id,subdisciplina,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.adicionarSubdisciplina = function(subdisciplina){
+				return $http.post(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/',subdisciplina,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.removerSubdisciplina = function(subdisciplina){
+				return $http.delete(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/'+subdisciplina.id,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjetos = function(){
 				return $http.get(API_ROOT+'/projetos', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
-			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
