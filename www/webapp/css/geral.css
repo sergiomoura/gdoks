@@ -132,7 +132,6 @@ button {
 	font-size:12px;
 	border-radius:5px;
 	color:#FFF;
-	min-width:100px;
 	padding: 0 20px;
 	cursor:pointer;
 }
@@ -154,7 +153,6 @@ button {
 	font-size:12px;
 	border-radius:5px;
 	color:#FFF;
-	width:100px;
 	cursor:pointer;
 }
 
@@ -169,7 +167,6 @@ button {
 	font-size:12px;
 	border-radius:5px;
 	color:#FFF;
-	width:100px;
 	cursor:pointer;
 }
 
@@ -189,6 +186,30 @@ button {
 
 #view .bt_adicionar:hover{
 	background-color:#06C306;
+}
+
+#view .bt_adicionar:disabled{
+	background-color:#CCCCCC !important;
+	color:#666 !important;
+	cursor: default !important;
+}
+
+#view .bt_adicionar:hover{
+	background-color:#40aaff;
+}
+
+#view .bt_limpo{
+	border: none;
+	background-color: rgba(0,0,0,0) !important;
+	text-decoration: underline;
+	padding: 0 10px;
+	color:#999;
+	cursor: pointer;
+	font-size: 12px;
+}
+
+#view .bt_limpo:hover{
+	color:#000;
 }
 
 #view .avisa_resultado_50{

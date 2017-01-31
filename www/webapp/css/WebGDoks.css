@@ -335,11 +335,49 @@ nav .cfg{
 
 #subdisciplina_container{
 	padding-bottom: 55px;
-	margin-bottom: 100px;
+	margin-bottom: 50px;
 }
 
 #subdisciplina_container table td:nth-child(1),
 #subdisciplina_container table td:nth-child(2),
 #subdisciplina_container table td:nth-child(3){
 	width: 20%;
+}
+
+#especialista_container .bt_adicionar{
+	position: absolute;
+	right: 15px;
+	bottom:15px;
+}
+
+#especialista_container{
+	padding-bottom: 55px;
+	margin-bottom: 50px;
+}
+
+#especialista_container table td:nth-child(1),
+#especialista_container table td:nth-child(2),
+#especialista_container table td:nth-child(3){
+	width: 20%;
+}
+
+#validador_container .bt_adicionar{
+	position: absolute;
+	right: 15px;
+	bottom:15px;
+}
+
+#validador_container{
+	padding-bottom: 55px;
+	margin-bottom: 150px;
+}
+
+#validador_container table td:nth-child(1),
+#validador_container table td:nth-child(2),
+#validador_container table td:nth-child(3){
+	width: 25%;
+}
+
+#validador_container table tr td:first-child select{
+	width: 100%;
 }

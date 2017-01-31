@@ -25,16 +25,6 @@
 <div class="avisa_resultado_50 negativo" ng-show="erroEmOperacaoDeSubdisciplina!=null">{{erroEmOperacaoDeSubdisciplina}}</div>
 <div ng-if="disciplina.id!=0" id="subdisciplina_container" class="bloco_conteudo bloco_central_80">
 	<h1>Subdisciplinas de {{disciplina.nome}}</h1>
-	<help>
-		<text>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis expedita magni commodi voluptatibus
-			perspiciatis voluptatum reiciendis molestias officiaLorem ipsum dolor sit amet, consectetur adipisicing
-			elit. Quis expedita magni commodi voluptatibus perspiciatis voluptatum reiciendis molestias officiaLorem
-			ipsum dolor sit amet, consectetur adipisicing elit. Quis expedita magni commodi voluptatibus
-			perspiciatis <a href="http://www.google.com.br">aqui!</a> voluptatum reiciendis molestias officia
-		</text>
-	</help>
-	
 	<table>
 		<thead>
 			<tr>
@@ -65,11 +55,120 @@
 					<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_alterar" ng-click="editarSubdisciplina(sub.id)">Alterar</button>
 
 					<!-- em modo edição: botões de salvar e cancelar -->
-					<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_cancelar" ng-click="cancelarAlteracoesEmSubdisciplina(sub.id)">x</button>
+					<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_limpo" ng-click="cancelarAlteracoesEmSubdisciplina(sub.id)">Cancelar</button>
 					<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_salvar" ng-click="salvarSubdisciplina(sub.id)">Salvar</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<button class="bt_adicionar" ng-click="editarSubdisciplina(0)">+ Adicionar Subdisciplina</button>
+	<button class="bt_adicionar" ng-click="editarSubdisciplina(0)" ng-disabled="subdisciplinaEditada!=null">+ Adicionar Subdisciplina</button>
+	<help>
+		<text>
+			Subdisciplinas são divisões de uma disciplina.
+		</text>
+	</help>
+</div>
+
+<div ng-if="disciplina.id!=0" id="especialista_container" class="bloco_conteudo bloco_central_80">
+	<h1>Especialistas de {{disciplina.nome}}</h1>
+	<table>
+		<thead>
+			<tr>
+				<td>Nome</td>
+				<td>E-mail</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="esp in especialistas track by $index">
+				<td>{{esp.nome}}</td>
+				<td>{{esp.email}}</td>
+				<td>
+					<button class="bt_cancelar" ng-click="removerEspecialista(esp.id)">Remover</button>
+				</td>
+			</tr>
+			<tr ng-if="inserindoNovoEspecialista">
+				<td colspan="2">
+					<select
+						name="selNovoEspecialista"
+						id="selNovoEspecialista"
+						ng-options="option.nome for option in data.possiveisEspecialistas track by option.id"
+						ng-model="data.selecionado">
+					</select>
+				</td>
+				<td>
+					<button class="bt_limpo" ng-click="cancelarAlteracoesEmNovoEspecialista()">Cancelar</button>
+					<button class="bt_salvar" ng-click="salvarEspecialista()" ng-disabled="data.selecionado.id == 0">Salvar</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<button class="bt_adicionar" ng-click="adicionarNovoEspecialista()" ng-disabled="inserindoNovoEspecialista">+ Adicionar Especialista</button>
+	<help>
+		<text>
+			Os usuários que são especialistas em uma disciplina tem permissão para acessar e alterar os documentos desta disciplina.
+			As alterações realizadas por estes especialistas deverão ser validadas por um ou mais usuário validador desta
+			disciplina.
+		</text>
+	</help>
+</div>
+
+<div ng-if="disciplina.id!=0" id="validador_container" class="bloco_conteudo bloco_central_80">
+	<h1>Validadores da {{disciplina.nome}}</h1>
+	<table>
+		<thead>
+			<tr>
+				<td>Nome</td>
+				<td>E-mail</td>
+				<td>Tipo</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="val in validadores track by $index">
+				<td>{{val.nome}}</td>
+				<td>{{val.email}}</td>
+				<td>{{val.tipo==1?"Necessário":"Suficiente"}}</td>
+				<td>
+					<button class="bt_cancelar" ng-click="removerValidador(val.id)">Remover</button>
+				</td>
+			</tr>
+			<tr ng-if="inserindoNovoValidador">
+				<td colspan="2">
+					<select
+						name="selNovoValidador"
+						id="selNovoValidador"
+						ng-options="option.nome for option in dataValidadores.possiveisValidadores track by option.id"
+						ng-model="dataValidadores.selecionado">
+					</select>
+				</td>
+				<td>
+					<select
+						name="selTipoValidador"
+						id="selTipoValidador"
+						ng-options="option.nome for option in tiposDeValidadores.tipos track by option.id"
+						ng-model="tiposDeValidadores.selecionado">
+					</select>
+				</td>
+				<td>
+					<button class="bt_limpo" ng-click="cancelarAlteracoesEmNovoValidador()">Cancelar</button>
+					<button class="bt_salvar" ng-click="salvarValidador()" ng-disabled="dataValidadores.selecionado.id == 0">Salvar</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<button class="bt_adicionar" ng-click="adicionarNovoValidador()" ng-disabled="inserindoNovoValidador">+ Adicionar Validador</button>
+	<help>
+		<text>
+			<p>Validadores são usuários que validam as alterações feitas nos documentos.</p>
+			<p>Uma disciplina pode ter vários validadores.</p>
+			<p>Um validador pode ser de dois tipos: Suficiente ou Necessário.</p>
+			<p>Um documento é tido como validado se uma das duas coisas abaixo acontecer:
+			<ul>
+				<li>Todos os validadores necessários validam o documento</li>
+				<li>Pelo menos um validador suficiente valida o documento</li>
+			</ul>
+		</p>
+		</text>
+	</help>
 </div>

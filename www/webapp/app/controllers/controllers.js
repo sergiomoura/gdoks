@@ -47,8 +47,20 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 	// Acionando timer que renova o token de tempo em tempo
 	$interval(refreshToken,TOKEN_REFRESH_IN);
 
-	// renovando o token agora.
-	refreshToken();
+	// Carregando os usuários do servidor
+	GDoksFactory.loadUsuarios()
+		.success(
+			function(response){
+				$scope.root.usuarios = response.usuarios;
+				for (var i = $scope.root.usuarios.length - 1; i >= 0; i--) {
+					$scope.root.usuarios[i].ativo = ($scope.root.usuarios[i].ativo==1);
+				};
+			}
+		)
+		.error(
+			function(error){
+			}
+		);
 }
 
 controllers.TopoController = function($scope){
@@ -141,21 +153,6 @@ controllers.NavController = function($scope){
 controllers.HomeController = function($scope){}
 
 controllers.UsuariosController = function($scope,GDoksFactory){
-	// Carregando os usuários do servidor
-	GDoksFactory.loadUsuarios()
-		.success(
-			function(response){
-				$scope.root.usuarios = response.usuarios;
-				for (var i = $scope.root.usuarios.length - 1; i >= 0; i--) {
-					$scope.root.usuarios[i].ativo = ($scope.root.usuarios[i].ativo==1);
-				};
-			}
-		)
-		.error(
-			function(error){
-			}
-		);
-
 	// função que leva para a tela de adicionar usuário
 	$scope.goToAddUsuario = function(){
 		window.location = '#/usuarios/0';
@@ -313,6 +310,12 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 	var id = $routeParams.id;
 	$scope.subdisciplinaEditada = null;
 	$scope.erroEmOperacaoDeSubdisciplina = null;
+	$scope.especialistas = [];
+	$scope.inserindoNovoEspecialista = false;
+	$scope.possiveisEspecialistas = [];
+	$scope.validadores = [];
+	$scope.inserindoNovoValidador = false;
+	$scope.possiveisValidadores = [];
 
 
 	// se id== 0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
@@ -339,6 +342,19 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 					$scope.disciplinaRef = angular.copy(response.disciplina);
 					$scope.root.disciplinas.filter(function(a){return a.id == this},id)[0] = $scope.disciplinaRef;
 					$scope.inicialmenteAtiva = $scope.disciplina.ativa;
+
+					// Parsing especialistas
+					for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
+						$scope.especialistas.push($scope.root.usuarios.find(function(a){return a.id == this},$scope.disciplina.especialistas[i]));
+					};
+
+					// Parsing validadores
+					var validador;
+					for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
+						validador = $scope.root.usuarios.find(function(a){return a.id == this},$scope.disciplina.validadores[i].id);
+						validador.tipo = $scope.disciplina.validadores[i].tipo;
+						$scope.validadores.push(validador);
+					};
 				}
 			)
 			.error(
@@ -477,6 +493,143 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 		}
 	}
 
+	$scope.adicionarNovoEspecialista = function(){
+		// Criando objeto data que irá conter dados para o select de possíveis especialistas
+		$scope.data = {};
+
+		// Copiando vetor de usuários para o vetor de possíveis especialistas
+		$scope.data.possiveisEspecialistas = angular.copy($scope.root.usuarios);
+
+		// removendo os usuários que já são especialistas da disciplina
+		for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
+			$scope.data.possiveisEspecialistas = $scope.data.possiveisEspecialistas.filter(function(a){return a.id != this},$scope.disciplina.especialistas[i]);
+		};
+
+		// Criando especialista vazio
+		var especialistaVazio = {"nome":"Selecione um usuário...","id":0};
+
+		// adicionando o especialista vazio ao grupo de possiveis especialistas
+		$scope.data.possiveisEspecialistas.unshift(especialistaVazio);
+		
+		// Marcando o item defalr		
+		$scope.data.selecionado = especialistaVazio;
+
+		// marcando flag para exibir campo de insersão de novo especialista
+		$scope.inserindoNovoEspecialista = true;
+	}
+
+	// definindo função que remove especialista
+	$scope.removerEspecialista = function(id_especialista){
+		if(confirm("Tem certeza que deseja remover o especialista da disciplina?")){
+			GDoksFactory.removerEspecialista($scope.disciplina.id,id_especialista)
+				.success(
+					function(response){
+						$scope.disciplina.especialistas = $scope.disciplina.especialistas.filter(function(a){return a != this},id_especialista);
+						$scope.especialistas = $scope.especialistas.filter(function(a){return a.id != this},id_especialista);
+					}
+				)
+				.error(
+					function(error){
+						
+					}
+				);
+		}
+	}
+
+	// definindo função que cancela alterações em subdisciplina
+	$scope.cancelarAlteracoesEmNovoEspecialista = function(){
+		$scope.inserindoNovoEspecialista = false;
+	}
+
+	// definindo função que salva alterações em subdisciplinas
+	$scope.salvarEspecialista = function(){
+		GDoksFactory.adicionarEspecialista($scope.disciplina.id,$scope.data.selecionado.id)
+			.success(
+				function(response){
+					$scope.disciplina.especialistas.push($scope.data.selecionado.id);
+					$scope.especialistas.push($scope.root.usuarios.find(function(a){return a.id == this},$scope.data.selecionado.id));
+					$scope.inserindoNovoEspecialista = false;
+				}
+			)
+			.error(
+				function(error){
+					
+				}
+			);
+	}
+
+	$scope.adicionarNovoValidador = function(){
+		// Criando objeto data que irá conter dados para o select de possíveis validadores
+		$scope.dataValidadores = {};
+
+		// Copiando vetor de usuários para o vetor de possíveis validadores
+		$scope.dataValidadores.possiveisValidadores = angular.copy($scope.root.usuarios);
+
+		// removendo os usuários que já são validadores da disciplina
+		for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
+			$scope.dataValidadores.possiveisValidadores = $scope.dataValidadores.possiveisValidadores.filter(function(a){return a.id != this},$scope.disciplina.validadores[i].id);
+		};
+
+		// Criando validador vazio
+		var validadorVazio = {"nome":"Selecione um usuário...","id":0,"tipo":1};
+
+		// adicionando o validador vazio ao grupo de possiveis validadores
+		$scope.dataValidadores.possiveisValidadores.unshift(validadorVazio);
+		
+		// Marcando o item defalr		
+		$scope.dataValidadores.selecionado = validadorVazio;
+
+		// Criando um objeto para lidar com os tipos de validadores
+		$scope.tiposDeValidadores = {};
+		$scope.tiposDeValidadores.tipos = [{"id":1,"nome":"Necessário"},{"id":2,"nome":"Suficiente"}];
+		$scope.tiposDeValidadores.selecionado = {"id":1,"nome":"Necessário"};
+
+
+		// marcando flag para exibir campo de insersão de novo validador
+		$scope.inserindoNovoValidador = true;
+	}
+
+	// definindo função que remove validador
+	$scope.removerValidador = function(id_validador){
+		if(confirm("Tem certeza que deseja remover o validador da disciplina?")){
+			GDoksFactory.removerValidador($scope.disciplina.id,id_validador)
+				.success(
+					function(response){
+						$scope.disciplina.validadores = $scope.disciplina.validadores.filter(function(a){return a.id != this},id_validador);
+						$scope.validadores = $scope.validadores.filter(function(a){return a.id != this},id_validador);
+					}
+				)
+				.error(
+					function(error){
+						
+					}
+				);
+		}
+	}
+
+	// definindo função que cancela alterações em subdisciplina
+	$scope.cancelarAlteracoesEmNovoValidador = function(){
+		$scope.inserindoNovoValidador = false;
+	}
+
+	// definindo função que salva alterações em subdisciplinas
+	$scope.salvarValidador = function(){
+		GDoksFactory.adicionarValidador($scope.disciplina.id,$scope.dataValidadores.selecionado.id,$scope.tiposDeValidadores.selecionado.id)
+			.success(
+				function(response){
+					$scope.disciplina.validadores.push({"id":$scope.dataValidadores.selecionado.id,"tipo":$scope.tiposDeValidadores.selecionado.id});
+					var validador = $scope.root.usuarios.find(function(a){return a.id == this},$scope.dataValidadores.selecionado.id);
+					validador.tipo = $scope.tiposDeValidadores.selecionado.id;
+					$scope.validadores.push(validador);
+					$scope.inserindoNovoValidador = false;
+				}
+			)
+			.error(
+				function(error){
+					
+				}
+			);
+	}
 };
 
 controllers.AFazerController = function($scope){};

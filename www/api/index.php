@@ -605,6 +605,196 @@
 					$response = new response(1,'Não altera dados de outro cliente.');	
 				}
 			});
+
+			$app->post('/disciplinas/:id_disciplina/especialistas/',function($id_disciplina) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_disciplina = 1*$id_disciplina;
+				$id_especialista = 1*$app->request->getBody();
+
+				// verificando se o usário enviado é do mesmo cliente da subdisciplina atual
+				$sql = 'SELECT A.id as id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_cliente
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_disciplinas
+						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_usuarios
+						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_especialista)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A subdisciplina a ser adicionada é do mesmo cliente do usuário
+					$sql = 'INSERT INTO gdoks_especialistas (id_usuario,id_disciplina) VALUES (?,?)';
+					try {
+						$db->query($sql,'ii',$id_especialista,$id_disciplina);
+						$response = new response(0,'Especialista adicionado com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage);
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outro cliente.');	
+				}
+			});
+			
+			$app->delete('/disciplinas/:id_disciplina/especialistas/:id_especialista',function($id_disciplina,$id_especialista) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_disciplina = 1*$id_disciplina;
+				$id_especialista = 1*$id_especialista;
+
+				// verificando se o usário enviado é do mesmo cliente da subdisciplina atual
+				$sql = 'SELECT A.id as id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_cliente
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_disciplinas
+						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_usuarios
+						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_especialista)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A subdisciplina a ser adicionada é do mesmo cliente do usuário
+					$sql = 'DELETE FROM gdoks_especialistas WHERE id_usuario=? AND id_disciplina=?';
+					try {
+						$db->query($sql,'ii',$id_especialista,$id_disciplina);
+						$response = new response(0,'Especialista removido com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage);
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outro cliente.');	
+				}
+			});
+			
+			$app->post('/disciplinas/:id_disciplina/validadores/',function($id_disciplina) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_disciplina = 1*$id_disciplina;
+				$data = json_decode($app->request->getBody());
+				$id_validador = $data->idu;
+				$tipo = $data->tipo;
+
+				// verificando se o usário enviado é do mesmo cliente da subdisciplina atual
+				$sql = 'SELECT A.id as id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_cliente
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_disciplinas
+						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_usuarios
+						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_validador)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A subdisciplina a ser adicionada é do mesmo cliente do usuário
+					$sql = 'INSERT INTO gdoks_validadores (id_usuario,id_disciplina,tipo) VALUES (?,?,?)';
+					try {
+						$db->query($sql,'iii',$id_validador,$id_disciplina,$tipo);
+						$response = new response(0,'Validador adicionado com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina.','.$tipo);
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outro cliente.');	
+				}
+			});
+			
+			$app->delete('/disciplinas/:id_disciplina/validadores/:id_validador',function($id_disciplina,$id_validador) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_disciplina = 1*$id_disciplina;
+				$id_validador = 1*$id_validador;
+
+				// verificando se o usário enviado é do mesmo cliente da subdisciplina atual
+				$sql = 'SELECT A.id as id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_cliente
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_disciplinas
+						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						INNER JOIN
+						  (SELECT id_cliente
+						   FROM gdoks_usuarios
+						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_validador)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A subdisciplina a ser adicionada é do mesmo cliente do usuário
+					$sql = 'DELETE FROM gdoks_validadores WHERE id_usuario=? AND id_disciplina=?';
+					try {
+						$db->query($sql,'ii',$id_validador,$id_disciplina);
+						$response = new response(0,'Validador removido com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina);
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outro cliente.');	
+				}
+			});
 		// FIM DE ROTAS DE DISCIPLINAS
 		
 		// ROTAS DE PROJETOS - - - - - - - - - - - - - - - - -

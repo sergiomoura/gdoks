@@ -22,6 +22,7 @@
 				<li>Acertar o fuso horário do registro no log</li>
 				<li>Acertar o fuso horário do última atualização</li>
 				<li>Submenu projetos se move para direita para se posicionar corretamente quando a página de projetos é carregada enquanto o menu principal está sendo exibido.</li>
+				<li class="feito">No cadastro de especialistas, ao se remover um especialista ele não fica disponível para nova adição.</li>
 			</ul>
 		</li>
 		<li>
