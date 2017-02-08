@@ -16,8 +16,8 @@
 			<img src="img/logo.png" alt="GDoks">
 			<form class="bloco_conteudo" ng-submit="getToken()">
 				<div>
-					<label for="cliente">Cliente</label>
-					<input type="text" name="cliente" id="cliente" value="" ng-model="cliente" focus />
+					<label for="cliente">Empresa</label>
+					<input type="text" name="empresa" id="empresa" value="" ng-model="empresa" focus />
 				</div>
 				<div>
 					<label for="login">Login</label>
@@ -46,7 +46,7 @@
 					var data = {}
 					data.login = $scope.login;
 					data.senha = $scope.senha;
-					data.cliente = $scope.cliente;
+					data.empresa = $scope.empresa;
 					$http.post(API_ROOT+'/login',data).
 					then(function(response) {
 						$scope.loginFail = false;

@@ -40,13 +40,13 @@
 						   b.login,
 						   b.email,
 					       count(*)=1 AS ok
-					FROM gdoks_clientes a
-					INNER JOIN gdoks_usuarios b ON a.id=b.id_cliente
+					FROM gdoks_empresas a
+					INNER JOIN gdoks_usuarios b ON a.id=b.id_empresa
 					WHERE login=?
 					  AND senha=PASSWORD(?)
 					  AND ucase(a.nome)=ucase(?)
 					  AND ativo';
-			$result = $db->query($sql,'sss',$data->login,$data->senha,$data->cliente)[0];
+			$result = $db->query($sql,'sss',$data->login,$data->senha,$data->empresa)[0];
 
 			// perguntando se usuário é válido
 			if($result['ok'] == 1){
@@ -171,9 +171,9 @@
 						       a.ativo
 						FROM gdoks_usuarios a
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks.gdoks_usuarios
-						   WHERE token=?) b ON a.id_cliente=b.id_cliente
+						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 							ORDER by a.nome';
 				$response = new response(0,'ok');
 				$response->usuarios = $db->query($sql,'s',$token);
@@ -191,14 +191,14 @@
 							A.id,COUNT(*) as ok
 						FROM (
 							SELECT
-								id,id_cliente
+								id,id_empresa
 							FROM gdoks.gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 							SELECT
-								id_cliente
+								id_empresa
 							FROM gdoks.gdoks_usuarios
-								WHERE id=?) B on A.id_cliente=B.id_cliente;';
+								WHERE id=?) B on A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
 				$id = $rs['id'];
@@ -249,21 +249,21 @@
 				$token = $app->request->headers->get('Authorization');
 				$usuario = json_decode($app->request->getBody());
 
-				// Capturando o id e o id_cliente do usuário atual
+				// Capturando o id e o id_empresa do usuário atual
 				$sql = 'SELECT
-							id,id_cliente
+							id,id_empresa
 						FROM 
 							gdoks_usuarios
 						WHERE
 							token=? and validade_do_token>now()';
 				$rs = $db->query($sql,'s',$token)[0];
-				$id_cliente = $rs['id_cliente'];
+				$id_empresa = $rs['id_empresa'];
 				$id = $rs['id'];
 
 				// Inserindo novo usuário.
-				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_cliente,ativo) VALUES (?,?,?,?,?,?)';
+				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_empresa,ativo) VALUES (?,?,?,?,?,?)';
 				try {
-					$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$id_cliente,$usuario->ativo);
+					$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$id_empresa,$usuario->ativo);
 					$response = new response(0,'Usuário criado com sucesso.');
 					$response->newId = $db->insert_id;
 					$response->flush();
@@ -287,9 +287,9 @@
 						       a.ativa
 						FROM gdoks_disciplinas a
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks.gdoks_usuarios
-						   WHERE token=?) b ON a.id_cliente=b.id_cliente
+						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 							ORDER by a.nome';
 				$response = new response(0,'ok');
 				$response->disciplinas = $db->query($sql,'s',$token);
@@ -307,14 +307,14 @@
 						       COUNT(*) AS ok
 						FROM
 						  ( SELECT id,
-						           id_cliente
+						           id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  ( SELECT id_cliente
+						  ( SELECT id_empresa
 						   FROM gdoks.gdoks_disciplinas
-						   WHERE id=?) B ON A.id_cliente=B.id_cliente;';
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id'];
@@ -344,21 +344,21 @@
 				$token = $app->request->headers->get('Authorization');
 				$disciplina = json_decode($app->request->getBody());
 
-				// Capturando o id e o id_cliente do usuário atual
+				// Capturando o id e o id_empresa do usuário atual
 				$sql = 'SELECT
-							id,id_cliente
+							id,id_empresa
 						FROM 
 							gdoks_usuarios
 						WHERE
 							token=? and validade_do_token>now()';
 				$rs = $db->query($sql,'s',$token)[0];
-				$id_cliente = $rs['id_cliente'];
+				$id_empresa = $rs['id_empresa'];
 				$id = $rs['id'];
 
 				// Inserindo nova disciplina.
-				$sql = 'INSERT INTO gdoks_disciplinas (nome,sigla,id_cliente,ativa) VALUES (?,?,?,?)';
+				$sql = 'INSERT INTO gdoks_disciplinas (nome,sigla,id_empresa,ativa) VALUES (?,?,?,?)';
 				try {
-					$db->query($sql,'ssii',$disciplina->nome,$disciplina->sigla,$id_cliente,$disciplina->ativa);
+					$db->query($sql,'ssii',$disciplina->nome,$disciplina->sigla,$id_empresa,$disciplina->ativa);
 					$response = new response(0,'Disciplina criada com sucesso.');
 					$response->newId = $db->insert_id;
 					$response->flush();
@@ -383,14 +383,14 @@
 						       COUNT(*) AS ok
 						FROM
 						  ( SELECT id,
-						           id_cliente
+						           id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  ( SELECT id_cliente
+						  ( SELECT id_empresa
 						   FROM gdoks.gdoks_disciplinas
-						   WHERE id=?) B ON A.id_cliente=B.id_cliente;';
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
 				
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
@@ -476,15 +476,15 @@
 						       count(*) AS ok
 						FROM
 						  (SELECT id,
-						          id_cliente
+						          id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_disciplinas d
 						   INNER JOIN gdoks_subdisciplinas s ON d.id=s.id_disciplina
-						   AND s.id=?) B ON A.id_cliente=B.id_cliente';
+						   AND s.id=?) B ON A.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'si',$token,$id_sub)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
@@ -520,13 +520,13 @@
 						       count(*) AS ok
 						FROM
 						  (SELECT id,
-						          id_cliente
+						          id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  (SELECT id_cliente
-						   FROM gdoks_disciplinas d WHERE d.id=?) B ON A.id_cliente=B.id_cliente';
+						  (SELECT id_empresa
+						   FROM gdoks_disciplinas d WHERE d.id=?) B ON A.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'si',$token,$id_disciplina)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
@@ -573,15 +573,15 @@
 						       count(*) AS ok
 						FROM
 						  (SELECT id,
-						          id_cliente
+						          id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_disciplinas d
 						   INNER JOIN gdoks_subdisciplinas s ON d.id=s.id_disciplina
-						   AND s.id=?) B ON A.id_cliente=B.id_cliente';
+						   AND s.id=?) B ON A.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'si',$token,$id_sub)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
@@ -617,18 +617,18 @@
 						       count(*) AS ok
 						FROM
 						  (SELECT id,
-						          id_cliente
+						          id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_disciplinas
-						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_usuarios
-						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+						   WHERE id=?) C ON C.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_especialista)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
@@ -664,18 +664,18 @@
 						       count(*) AS ok
 						FROM
 						  (SELECT id,
-						          id_cliente
+						          id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_disciplinas
-						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_usuarios
-						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+						   WHERE id=?) C ON C.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_especialista)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
@@ -713,18 +713,18 @@
 						       count(*) AS ok
 						FROM
 						  (SELECT id,
-						          id_cliente
+						          id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_disciplinas
-						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_usuarios
-						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+						   WHERE id=?) C ON C.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_validador)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
@@ -760,18 +760,18 @@
 						       count(*) AS ok
 						FROM
 						  (SELECT id,
-						          id_cliente
+						          id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_disciplinas
-						   WHERE id=?) B ON A.id_cliente=B.id_cliente
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa
 						INNER JOIN
-						  (SELECT id_cliente
+						  (SELECT id_empresa
 						   FROM gdoks_usuarios
-						   WHERE id=?) C ON C.id_cliente=B.id_cliente';
+						   WHERE id=?) C ON C.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'sii',$token,$id_disciplina,$id_validador)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
@@ -828,14 +828,14 @@
 						       COUNT(*) AS ok
 						FROM
 						  ( SELECT id,
-						           id_cliente
+						           id_empresa
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
-						  ( SELECT id_cliente
+						  ( SELECT id_empresa
 						   FROM gdoks.gdoks_projetos
-						   WHERE id=?) B ON A.id_cliente=B.id_cliente;';
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
 			
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
