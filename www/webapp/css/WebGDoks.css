@@ -34,30 +34,65 @@
 }
 
 nav {
-	position: fixed;
-	left: 0;
-	top: 36px;
-	width: 45px;
-	/*width: 186px;*/
-	transition: width 0.3s;
-	transition-timing-function: ease-out;
-	height: calc(100% - 36px);
-	background-color: #2B2B2B;
-	overflow: hidden;
-	
+	position: fixed; left: 0px; top: 36px; transition: left 0.3s; transition-timing-function: ease-out; height: calc(100% - 36px); /*
+	*/
+	background-color: RGBA(43, 43, 43,0.8);
+	width: 200px;
 }
 
-nav a{
+nav ul{
+	list-style:none;
+	position:relative;
+	float:left;
+	margin:0;
+	padding:0;
+	height: 100%;
+}
+
+nav ul a{
+	cursor: pointer;
 	display: block;
 	text-decoration: none;
 	color: #FFF;
 	font-size: 16px;
-	padding: 10px 0;
-	text-indent: 45px;
+	padding: 10px 10px;
+  width: calc(100% + 15px);
+  white-space: nowrap;
+}
+
+nav>ul>li li a{
+  background-color: rgba(43,43,43,0.8);
+}
+
+
+nav>ul>li ul{
+	position:absolute;
+	margin-top: -41px;
+	margin-left: calc(100% + 35px);
+	padding: 0;
+	display: none;
+}
+
+nav>ul li:hover>ul{
+	display: block;
+}
+
+nav li{
+	list-style: none;
+	display: block;
+	position: relative;
+}
+
+nav>ul>li>a{
+  text-indent: 45px;
 	background-repeat: no-repeat;
-    background-position: 6px 5px;
-    width: 100%;
-    white-space: nowrap;
+  background-position: 6px 5px;
+}
+
+nav>ul>li:last-child{
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
 }
 
 nav a:hover{
@@ -65,11 +100,11 @@ nav a:hover{
 }
 
 nav .selected{
-	border-left: solid 5px #2196F3;
 	background-color: #296a9e;
 	cursor: default;
-	background-position: 1px 5px;
-	text-indent: 40px;
+	/*!  */
+	/*!  */
+	text-decoration: underline;
 }
 
 nav .home{
@@ -102,17 +137,15 @@ nav .cli{
 
 nav .cfg{
 	background-image: url(../img/icon_configuracoes.png);
-	position: absolute;
-	bottom: 0;
 }
 
 #view_container{
-	width: calc(100% - 45px);
+	width: 100%;
 	position: relative;
 	transition: width 0.3s, left 0.3s;
 	transition-timing-function: ease-out;
-	left: 45px;
-	min-width: 755px;
+	left: 0;
+	min-width: 800px;
 	top: 0px;
 	z-index: -1;
 	height: 100%;

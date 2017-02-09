@@ -13,6 +13,19 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 	// definindo valor inicial para mostrandoMenu
 	$scope.root.mostrandoMenu = false;
 
+	// definindo função que mostra ou esconde o menu principal
+	$scope.root.toggleSideMenu = function(){
+		/*
+		$scope.root.mostrandoMenu = !$scope.root.mostrandoMenu;
+		if($scope.root.mostrandoMenu){
+			// aumentando menu lateral esquerdo;
+			document.getElementById("menu").style.left = "0px";
+		} else {
+			document.getElementById("menu").style.left = "-186px";
+		}
+		*/
+	}
+
 	// definindo o objeto que guarda as info do usuário logado.
 	$scope.root.user = $cookies.getObject('user');
 
@@ -21,9 +34,6 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 
 	// Definindo vetor que manterá os projetos que são visíveis pelo usuário.
 	$scope.root.projetos = [];
-
-	// Definindo objeto que representa o projeto selecionado
-	// $scope.root.projetoSelecionado = null;
 
 	// Definindo vetor que guarda as disciplinas;
 	$scope.root.disciplinas = [];
@@ -67,30 +77,7 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 }
 
 controllers.TopoController = function($scope){
-	$scope.toggleSideMenu = function(){
-		$scope.root.mostrandoMenu = !$scope.root.mostrandoMenu;
-		if($scope.root.mostrandoMenu){
-			// aumentando menu lateral esquerdo e diminuindo o view_container;
-			document.getElementById("menu").style.width = "186px";
-			document.getElementById("view_container").style.width = "calc(100% - 186px)";
-			document.getElementById("view_container").style.minWidth = "614px";
-			document.getElementById("view_container").style.left = "186px";
-
-			// movendo o submenu de projetos caso ele esteja carregado.
-			var menu = document.getElementById("prj_menu");
-			if(menu){menu.style.marginLeft = "141px"};
-
-		} else {
-			document.getElementById("menu").style.width = "45px";
-			document.getElementById("view_container").style.width = "calc(100% - 45px)"
-			document.getElementById("view_container").style.left = "45px";
-			document.getElementById("view_container").style.minWidth = "755px"
-
-			// movendo o submenu de projetos caso ele esteja carregado.
-			var menu = document.getElementById("prj_menu");
-			if(menu){menu.style.marginLeft = "31px"};
-		}
-	}
+	
 
 	$scope.toggleOpcoesMenu = function(){
 		$scope.mostrandoOpcoes = !$scope.mostrandoOpcoes;

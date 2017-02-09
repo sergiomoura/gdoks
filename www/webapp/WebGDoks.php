@@ -15,20 +15,47 @@
 </head>
 <body ng-controller="RootController">
 	<div id="topo" ng-controller="TopoController">
-		<a ng-click="toggleSideMenu()" id="abreMenu"></a>
+		<a ng-click="root.toggleSideMenu()" id="abreMenu"></a>
 		<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
 		<a ng-click="toggleOpcoesMenu()" id="lk_opcoes"></a>
 	</div>
 	<div id="container_horizontal">
 		<nav id="menu" ng-controller="NavController">
-			<a ng-click="itemClicked(0)" class="prj" ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/projetos#prj_documentos">Projetos</a>
-			<a ng-click="itemClicked(1)" class="usu" ng-class="{ 'selected': 1 == root.itemSelecionadoDoMenu }" href="#/usuarios">Usuários</a>
-			<a ng-click="itemClicked(2)" class="doc" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos</a>
-			<a ng-click="itemClicked(3)" class="dsc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
-			<a ng-click="itemClicked(4)" class="cal" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/afazer">A Fazer</a>
-			<a ng-click="itemClicked(5)" class="cli" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/clientes">Clientes</a>
-			<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
-
+			<ul>
+				<li>
+					<a class="prj">Projetos</a>
+					<ul>
+						<li><a href="#/visaogeral">Visão Geral</a></li>
+						<li><a href="#/addprojeto">Cadastrar Novo Projeto</a></li>
+						<li>
+							<a>Ir Para Projeto</a>
+							<ul>
+								<li><a href="#/projetos/1">Projeto 1</a></li>
+								<li><a href="#/projetos/2">Projeto 2</a></li>
+								<li><a href="#/projetos/3">Projeto 3</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a ng-click="itemClicked(1)" class="usu" ng-class="{ 'selected': 1 == root.itemSelecionadoDoMenu }" href="#/usuarios">Usuários</a>
+				</li>
+				<li>
+					<a ng-click="itemClicked(2)" class="doc" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos</a>
+				</li>
+				<li>
+					<a ng-click="itemClicked(3)" class="dsc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
+				</li>
+				<li>
+					<a ng-click="itemClicked(4)" class="cal" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/afazer">A Fazer</a>
+				</li>
+				<li>
+					<a ng-click="itemClicked(5)" class="cli" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/clientes">Clientes</a>
+				</li>
+				<li>
+					<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
+				</li>
+			</ul>
 		</nav>
 		<div id="view_container">
 			<div id="view" ng-view></div>
