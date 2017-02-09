@@ -1,0 +1,46 @@
+<div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
+<form name="form" novalidate="">
+	<div id="cliente_container" class="bloco_conteudo bloco_central_50">
+		<h1><img src="img/cliente.png">Dados de {{ cliente.id==0 ? 'Novo Cliente' : cliente.nome}}</h1>
+		<div>
+			<div class="item">
+				<label>Nome:</label>
+				<input type="text" placeholder="Digite o nome" ng-model="cliente.nome" required>
+			</div>
+			<div class="item">
+				<label>Nome Fantasia:</label>
+				<input type="text" placeholder="Digite o nome fantasia" ng-model="cliente.nome_fantasia" required>
+			</div>
+			<div class="item">
+				<label>Tipo:</label>
+				<select ng-model="cliente.tipo" ng-change="onTipoChange()">
+					<option value="1">Pessoa Jurídica</option>
+					<option value="2">Pessoa Pessoa Física</option>
+				</select>
+			</div>
+			<div class="item" ng-show="cliente.tipo=='1'">
+				<label>CNPJ:</label>
+				<input type="text" ng-model="cliente.cnpj" ui-mask-placeholder  ui-mask="99.999.999/9999-99" ui-mask-placeholder-char="_" ng-required="cliente.tipo=='1'" model-view-value="true">
+			</div>
+			<div class="item" ng-show="cliente.tipo=='2'">
+				<label>CPF:</label>
+				<input type="text" ng-model="cliente.cpf" ui-mask-placeholder  ui-mask="999.999.999-99" ui-mask-placeholder-char="_" ng-required="cliente.tipo=='2'" model-view-value="true">
+			</div>
+			<div class="item">
+				<label>Nome do Contato:</label>
+				<input type="text" ng-model="cliente.contato_nome" placeholder="Digite o nome do contato">
+			</div>
+			<div class="item">
+				<label>E-mail do Contato:</label>
+				<input type="email" ng-model="cliente.contato_email" placeholder="Digite o e-mail do contato">
+			</div>
+			<div class="item">
+				<label>Telefone do Contato:</label>
+				<input type="text" ng-model="cliente.contato_telefone" placeholder="Digite o telefone do contato">
+			</div>
+		</div>
+		<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
+		<button	class="bt_salvar" ng-click="salvarCliente()" ng-disabled="form.$invalid || cliente.senha1!=cliente.senha2">
+			{{cliente.senha1!=cliente.senha2?"Confirme a senha corretamente":"Salvar"}}</button>
+	</div>
+</form>

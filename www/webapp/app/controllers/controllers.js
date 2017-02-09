@@ -28,6 +28,9 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 	// Definindo vetor que guarda as disciplinas;
 	$scope.root.disciplinas = [];
 
+	// Definindo vetor que guardar os clientes;
+	$scope.root.clientes = [];
+
 	// Definindo funções que renovam o token
 	var refreshToken = function(){
 		GDoksFactory.refreshToken()
@@ -283,6 +286,118 @@ controllers.ProjetosController = function($scope,$location,GDoksFactory){
 };
 
 controllers.DocumentosController = function($scope){};
+
+controllers.ClientesController = function($scope,GDoksFactory){
+	GDoksFactory.getClientes()
+		.success(
+			function(response){
+				$scope.root.clientes = response.clientes;
+				for (var i = $scope.root.clientes.length - 1; i >= 0; i--) {
+					$scope.root.clientes[i].ativa = ($scope.root.clientes[i].ativa==1);
+				};
+			}
+		)
+		.error(
+			function(error){
+			}
+		);
+
+	// função que leva para a tela de adicionar disciplina
+	$scope.goToAddCliente = function(){
+		window.location = '#/clientes/0';
+	}
+};
+
+controllers.ClienteController = function($scope,$routeParams,GDoksFactory){
+	// Capturando o id passado na url
+	var id = $routeParams.id;
+
+	// se id== 0, adicionar um novo usuário. se não carregar o cliente de id passado
+	if(id == 0) {
+		// Criando um usuário vazio.
+		$scope.cliente = {};
+		$scope.cliente.id = 0;
+		$scope.cliente.nome = '';
+		$scope.cliente.nome_fantasia = '';
+		$scope.cliente.tipo = '1';
+		$scope.cliente.cnpj = '';
+		$scope.cliente.cpf = null;
+		$scope.cliente.contato_nome = '';
+		$scope.cliente.contato_email = '';
+		$scope.cliente.contato_telefone = '';
+	} else {
+		// Carregando informações do cliente a partir da base
+		GDoksFactory.getCliente(id)
+			.success(
+				function(response){
+					$scope.cliente = response.cliente;
+					$scope.cliente.tipo = response.cliente.cpf == null?'1':'2';
+				}
+			)
+			.error(
+				function(error){
+
+				}
+			);
+	}
+
+	// Definindo função que cancela as alterações
+	$scope.cancel = function(){
+		window.location = "WebGDoks.php#/clientes";
+	}
+
+	$scope.salvarCliente = function(){
+		if($scope.cliente.id == 0){
+			GDoksFactory.adicionarCliente($scope.cliente)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
+
+					$scope.usuario.id = response.newId;
+					$scope.root.usuarios.push($scope.usuario);
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		} else {
+			GDoksFactory.atualizarCliente($scope.cliente)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
+
+					// atualizando usuário alterado no root
+					$scope.root.clientes.filter(function(u){return u.id==this},$scope.cliente.id)[0] = $scope.cliente;
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		}
+	}
+
+	$scope.onTipoChange = function(){
+		if($scope.cliente.tipo == '1'){
+			// Pessoa Jurídica. CPF deve ser nulo!
+			$scope.cliente.cpf = null;
+		} else {
+			// Pessoa Física. CNPJ deve ser nulo!
+			$scope.cliente.cnpj = null;
+		}
+	}
+};
 
 controllers.DisciplinasController = function($scope,GDoksFactory){
 	GDoksFactory.getDisciplinas()

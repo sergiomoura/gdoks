@@ -26,7 +26,9 @@
 			<a ng-click="itemClicked(2)" class="doc" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos</a>
 			<a ng-click="itemClicked(3)" class="dsc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
 			<a ng-click="itemClicked(4)" class="cal" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/afazer">A Fazer</a>
-			<a ng-click="itemClicked(5)" class="cfg" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
+			<a ng-click="itemClicked(5)" class="cli" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/clientes">Clientes</a>
+			<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
+
 		</nav>
 		<div id="view_container">
 			<div id="view" ng-view></div>
@@ -48,6 +50,7 @@
 	<script src="js/angular/angular-cookies.min.js"></script>
 	<script src="js/angular/angular-resource.min.js"></script>
 	<script src="js/angular/ng-currency.min.js"></script>
+	<script src="js/angular/angular-ui-mask.min.js"></script>
 	
 	<!-- Scripts do app -->
 	<script src="app/services/constants.js"></script>

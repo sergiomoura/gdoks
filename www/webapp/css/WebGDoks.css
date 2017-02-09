@@ -96,6 +96,10 @@ nav .cal{
 	background-image: url(../img/icon_calendario.png);
 }
 
+nav .cli{
+	background-image: url(../img/icon_clientes.png);
+}
+
 nav .cfg{
 	background-image: url(../img/icon_configuracoes.png);
 	position: absolute;
@@ -380,4 +384,39 @@ nav .cfg{
 
 #validador_container table tr td:first-child select{
 	width: 100%;
+}
+
+
+#clientes_container button{
+	position: absolute;
+	left: 0;
+	top: 16px;
+}
+
+#lista_de_clientes{
+	position: relative;
+	top: 60px;
+}
+
+#lista_de_clientes .cliente{
+	display: block;
+	width: calc(50% - 60px);
+	float: left;
+	margin-bottom: 20px;
+	padding: 20px;
+	text-decoration: none;
+	margin-right:20px;
+}
+
+#lista_de_clientes .cliente:nth-child(2n){
+	margin-right:0px;
+}
+
+#cliente_container .bt_salvar{
+	position: absolute;
+	right: 15px;
+}
+
+#cliente_container .bt_cancelar{
+	margin-left: 15px;
 }

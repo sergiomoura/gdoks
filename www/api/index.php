@@ -240,7 +240,7 @@
 					}
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 
@@ -335,7 +335,7 @@
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa == true?1:0));
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 
@@ -448,7 +448,7 @@
 					
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não carrega dados de outro cliente.');	
+					$response = new response(1,'Não carrega dados de outra empresa.');	
 				}
 
 
@@ -505,7 +505,7 @@
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 
@@ -548,7 +548,7 @@
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 
@@ -602,7 +602,7 @@
 					registrarAcao($db,$id_usuario,ACAO_REMOVEU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 
@@ -649,7 +649,7 @@
 					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 			
@@ -696,7 +696,7 @@
 					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 			
@@ -745,7 +745,7 @@
 					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina.','.$tipo);
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 			
@@ -792,7 +792,7 @@
 					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina);
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
 		// FIM DE ROTAS DE DISCIPLINAS
@@ -871,14 +871,163 @@
 					$response->projeto = $projeto;
 				} else {
 					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outro cliente.');	
+					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 
 				// enviando resposta
 				$response->flush();
 			});
 		// FIM DE ROTAS DE PROJETOS
+		
+		// ROTAS DE CLIENTES
+			$app->get('/clientes',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$sql = 'SELECT a.id,
+						       a.nome,
+						       a.cnpj,
+						       a.cpf
+						FROM gdoks_clientes a
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?) b ON a.id_empresa=b.id_empresa
+							ORDER by a.nome';
+				$response = new response(0,'ok');
+				$response->clientes = $db->query($sql,'s',$token);
+				$response->flush();
+			});
 
+			$app->get('/clientes/:id',function($id) use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$sql = 'SELECT a.id,
+						       a.nome,
+						       a.nome_fantasia,
+						       a.cnpj,
+						       a.cpf,
+						       a.contato_nome,
+						       a.contato_email,
+						       a.contato_telefone
+						FROM gdoks_clientes a
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?) b ON a.id_empresa=b.id_empresa
+						WHERE a.id=?
+							ORDER by a.nome';
+				$response = new response(0,'ok');
+				$response->cliente = $db->query($sql,'si',$token,$id)[0];
+				$response->flush();
+			});
+
+			$app->put('/clientes/:id',function($id) use ($app,$db){
+				// Lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$cliente = json_decode($app->request->getBody());
+
+				// verifricando consistência de dados
+				if($cliente->id != $id){
+					$response = new response(1,'Dados inconsistentes.');
+					$response->flush();
+					die();
+				}
+				
+				// Tornando consistente o cliente quanto a escolha
+				if($cliente->tipo == '1'){
+					$cliente->cpf = null;
+				} elseif($cliente->tipo == '2') {
+					$cliente->cnpj = null;
+				}
+
+				// Verificando se o cliente é da mesma empresa do usuário
+				$sql = 'SELECT
+							A.id,COUNT(*) as ok
+						FROM (
+							SELECT
+								id,id_empresa
+							FROM gdoks.gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+							SELECT
+								id_empresa
+							FROM gdoks.gdoks_clientes
+								WHERE id=?) B on A.id_empresa=B.id_empresa;';
+				$rs = $db->query($sql,'si',$token,$id)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
+
+				// Indo adiante
+				if($ok == 1) {
+					$sql = "UPDATE gdoks_clientes
+							SET	
+								nome=?,
+         						nome_fantasia=?,
+		                       	cpf=?,
+								cnpj=?,
+                                contato_nome=?,
+                                contato_email=?,
+                                contato_telefone=?
+                            WHERE id=?";
+                    try {
+                    	$db->query($sql,'sssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id);
+                    } catch (Exception $e) {
+                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+						$response->flush();
+						die();
+                    }
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					die();
+				}
+
+				// retornando
+				$response = new response(0,'Dados da empresa alterados com sucesso.');
+				$response->flush();
+
+				// registrando alteração
+				registrarAcao($db,$id_usuario,ACAO_ALTEROU_CLIENTE,$cliente->id.','.$cliente->nome.','.$cliente->nome_fantasia);
+			});
+
+			$app->post('/clientes',function() use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$cliente = json_decode($app->request->getBody());
+				
+				// Tornando consistente o cliente quanto a escolha
+				if($cliente->tipo == '1'){
+					$cliente->cpf = null;
+				} elseif($cliente->tipo == '2') {
+					$cliente->cnpj = null;
+				}
+
+				// Capturando o id e o id_empresa do usuário atual
+				$sql = 'SELECT
+							id,id_empresa
+						FROM 
+							gdoks_usuarios
+						WHERE
+							token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token)[0];
+				$id_empresa = $rs['id_empresa'];
+				$id = $rs['id'];
+
+				// Inserindo novo cliente.
+				$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em) VALUES (?,?,?,?,?,?,?,?,NOW())';
+				try {
+					$db->query($sql,'sssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa);
+					$response = new response(0,'Cliente criado com sucesso.');
+					$response->newId = $db->insert_id;
+					$response->flush();
+				} catch (Exception $e) {
+					$app->response->setStatus(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					return;
+				}
+				// Registrando a ação
+				registrarAcao($db,$id,ACAO_ADICIONOU_CLIENTE,$db->insert_id.','.$cliente->nome);
+			});
+		// FIM DE ROTAS DE CLIENTES
 
 		
 	});

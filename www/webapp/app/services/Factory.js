@@ -77,6 +77,22 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/projetos', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getClientes = function(){
+				return $http.get(API_ROOT+'/clientes', {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getCliente = function(id){
+				return $http.get(API_ROOT+'/clientes/'+id, {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.atualizarCliente = function(cliente){
+				return $http.put(API_ROOT+'/clientes/'+cliente.id,cliente, {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.adicionarCliente = function(cliente){
+				return $http.post(API_ROOT+'/clientes',cliente, {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

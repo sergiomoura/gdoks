@@ -1,5 +1,5 @@
 // Definindo Module WebGDoks
-var WebGDoks = angular.module('WebGDoks', ['ngRoute','ngCookies','ng-currency','ngLocale']);
+var WebGDoks = angular.module('WebGDoks', ['ngRoute','ngCookies','ng-currency','ngLocale','ui.mask']);
 
 // Definindo Rotas
 WebGDoks.config(
@@ -52,6 +52,20 @@ WebGDoks.config(
 			{
 				controller: 'AFazerController',
 				templateUrl: 'app/views/afazer.php'
+			}
+		)
+		.when(
+			'/clientes',
+			{
+				controller: 'ClientesController',
+				templateUrl: 'app/views/clientes.html'
+			}
+		)
+		.when(
+			'/clientes/:id',
+			{
+				controller: 'ClienteController',
+				templateUrl: 'app/views/cliente.html'
 			}
 		)
 		.when(
