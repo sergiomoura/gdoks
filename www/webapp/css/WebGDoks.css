@@ -34,9 +34,19 @@
 }
 
 nav {
-	position: fixed; left: 0px; top: 36px; transition: left 0.3s; transition-timing-function: ease-out; height: calc(100% - 36px); /*
-	*/
+	position: fixed;
+	left: 0px;
+	top: 36px;
+	/*transition: width 0.3s;
+	transition-timing-function: ease-out*/;
+	height: calc(100% - 36px);
 	background-color: RGBA(43, 43, 43,0.8);
+	width: 50px;
+	overflow: hidden;
+}
+
+nav:hover{
+	overflow: visible;
 	width: 200px;
 }
 
@@ -100,10 +110,8 @@ nav a:hover{
 }
 
 nav .selected{
-	background-color: #296a9e;
+	background-color: rgba(43,43,43,0.8);
 	cursor: default;
-	/*!  */
-	/*!  */
 	text-decoration: underline;
 }
 
@@ -140,11 +148,11 @@ nav .cfg{
 }
 
 #view_container{
-	width: 100%;
+	width: calc(100% - 50px);
 	position: relative;
 	transition: width 0.3s, left 0.3s;
 	transition-timing-function: ease-out;
-	left: 0;
+	left: 50px;
 	min-width: 800px;
 	top: 0px;
 	z-index: -1;
