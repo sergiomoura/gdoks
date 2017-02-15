@@ -156,7 +156,7 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 						var addRequest;
 						for (var i = disciplinas.length - 1; i >= 0; i--) {
 							// Normalizando o valor da propriedade ativo para boolean
-							disciplinas[i].ativo = (disciplinas[i].ativa==1);
+							disciplinas[i].ativa = (disciplinas[i].ativa==1);
 							
 							// adicionando disciplinas
 							addRequest = os_disciplinas.add(disciplinas[i]);
@@ -662,7 +662,7 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 		$scope.disciplina.especialistas = [];
 		$scope.disciplina.validadores = [];
 	} else {
-		// Carregando dados da disciplina no servidor
+		// Carregando dados da disciplina na base do cliente
 		GDoksFactory.getDisciplina(id)
 			.success(
 				function(response){
