@@ -280,7 +280,10 @@
 		
 		// ROTAS DE DISCIPLINAS - - - - - - - - - - - - - - -
 			$app->get('/disciplinas',function() use ($app,$db){
+				// lendo o token
 				$token = $app->request->headers->get('Authorization');
+
+				// carregando as disciplinas
 				$sql = 'SELECT a.id,
 						       a.nome,
 						       a.sigla,
@@ -291,8 +294,72 @@
 						   FROM gdoks.gdoks_usuarios
 						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 							ORDER by a.nome';
+				$disciplinas = array_map(function($a){return (object)$a;}, $db->query($sql,'s',$token));
+
+				// carregando as subdisciplinas
+				$sql = 'SELECT a.id_disciplina,
+						       a.id
+						FROM gdoks_subdisciplinas a
+						INNER JOIN gdoks_disciplinas b ON a.id_disciplina=b.id
+						INNER JOIN gdoks_usuarios c ON c.id_empresa=b.id_empresa
+						WHERE c.token=?';
+				$subdisciplinas = array_map(function($a){return (object)$a;}, $db->query($sql,'s',$token));
+
+				foreach ($disciplinas as $d) {
+					// filtrando somente subdisciplinas da disciplina em questão
+					$id = $d->id;
+					$subsDestaDisciplina = array_filter($subdisciplinas,function($e) USE ($id){
+						return $e->id_disciplina == $id;
+					});
+					
+					// mapeando o vetor para mostrar somente os ids das subdisciplinas	
+					$d->subs = array_values(array_map(function($a){return 1*$a->id;}, $subsDestaDisciplina));
+				}
+
+				// carregando especialistas das disciplinas
+				$sql = 'SELECT a.id_disciplina,
+						       a.id_usuario as id
+						FROM gdoks_especialistas a
+						INNER JOIN gdoks_disciplinas b ON a.id_disciplina=b.id
+						INNER JOIN gdoks_usuarios c ON c.id_empresa=b.id_empresa
+						WHERE c.token=?';
+				$especialistas = array_map(function($a){return (object)$a;}, $db->query($sql,'s',$token));
+
+				foreach ($disciplinas as $d) {
+					// filtrando somente especialistas da disciplina em questão
+					$id = $d->id;
+					$especialistasDestaDisciplina = array_filter($especialistas,function($a) USE ($id){
+						return $a->id_disciplina == $id;
+					});
+					
+					// mapeando o vetor para mostrar somente os ids dos especialistas
+					$d->especialistas = array_values(array_map(function($a){return 1*$a->id;}, $especialistasDestaDisciplina));
+				}
+
+				// Carregando validadores
+				$sql = 'SELECT a.id_disciplina,
+						       a.id_usuario as id,
+						       a.tipo
+						FROM gdoks_validadores a
+						INNER JOIN gdoks_disciplinas b ON a.id_disciplina=b.id
+						INNER JOIN gdoks_usuarios c ON c.id_empresa=b.id_empresa
+						WHERE c.token=?';
+				$validadores = array_map(function($a){return (object)$a;}, $db->query($sql,'s',$token));
+
+				foreach ($disciplinas as $d) {
+					// filtrando somente validadores da disciplina em questão
+					$id = $d->id;
+					$validadoresDestaDisciplina = array_filter($validadores,function($a) USE ($id){
+						return $a->id_disciplina == $id;
+					});
+					
+					// mapeando o vetor para mostrar somente dados dos validadores
+					$d->validadores = array_values(array_map(function($a){return (object)Array('id'=>(1*$a->id),'tipo'=>(1*$a->tipo) );}, $validadoresDestaDisciplina));
+				}
+
+
 				$response = new response(0,'ok');
-				$response->disciplinas = $db->query($sql,'s',$token);
+				$response->disciplinas = $disciplinas;
 				$response->flush();
 			});
 
