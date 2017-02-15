@@ -1,45 +1,224 @@
 var controllers = {};
 
 controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
+
 	// definindo o objeto root.
 	$scope.root = {};
 
-	// Definindo valores padrão para a interface
-	$scope.root.itemSelecionadoDoMenu = 4;
+	// Definindo função que carrega usuários do servidor
+	$scope.root.loadUsuarios = function(){
+		GDoksFactory.loadUsuarios()
+			.success(
+				function(response){
+					// Carregando usuários
+					var usuarios = response.usuarios;
 
-	// Defininfo valor inicial do item do submenu de projetos.
-	$scope.root.itemSelecionadoDoPrjMenu = "prj_documentos";
+					// Conectando-se a base de dados
+					var reqOpen = indexedDB.open("gdoks");
+					
+					reqOpen.onsuccess = function(evt){
+						// Capturando a conexão com a base
+						var db = evt.target.result;
 
-	// definindo valor inicial para mostrandoMenu
-	$scope.root.mostrandoMenu = false;
+						// Conectando-se a ObjectStore "usuarios"
+						var os_usuarios = db.transaction('usuarios','readwrite').objectStore('usuarios');
 
-	// definindo função que mostra ou esconde o menu principal
-	$scope.root.toggleSideMenu = function(){
-		/*
-		$scope.root.mostrandoMenu = !$scope.root.mostrandoMenu;
-		if($scope.root.mostrandoMenu){
-			// aumentando menu lateral esquerdo;
-			document.getElementById("menu").style.left = "0px";
-		} else {
-			document.getElementById("menu").style.left = "-186px";
-		}
-		*/
+						// limpando a tabela de usuários
+						var reqClear = os_usuarios.clear();
+						reqClear.onsuccess = function(evt){
+							// Adicionando os usuários	
+							var addRequest;
+							for (var i = usuarios.length - 1; i >= 0; i--) {
+								// Normalizando o valor da propriedade ativo para boolean
+								usuarios[i].ativo = (usuarios[i].ativo==1);
+								
+								// adicionando usuários
+								addRequest = os_usuarios.add(usuarios[i]);
+								addRequest.onerror = function(evt){
+									console.error("Impossível adicionar usuário a base.");
+								}
+							}
+						}
+					}
+				}
+			)
+			.error(
+				function(error){
+				}
+			);
+	};
+
+	// Definindo função que carrega clientes do servidor
+	$scope.root.loadClientes = function(){
+		GDoksFactory.getClientes()
+			.success(
+				function(response){
+					// Carregando usuários
+					var clientes = response.clientes;
+
+					// Conectando-se a base de dados
+					var reqOpen = indexedDB.open("gdoks");
+					
+					reqOpen.onsuccess = function(evt){
+						// Capturando a conexão com a base
+						var db = evt.target.result;
+
+						// Conectando-se a ObjectStore "clientes"
+						var os_clientes = db.transaction('clientes','readwrite').objectStore('clientes');
+
+						// limpando a tabela de usuários
+						var reqClear = os_clientes.clear();
+						reqClear.onsuccess = function(evt){
+							// Adicionando os usuários	
+							var addRequest;
+							for (var i = clientes.length - 1; i >= 0; i--) {
+								// adicionando usuários
+								addRequest = os_clientes.add(clientes[i]);
+								addRequest.onerror = function(evt){
+									console.error("Impossível adicionar cliente a base.");
+								}
+							}
+						}
+					}
+				}
+			)
+			.error(
+				function(error){
+				}
+			);
+	};
+
+	// Definindo função que carrega projetos do servidor
+	$scope.root.loadProjetos = function(){
+		GDoksFactory.getProjetos()
+		.success(
+			function(response){
+				// Carregando projetos
+				var projetos = response.projetos;
+
+				// Conectando-se a base de dados
+				var reqOpen = indexedDB.open("gdoks");
+				
+				reqOpen.onsuccess = function(evt){
+					// Capturando a conexão com a base
+					var db = evt.target.result;
+
+					// Conectando-se a ObjectStore "projetos"
+					var os_projetos = db.transaction('projetos','readwrite').objectStore('projetos');
+
+					// limpando a tabela de projetos
+					var reqClear = os_projetos.clear();
+					reqClear.onsuccess = function(evt){
+						// Adicionando os projetos	
+						var addRequest;
+						for (var i = projetos.length - 1; i >= 0; i--) {
+							// Normalizando o valor da propriedade ativo para boolean
+							projetos[i].ativo = (projetos[i].ativo==1);
+							
+							// adicionando projetos
+							addRequest = os_projetos.add(projetos[i]);
+							addRequest.onerror = function(evt){
+								console.error("Impossível adicionar projeto a base.");
+							}
+						}
+					}
+				}
+			}
+		)
+		.error(
+			function(error){
+			}
+		);
 	}
 
-	// definindo o objeto que guarda as info do usuário logado.
-	$scope.root.user = $cookies.getObject('user');
+	// Definindo função que carrega disciplinas do servidor
+	$scope.root.loadDisciplinas = function(){
+		GDoksFactory.getDisciplinas()
+		.success(
+			function(response){
+				// Carregando disciplinas
+				var disciplinas = response.disciplinas;
 
-	// Definindo o vetor que guarda as informações públicas dos usuários do cliente
-	$scope.root.usarios = [];
+				// Conectando-se a base de dados
+				var reqOpen = indexedDB.open("gdoks");
+				
+				reqOpen.onsuccess = function(evt){
+					// Capturando a conexão com a base
+					var db = evt.target.result;
 
-	// Definindo vetor que manterá os projetos que são visíveis pelo usuário.
-	$scope.root.projetos = [];
+					// Conectando-se a ObjectStore "disciplinas"
+					var os_disciplinas = db.transaction('disciplinas','readwrite').objectStore('disciplinas');
 
-	// Definindo vetor que guarda as disciplinas;
-	$scope.root.disciplinas = [];
+					// limpando a tabela de disciplinas
+					var reqClear = os_disciplinas.clear();
+					reqClear.onsuccess = function(evt){
+						// Adicionando os disciplinas	
+						var addRequest;
+						for (var i = disciplinas.length - 1; i >= 0; i--) {
+							// Normalizando o valor da propriedade ativo para boolean
+							disciplinas[i].ativo = (disciplinas[i].ativa==1);
+							
+							// adicionando disciplinas
+							addRequest = os_disciplinas.add(disciplinas[i]);
+							addRequest.onerror = function(evt){
+								console.error("Impossível adicionar disciplina a base.");
+							}
+						}
+					}
+				}
+			}
+		)
+		.error(
+			function(error){
+			}
+		);
+	}
 
-	// Definindo vetor que guardar os clientes;
-	$scope.root.clientes = [];
+	// Criando base de dados.
+	var reqOpen = indexedDB.open("gdoks");
+	
+	reqOpen.onerror = function(e){
+		console.log("Falha na abertura da base.");
+		console.dir(e);
+	}
+
+	reqOpen.onblocked = function(e){
+		console.log("Acesso a base bloqueado.");
+		console.dir(e);
+	}
+
+	reqOpen.onupgradeneeded = function(e){
+		// Criando ObjectStores da base de dados
+		var db = e.target.result;
+
+		// Criando ObjectStore de usuários
+		var os_usuarios = db.createObjectStore("usuarios",{keyPath: "id"});
+		os_usuarios.createIndex("idx_nome","nome",{'unique':false});
+		os_usuarios.transaction.addEventListener('complete',function(){
+			$scope.root.loadUsuarios();
+		})
+
+		// Criando ObjectStore de disciplinas
+		var os_disciplinas = db.createObjectStore("disciplinas",{keyPath: "id"});
+		os_disciplinas.createIndex("idx_nome","nome",{'sigla':true});
+		os_disciplinas.transaction.addEventListener('complete',function(){
+			$scope.root.loadDisciplinas();
+		})
+
+		// Criando ObjectStore de projetos
+		var os_projetos = db.createObjectStore("projetos",{keyPath: "id"});
+		os_projetos.createIndex("idx_nome","nome",{'sigla':true});
+		os_projetos.transaction.addEventListener('complete',function(){
+			$scope.root.loadProjetos();
+		})
+
+		// Criando ObjectStore de clientes
+		var os_clientes = db.createObjectStore("clientes",{keyPath: "id"});
+		os_clientes.createIndex("idx_nome","nome",{'sigla':true});
+		os_clientes.transaction.addEventListener('complete',function(){
+			$scope.root.loadClientes();
+		})
+	}
 
 	// Definindo funções que renovam o token
 	var refreshToken = function(){
@@ -59,26 +238,21 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 
 	// Acionando timer que renova o token de tempo em tempo
 	$interval(refreshToken,TOKEN_REFRESH_IN);
+	
+	// Definindo valores padrão para a interface
+	$scope.root.itemSelecionadoDoMenu = 0;
 
-	// Carregando os usuários do servidor
-	GDoksFactory.loadUsuarios()
-		.success(
-			function(response){
-				$scope.root.usuarios = response.usuarios;
-				for (var i = $scope.root.usuarios.length - 1; i >= 0; i--) {
-					$scope.root.usuarios[i].ativo = ($scope.root.usuarios[i].ativo==1);
-				};
-			}
-		)
-		.error(
-			function(error){
-			}
-		);
+	// Defininfo valor inicial do item do submenu de projetos.
+	$scope.root.itemSelecionadoDoPrjMenu = "prj_documentos";
+
+	// definindo valor inicial para mostrandoMenu
+	$scope.root.mostrandoMenu = false;
+
+	// definindo o objeto que guarda as info do usuário logado.
+	$scope.root.user = $cookies.getObject('user');
 }
 
 controllers.TopoController = function($scope){
-	
-
 	$scope.toggleOpcoesMenu = function(){
 		$scope.mostrandoOpcoes = !$scope.mostrandoOpcoes;
 		if($scope.mostrandoOpcoes){
@@ -143,6 +317,19 @@ controllers.NavController = function($scope){
 controllers.HomeController = function($scope){}
 
 controllers.UsuariosController = function($scope,GDoksFactory){
+
+	// Declarando vetor de usuários
+	$scope.usuarios = [];
+
+	// Carregando usuarios da base local
+	var openReq = indexedDB.open("gdoks");
+	openReq.onsuccess = function(){
+		var db = openReq.result;
+		db.transaction('usuarios').objectStore('usuarios').getAll().onsuccess = function(evt){
+			$scope.$apply(function(){$scope.usuarios = evt.target.result;});
+		}
+	}
+
 	// função que leva para a tela de adicionar usuário
 	$scope.goToAddUsuario = function(){
 		window.location = '#/usuarios/0';
@@ -164,11 +351,17 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 		$scope.usuario.ativo = true;
 		$scope.inicialmenteAtivo = true;
 	} else {
-		// Buscando o usuário que tem como id o id passado
-		$scope.usuario = angular.copy($scope.root.usuarios.filter(function(u){return u.id==this},$routeParams.id)[0]);
-
-		// guardando estado inicial do atributo "ativo"
-		$scope.inicialmenteAtivo = ($scope.usuario.ativo == true);	
+		// Carregando usuário da base
+		var openReq = indexedDB.open('gdoks');
+		openReq.onsuccess = function(evt){
+			var db = openReq.result;
+			db.transaction('usuarios').objectStore('usuarios').get(id*1).onsuccess = function(evt){
+				$scope.$apply(function(){
+					$scope.usuario = evt.target.result;
+					$scope.inicialmenteAtivo = ($scope.usuario.ativo == true);
+				});
+			}
+		}
 	}
 	
 
@@ -186,9 +379,16 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 					$scope.obteve_resposta = true;
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
-
 					$scope.usuario.id = response.newId;
-					$scope.root.usuarios.push($scope.usuario);
+					delete($scope.usuario.senha1);
+					delete($scope.usuario.senha2);
+
+					// Salvando usuário na base
+					var openReq = indexedDB.open('gdoks');
+					openReq.onsuccess = function(evt){
+						var db = evt.target.result;
+						db.transaction('usuarios','readwrite').objectStore('usuarios').add($scope.usuario);
+					}
 				}
 			)
 			.error(
@@ -206,8 +406,12 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
 
-					// atualizando usuário alterado no root
-					$scope.root.usuarios.filter(function(u){return u.id==this},$scope.usuario.id)[0] = $scope.usuario;
+					// Atualizando usuário na base
+					var openReq = indexedDB.open('gdoks');
+					openReq.onsuccess = function(evt){
+						var db = evt.target.result;
+						db.transaction('usuarios','readwrite').objectStore('usuarios').put($scope.usuario);
+					}
 				}
 			)
 			.error(
@@ -221,74 +425,92 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 	}
 };
 
-controllers.ProjetosController = function($scope,$location,GDoksFactory){
-	$scope.onPrjMenuClick = function(anchor){
-		$location.hash(anchor);
-		var scroll = $('#'+anchor).position().top - 40;
-		$("#container_horizontal").animate({scrollTop: scroll}, "slow",function(){});
-		$scope.root.itemSelecionadoDoPrjMenu = anchor;
-	}
+controllers.VisaoGeralController = function($scope){};
 
-	// Fazendo com que página se mostre o ponto correto.
-	$scope.onPrjMenuClick($location.hash());
+controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
+	var id = $routeParams.id;
 
-	// posicionando o menu de projeto corretamente, de acordo com o $scope.root.mostrandoMenu
-	if($scope.root.mostrandoMenu){
-		document.getElementById("prj_menu").style.marginLeft = "141px"
+	// Criando o projeto em questão
+	if(id == 0) {
+		// Projeto novo
+		$scope.projeto = {};
+		$scope.projeto.nome = '';
+		$scope.projeto.codigo = '';
+		$scope.projeto.id_cliente = 0;
+		$scope.projeto.id_responsavel = 0;
+		$scope.projeto.data_inicio_p = '';
+		$scope.projeto.data_final_p = '';
+		$scope.projeto.daos = [];
+		$scope.projeto.areas = [];
+		$scope.projeto.documentos = [];
 	} else {
-		document.getElementById("prj_menu").style.marginLeft = "31px"
+		GDoksFactory.getProjeto(id)
+		.success(function(response){
+			$scope.projeto = response.projeto;
+		})
+		.error(function(error){
+		})
 	}
 
-	// Carregando os projetos do servidor
-	GDoksFactory.getProjetos()
-		.success(
-			function(response){
-				$scope.root.projetos = response.projetos;
-				for (var i = $scope.root.projetos.length - 1; i >= 0; i--) {
-					$scope.root.projetos[i].ativo = ($scope.root.projetos[i].ativo==1);
-				};
+	// populando o select de usuários
+	var usuarioVazio = {'id':'0','nome':'Selecione um usuário'};
+	$scope.dataUsuarios = {};
+	$scope.dataUsuarios.data = angular.copy($scope.root.usuarios);
+	$scope.dataUsuarios.data.unshift(usuarioVazio);
+	$scope.dataUsuarios.selecionado = usuarioVazio;
 
-				// Criando um projeto 'vazio'
-				var prjVazio = {
-					'id_projeto':0,
-					'nome_projeto':'Adicionar novo projeto...',
-					'ativo':true,
-					'permissao':3
-				};
+	// Populando o select de clientes
+	var clienteVazio = {'id':'0','nome':'Selecione um cliente'};
+	$scope.dataClientes = {};
+	$scope.dataClientes.data = angular.copy($scope.root.clientes);
+	$scope.dataClientes.data.unshift(clienteVazio);
+	$scope.dataClientes.selecionado = clienteVazio;
+	
+	$scope.salvarProjeto = function(){
+		if($scope.projeto.id == 0){
+			GDoksFactory.adicionarDisciplina($scope.projeto)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
+					$scope.projeto.id = response.newId;
+					$scope.root.disciplinas.push($scope.projeto);
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		} else {
+			GDoksFactory.atualizarDisciplina($scope.projeto)
+			.success(
+				function(response){
+					$scope.obteve_resposta = true;
+					$scope.ok = (response.error==0);
+					$scope.msg = response.msg;
 
-				// Configurando as opções do menu de projeto
-				$scope.opcoesDeProjeto = angular.copy($scope.root.projetos);
-				$scope.opcoesDeProjeto.unshift(prjVazio);
-
-				// Definindo o projeto que vai aparecer inicialmente selecionado
-				$scope.opcaoSelecionada = ($scope.root.projetos.length > 0)?$scope.root.projetos[0]:prjVazio;
-				
-			}
-		)
-		.error(
-			function(error){
-			}
-		);
-
+					// atualizando usuário alterado no root
+					$scope.root.disciplinas.filter(function(d){return d.id==this},$scope.projeto.id)[0] = $scope.disciplina;
+				}
+			)
+			.error(
+				function(error){
+					$scope.obteve_resposta = true;
+					$scope.ok = (error.error==0);
+					$scope.msg = error.msg;
+				}
+			);
+		}
+	}
 };
 
 controllers.DocumentosController = function($scope){};
 
 controllers.ClientesController = function($scope,GDoksFactory){
-	GDoksFactory.getClientes()
-		.success(
-			function(response){
-				$scope.root.clientes = response.clientes;
-				for (var i = $scope.root.clientes.length - 1; i >= 0; i--) {
-					$scope.root.clientes[i].ativa = ($scope.root.clientes[i].ativa==1);
-				};
-			}
-		)
-		.error(
-			function(error){
-			}
-		);
-
 	// função que leva para a tela de adicionar disciplina
 	$scope.goToAddCliente = function(){
 		window.location = '#/clientes/0';
@@ -386,20 +608,28 @@ controllers.ClienteController = function($scope,$routeParams,GDoksFactory){
 	}
 };
 
+controllers.ProjetosController = function($scope,GDoksFactory){
+	
+
+	// função que leva para a tela de adicionar disciplina
+	$scope.goToAddProjeto = function(){
+		window.location = '#/projetos/0';
+	}
+}
+
 controllers.DisciplinasController = function($scope,GDoksFactory){
-	GDoksFactory.getDisciplinas()
-		.success(
-			function(response){
-				$scope.root.disciplinas = response.disciplinas;
-				for (var i = $scope.root.disciplinas.length - 1; i >= 0; i--) {
-					$scope.root.disciplinas[i].ativa = ($scope.root.disciplinas[i].ativa==1);
-				};
-			}
-		)
-		.error(
-			function(error){
-			}
-		);
+	
+	// Definindo variável que carrega aa disciplinas
+	$scope.disciplinas = [];
+
+	// Carregando disciplinas da base
+	var openReq = indexedDB.open("gdoks");
+	openReq.onsuccess = function(){
+		var db = openReq.result;
+		db.transaction('disciplinas').objectStore('disciplinas').getAll().onsuccess = function(evt){
+			$scope.$apply(function(){$scope.disciplinas = evt.target.result;});
+		}
+	}
 
 	// função que leva para a tela de adicionar disciplina
 	$scope.goToAddDisciplina = function(){

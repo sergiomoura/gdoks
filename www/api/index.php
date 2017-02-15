@@ -803,15 +803,13 @@
 				$token = $app->request->headers->get('Authorization');
 
 				// Levantando os projetos que este usuário possui pemissão
-				$sql = 'SELECT p.id AS id_projeto,
-						       p.nome AS nome_projeto,
-						       p.ativo,
-						       pup.permissao
+				$sql = 'SELECT p.id,
+						       p.nome,
+						       p.codigo,
+						       p.ativo
 						FROM gdoks_usuarios u
-						INNER JOIN gdoks_perm_usuarios_x_projetos pup ON pup.id_usuario=u.id
-						INNER JOIN gdoks_projetos p ON pup.id_projeto=p.id
-						WHERE token=?
-						  AND pup.permissao>0';
+						INNER JOIN gdoks_projetos p ON p.id_empresa=u.id_empresa
+						WHERE u.token=?';
 
 				$response = new response(0,'ok');
 				$response->projetos = $db->query($sql,'s',$token);
@@ -843,27 +841,37 @@
 				if($ok == 1){
 
 					// levantando informações do projeto
-					$sql = "SELECT nome, ativo FROM gdoks_projetos WHERE id=?";
+					$sql = "SELECT id,codigo,nome,id_cliente,id_responsavel,data_inicio_p,data_final_p,ativo FROM gdoks_projetos WHERE id=?";
 					$projeto = (object)$db->query($sql,'i',$id_projeto)[0];
 					
 					// Levantando áreas do projeto
-					$sql = "SELECT id,nome FROM gdoks_areas WHERE id_projeto=?";
+					$sql = "SELECT id,codigo,nome FROM gdoks_areas WHERE id_projeto=?";
 					$projeto->areas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
-
-					// Levantando usuários que possuem acesso ao projeto
-					$sql = "SELECT u.id,
-							       u.nome,
-							       u.email,
-							       u.ativo,
-							       pup.permissao
-							FROM gdoks.gdoks_perm_usuarios_x_projetos pup
-							INNER JOIN gdoks_usuarios u ON pup.id_usuario=u.id
-							WHERE pup.id_projeto=?
-							  AND pup.permissao>0;";
-					$projeto->usuarios = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
+					
+					// levantando DAOs do projeto
+					$sql = 'SELECT id,nome,caminho FROM gdoks_daos WHERE id_projeto=?';
+					$projeto->daos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
 					// Levantando documentos do projeto
-					$sql = "SELECT id,nome FROM gdoks_documentos WHERE id_projeto=?";
+					$sql = 'SELECT A.id AS id_documento,
+							       A.nome AS nome_documento,
+							       B.data_upload,
+							       ifnull(percentual_concluido,0) AS percentual_concluido
+							FROM
+							  (SELECT docs.id,
+							          docs.nome,
+							          id_area,
+							          id_disciplina,
+							          max(arqs.id) AS id_ultima_versao
+							   FROM gdoks_documentos docs
+							   INNER JOIN gdoks_areas areas ON docs.id_area=areas.id
+							   LEFT JOIN gdoks_arquivos arqs ON arqs.id_documento=docs.id
+							   WHERE id_projeto=?
+							   GROUP BY docs.id,
+							            docs.nome,
+							            id_area,
+							            id_disciplina) A
+							LEFT JOIN gdoks_arquivos B ON A.id_ultima_versao=B.id';
 					$projeto->documentos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
 					// Criando o objeto response 

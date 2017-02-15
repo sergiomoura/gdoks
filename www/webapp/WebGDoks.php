@@ -12,10 +12,10 @@
 	<link rel="stylesheet" href="css/geral.css">
 	<link rel="stylesheet" href="css/normalizer.css">
 	<link rel="stylesheet" href="css/WebGDoks.css">
+	<link rel="stylesheet" href="js/jquery-ui-1.12.1/jquery-ui.css">
 </head>
 <body ng-controller="RootController">
 	<div id="topo" ng-controller="TopoController">
-		<a ng-click="root.toggleSideMenu()" id="abreMenu"></a>
 		<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
 		<a ng-click="toggleOpcoesMenu()" id="lk_opcoes"></a>
 	</div>
@@ -23,16 +23,17 @@
 		<nav id="menu" ng-controller="NavController">
 			<ul>
 				<li>
-					<a class="prj">Projetos</a>
+					<a ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/projetos" class="prj">Projetos<span class="seta_direita"></span></a>
 					<ul>
-						<li><a href="#/visaogeral">Visão Geral</a></li>
-						<li><a href="#/addprojeto">Cadastrar Novo Projeto</a></li>
+						<li><a ng-click="itemClicked(0)" href="#/visaogeral">Visão Geral</a></li>
+						<li><a ng-click="itemClicked(0)" href="#/projetos">Ver Todos Projetos</a></li>
+						<li><a ng-click="itemClicked(0)" href="#/projetos/0">Cadastrar Novo Projeto</a></li>
 						<li>
-							<a>Ir Para Projeto</a>
+							<a ng-click="itemClicked(0)">Ir Para Projeto<span class="seta_direita"></span></a>
 							<ul>
-								<li><a href="#/projetos/1">Projeto 1</a></li>
-								<li><a href="#/projetos/2">Projeto 2</a></li>
-								<li><a href="#/projetos/3">Projeto 3</a></li>
+								<li><a ng-click="itemClicked(0)" href="#/projetos/1">Projeto 1</a></li>
+								<li><a ng-click="itemClicked(0)" href="#/projetos/2">Projeto 2</a></li>
+								<li><a ng-click="itemClicked(0)" href="#/projetos/3">Projeto 3</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -72,20 +73,20 @@
 	</div>
 	<!-- Scripts externos -->
 	<script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
+	<script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 	<script src="js/angular/angular.min.js"></script>
 	<script src="js/angular/angular-route.min.js"></script>
 	<script src="js/angular/angular-cookies.min.js"></script>
 	<script src="js/angular/angular-resource.min.js"></script>
 	<script src="js/angular/ng-currency.min.js"></script>
 	<script src="js/angular/angular-ui-mask.min.js"></script>
-	
+	<!-- Fim de Scripts externos -->
 	<!-- Scripts do app -->
 	<script src="app/services/constants.js"></script>
 	<script src="app/WebGDoks.js"></script>
 	<script src="app/services/Factory.js"></script>
 	<script src="app/controllers/controllers.js"></script>
 	<script src="app/directives/directives.js"></script>
-
-
+	<!-- Fim de Scripts do app -->
 </body>
 </html>

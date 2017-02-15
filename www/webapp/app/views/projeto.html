@@ -1,0 +1,98 @@
+<div id="addprojeto_container" class="bloco_conteudo bloco_central_80">
+	<h1><img src="img/projeto.png">Dados do Novo Projeto</h1>
+	<div>
+		<div class="item">
+			<label for="nome">Nome:</label>
+			<input type="text" placeholder="Dê um nome para o projeto" ng-model="projeto.nome" required>
+		</div>
+		<div class="item">
+			<label for="codigo">Codigo:</label>
+			<input type="text" placeholder="Digite um código identificador para o projeto" ng-model="projeto.codigo" required>
+		</div>
+		<div class="item">
+			<label for="sigla">Cliente:</label>
+			<select name="sel_cliente" ng-options="option.nome for option in dataClientes.data track by option.id" ng-model="dataClientes.selecionado"></select>
+		</div>
+		<div class="item">
+			<label for="sigla">Responsável:</label>
+			<select name="sel_responsavel" ng-options="option.nome for option in dataUsuarios.data track by option.id" ng-model="dataUsuarios.selecionado"></select>
+		</div>
+		<div class="item">
+			<label for="data_inicio_p">Início (previsto):</label>
+			<input type="text" id="data_inicio_p" placeholder="Selecione uma data para início previsto" ng-model="projeto.data_inicio_p|date:'dd/MM/yyyy'">
+		</div>
+		<div class="item">
+			<label for="data_final_p">Final (previsto):</label>
+			<input type="text" id="data_final_p" placeholder="Selecione uma data prevista para o final" ng-model="projeto.data_final_p|date:'dd/MM/yyyy'">
+		</div>
+		<div class="item">
+			<label for="ativo">Ativo:</label>
+			<input type="checkbox" id="ativo" ng-model="projeto.ativo">
+		</div>
+	</div>
+	<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
+	<button	class="bt_salvar" ng-click="salvarProjeto()">Salvar</button>
+</div>
+
+<div id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">
+	<h1>Documentos de Abertura de Operações</h1>
+	<table>
+		<thead>
+			<tr>
+				<td>Nome do Documento</td>
+				<td>Arquivo</td>
+				<td><button class="bt_adicionar">+ Adicionar</button></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="text"></td>
+				<td><input type="file"></td>
+				<td><button class="bt_cancelar">Remover</button></td>
+			</tr>
+			<tr>
+				<td><input type="text"></td>
+				<td><input type="file"></td>
+				<td><button class="bt_cancelar">Remover</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<button	class="bt_salvar" ng-click="salvarDAOs()">Salvar Documentos de Abertura de Operações</button>
+</div>
+
+<div id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80">
+	<h1>Áreas</h1>
+	<table>
+		<thead>
+			<tr>
+				<td>Cód. da Área</td>
+				<td>Nome da Área</td>
+				<td><button class="bt_adicionar">+ Adicionar</button></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="text"></td>
+				<td><input type="text"></td>
+				<td><button class="bt_cancelar">Remover</button></td>
+			</tr>
+			<tr>
+				<td><input type="text"></td>
+				<td><input type="text"></td>
+				<td><button class="bt_cancelar">Remover</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<button	class="bt_salvar" ng-click="salvarAreas()">Salvar Áreas</button>
+</div>
+
+<div id="addprojeto_documentos_container" class="bloco_conteudo bloco_central_80">
+	<h1>Documentos</h1>
+</div>
+
+<script>
+	$( function() {
+		$( "#data_inicio_p" ).datepicker(datePickerOptions);
+		$( "#data_final_p" ).datepicker(datePickerOptions);
+	} );
+</script>

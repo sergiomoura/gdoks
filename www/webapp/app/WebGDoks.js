@@ -6,10 +6,22 @@ WebGDoks.config(
 	function ($routeProvider){
 		$routeProvider
 		.when(
+			'/visaogeral',
+			{
+				controller: 'VisaoGeralController',
+				templateUrl: 'app/views/visaogeral.html'
+			}
+		).when(
 			'/projetos',
 			{
 				controller: 'ProjetosController',
 				templateUrl: 'app/views/projetos.html'
+			}
+		).when(
+			'/projetos/:id',
+			{
+				controller: 'ProjetoController',
+				templateUrl: 'app/views/projeto.html'
 			}
 		)
 		.when(
@@ -82,7 +94,7 @@ WebGDoks.config(
 				templateUrl: 'app/views/senha.html'
 			}
 		)
-		.otherwise({redirectTo:'/afazer'});
+		.otherwise({redirectTo:'/visaogeral'});
 	}
 )
 
@@ -98,3 +110,10 @@ WebGDoks.run(function($rootScope, $location, $anchorScroll) {
 		}
 	});
 });
+
+// Definindo opções do DatePiscker
+var datePickerOptions = {};
+datePickerOptions.dayNamesMin = [ "D", "S", "T", "Q", "Q", "S", "S" ];
+datePickerOptions.monthNames = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+datePickerOptions.dateFormat = "dd/mm/yy";
+datePickerOptions.showAnim = "";

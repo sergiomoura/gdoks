@@ -77,6 +77,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/projetos', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getProjeto = function(id){
+				return $http.get(API_ROOT+'/projetos/'+id, {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getClientes = function(){
 				return $http.get(API_ROOT+'/clientes', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}

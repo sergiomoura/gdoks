@@ -41,7 +41,11 @@
 		WebGDoks.controller(
 			'LoginController',
 			function($scope,$http,$cookies){
+
+				// Determinando valores inciais
 				$scope.loginFail = false;
+
+				// Defininfo função que tenta fazer o login e recuperar um token para acesso
 				$scope.getToken = function(){
 					var data = {}
 					data.login = $scope.login;
@@ -51,8 +55,22 @@
 					then(function(response) {
 						$scope.loginFail = false;
 						if(response.data.error === 0){
+
+							// Guardando os dados do usuário nos cookies
 							$cookies.putObject('user',response.data.user);
-							window.location = "WebGDoks.php";
+
+							// Limpando base de dados.
+							var deleteRequest = indexedDB.deleteDatabase("gdoks");
+							deleteRequest.onsuccess = function(evt){
+								console.log("lá vamos nós");
+								// indo para a página principal do aplicativo
+								window.location = "WebGDoks.php";
+							}
+
+							deleteRequest.onerror = function(evt){
+								console.log("Erro ao tentar zerar base de dados.");
+								console.dir(evt);
+							}
 						}
 					}, function(response) {
 						$scope.loginFail = true;

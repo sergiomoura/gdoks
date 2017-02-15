@@ -305,4 +305,14 @@ help:hover>text{
 	box-shadow: 0 0 10px -5px;
 }
 
-
+.seta_direita{
+	width: 0; 
+	height: 0; 
+	border-top: 6px solid transparent;
+	border-bottom: 6px solid transparent;
+	border-left: 6px solid #FFF;
+	display: block;
+	position: absolute;
+	right: 10px;
+	top: calc(50% - 6px);
+}
