@@ -298,7 +298,10 @@
 
 				// carregando as subdisciplinas
 				$sql = 'SELECT a.id_disciplina,
-						       a.id
+						       a.id,
+						       a.nome,
+						       a.sigla,
+						       a.ativa
 						FROM gdoks_subdisciplinas a
 						INNER JOIN gdoks_disciplinas b ON a.id_disciplina=b.id
 						INNER JOIN gdoks_usuarios c ON c.id_empresa=b.id_empresa
@@ -313,7 +316,15 @@
 					});
 					
 					// mapeando o vetor para mostrar somente os ids das subdisciplinas	
-					$d->subs = array_values(array_map(function($a){return 1*$a->id;}, $subsDestaDisciplina));
+					$d->subs = array_values(array_map(
+						function($a){
+							return (object)Array(
+								'id'=>(1*$a->id),
+								'nome'=>$a->nome,
+								'sigla'=>$a->sigla,
+								'ativa'=>$a->ativa
+							);
+						}, $subsDestaDisciplina));
 				}
 
 				// carregando especialistas das disciplinas

@@ -157,6 +157,11 @@ controllers.RootController = function($scope,$interval,$cookies,GDoksFactory){
 						for (var i = disciplinas.length - 1; i >= 0; i--) {
 							// Normalizando o valor da propriedade ativo para boolean
 							disciplinas[i].ativa = (disciplinas[i].ativa==1);
+
+							// normalizando o valor da propriedade ativa para boolean nas subs
+							for (var j = disciplinas[i].subs.length - 1; j >= 0; j--) {
+								disciplinas[i].subs[j].ativa = (disciplinas[i].subs[j].ativa == 1);
+							};
 							
 							// adicionando disciplinas
 							addRequest = os_disciplinas.add(disciplinas[i]);
@@ -662,38 +667,33 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 		$scope.disciplina.especialistas = [];
 		$scope.disciplina.validadores = [];
 	} else {
-		// Carregando dados da disciplina na base do cliente
-		GDoksFactory.getDisciplina(id)
-			.success(
-				function(response){
-					$scope.disciplina = response.disciplina;
-					$scope.disciplina.ativa = ($scope.disciplina.ativa==1);
-					for (var i = $scope.disciplina.subs.length - 1; i >= 0; i--) {
-						$scope.disciplina.subs[i].ativa = ($scope.disciplina.subs[i].ativa==1);
-					};
-					$scope.disciplinaRef = angular.copy(response.disciplina);
-					$scope.root.disciplinas.filter(function(a){return a.id == this},id)[0] = $scope.disciplinaRef;
+		// Carregando dados da disciplina a partir da base no cliente
+		var openReq = indexedDB.open('gdoks');
+		openReq.onsuccess = function(evt){
+			var db = evt.target.result;
+			var transaction = db.transaction(['disciplinas','usuarios']);
+			transaction.objectStore('disciplinas').get(id*1).onsuccess = function(evt){
+				$scope.$apply(function(){
+					$scope.disciplina = evt.target.result;
 					$scope.inicialmenteAtiva = $scope.disciplina.ativa;
 
-					// Parsing especialistas
+					// parsing especialistas
 					for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
-						$scope.especialistas.push($scope.root.usuarios.find(function(a){return a.id == this},$scope.disciplina.especialistas[i]));
+						transaction.objectStore('usuarios').get($scope.disciplina.especialistas[i]*1).onsuccess = function(evt){
+							$scope.$apply(function(){$scope.especialistas.push(evt.target.result);});
+						}
 					};
 
-					// Parsing validadores
-					var validador;
+					// parsing validadores
 					for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
-						validador = $scope.root.usuarios.find(function(a){return a.id == this},$scope.disciplina.validadores[i].id);
-						validador.tipo = $scope.disciplina.validadores[i].tipo;
-						$scope.validadores.push(validador);
+						transaction.objectStore('usuarios').get($scope.disciplina.validadores[i].id*1).onsuccess = function(evt){
+							var validador = angular.copy(evt.target.result);
+							$scope.$apply(function(){$scope.validadores.push(validador);});
+						}
 					};
-				}
-			)
-			.error(
-				function(error){
-					
-				}
-			);
+				})
+			}
+		}
 	}
 
 	$scope.salvarDisciplina = function(){
