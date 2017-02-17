@@ -516,6 +516,13 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 controllers.DocumentosController = function($scope){};
 
 controllers.ClientesController = function($scope,GDoksFactory){
+	// levantando clientes na base de dados local
+	$scope.clientes = [];
+	indexedDB.open('gdoks').onsuccess = function(evt){
+		evt.target.result.transaction('clientes').objectStore('clientes').getAll().onsuccess = function(evt){
+			$scope.$apply(function(){$scope.clientes = evt.target.result});
+		}
+	}
 	// função que leva para a tela de adicionar disciplina
 	$scope.goToAddCliente = function(){
 		window.location = '#/clientes/0';
