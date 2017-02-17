@@ -685,12 +685,15 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 					};
 
 					// parsing validadores
-					for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
-						transaction.objectStore('usuarios').get($scope.disciplina.validadores[i].id*1).onsuccess = function(evt){
-							var validador = angular.copy(evt.target.result);
+					transaction.objectStore('usuarios').getAll().onsuccess = function(evt){
+						var usuarios = evt.target.result;
+						var validador;
+						for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
+							validador = usuarios.find(function(u){return u.id == this},$scope.disciplina.validadores[i].id);
+							validador.tipo = $scope.disciplina.validadores[i].tipo;
 							$scope.$apply(function(){$scope.validadores.push(validador);});
-						}
-					};
+						};
+					}
 				})
 			}
 		}
@@ -705,7 +708,13 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
 					$scope.disciplina.id = response.newId;
-					$scope.root.disciplinas.push($scope.disciplina);
+
+					// salvando na base de dados local
+					var openReq = indexedDB.open('gdoks').onsuccess;
+					openReq.onsuccess = function(){
+						var db = openReq.result;
+						db.transaction('disciplinas').objectStore('disciplinas').add($scope.disciplina);
+					}
 				}
 			)
 			.error(
@@ -723,8 +732,12 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
 
-					// atualizando usuário alterado no root
-					$scope.root.disciplinas.filter(function(d){return d.id==this},$scope.disciplina.id)[0] = $scope.disciplina;
+					// atualizando usuário na base local
+					var openReq = indexedDB.open('gdoks').onsuccess;
+					openReq.onsuccess = function(){
+						var db = openReq.result;
+						var putReq = db.transaction('disciplinas').objectStore('disciplinas').put($scope.disciplina);
+					}
 				}
 			)
 			.error(
@@ -740,7 +753,7 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 	// Definindo função que cancela as alterações
 	$scope.cancel = function(){
 		window.location = "WebGDoks.php#/disciplinas";
-		$scope.root.itemSelecionadoDoMenu = 0;
+		$scope.root.itemSelecionadoDoMenu = 3;
 	}
 
 	// definindo função que remove subdisciplina
@@ -752,6 +765,13 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 				.success(
 					function(response){
 						$scope.disciplina.subs = $scope.disciplina.subs.filter(function(a){return a.id!=this},id);
+
+						// Atualizando na base local
+						var openReq = indexedDB.open('gdoks');
+						openReq.onsuccess = function(){
+							var db = openReq.result;
+							db.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
+						}
 					}
 				)
 				.error(
@@ -801,6 +821,13 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 							sub.ativa = $scope.subdisciplinaEditada.ativa;
 							$scope.subdisciplinaEditada = null;
 							$scope.erroEmOperacaoDeSubdisciplina = null;
+
+							// atualizar na base local
+							var openReq = indexedDB.open('gdoks');
+							openReq.onsuccess = function(){
+								var db = openReq.result;
+								db.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina)
+							}
 						}
 					)
 					.error(
@@ -814,6 +841,13 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 						function(response){
 							$scope.subdisciplinaEditada.id = response.newId;
 							$scope.subdisciplinaEditada = null;
+
+							// atualizar na base local
+							var openReq = indexedDB.open('gdoks');
+							openReq.onsuccess = function(){
+								var db = openReq.result;
+								db.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
+							}
 						}
 					)
 					.error(
@@ -829,25 +863,33 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 		// Criando objeto data que irá conter dados para o select de possíveis especialistas
 		$scope.data = {};
 
-		// Copiando vetor de usuários para o vetor de possíveis especialistas
-		$scope.data.possiveisEspecialistas = angular.copy($scope.root.usuarios);
+		// levantando usuários na base de dados local
+		var openReq = indexedDB.open('gdoks');
+		openReq.onsuccess = function(evt){
+			var db = openReq.result;
+			db.transaction('usuarios').objectStore('usuarios').getAll().onsuccess = function(evt){
+				$scope.$apply(function(){
+					$scope.data.possiveisEspecialistas = evt.target.result;
 
-		// removendo os usuários que já são especialistas da disciplina
-		for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
-			$scope.data.possiveisEspecialistas = $scope.data.possiveisEspecialistas.filter(function(a){return a.id != this},$scope.disciplina.especialistas[i]);
-		};
+					// removendo os usuários que já são especialistas da disciplina
+					for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
+						$scope.data.possiveisEspecialistas = $scope.data.possiveisEspecialistas.filter(function(a){return a.id != this},$scope.disciplina.especialistas[i]);
+					};
 
-		// Criando especialista vazio
-		var especialistaVazio = {"nome":"Selecione um usuário...","id":0};
+					// Criando especialista vazio
+					var especialistaVazio = {"nome":"Selecione um usuário...","id":0};
 
-		// adicionando o especialista vazio ao grupo de possiveis especialistas
-		$scope.data.possiveisEspecialistas.unshift(especialistaVazio);
-		
-		// Marcando o item defalr		
-		$scope.data.selecionado = especialistaVazio;
+					// adicionando o especialista vazio ao grupo de possiveis especialistas
+					$scope.data.possiveisEspecialistas.unshift(especialistaVazio);
+					
+					// Marcando o item defalr		
+					$scope.data.selecionado = especialistaVazio;
 
-		// marcando flag para exibir campo de insersão de novo especialista
-		$scope.inserindoNovoEspecialista = true;
+					// marcando flag para exibir campo de insersão de novo especialista
+					$scope.inserindoNovoEspecialista = true;
+				})
+			}
+		}
 	}
 
 	// definindo função que remove especialista
@@ -857,6 +899,13 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 				.success(
 					function(response){
 						$scope.disciplina.especialistas = $scope.disciplina.especialistas.filter(function(a){return a != this},id_especialista);
+
+						// salvando especialista na base local
+						indexedDB.open('gdoks').onsuccess = function(evt){
+							$scope.$apply(function(){
+								evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
+							})
+						}
 						$scope.especialistas = $scope.especialistas.filter(function(a){return a.id != this},id_especialista);
 					}
 				)
@@ -879,8 +928,19 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 			.success(
 				function(response){
 					$scope.disciplina.especialistas.push($scope.data.selecionado.id);
-					$scope.especialistas.push($scope.root.usuarios.find(function(a){return a.id == this},$scope.data.selecionado.id));
-					$scope.inserindoNovoEspecialista = false;
+					
+					// Capturando o especialista selecionado e adicionando a vetor de especialistas
+					var openReq = indexedDB.open('gdoks');
+					openReq.onsuccess = function(evt){
+						var transaction = openReq.result.transaction(['usuarios','disciplinas'],'readwrite');
+						transaction.objectStore('usuarios').get($scope.data.selecionado.id).onsuccess = function(evt){
+							$scope.$apply(function(){
+								$scope.especialistas.push(evt.target.result);
+								$scope.inserindoNovoEspecialista = false;
+							})
+						}
+						transaction.objectStore('disciplinas').put($scope.disciplina);
+					}
 				}
 			)
 			.error(
@@ -894,31 +954,38 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 		// Criando objeto data que irá conter dados para o select de possíveis validadores
 		$scope.dataValidadores = {};
 
-		// Copiando vetor de usuários para o vetor de possíveis validadores
-		$scope.dataValidadores.possiveisValidadores = angular.copy($scope.root.usuarios);
+		// Levantando os possíveis validadores desta disciplina na base local
+		var openReq = indexedDB.open('gdoks');
+		openReq.onsuccess = function(evt){
+			var db = evt.target.result;
+			db.transaction('usuarios').objectStore('usuarios').getAll().onsuccess = function(evt){
+				$scope.$apply(function(){
+					$scope.dataValidadores.possiveisValidadores = evt.target.result;
 
-		// removendo os usuários que já são validadores da disciplina
-		for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
-			$scope.dataValidadores.possiveisValidadores = $scope.dataValidadores.possiveisValidadores.filter(function(a){return a.id != this},$scope.disciplina.validadores[i].id);
-		};
+					// removendo os usuários que já são validadores da disciplina
+					for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
+						$scope.dataValidadores.possiveisValidadores = $scope.dataValidadores.possiveisValidadores.filter(function(a){return a.id != this},$scope.disciplina.validadores[i].id);
+					};
 
-		// Criando validador vazio
-		var validadorVazio = {"nome":"Selecione um usuário...","id":0,"tipo":1};
+					// Criando validador vazio
+					var validadorVazio = {"nome":"Selecione um usuário...","id":0,"tipo":1};
 
-		// adicionando o validador vazio ao grupo de possiveis validadores
-		$scope.dataValidadores.possiveisValidadores.unshift(validadorVazio);
+					// adicionando o validador vazio ao grupo de possiveis validadores
+					$scope.dataValidadores.possiveisValidadores.unshift(validadorVazio);
+					
+					// Marcando o item defalr		
+					$scope.dataValidadores.selecionado = validadorVazio;
+
+					// marcando flag para exibir campo de insersão de novo validador
+					$scope.inserindoNovoValidador = true;
+				})		
+			}
+		}
 		
-		// Marcando o item defalr		
-		$scope.dataValidadores.selecionado = validadorVazio;
-
 		// Criando um objeto para lidar com os tipos de validadores
 		$scope.tiposDeValidadores = {};
 		$scope.tiposDeValidadores.tipos = [{"id":1,"nome":"Necessário"},{"id":2,"nome":"Suficiente"}];
 		$scope.tiposDeValidadores.selecionado = {"id":1,"nome":"Necessário"};
-
-
-		// marcando flag para exibir campo de insersão de novo validador
-		$scope.inserindoNovoValidador = true;
 	}
 
 	// definindo função que remove validador
@@ -929,6 +996,11 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 					function(response){
 						$scope.disciplina.validadores = $scope.disciplina.validadores.filter(function(a){return a.id != this},id_validador);
 						$scope.validadores = $scope.validadores.filter(function(a){return a.id != this},id_validador);
+
+						// salvando remoção na base de dados
+						indexedDB.open('gdoks').onsuccess = function(evt){
+							evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
+						}
 					}
 				)
 				.error(
@@ -949,11 +1021,25 @@ controllers.DisciplinaController = function($scope,$routeParams,GDoksFactory){
 		GDoksFactory.adicionarValidador($scope.disciplina.id,$scope.dataValidadores.selecionado.id,$scope.tiposDeValidadores.selecionado.id)
 			.success(
 				function(response){
+					// Alterando validador no scope
 					$scope.disciplina.validadores.push({"id":$scope.dataValidadores.selecionado.id,"tipo":$scope.tiposDeValidadores.selecionado.id});
-					var validador = $scope.root.usuarios.find(function(a){return a.id == this},$scope.dataValidadores.selecionado.id);
-					validador.tipo = $scope.tiposDeValidadores.selecionado.id;
-					$scope.validadores.push(validador);
-					$scope.inserindoNovoValidador = false;
+
+					// Alterando o validador na base
+					indexedDB.open('gdoks').onsuccess = function(evt){
+						// salvando disciplina alterada na base local
+						var transaction = evt.target.result.transaction(['disciplinas','usuarios'],'readwrite');
+						transaction.objectStore('disciplinas').put($scope.disciplina);
+
+						// alterando o scope.validadores para consistencia da interface
+						transaction.objectStore('usuarios').get($scope.dataValidadores.selecionado.id).onsuccess = function(evt){
+							var validador = evt.target.result;
+							validador.tipo = $scope.tiposDeValidadores.selecionado.id;
+							$scope.$apply(function(){
+								$scope.validadores.push(validador);
+								$scope.inserindoNovoValidador = false;			
+							})
+						}
+					}
 				}
 			)
 			.error(

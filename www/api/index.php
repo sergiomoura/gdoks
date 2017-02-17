@@ -719,7 +719,7 @@
 						$response->flush();
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
-						$response = new response(1,$e->getMessage);
+						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
 					}

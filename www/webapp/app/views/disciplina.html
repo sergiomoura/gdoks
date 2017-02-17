@@ -128,7 +128,7 @@
 			<tr ng-repeat="val in validadores track by $index">
 				<td>{{val.nome}}</td>
 				<td>{{val.email}}</td>
-				<td>{{val.tipo==1?"Necessário":"Suficiente"}}</td>
+				<td>{{val.tipo=="1"?"Necessário":"Suficiente"}}</td>
 				<td>
 					<button class="bt_cancelar" ng-click="removerValidador(val.id)">Remover</button>
 				</td>
