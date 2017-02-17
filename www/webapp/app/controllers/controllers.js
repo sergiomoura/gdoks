@@ -575,9 +575,16 @@ controllers.ClienteController = function($scope,$routeParams,GDoksFactory){
 					$scope.obteve_resposta = true;
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
+					$scope.cliente.id = response.newId;
 
-					$scope.usuario.id = response.newId;
-					$scope.root.usuarios.push($scope.usuario);
+					// salvando cliente na base local
+					var cliente = angular.copy($scope.cliente);
+					delete(cliente.contato_telefone);
+					delete(cliente.contato_email);
+					delete(cliente.contato_nome);
+					indexedDB.open('gdoks').onsuccess = function(evt){
+						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').add(cliente);
+					}
 				}
 			)
 			.error(
@@ -595,8 +602,14 @@ controllers.ClienteController = function($scope,$routeParams,GDoksFactory){
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
 
-					// atualizando usuário alterado no root
-					$scope.root.clientes.filter(function(u){return u.id==this},$scope.cliente.id)[0] = $scope.cliente;
+					// atualiznado cliente na base local
+					var cliente = angular.copy($scope.cliente);
+					delete(cliente.contato_telefone);
+					delete(cliente.contato_email);
+					delete(cliente.contato_nome);
+					indexedDB.open('gdoks').onsuccess = function(evt){
+						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').put(cliente);
+					}
 				}
 			)
 			.error(
