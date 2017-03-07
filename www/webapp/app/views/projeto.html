@@ -11,11 +11,11 @@
 		</div>
 		<div class="item">
 			<label for="sigla">Cliente:</label>
-			<select name="sel_cliente" ng-options="option.nome for option in dataClientes.data track by option.id" ng-model="dataClientes.selecionado"></select>
+			<select name="sel_cliente" ng-options="option.nome for option in clientes.dados track by option.id" ng-model="clientes.selecionado"></select>
 		</div>
 		<div class="item">
 			<label for="sigla">Responsável:</label>
-			<select name="sel_responsavel" ng-options="option.nome for option in dataUsuarios.data track by option.id" ng-model="dataUsuarios.selecionado"></select>
+			<select name="sel_responsavel" ng-options="option.nome for option in usuarios.dados track by option.id" ng-model="usuarios.selecionado"></select>
 		</div>
 		<div class="item">
 			<label for="data_inicio_p">Início (previsto):</label>
@@ -32,6 +32,27 @@
 	</div>
 	<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
 	<button	class="bt_salvar" ng-click="salvarProjeto()">Salvar</button>
+</div>
+
+<div id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80">
+	<h1>Áreas</h1>
+	<table>
+		<thead>
+			<tr>
+				<td>Cód. da Área</td>
+				<td>Nome da Área</td>
+				<td><button class="bt_adicionar">+ Adicionar</button></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="area in projeto.areas">
+				<td><input type="text" ng-model="area.codigo"></td>
+				<td><input type="text" ng-model="area.nome"></td>
+				<td><button class="bt_cancelar" id="remover_{{area.id}}">Remover</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<button	class="bt_salvar" ng-click="salvarAreas()">Salvar Áreas</button>
 </div>
 
 <div id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">
@@ -58,32 +79,6 @@
 		</tbody>
 	</table>
 	<button	class="bt_salvar" ng-click="salvarDAOs()">Salvar Documentos de Abertura de Operações</button>
-</div>
-
-<div id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80">
-	<h1>Áreas</h1>
-	<table>
-		<thead>
-			<tr>
-				<td>Cód. da Área</td>
-				<td>Nome da Área</td>
-				<td><button class="bt_adicionar">+ Adicionar</button></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><input type="text"></td>
-				<td><input type="text"></td>
-				<td><button class="bt_cancelar">Remover</button></td>
-			</tr>
-			<tr>
-				<td><input type="text"></td>
-				<td><input type="text"></td>
-				<td><button class="bt_cancelar">Remover</button></td>
-			</tr>
-		</tbody>
-	</table>
-	<button	class="bt_salvar" ng-click="salvarAreas()">Salvar Áreas</button>
 </div>
 
 <div id="addprojeto_documentos_container" class="bloco_conteudo bloco_central_80">

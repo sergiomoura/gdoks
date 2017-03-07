@@ -434,7 +434,35 @@ controllers.VisaoGeralController = function($scope){};
 
 controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 	var id = $routeParams.id;
+	$scope.projeto = {};
 
+	// Carregando clientes da base local
+	$scope.clientes = {};
+	$scope.clientes.dados = [];
+	indexedDB.open("gdoks").onsuccess = function(evt){
+		evt.target.result.transaction("clientes").objectStore("clientes").getAll().onsuccess = function(evt){
+			$scope.$apply(function(){
+				$scope.clientes.dados = evt.target.result;
+				$scope.clientes.dados.unshift({'id':0,'nome':'Selecione o cliente...'});
+				$scope.clientes.selecionado = $scope.clientes.dados[0];
+			});
+		}
+	}
+
+	// Carregando clientes da base local
+	$scope.usuarios = {};
+	$scope.usuarios.dados = [];
+	indexedDB.open("gdoks").onsuccess = function(evt){
+		evt.target.result.transaction("usuarios").objectStore("usuarios").getAll().onsuccess = function(evt){
+			$scope.$apply(function(){
+				$scope.usuarios.dados = evt.target.result;
+				$scope.usuarios.dados.unshift({'id':0,'nome':'Selecione um responsável...'})
+				$scope.usuarios.selecionado = $scope.usuarios.dados[0];
+			});
+		}
+	}
+	
+	
 	// Criando o projeto em questão
 	if(id == 0) {
 		// Projeto novo
@@ -443,8 +471,9 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 		$scope.projeto.codigo = '';
 		$scope.projeto.id_cliente = 0;
 		$scope.projeto.id_responsavel = 0;
-		$scope.projeto.data_inicio_p = '';
-		$scope.projeto.data_final_p = '';
+		$scope.projeto.data_inicio_p = undefined;
+		$scope.projeto.data_final_p = undefined;
+		$scope.projeto.ativo = true;
 		$scope.projeto.daos = [];
 		$scope.projeto.areas = [];
 		$scope.projeto.documentos = [];
@@ -452,25 +481,17 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 		GDoksFactory.getProjeto(id)
 		.success(function(response){
 			$scope.projeto = response.projeto;
+			$scope.projeto.id_responsavel = ($scope.projeto.id_responsavel==null)?0:$scope.projeto.id_responsavel;
+			$scope.projeto.id_usuario = ($scope.projeto.id_usuario==null)?0:$scope.projeto.id_usuario;
+			$scope.clientes.selecionado = $scope.clientes.dados.filter(function(a){return a.id==this},$scope.projeto.id_cliente)[0];
+			$scope.usuarios.selecionado = $scope.usuarios.dados.filter(function(a){return a.id==this},$scope.projeto.id_responsavel)[0];
+			$scope.projeto.ativo = ($scope.projeto.ativo == 1);
 		})
 		.error(function(error){
 		})
 	}
 
-	// populando o select de usuários
-	var usuarioVazio = {'id':'0','nome':'Selecione um usuário'};
-	$scope.dataUsuarios = {};
-	$scope.dataUsuarios.data = angular.copy($scope.root.usuarios);
-	$scope.dataUsuarios.data.unshift(usuarioVazio);
-	$scope.dataUsuarios.selecionado = usuarioVazio;
-
-	// Populando o select de clientes
-	var clienteVazio = {'id':'0','nome':'Selecione um cliente'};
-	$scope.dataClientes = {};
-	$scope.dataClientes.data = angular.copy($scope.root.clientes);
-	$scope.dataClientes.data.unshift(clienteVazio);
-	$scope.dataClientes.selecionado = clienteVazio;
-	
+	/*
 	$scope.salvarProjeto = function(){
 		if($scope.projeto.id == 0){
 			GDoksFactory.adicionarDisciplina($scope.projeto)
@@ -511,6 +532,7 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 			);
 		}
 	}
+	*/
 };
 
 controllers.DocumentosController = function($scope){};
