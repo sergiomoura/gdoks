@@ -115,5 +115,5 @@ WebGDoks.run(function($rootScope, $location, $anchorScroll) {
 var datePickerOptions = {};
 datePickerOptions.dayNamesMin = [ "D", "S", "T", "Q", "Q", "S", "S" ];
 datePickerOptions.monthNames = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-datePickerOptions.dateFormat = "dd/mm/yy";
+datePickerOptions.dateFormat = "yy-mm-dd";
 datePickerOptions.showAnim = "";

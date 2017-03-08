@@ -433,8 +433,8 @@ controllers.UsuarioController = function($scope,$routeParams,GDoksFactory){
 controllers.VisaoGeralController = function($scope){};
 
 controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
-	var id = $routeParams.id;
 	$scope.projeto = {};
+	$scope.projeto.id = $routeParams.id;
 
 	// Carregando clientes da base local
 	$scope.clientes = {};
@@ -464,7 +464,7 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 	
 	
 	// Criando o projeto em questão
-	if(id == 0) {
+	if($scope.projeto.id == 0) {
 		// Projeto novo
 		$scope.projeto = {};
 		$scope.projeto.nome = '';
@@ -477,31 +477,46 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 		$scope.projeto.daos = [];
 		$scope.projeto.areas = [];
 		$scope.projeto.documentos = [];
+		$scope.inicialmenteAtivo = true;
 	} else {
-		GDoksFactory.getProjeto(id)
+		GDoksFactory.getProjeto($scope.projeto.id)
 		.success(function(response){
 			$scope.projeto = response.projeto;
 			$scope.projeto.id_responsavel = ($scope.projeto.id_responsavel==null)?0:$scope.projeto.id_responsavel;
-			$scope.projeto.id_usuario = ($scope.projeto.id_usuario==null)?0:$scope.projeto.id_usuario;
+			$scope.projeto.id_cliente = ($scope.projeto.id_cliente==null)?0:$scope.projeto.id_cliente;
 			$scope.clientes.selecionado = $scope.clientes.dados.filter(function(a){return a.id==this},$scope.projeto.id_cliente)[0];
 			$scope.usuarios.selecionado = $scope.usuarios.dados.filter(function(a){return a.id==this},$scope.projeto.id_responsavel)[0];
 			$scope.projeto.ativo = ($scope.projeto.ativo == 1);
+			$scope.inicialmenteAtivo = $scope.projeto.ativo;
 		})
 		.error(function(error){
 		})
 	}
 
-	/*
+	// definindo função Cancel
+	$scope.cancel = function(){
+		window.location = '/webapp/WebGDoks.php#/projetos';
+	}
+
 	$scope.salvarProjeto = function(){
-		if($scope.projeto.id == 0){
-			GDoksFactory.adicionarDisciplina($scope.projeto)
+		// copiando o objeto projeto
+		var projeto = angular.copy($scope.projeto);
+
+		// removendo campos que não serão enviados
+		delete projeto.daos;
+		delete projeto.areas;
+		delete projeto.documentos;
+
+		if(projeto.id == 0){
+			GDoksFactory.adicionarProjeto(projeto)
 			.success(
 				function(response){
 					$scope.obteve_resposta = true;
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
 					$scope.projeto.id = response.newId;
-					$scope.root.disciplinas.push($scope.projeto);
+
+					// Adicionando projeto na base local
 				}
 			)
 			.error(
@@ -512,15 +527,24 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 				}
 			);
 		} else {
-			GDoksFactory.atualizarDisciplina($scope.projeto)
+			GDoksFactory.atualizarProjeto(projeto)
 			.success(
 				function(response){
 					$scope.obteve_resposta = true;
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
 
-					// atualizando usuário alterado no root
-					$scope.root.disciplinas.filter(function(d){return d.id==this},$scope.projeto.id)[0] = $scope.disciplina;
+					// Atualizando projeto na base local
+					indexedDB.open('gdoks').onsuccess = function(evt){
+						// limpando dados para armazenamento.
+						delete projeto.id_cliente;
+						delete projeto.id_responsavel;
+						delete projeto.data_inicio_p;
+						delete projeto.data_final_p;
+
+						// armazenando.
+						evt.target.result.transaction('projetos','readwrite').objectStore('projetos').put(projeto);
+					}
 				}
 			)
 			.error(
@@ -532,7 +556,6 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 			);
 		}
 	}
-	*/
 };
 
 controllers.DocumentosController = function($scope){};

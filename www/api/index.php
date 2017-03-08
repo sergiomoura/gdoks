@@ -963,6 +963,77 @@
 				// enviando resposta
 				$response->flush();
 			});
+
+			$app->put('/projetos/:id',function($id) use ($app,$db){
+				
+				// Lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$projeto = json_decode($app->request->getBody());
+
+				// verifricando consistência de dados
+				if($projeto->id != $id){
+					$response = new response(1,'Dados inconsistentes.');
+					$response->flush();
+					die();
+				}
+
+				// Verificando se o projeto é da mesma empresa do usuário
+				$sql = 'SELECT
+							A.id,COUNT(*) as ok
+						FROM (
+							SELECT
+								id,id_empresa
+							FROM gdoks.gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+							SELECT
+								id_empresa
+							FROM gdoks.gdoks_projetos
+								WHERE id=?) B on A.id_empresa=B.id_empresa;';
+				$rs = $db->query($sql,'si',$token,$id)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
+
+				// Indo adiante
+				if($ok == 1) {
+					$sql = "UPDATE gdoks_projetos
+							SET	
+								nome=?,
+         						codigo=?,
+		                       	id_cliente=?,
+								id_responsavel=?,
+                                data_inicio_p=?,
+                                data_final_p=?,
+                                ativo=?
+                            WHERE id=?";
+                    try {
+                    	$db->query($sql,'ssiissii',
+                    		$projeto->nome,
+                    		$projeto->codigo,
+                    		$projeto->id_cliente,
+                    		$projeto->id_responsavel,
+                    		$projeto->data_inicio_p,
+                    		$projeto->data_final_p,
+                    		$projeto->ativo,
+                    		$id);
+                    } catch (Exception $e) {
+                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+						$response->flush();
+						die();
+                    }
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					die();
+				}
+
+				// retornando
+				$response = new response(0,'Dados do projeto alterados com sucesso.');
+				$response->flush();
+
+				// registrando alteração
+				registrarAcao($db,$id_usuario,ACAO_ALTEROU_PROJETO,implode(',',(array)$projeto));
+			});
 		// FIM DE ROTAS DE PROJETOS
 		
 		// ROTAS DE CLIENTES
