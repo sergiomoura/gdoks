@@ -1034,6 +1034,65 @@
 				// registrando alteração
 				registrarAcao($db,$id_usuario,ACAO_ALTEROU_PROJETO,implode(',',(array)$projeto));
 			});
+
+			$app->post('/projetos',function() use ($app,$db){
+				
+				// Lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$projeto = json_decode($app->request->getBody());
+
+				// Determinando o id do usuário e o id da empresa a qual ele pertence
+				$sql = 'SELECT id,
+						       id_empresa
+						FROM gdoks.gdoks_usuarios
+						WHERE token=?
+						  AND validade_do_token>now()';
+				$query = $db->query($sql,'s',$token);
+				$ok = (sizeof($query) == 1);
+
+				// Indo adiante
+				if($ok == 1) {
+					$id_usuario = $query[0]['id'];
+					$id_empresa = $query[0]['id_empresa'];
+					$sql = "INSERT INTO gdoks_projetos (
+								nome,
+								codigo,
+								id_cliente,
+								id_responsavel,
+								id_empresa,
+								data_inicio_p,
+								data_final_p,
+								ativo
+							) VALUES (?,?,?,?,?,?,?,?)";
+                    try {
+                    	$db->query($sql,'ssiiissi',
+                    		$projeto->nome,
+                    		$projeto->codigo,
+                    		$projeto->id_cliente,
+                    		$projeto->id_responsavel,
+                    		$id_empresa,
+                    		$projeto->data_inicio_p,
+                    		$projeto->data_final_p,
+                    		$projeto->ativo);
+                    } catch (Exception $e) {
+                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+						$response->flush();
+						die();
+                    }
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					die();
+				}
+
+				// retornando
+				$response = new response(0,'Projeto cadastrado com sucesso.');
+				$response->newId = $db->insert_id;
+				$response->flush();
+
+				// registrando alteração
+				registrarAcao($db,$id_usuario,ACAO_ADICIONOU_PROJETO,implode(',',(array)$projeto));
+			});
 		// FIM DE ROTAS DE PROJETOS
 		
 		// ROTAS DE CLIENTES

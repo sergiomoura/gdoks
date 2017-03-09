@@ -21,11 +21,11 @@
 			</div>
 			<div class="item">
 				<label for="data_inicio_p">Início (previsto):</label>
-				<input type="text" id="data_inicio_p" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="Selecione uma data para início previsto" ng-model="projeto.data_inicio_p">
+				<input type="text" id="data_inicio_p" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="Selecione uma data para início previsto" ng-model="projeto.data_inicio_p" required>
 			</div>
 			<div class="item">
 				<label for="data_final_p">Final (previsto):</label>
-				<input type="text" id="data_final_p" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="Selecione uma data prevista para o final" ng-model="projeto.data_final_p">
+				<input type="text" id="data_final_p" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="Selecione uma data prevista para o final" ng-model="projeto.data_final_p" required>
 			</div>
 			<div class="item">
 				<label for="ativo">Ativo:</label>
@@ -38,7 +38,7 @@
 	</div>
 </form>
 
-<div id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="projeto.id!=0" id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80">
 	<h1>Áreas</h1>
 	<table>
 		<thead>
@@ -59,7 +59,7 @@
 	<button	class="bt_salvar" ng-click="salvarAreas()">Salvar Áreas</button>
 </div>
 
-<div id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">
 	<h1>Documentos de Abertura de Operações</h1>
 	<table>
 		<thead>
@@ -85,7 +85,7 @@
 	<button	class="bt_salvar" ng-click="salvarDAOs()">Salvar Documentos de Abertura de Operações</button>
 </div>
 
-<div id="addprojeto_documentos_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="projeto.id!=0" id="addprojeto_documentos_container" class="bloco_conteudo bloco_central_80">
 	<h1>Documentos</h1>
 </div>
 
