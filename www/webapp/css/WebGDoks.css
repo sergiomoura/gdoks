@@ -490,7 +490,10 @@ nav .cfg{
 	padding-bottom: 56px
 }
 
-#addprojeto_areas_container .bt_salvar{
+#addprojeto_areas_container .bt_adicionar{
+	position: absolute;
+	right: 15px;
+	bottom: 15px;
 }
 
 #addprojeto_areas_container table input[type=text]{
