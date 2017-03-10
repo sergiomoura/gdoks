@@ -71,7 +71,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<button class="bt_adicionar" ng-click="editarArea(0)">+ Adicionar Área</button>
+	<button class="bt_adicionar" ng-click="editarArea(0)" ng-disabled="areaEditada.id==0">+ Adicionar Área</button>
 </div>
 
 <div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">
