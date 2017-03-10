@@ -39,24 +39,39 @@
 </form>
 
 <div ng-if="projeto.id!=0" id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80">
-	<h1>Áreas</h1>
+	<h1>Áreas de {{projeto.nome}}</h1>
 	<table>
 		<thead>
 			<tr>
 				<td>Cód. da Área</td>
 				<td>Nome da Área</td>
-				<td><button class="bt_adicionar">+ Adicionar</button></td>
+				<td></td>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="area in projeto.areas">
-				<td><input type="text" ng-model="area.codigo"></td>
-				<td><input type="text" ng-model="area.nome"></td>
-				<td><button class="bt_cancelar" id="remover_{{area.id}}">Remover</button></td>
+			<tr ng-repeat="area in projeto.areas track by $index">
+				<!-- Campo de código -->
+				<td ng-if="area.id!=areaEditada.id">{{area.codigo}}</td>
+				<td ng-if="area.id==areaEditada.id"><input type="text" ng-model="areaEditada.codigo" id="codigo_area_{{area.id}}"></td>
+				
+				<!-- Campo de nome -->
+				<td ng-if="area.id!=areaEditada.id">{{area.nome}}</td>
+				<td ng-if="area.id==areaEditada.id"><input type="text" ng-model="areaEditada.nome" id="nome_area_{{area.id}}"></td>
+				
+				<!-- Botões-->
+				<td>
+					<!-- em modo normal: Botão de remover e alterar -->
+					<button ng-if="area.id!=areaEditada.id" class="bt_cancelar" ng-click="removerArea(area.id)">Remover</button>
+					<button ng-if="area.id!=areaEditada.id" class="bt_alterar" ng-click="editarArea(area.id)">Alterar</button>
+
+					<!-- em modo edição: Botões de salvar e cancelar -->
+					<button ng-if="area.id==areaEditada.id" class="bt_limpo" ng-click="cancelarAlteracoesEmArea(area.id)">Cancelar</button>
+					<button ng-if="area.id==areaEditada.id" class="bt_salvar" ng-click="salvarArea(area.id)">Salvar</button>
+				</td>
 			</tr>
 		</tbody>
 	</table>
-	<button	class="bt_salvar" ng-click="salvarAreas()">Salvar Áreas</button>
+	<button class="bt_adicionar" ng-click="editarArea(0)">+ Adicionar Área</button>
 </div>
 
 <div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">

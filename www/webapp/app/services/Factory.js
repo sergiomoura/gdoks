@@ -89,6 +89,14 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/projetos',projeto, {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.adicionarArea = function(area){
+				return $http.post(API_ROOT+'/projetos/'+area.id_projeto+'/areas/',area,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.atualizarArea = function(area){
+				return $http.put(API_ROOT+'/projetos/'+area.id_projeto+'/areas/'+area.id,area,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getClientes = function(){
 				return $http.get(API_ROOT+'/clientes', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}

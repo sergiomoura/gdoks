@@ -491,9 +491,6 @@ nav .cfg{
 }
 
 #addprojeto_areas_container .bt_salvar{
-	position: absolute;
-	right: 15px;
-	bottom: 15px;
 }
 
 #addprojeto_areas_container table input[type=text]{

@@ -1093,6 +1093,102 @@
 				// registrando alteração
 				registrarAcao($db,$id_usuario,ACAO_ADICIONOU_PROJETO,implode(',',(array)$projeto));
 			});
+
+			$app->put('/projetos/:id_projeto/areas/:id_area',function($id_projeto,$id_area) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				$id_area = 1*$id_area;
+				$area = json_decode($app->request->getBody());
+
+				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
+				if($id_area != $area->id) {
+					$app->response->setStatus(401);
+					$response = new response(1,'inconscistência nas informações fornecidas');
+					$response.flush();
+					die();
+				}
+
+				// verificando se o usário enviado é do mesmo cliente da area atual
+				$sql = 'SELECT A.id AS id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos p
+						   INNER JOIN gdoks_areas a ON p.id=a.id_projeto
+						   AND a.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_area)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A area a ser alterada é do mesmo cliente do usuário
+					$sql = 'UPDATE gdoks_areas SET nome=?,codigo=? WHERE id=?';
+					try {
+						$db->query($sql,'ssi',$area->nome,$area->codigo,$id_area);
+						$response = new response(0,'Área alterada com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_ALTEROU_AREA,implode(',', (array)$area));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
+			$app->post('/projetos/:id_projeto/areas',function($id_projeto) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				$area = json_decode($app->request->getBody());
+
+				// verificando se o usário enviado é do mesmo cliente da area atual
+				$sql = 'SELECT A.id AS id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos d WHERE d.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_projeto)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A area a ser adicionada é do mesmo cliente do usuário
+					$sql = 'INSERT INTO gdoks_areas (nome,codigo,id_projeto) VALUES (?,?,?)';
+					try {
+						$db->query($sql,'ssi',$area->nome,$area->codigo,$id_projeto);
+						$response = new response(0,'Area adicionada com sucesso.');
+						$response->newId = $db->insert_id;
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_CRIOU_AREA,implode(',', (array)$area));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
 		// FIM DE ROTAS DE PROJETOS
 		
 		// ROTAS DE CLIENTES
