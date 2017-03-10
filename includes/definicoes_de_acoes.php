@@ -17,5 +17,6 @@
 	define('ACAO_ALTEROU_PROJETO', 16);
 	define('ACAO_ADICIONOU_PROJETO', 17);
 	define('ACAO_CRIOU_AREA',18);
-	definE('ACAO_ALTEROU_AREA',19);
+	define('ACAO_ALTEROU_AREA',19);
+	define('ACAO_REMOVEU_AREA',20);
 ?>

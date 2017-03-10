@@ -594,22 +594,15 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 		}
 	}
 
-	/* definindo função que remove subdisciplina
-	$scope.removerSubdisciplina = function(id){
-		if(confirm("Tem certeza que deseja excluir a subdisciplina? A ação não poderá ser desfeita.")){
-			var sub = $scope.disciplina.subs.find(function(a){return a.id == this},id);
-			sub.id_disciplina = $scope.disciplina.id;
-			GDoksFactory.removerSubdisciplina(sub)
+	// Definindo função que remove área
+	$scope.removerArea = function(id){
+		if(confirm("Tem certeza que deseja excluir a área? A ação não poderá ser desfeita.")){
+			var area = $scope.projeto.areas.find(function(a){return a.id == this},id);
+			area.id_projeto = $scope.projeto.id;
+			GDoksFactory.removerArea(area)
 				.success(
 					function(response){
-						$scope.disciplina.subs = $scope.disciplina.subs.filter(function(a){return a.id!=this},id);
-
-						// Atualizando na base local
-						var openReq = indexedDB.open('gdoks');
-						openReq.onsuccess = function(){
-							var db = openReq.result;
-							db.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
-						}
+						$scope.projeto.areas = $scope.projeto.areas.filter(function(a){return a.id!=this},id);
 					}
 				)
 				.error(
@@ -618,7 +611,7 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams){
 					}
 				);
 		}
-	}*/
+	}
 
 	// definindo função que edita area
 	$scope.editarArea = function(id){

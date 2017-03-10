@@ -1189,6 +1189,61 @@
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
+
+			$app->delete('/projetos/:id_projeto/areas/:id_area',function($id_projeto,$id_area) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				$id_area = 1*$id_area;
+				
+				// levantando area na base de dados
+				$sql = 'SELECT id,
+						       nome,
+						       codigo,
+						       id_projeto
+						FROM gdoks_areas
+						WHERE id=?';
+				$area = $db->query($sql,'i',$id_area)[0];
+
+				// verificando se o usário enviado é da mesma empresa da subdisciplina atual
+				$sql = 'SELECT A.id AS id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos p
+						   INNER JOIN gdoks_areas a ON p.id=a.id_projeto
+						   AND a.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_area)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A subdisciplina a ser adicionada é do mesmo cliente do usuário
+					$sql = 'DELETE FROM gdoks_areas WHERE id=?';
+					try {
+						$db->query($sql,'i',$id_area);
+						$response = new response(0,'Área removida com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_REMOVEU_AREA,implode(',',$area));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
+
 		// FIM DE ROTAS DE PROJETOS
 		
 		// ROTAS DE CLIENTES
