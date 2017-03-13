@@ -1,5 +1,5 @@
 // Definindo Module WebGDoks
-var WebGDoks = angular.module('WebGDoks', ['ngRoute','ngCookies','ng-currency','ngLocale','ui.mask']);
+var WebGDoks = angular.module('WebGDoks', ['ngRoute','ngCookies','ng-currency','ngLocale','ui.mask','ngFileUpload']);
 
 // Definindo Rotas
 WebGDoks.config(
@@ -97,7 +97,7 @@ WebGDoks.config(
 		.otherwise({redirectTo:'/visaogeral'});
 	}
 )
-
+/*
 WebGDoks.run(function($rootScope, $location, $anchorScroll) {
 	//when the route is changed scroll to the proper element.
 	$rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
@@ -110,7 +110,7 @@ WebGDoks.run(function($rootScope, $location, $anchorScroll) {
 		}
 	});
 });
-
+*/
 // Definindo opções do DatePiscker
 var datePickerOptions = {};
 datePickerOptions.dayNamesMin = [ "D", "S", "T", "Q", "Q", "S", "S" ];

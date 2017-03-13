@@ -4,6 +4,7 @@
 
 	// Required files - - - - - - - - - - - - - - - - - - -
 	require('../../includes/Slim/vendor/autoload.php');
+	require('../../includes/constantes.php');
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
@@ -927,7 +928,7 @@
 					$projeto->areas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 					
 					// levantando DAOs do projeto
-					$sql = 'SELECT id,nome,caminho FROM gdoks_daos WHERE id_projeto=?';
+					$sql = 'SELECT id,nome,nome_cliente,tipo,tamanho FROM gdoks_daos WHERE id_projeto=?';
 					$projeto->daos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
 					// Levantando documentos do projeto
@@ -1237,6 +1238,236 @@
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_REMOVEU_AREA,implode(',',$area));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
+			$app->post('/projetos/:id_projeto/daos/',function($id_projeto) use ($app,$db){
+				/*
+				echo('<pre>');
+				print_r($_FILES);
+				print_r($_POST);
+				echo('</pre>');
+				die();
+				*/
+				// lendo dados
+				$token = $app->request->headers->get('Authorization');
+
+				// Verificando se o projeto é da mesma empresa do usuário
+				$sql = 'SELECT
+							A.id,A.id_empresa,COUNT(*) as ok
+						FROM (
+							SELECT
+								id,id_empresa
+							FROM gdoks.gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+							SELECT
+								id_empresa
+							FROM gdoks.gdoks_projetos
+								WHERE id=?) B on A.id_empresa=B.id_empresa;';
+				$rs = $db->query($sql,'si',$token,$id_projeto)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
+				$id_empresa = $rs['id_empresa'];
+
+				// Indo adiante
+				if($ok == 1) {
+					// Determinando a quantidade de arquivos
+					$n = sizeof($_POST['profiles']);
+
+					// criando vetor de erros
+					$erros = Array();
+
+					// criando o vetor de sucessos
+					$sucessos = Array();
+
+					// percorrendo informações armazenamento na base e no filesystem
+					for ($i=0; $i < $n; $i++) { 
+						// verificando se há erro
+						if($_FILES['profiles']['error'][$i]['file'] == 0){
+							// UPLOAD COM SUCESSO
+							
+							// Organizando informações a serem salvas na base
+							$nomeUnico = uniqid(true);
+							$nomeTemporario = $_FILES['profiles']['tmp_name'][$i]['file'];
+							$nomeCliente = $_FILES['profiles']['name'][$i]['file'];
+							$tipo = $_FILES['profiles']['type'][$i]['file'];
+							$tamanho = $_FILES['profiles']['size'][$i]['file'];
+							$nomeDao = $_POST['profiles'][$i]['nome'];
+
+							// Registrando informações na base
+							$registradoNaBase = false;
+							$sql = "INSERT INTO gdoks_daos (nome,nome_unico,nome_cliente,tipo,tamanho,id_projeto)
+									VALUES (?,?,?,?,?,?)";
+							try {
+								$db->query($sql,'ssssii',
+									$nomeDao,
+									$nomeUnico,
+									$nomeCliente,
+									$tipo,
+									$tamanho,
+									$id_projeto);
+								$registradoNaBase = true;
+							} catch (Exception $e1) {
+								// registrando falha na consulta no vetor de falhas.
+								$erro = new stdClass();
+								$erro->arquivo = $nomeCliente;
+								$erro->msg = $e1->getMessage();
+								$erro->codigo = $e1->getCode();
+								array_push($erros, $erro);
+							}
+
+							// Salvando arquivo no FS
+							$salvoNoFS = false;
+							if($registradoNaBase) {
+								try {
+									// verificando se existe uma pasta da empresa. Se não houver, tenta criar.
+									$caminho = UPLOAD_PATH.$id_empresa;
+									$pastaDaEmpresaExiste = file_exists($caminho);
+									if(!$pastaDaEmpresaExiste){
+										$pastaDaEmpresaExiste = @mkdir($caminho);
+									}
+
+									if($pastaDaEmpresaExiste){
+										// Verificando se existe uma pasta do projeto. Se não houver, tenta criar.
+										$caminho = $caminho.'/'.$id_projeto;
+										$pastaDoProjetoExiste = file_exists($caminho);
+										if(!$pastaDoProjetoExiste){
+											$pastaDoProjetoExiste = @mkdir($caminho);
+										}
+									}
+
+									if($pastaDoProjetoExiste){
+										// Salvando arquivo na pasta do cliente
+										$salvoNoFS = @move_uploaded_file($nomeTemporario, $caminho.'/'.$nomeUnico);	
+									}
+
+									if($salvoNoFS){
+										// Criando elemento de vetor de sucesso
+										$dao = new stdClass();
+										$dao->nome = $nomeDao;
+										$dao->nome_cliente = $nomeCliente;
+										$dao->tipo = $tipo;
+										$dao->tamanho = $tamanho;
+										$dao->id = $db->insert_id;
+										array_push($sucessos, $dao);
+
+										// Registrando a ação
+										registrarAcao($db,$id_usuario,ACAO_CRIOU_DAO,implode(',', (array)$dao));
+									} else {
+										// registrando falha no processo de salvar no FS
+										$erro = new stdClass();
+										$erro->arquivo = $nomeCliente;
+										$erro->msg = $e1->getMessage();
+										array_push($erros, $erro);
+
+										// removendo registro na base de dados
+										$sql = "DELETE from gdoks_daos WHERE id=?";
+										$db->query($sql,'i',$db->insert_id);
+									}
+								} catch (Exception $e2) {
+									// registrando falha na consulta no vetor de falhas.
+									$erro = new stdClass();
+									$erro->arquivo = $nomeCliente;
+									$erro->msg = $e1->getMessage();
+									$erro->codigo = -2;
+									array_push($erros, $erro);
+								}
+							}
+						} else {
+							// Registrando falha no upload no vetor de falhas.
+							$erro = new stdClass();
+							$erro->arquivo = $nomeCliente;
+							$erro->msg = 'Upload falhou. Erro: '.$_FILES['profiles']['error'][$i]['file'];
+							$erro->codigo = -1;
+							array_push($erros, $erro);
+						}
+					}
+
+					// retornando;
+					$response = new response(0,'Documentos processados.');
+					$response->erros = $erros;
+					$response->sucessos = $sucessos;
+					$response->flush();
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					die();
+				}
+			});
+
+			$app->delete('/projetos/:id_projeto/daos/:id_dao',function($id_projeto,$id_dao) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				$id_dao = 1*$id_dao;
+				
+				// levantando dao na base de dados
+				$sql = 'SELECT id,
+						       nome,
+						       nome_unico
+						FROM gdoks_daos
+						WHERE id=?';
+				$dao = (object)($db->query($sql,'i',$id_dao)[0]);
+
+				// verificando se o usário enviado é da mesma empresa da subdisciplina atual
+				$sql = 'SELECT A.id AS id_usuario,
+							   A.id_empresa AS id_empresa,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos p
+						   INNER JOIN gdoks_daos a ON p.id=a.id_projeto
+						   AND a.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_dao)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				$id_empresa = $rs['id_empresa'];
+
+				if($ok == 1){
+					// Tudo ok! A dao a ser removida é do mesmo cliente do usuário
+					$sql = 'DELETE FROM gdoks_daos WHERE id=?';
+					$removeuDaBase = false;
+					try {
+						$db->query($sql,'i',$id_dao);
+						$removeuDaBase = true;
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+
+					$removeuDoFS = false;
+					if($removeuDaBase){
+						// removendo do FS
+						$removeuDoFS = @unlink(UPLOAD_PATH.$id_empresa.'/'.$id_projeto.'/'.$dao->nome_unico);
+					} else {
+						$app->response->setStatus(401);
+						$response = new response(1,'Falha ao tentar remover registro do documento na base de dados.');
+						$response->flush();
+						return;	
+					}
+
+
+					if($removeuDoFS){
+						// Retornando resultado para o cliente
+						$response = new response(0,'Ok');
+						$response->flush();
+
+						// Registrando a ação
+						registrarAcao($db,$id_usuario,ACAO_REMOVEU_DAO,implode(',',(array)$dao));
+					}
+					
 				} else {
 					$app->response->setStatus(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	

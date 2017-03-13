@@ -80,6 +80,7 @@
 	<script src="js/angular/angular-resource.min.js"></script>
 	<script src="js/angular/ng-currency.min.js"></script>
 	<script src="js/angular/angular-ui-mask.min.js"></script>
+	<script src="js/angular/ng-file-upload.min.js"></script>
 	<!-- Fim de Scripts externos -->
 	<!-- Scripts do app -->
 	<script src="app/services/constants.js"></script>

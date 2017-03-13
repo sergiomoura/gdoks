@@ -101,6 +101,14 @@ WebGDoks.factory('GDoksFactory',
 				return $http.delete(API_ROOT+'/projetos/'+area.id_projeto+'/areas/'+area.id,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.salvarDAOs = function(){
+
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.removerDAO = function(dao){
+				return $http.delete(API_ROOT+'/projetos/'+dao.id_projeto+'/daos/'+dao.id,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getClientes = function(){
 				return $http.get(API_ROOT+'/clientes', {headers: {'Authorization': $cookies.getObject('user').token}});
 			}

@@ -76,28 +76,58 @@
 
 <div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">
 	<h1>Documentos de Abertura de Operações</h1>
-	<table>
-		<thead>
-			<tr>
-				<td>Nome do Documento</td>
-				<td>Arquivo</td>
-				<td><button class="bt_adicionar">+ Adicionar</button></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><input type="text"></td>
-				<td><input type="file"></td>
-				<td><button class="bt_cancelar">Remover</button></td>
-			</tr>
-			<tr>
-				<td><input type="text"></td>
-				<td><input type="file"></td>
-				<td><button class="bt_cancelar">Remover</button></td>
-			</tr>
-		</tbody>
-	</table>
-	<button	class="bt_salvar" ng-click="salvarDAOs()">Salvar Documentos de Abertura de Operações</button>
+	<form id="form_daos" name="form_daos" novalidate>
+		<button ngf-select ngf-multiple="true" ng-model="daoFiles" class="bt_upload">Selecione Documentos de Abertura de Operções ...</button>
+		<table ng-if="daoFiles.length>0">
+			<thead>
+				<tr>
+					<td>Nome do Documento</td>
+					<td>Arquivo</td>
+					<td></td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="file in daoFiles">
+					<td><input type="text" name="daoName_{{$index}}" ng-model="daoNames[$index]" required></td>
+					<td>{{file.name}}</td>
+					<td>{{errosNoUploadDeDaos[$index]}}</td>
+					<td><button class="bt_cancelar">Remover</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<div ng-if="mostrarProgressoUploadDaos" class="progress_bar">
+			<div style="width:{{progress}}%">
+				<span>{{progress}}%</span>	
+			</div>
+		</div>
+		<button	class="bt_salvar" ng-click="salvarDAOs(daoFiles)" ng-if="daoFiles.length>0" ng-disabled="daoFiles.length==0 || !form_daos.$valid">Salvar Documentos de Abertura de Operações</button>
+	</form>
+	
+	
+	<div class="sub_bloco">
+		<h3>Já registrados</h3>
+		<table>
+			<thead>
+				<tr>
+					<td>Nome</td>
+					<td>Arquivo</td>
+					<td>Tipo</td>
+					<td>Tamanho</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="dao in projeto.daos">
+					<td>{{dao.nome}}</td>
+					<td>{{dao.nome_cliente}}</td>
+					<td>{{dao.tipo}}</td>
+					<td>{{dao.tamanho}}</td>
+					<td><button class="bt_cancelar" ng-click="removerDAO(dao.id)">Remover</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <div ng-if="projeto.id!=0" id="addprojeto_documentos_container" class="bloco_conteudo bloco_central_80">

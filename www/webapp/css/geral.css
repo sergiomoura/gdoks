@@ -34,6 +34,29 @@ button {
 	box-shadow: 0 0 2px 2px rgba(0,0,0,0.05);
 }
 
+.bloco_conteudo .sub_bloco {
+  border-top:1px solid #2196F3;
+	margin: 20px 0 0 0;
+	display:flex;
+	background-color:#E8F4FE;
+}
+
+.bloco_conteudo .sub_bloco h3{
+	display: block;
+	background-color: #2196F3;
+	color:#FFF;
+	text-align: center;
+	padding: 30px;
+}
+
+.bloco_conteudo .sub_bloco table td{
+	border-bottom: none;
+}
+
+.bloco_conteudo .sub_bloco table thead td{
+	font-size:14px;
+}
+
 .bloco_central_50{
 	width: 50%;
 	top: 50px;
@@ -212,6 +235,22 @@ button {
 	color:#000;
 }
 
+#view .bt_upload{
+	border-radius: 5px;
+	padding: 0 20px;
+	height: 27px;
+	background-color: #2196F3;
+	color: #FFF;
+	text-align: center;
+	cursor: pointer;
+	border: none;
+	font-size: 12px;
+}
+
+#view .bt_upload:hover{
+	background-color: #40aaff;
+}
+
 #view .avisa_resultado_50{
 	width: calc(50% - 20px);
 	top: 25px;
@@ -315,4 +354,39 @@ help:hover>text{
 	position: absolute;
 	right: 10px;
 	top: calc(50% - 6px);
+}
+
+.progress_bar{
+	background-color: #C1E3FF;
+	height:27px;
+}
+.progress_bar>div{
+	background-color: #2196F3;
+	height: 100%;
+	border-radius: 5px 0 0 5px;
+	text-align: right;
+	color: #FFF;
+	font-size: 14px;
+	line-height: 27px;
+	transition: width ease-in-out 0.3s;
+}
+.progress_bar>span{
+	display: block;
+	width: 100px;
+	position: relative;
+	left: 50%;
+	margin-left: -50px;
+	text-align: center;
+	color:#FFF;
+	font-size: 12px;
+	top: -18px;
+}
+
+.aviso_inline{
+	display: inline-block;
+	width: 40%;
+	margin: 0 0 0 2%;
+	vertical-align: middle;
+	color: #FF5722;
+	text-align: justify;
 }
