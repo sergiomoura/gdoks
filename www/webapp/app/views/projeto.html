@@ -88,11 +88,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="file in daoFiles">
+				<tr ng-repeat="file in daoFiles" id="tr_{{file.name}}">
 					<td><input type="text" name="daoName_{{$index}}" ng-model="daoNames[$index]" required></td>
 					<td>{{file.name}}</td>
 					<td>{{errosNoUploadDeDaos[$index]}}</td>
-					<td><button class="bt_cancelar">Remover</button></td>
+					<td><button class="bt_cancelar" ng-click="removerDaoFile(file.name)">Remover</button></td>
 				</tr>
 			</tbody>
 		</table>

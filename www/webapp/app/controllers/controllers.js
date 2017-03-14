@@ -678,7 +678,7 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams,$timeo
 	}
 
 	// Documentos de abertura de operações
-	$scope.daoFiles = [];
+	//$scope.daoFiles = [];
 	$scope.daoNames = [];
 	$scope.errosNoUploadDeDaos = [];
 	$scope.mostrarProgressoUploadDaos = false;
@@ -709,8 +709,13 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams,$timeo
                 		function () {
                     		var result = response.data;
                     		if(result.error == 0){
+                    			var tr; // variável da linha da tabela que exibe os campos dos arquivos que vão subir
                     			for (var i = result.sucessos.length - 1; i >= 0; i--) {
                     				$scope.projeto.daos.push(result.sucessos[i]);
+
+                    				// removendo linhas NA TORA.
+                    				tr = document.getElementById("tr_"+result.sucessos[i].nome_cliente);
+                    				tr.parentNode.removeChild(tr);
                     			};
                     			for (var i = result.erros.length - 1; i >= 0; i--) {
                     				switch(result.erros[i].codigo){
@@ -760,6 +765,12 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams,$timeo
 					}
 				);
 		}
+	}
+
+	// Definindo função que remove linha do arquivo de upload da interface
+	$scope.removerDaoFile = function(filename){
+		console.log(filename);
+		console.dir($scope.daoFiles);
 	}
 };
 
