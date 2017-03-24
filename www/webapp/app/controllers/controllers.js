@@ -453,7 +453,7 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams,$timeo
 		}
 	}
 
-	// Carregando clientes da base local
+	// Carregando usuarios da base local
 	$scope.usuarios = {};
 	$scope.usuarios.dados = [];
 	indexedDB.open("gdoks").onsuccess = function(evt){
@@ -771,6 +771,53 @@ controllers.ProjetoController = function($scope,GDoksFactory,$routeParams,$timeo
 	$scope.removerDaoFile = function(filename){
 		console.log(filename);
 		console.dir($scope.daoFiles);
+	}
+
+	// Carregando subdisciplinas da base
+	$scope.subdisciplinas = [];
+	indexedDB.open('gdoks').onsuccess = function(evt){
+		evt.target.result.transaction('disciplinas').objectStore('disciplinas').getAll().onsuccess = function(evt){
+			var disciplinas = evt.target.result;
+			var subs = [];
+			var disc;
+			var sub;
+			for (var i = disciplinas.length - 1; i >= 0; i--) {
+				disc = disciplinas[i];
+				for (var j = disc.subs.length - 1; j >= 0; j--) {
+					sub = disc.subs[j];
+					$scope.subdisciplinas.push({'id':sub.id,'nome':sub.nome,'id_disciplina':disc.id,'nome_disciplina':disc.nome});
+				}
+			}
+			$scope.subSelecionada = subs[0];
+		}
+	}
+
+	// Definindo função que abre campos para edição de documento
+	$scope.editarDocumento = function(id){
+		if(id != 0){
+			// removendo um possível novo documento em edição
+			$scope.projeto.documentos = $scope.projeto.documentos.filter(function(a){return a.id!=0});
+
+			// criando o objeto documento editado
+			$scope.documentoEditado = angular.copy($scope.projeto.documentos.filter(function(a){return a.id == this},id)[0]);
+
+			// marcando o id do projeto do documento como sendo o id do projeto corrente
+			$scope.documentoEditado.id_projeto = $scope.projeto.id;
+
+			setTimeout(function(){document.getElementById("nome_documento_"+id).focus()},10);
+		} else {
+			$scope.documentoEditado = {};
+			$scope.documentoEditado.id = 0;
+			$scope.documentoEditado.id_projeto = $scope.projeto.id;
+			$scope.documentoEditado.nome = "";
+			$scope.documentoEditado.id_subdisciplina = 0;
+			$scope.documentoEditado.nome_subdisciplina = "";
+			$scope.documentoEditado.id_disciplina = 0;
+			$scope.documentoEditado.nome_disciplina = "";
+
+			$scope.projeto.documentos.push($scope.documentoEditado);
+			setTimeout(function(){document.getElementById("nome_documento_0").focus()},10);
+		}
 	}
 };
 

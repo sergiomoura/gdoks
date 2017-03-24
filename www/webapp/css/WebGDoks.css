@@ -583,3 +583,9 @@ nav .cfg{
 	color:#CCC;
 	font-size: 12px
 }
+
+#addprojeto_documentos_container .bt_adicionar{
+	position: absolute;
+	right:15px;
+	bottom: 15px;
+}
