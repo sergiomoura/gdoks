@@ -933,10 +933,16 @@
 
 					// Levantando documentos do projeto
 					$sql = 'SELECT docs.id,
-									docs.nome,
+								   docs.nome,
 								  id_area,
-								  id_subdisciplina
+								  areas.nome as nome_area,
+								  id_subdisciplina,
+								  subs.nome as nome_subdisciplina,
+								  id_disciplina,
+								  disc.nome as nome_disciplina
 							FROM gdoks_documentos docs
+							INNER JOIN gdoks_subdisciplinas subs on subs.id=docs.id_subdisciplina
+							INNER JOIN gdoks_disciplinas disc on subs.id_disciplina=disc.id
 							INNER JOIN gdoks_areas areas ON docs.id_area=areas.id
 							WHERE areas.id_projeto=?';
 					$projeto->documentos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));

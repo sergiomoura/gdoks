@@ -136,7 +136,6 @@
 		<thead>
 			<tr>
 				<td>Nome</td>
-				<td>Disciplina</td>
 				<td>Subdisciplina</td>
 				<td>Área</td>
 				<td></td>
@@ -145,14 +144,15 @@
 		<tbody>
 			<tr ng-repeat="doc in projeto.documentos">
 				<td>{{doc.nome}}</td>
-				<td>-</td>
-				<td>{{doc.id_subdisciplina}}</td>
-				<td>{{doc.id_area}}</td>
+				<td>{{doc.nome_subdisciplina}}<span>{{doc.nome_disciplina}}</span></td>
+				<td>{{doc.nome_area}}</td>
 				<td>
+					<button class="bt_alterar">Alterar</button>
 					<button class="bt_cancelar">Remover</button>
 				</td>
 			</tr>
 	</table>
+	<button class="bt_adicionar" ng-click="editarDocumento(0)" ng-disabled="documentoEditado.id==0">+ Adicionar Documento</button>
 </div>
 
 <script>
