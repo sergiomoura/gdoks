@@ -132,6 +132,27 @@
 
 <div ng-if="projeto.id!=0" id="addprojeto_documentos_container" class="bloco_conteudo bloco_central_80">
 	<h1>Documentos</h1>
+	<table>
+		<thead>
+			<tr>
+				<td>Nome</td>
+				<td>Disciplina</td>
+				<td>Subdisciplina</td>
+				<td>Área</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="doc in projeto.documentos">
+				<td>{{doc.nome}}</td>
+				<td>-</td>
+				<td>{{doc.id_subdisciplina}}</td>
+				<td>{{doc.id_area}}</td>
+				<td>
+					<button class="bt_cancelar">Remover</button>
+				</td>
+			</tr>
+	</table>
 </div>
 
 <script>

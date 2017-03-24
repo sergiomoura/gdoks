@@ -932,25 +932,13 @@
 					$projeto->daos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
 					// Levantando documentos do projeto
-					$sql = 'SELECT A.id AS id_documento,
-							       A.nome AS nome_documento,
-							       B.data_upload,
-							       ifnull(percentual_concluido,0) AS percentual_concluido
-							FROM
-							  (SELECT docs.id,
-							          docs.nome,
-							          id_area,
-							          id_disciplina,
-							          max(arqs.id) AS id_ultima_versao
-							   FROM gdoks_documentos docs
-							   INNER JOIN gdoks_areas areas ON docs.id_area=areas.id
-							   LEFT JOIN gdoks_arquivos arqs ON arqs.id_documento=docs.id
-							   WHERE id_projeto=?
-							   GROUP BY docs.id,
-							            docs.nome,
-							            id_area,
-							            id_disciplina) A
-							LEFT JOIN gdoks_arquivos B ON A.id_ultima_versao=B.id';
+					$sql = 'SELECT docs.id,
+									docs.nome,
+								  id_area,
+								  id_subdisciplina
+							FROM gdoks_documentos docs
+							INNER JOIN gdoks_areas areas ON docs.id_area=areas.id
+							WHERE areas.id_projeto=?';
 					$projeto->documentos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
 					// Criando o objeto response 
