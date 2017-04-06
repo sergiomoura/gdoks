@@ -1142,7 +1142,7 @@
 				}
 			});
 
-			$app->post('/projetos/:id_projeto/areas',function($id_projeto) use ($app,$db){
+			$app->post('/projetos/:id_projeto/areas/',function($id_projeto) use ($app,$db){
 				// Lendo e saneando as informações da requisição
 				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;

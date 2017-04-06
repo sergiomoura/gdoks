@@ -38,7 +38,7 @@
 	</div>
 </form>
 
-<div ng-if="projeto.id!=0" id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="projeto.id!=0" id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosAreasController">
 	<h1>Áreas de {{projeto.nome}}</h1>
 	<table>
 		<thead>
@@ -74,7 +74,7 @@
 	<button class="bt_adicionar" ng-click="editarArea(0)" ng-disabled="areaEditada.id==0">+ Adicionar Área</button>
 </div>
 
-<div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosDaosController">
 	<h1>Documentos de Abertura de Operações</h1>
 	<form id="form_daos" name="form_daos" novalidate>
 		<button ngf-select ngf-multiple="true" ng-model="daoFiles" class="bt_upload">Selecione Documentos de Abertura de Operções ...</button>
