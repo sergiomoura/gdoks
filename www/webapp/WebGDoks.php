@@ -85,17 +85,17 @@
 		<!-- Scripts do app -->
 
 		<!-- Controllers -->
-		<script src="app/controllers/ClientesController.js"></script>
-		<script src="app/controllers/ConfiguracoesController.js"></script>
-		<script src="app/controllers/DocumentosController.js"></script>
-		<script src="app/controllers/DisciplinasController.js"></script>
-		<script src="app/controllers/NavController.js"></script>
-		<script src="app/controllers/OpcoesController.js"></script>
-		<script src="app/controllers/ProjetosController.js"></script>
-		<script src="app/controllers/SenhaController.js"></script>
-		<script src="app/controllers/TopoController.js"></script>
-		<script src="app/controllers/UsuariosController.js"></script>
-		<script src="app/controllers/VisaoGeralController.js"></script>
+		<script src="app/modules/Clientes/ClientesController.js"></script>
+		<script src="app/modules/Configuracoes/ConfiguracoesController.js"></script>
+		<script src="app/modules/Documentos/DocumentosController.js"></script>
+		<script src="app/modules/Disciplinas/DisciplinasController.js"></script>
+		<script src="app/modules/Nav/NavController.js"></script>
+		<script src="app/modules/Opcoes/OpcoesController.js"></script>
+		<script src="app/modules/Projetos/ProjetosController.js"></script>
+		<script src="app/modules/Senha/SenhaController.js"></script>
+		<script src="app/modules/Topo/TopoController.js"></script>
+		<script src="app/modules/Usuarios/UsuariosController.js"></script>
+		<script src="app/modules/VisaoGeral/VisaoGeralController.js"></script>
 		<!--/Controllers -->
 		<script src="app/services/constants.js"></script>
 		<script src="app/WebGDoks.js"></script>

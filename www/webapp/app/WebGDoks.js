@@ -26,82 +26,82 @@ WebGDoks.config(
 			'/senha',
 			{
 				controller: 'SenhaController',
-				templateUrl: 'app/views/senha.html'
+				templateUrl: 'app/modules/Senha/senha.html'
 			}
 		)
 		.when(
 			'/visaogeral',
 			{
 				controller: 'VisaoGeralController',
-				templateUrl: 'app/views/visaogeral.html'
+				templateUrl: 'app/modules/VisaoGeral/visaogeral.html'
 			}
 		).when(
 			'/projetos',
 			{
 				controller: 'ProjetosController',
-				templateUrl: 'app/views/projetos.html'
+				templateUrl: 'app/modules/Projetos/projetos.html'
 			}
 		).when(
 			'/projetos/:id',
 			{
 				controller: 'ProjetoController',
-				templateUrl: 'app/views/projeto.html'
+				templateUrl: 'app/modules/Projetos/projeto.html'
 			}
 		)
 		.when(
 			'/usuarios',
 			{
 				controller: 'UsuariosController',
-				templateUrl: 'app/views/usuarios.html'
+				templateUrl: 'app/modules/Usuarios/usuarios.html'
 			}
 		)
 		.when(
 			'/usuarios/:id',
 			{
 				controller: 'UsuarioController',
-				templateUrl: 'app/views/usuario.html'
+				templateUrl: 'app/modules/Usuarios/usuario.html'
 			}
 		)
 		.when(
 			'/documentos',
 			{
 				controller: 'DocumentosController',
-				templateUrl: 'app/views/documentos.html'
+				templateUrl: 'app/modules/Documentos/documentos.html'
 			}
 		)
 		.when(
 			'/disciplinas',
 			{
 				controller: 'DisciplinasController',
-				templateUrl: 'app/views/disciplinas.html'
+				templateUrl: 'app/modules/Disciplinas/disciplinas.html'
 			}
 		)
 		.when(
 			'/disciplinas/:id',
 			{
 				controller: 'DisciplinaController',
-				templateUrl: 'app/views/disciplina.html'
+				templateUrl: 'app/modules/Disciplinas/disciplina.html'
 			}
 		)
 		.when(
 			'/clientes',
 			{
 				controller: 'ClientesController',
-				templateUrl: 'app/views/clientes.html'
+				templateUrl: 'app/modules/Clientes/clientes.html'
 			}
 		)
 		.when(
 			'/clientes/:id',
 			{
 				controller: 'ClienteController',
-				templateUrl: 'app/views/cliente.html'
+				templateUrl: 'app/modules/Clientes/cliente.html'
 			}
 		)
 		.when(
 			'/configuracoes',
 			{
 				controller: 'ConfiguracoesController',
-				templateUrl: 'app/views/configuracoes.html'
+				templateUrl: 'app/modules/Configuracoes/configuracoes.html'
 			}
 		)
 		.otherwise({redirectTo:'/visaogeral'});
