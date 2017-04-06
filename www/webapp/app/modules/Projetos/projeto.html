@@ -74,10 +74,10 @@
 	<button class="bt_adicionar" ng-click="editarArea(0)" ng-disabled="areaEditada.id==0">+ Adicionar Área</button>
 </div>
 
-<div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosDaosController">
+<div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosDAOsController">
 	<h1>Documentos de Abertura de Operações</h1>
 	<form id="form_daos" name="form_daos" novalidate>
-		<button ngf-select ngf-multiple="true" ng-model="daoFiles" class="bt_upload">Selecione Documentos de Abertura de Operções ...</button>
+		<button ngf-select ng-model="daoFiles" ngf-multiple="true" ng-model="daoFiles" class="bt_upload" ng-disabled="daoFiles.length>0">Selecione Documentos de Abertura de Operções ...</button>
 		<table ng-if="daoFiles.length>0">
 			<thead>
 				<tr>
@@ -92,7 +92,7 @@
 					<td><input type="text" name="daoName_{{$index}}" ng-model="daoNames[$index]" required></td>
 					<td>{{file.name}}</td>
 					<td>{{errosNoUploadDeDaos[$index]}}</td>
-					<td><button class="bt_cancelar" ng-click="removerDaoFile(file.name)">Remover</button></td>
+					<td><button class="bt_cancelar" ng-click="removerDaoFile($index)">Remover</button></td>
 				</tr>
 			</tbody>
 		</table>
@@ -101,10 +101,8 @@
 				<span>{{progress}}%</span>	
 			</div>
 		</div>
-		<button	class="bt_salvar" ng-click="salvarDAOs(daoFiles)" ng-if="daoFiles.length>0" ng-disabled="daoFiles.length==0 || !form_daos.$valid">Salvar Documentos de Abertura de Operações</button>
+		<button	class="bt_salvar" ng-click="uploadDaoFiles(daoFiles)" ng-if="daoFiles.length>0" ng-disabled="daoFiles.length==0 || !form_daos.$valid">Salvar Documentos de Abertura de Operações</button>
 	</form>
-	
-	
 	<div class="sub_bloco">
 		<h3>Já registrados</h3>
 		<table>

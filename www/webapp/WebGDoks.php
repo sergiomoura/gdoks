@@ -93,6 +93,7 @@
 		<script src="app/modules/Opcoes/OpcoesController.js"></script>
 		<script src="app/modules/Projetos/ProjetosController.js"></script>
 		<script src="app/modules/Projetos/ProjetosAreasController.js"></script>
+		<script src="app/modules/Projetos/ProjetosDAOsController.js"></script>
 		<script src="app/modules/Senha/SenhaController.js"></script>
 		<script src="app/modules/Topo/TopoController.js"></script>
 		<script src="app/modules/Usuarios/UsuariosController.js"></script>

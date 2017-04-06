@@ -1,4 +1,4 @@
-angular.module('Projetos',[])
+angular.module('Projetos',['ngFileUpload'])
 .controller('ProjetosController',ProjetosController)
 .controller('ProjetoController',ProjetoController);
 
@@ -181,101 +181,6 @@ function ProjetoController($scope,GDoksFactory,$routeParams,$timeout,$cookies,Up
 		}
 	}
 
-	// Documentos de abertura de operações
-	//$scope.daoFiles = [];
-	$scope.daoNames = [];
-	$scope.errosNoUploadDeDaos = [];
-	$scope.mostrarProgressoUploadDaos = false;
-
-	// Definindo função que salva  DAOSs
-	$scope.salvarDAOs = function(files){
-		if (files && files.length) {
-			// criando pacote a enviar
-			
-			var packToSend = [];
-			var fileInfo;
-			for (var i = files.length - 1; i >= 0; i--) {
-				fileInfo = {};
-				fileInfo.file = files[i];
-				fileInfo.nome = $scope.daoNames[i];
-				packToSend.push(fileInfo);
-			};
-
-			Upload.upload(
-				{
-                	url: API_ROOT+'/projetos/'+$scope.projeto.id+'/daos/',
-                	data: {profiles: packToSend},
-                	headers: {'Authorization':$cookies.getObject('user').token}
-            	}
-            ).then(
-            	function (response) { // Função que trata upload concluído
-                	$timeout(
-                		function () {
-                    		var result = response.data;
-                    		if(result.error == 0){
-                    			var tr; // variável da linha da tabela que exibe os campos dos arquivos que vão subir
-                    			for (var i = result.sucessos.length - 1; i >= 0; i--) {
-                    				$scope.projeto.daos.push(result.sucessos[i]);
-
-                    				// removendo linhas NA TORA.
-                    				tr = document.getElementById("tr_"+result.sucessos[i].nome_cliente);
-                    				tr.parentNode.removeChild(tr);
-                    			};
-                    			for (var i = result.erros.length - 1; i >= 0; i--) {
-                    				switch(result.erros[i].codigo){
-                    					case 3:
-                    						$scope.errosNoUploadDeDaos[i] = "Já existe um documento com este nome para este projeto.";
-                    					break;
-                    					default:
-                    						$scope.errosNoUploadDeDaos[i] = result.erros[i].codigo;
-                    					break;
-                    				}
-                    			};
-                    			$scope.daoFiles = files;
-                    		} else {
-                    			$scope.daosUploadErrorMsg = result.msg;
-                    		}
-                    		$scope.mostrarProgressoUploadDaos = false;
-                		}
-                	);
-            	},
-            	function (response) { // Função que trata erro
-                	if (response.status > 0) {
-						$scope.daosUploadErrorMsg = response.status + ': ' + response.data;
-                	}
-            	},
-            	function (evt) { // Função que trata o progresso
-            		$scope.mostrarProgressoUploadDaos = true;
-                	$scope.progress = Math.round(100 * evt.loaded / evt.total);
-            	}
-            );
-		}
-	}
-
-	//Definindo função que remove dao
-	$scope.removerDAO = function(id){
-		if(confirm("Tem certeza que deseja documento do projeto? A ação não poderá ser desfeita.")){
-			var dao = $scope.projeto.daos.find(function(a){return a.id == this},id);
-			dao.id_projeto = $scope.projeto.id;
-			GDoksFactory.removerDAO(dao)
-				.success(
-					function(response){
-						$scope.projeto.daos = $scope.projeto.daos.filter(function(a){return a.id!=this},id);
-					}
-				)
-				.error(
-					function(error){
-						$scope.erroEmOperacaoDeSubdisciplina = error.msg;
-					}
-				);
-		}
-	}
-
-	// Definindo função que remove linha do arquivo de upload da interface
-	$scope.removerDaoFile = function(filename){
-		console.log(filename);
-		console.dir($scope.daoFiles);
-	}
 
 	// Carregando subdisciplinas da base
 	$scope.subdisciplinas = [];

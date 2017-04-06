@@ -1374,7 +1374,7 @@
 						} else {
 							// Registrando falha no upload no vetor de falhas.
 							$erro = new stdClass();
-							$erro->arquivo = $nomeCliente;
+							$erro->arquivo = $_FILES['profiles']['name'][$i]['file'];
 							$erro->msg = 'Upload falhou. Erro: '.$_FILES['profiles']['error'][$i]['file'];
 							$erro->codigo = -1;
 							array_push($erros, $erro);

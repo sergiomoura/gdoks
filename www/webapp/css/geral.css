@@ -247,6 +247,12 @@ button {
 	font-size: 12px;
 }
 
+#view .bt_upload:disabled{
+	background-color:#CCCCCC !important;
+	color:#666 !important;
+	cursor: default !important;
+}
+
 #view .bt_upload:hover{
 	background-color: #40aaff;
 }
