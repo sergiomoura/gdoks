@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>GDoks</title>
+		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="css/normalizer.css">
 		<link rel="stylesheet" href="css/geral.css">

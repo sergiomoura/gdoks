@@ -47,7 +47,7 @@ nav {
 
 nav:hover{
 	overflow: visible;
-	width: 200px;
+	width: 201px;
 }
 
 nav ul{
@@ -77,7 +77,7 @@ nav>ul>li li a{
 
 nav>ul>li ul{
 	position:absolute;
-	margin-top: -41px;
+	margin-top: -47px;
 	margin-left: calc(100% + 35px);
 	padding: 0;
 	display: none;

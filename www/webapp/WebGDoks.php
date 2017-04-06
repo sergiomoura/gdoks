@@ -8,6 +8,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>GDoks</title>
+		<!-- <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet"> -->
+		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="css/normalizer.css">
 		<link rel="stylesheet" href="css/geral.css">
@@ -55,7 +57,7 @@
 						<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
 					</li>
 				</ul>
-			</nav><
+			</nav>
 			<div id="view_container">
 				<div id="view" ng-view></div>
 			</div>
