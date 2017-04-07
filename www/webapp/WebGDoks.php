@@ -74,10 +74,25 @@
 		<!-- Scripts externos -->
 		<script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
 		<script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+		
+		<!-- carregamento do angular local --
 		<script src="js/angular/angular.min.js"></script>
 		<script src="js/angular/angular-route.min.js"></script>
 		<script src="js/angular/angular-cookies.min.js"></script>
 		<script src="js/angular/angular-resource.min.js"></script>
+		<!-- carregamento do angular 1.4.4 via CDN -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-cookies.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-resource.min.js"></script>
+		<!-- fim carregamento do angular via CDN -->
+		<!-- fim de carregamento do angular local -->
+		<!-- carregamento do angular 1.6.3 via CDN --
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-route.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-cookies.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-resource.min.js"></script>
+		<!-- fim carregamento do angular via CDN -->
 		<script src="js/angular/ng-currency.min.js"></script>
 		<script src="js/angular/angular-ui-mask.min.js"></script>
 		<script src="js/angular/ng-file-upload.min.js"></script>
@@ -94,6 +109,7 @@
 		<script src="app/modules/Projetos/ProjetosController.js"></script>
 		<script src="app/modules/Projetos/ProjetosAreasController.js"></script>
 		<script src="app/modules/Projetos/ProjetosDAOsController.js"></script>
+		<script src="app/modules/Projetos/ProjetosDocumentosController.js"></script>
 		<script src="app/modules/Senha/SenhaController.js"></script>
 		<script src="app/modules/Topo/TopoController.js"></script>
 		<script src="app/modules/Usuarios/UsuariosController.js"></script>
