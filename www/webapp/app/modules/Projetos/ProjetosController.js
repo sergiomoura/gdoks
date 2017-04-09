@@ -132,14 +132,8 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 
 						// armazenando
 						var reqAdd = evt.target.result.transaction('projetos','readwrite').objectStore('projetos').add(projeto);
-						reqAdd.onsuccess = function(evt){
-							console.log('ok!');
-							console.dir(evt);
-						}
-						reqAdd.onerror = function(evt){
-							console.log('Deu Erro...');
-							console.dir(evt);
-						}
+						reqAdd.onsuccess = function(evt){}
+						reqAdd.onerror = function(evt){}
 					}
 				}
 			)
