@@ -1468,6 +1468,157 @@
 				}
 			});
 
+			$app->put('/projetos/:id_projeto/documentos/:id_documento',function($id_projeto,$id_documento) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				$id_documento = 1*$id_documento;
+				$documento = json_decode($app->request->getBody());
+
+				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
+				if($id_documento != $documento->id) {
+					$app->response->setStatus(401);
+					$response = new response(1,'inconscistência nas informações fornecidas');
+					$response.flush();
+					die();
+				}
+
+				// verificando se o usário enviado é do mesmo cliente da documento atual
+				$sql = 'SELECT A.id AS id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos p
+						   INNER JOIN gdoks_areas a on a.id_projeto=p.id
+						   INNER JOIN gdoks_documentos d ON a.id=d.id_area
+						   AND d.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_documento)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! O documento a ser alterado é da mesma empresa do usuário
+					$sql = 'UPDATE gdoks_documentos SET nome=?,id_area=?,id_subdisciplina=? WHERE id=?';
+					try {
+						$db->query($sql,'siii',$documento->nome,$documento->id_area,$documento->id_subdisciplina,$id_documento);
+						$response = new response(0,'Documento alterado com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DOCUMENTO,implode(',', (array)$documento));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
+			$app->post('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				$documento = json_decode($app->request->getBody());
+
+				// verificando se o usário enviado é do mesmo cliente da projeto atual
+				$sql = 'SELECT A.id AS id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos d WHERE d.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_projeto)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A documento a ser adicionada é do mesmo cliente do usuário
+					$sql = 'INSERT INTO gdoks_documentos (nome,id_area,id_subdisciplina) VALUES (?,?,?)';
+					try {
+						$db->query($sql,'sii',$documento->nome,$documento->id_area,$documento->id_subdisciplina);
+						$response = new response(0,'Documento adicionado com sucesso.');
+						$response->newId = $db->insert_id;
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,implode(',', (array)$documento));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
+			$app->delete('/projetos/:id_projeto/documentos/:id_documento',function($id_projeto,$id_documento) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				$id_documento = 1*$id_documento;
+				
+				// levantando documento na base de dados
+				$sql = 'SELECT id,
+						       nome,
+						       id_area,
+						       id_subdisciplina
+						FROM gdoks_documentos
+						WHERE id=?';
+				$documento = $db->query($sql,'i',$id_documento)[0];
+
+				// verificando se o usário enviado é da mesma empresa do documento atual
+				$sql = 'SELECT A.id AS id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos p
+						   INNER JOIN gdoks_areas a ON p.id=a.id_projeto
+						   INNER JOIN gdoks_documentos d ON d.id_area = a.id
+						   AND d.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_documento)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! O Documento a ser removido é do mesmo cliente do usuário
+					$sql = 'DELETE FROM gdoks_documentos WHERE id=?';
+					try {
+						$db->query($sql,'i',$id_documento);
+						$response = new response(0,'Documento removido com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_REMOVEU_DOCUMENTO,implode(',',$documento));
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
 
 		// FIM DE ROTAS DE PROJETOS
 		

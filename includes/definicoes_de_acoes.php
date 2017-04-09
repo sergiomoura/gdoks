@@ -21,4 +21,7 @@
 	define('ACAO_REMOVEU_AREA',20);
 	define('ACAO_CRIOU_DAO',21);
 	define('ACAO_REMOVEU_DAO',22);
+	define('ACAO_ALTEROU_DOCUMENTO',23);
+	define('ACAO_CRIOU_DOCUMENTO',24);
+	define('ACAO_REMOVEU_DOCUMENTO',25);
 ?>
