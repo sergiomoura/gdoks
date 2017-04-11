@@ -51,10 +51,10 @@
 						<a ng-click="itemClicked(3)" class="dsc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
 					</li>
 					<li>
-						<a ng-click="itemClicked(5)" class="cli" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/clientes">Clientes</a>
+						<a ng-click="itemClicked(4)" class="cli" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/clientes">Clientes</a>
 					</li>
 					<li>
-						<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
+						<a ng-click="itemClicked(5)" class="cfg" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
 					</li>
 				</ul>
 			</nav>
