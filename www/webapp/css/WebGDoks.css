@@ -119,6 +119,9 @@ nav .selected{
 	background-color: rgba(43,43,43,0.8);
 	cursor: default;
 	text-decoration: underline;
+	border-left: 5px solid #2196F3;
+	padding-left: 5px;
+	background-position-x: 1px;
 }
 
 nav .home{
@@ -594,4 +597,12 @@ nav .cfg{
 	position: absolute;
 	right:15px;
 	bottom: 15px;
+}
+
+#busca_documentos{
+	border: none;
+	width: calc(100% - 20px);
+	padding: 10px;
+	position: relative;
+	margin-top:10px;
 }
