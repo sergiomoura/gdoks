@@ -23,10 +23,10 @@
 		</div>
 		
 		<div id="container_horizontal">
-			<nav id="menu" ng-controller="NavController">
+			<nav id="menu" ng-controller="NavController" ng-class="{nav_expanded:menuExpanded}" ng-mouseenter="expandMenu()" ng-mouseleave="contractMenu()">
 				<ul>
 					<li>
-						<a ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/projetos" class="prj">Projetos<span class="seta_direita"></span></a>
+						<a ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/projetos" class="prj">Projetos<span ng-if="menuExpanded" class="seta_direita"></span></a>
 						<ul>
 							<li><a ng-click="itemClicked(0)" href="#/visaogeral">Visão Geral</a></li>
 							<li><a ng-click="itemClicked(0)" href="#/projetos">Ver Todos Projetos</a></li>
