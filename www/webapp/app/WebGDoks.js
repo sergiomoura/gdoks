@@ -10,6 +10,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'Configuracoes',
 								'Disciplinas',
 								'Documentos',
+								'DocumentosParaValidacao',
 								'Nav',
 								'Opcoes',
 								'Projetos',
@@ -67,6 +68,13 @@ WebGDoks.config(
 			{
 				controller: 'DocumentosController',
 				templateUrl: 'app/modules/Documentos/documentos.html'
+			}
+		)
+		.when(
+			'/dpvs',
+			{
+				controller: 'DocumentosParaValidacaoController',
+				templateUrl: 'app/modules/DocumentosParaValidacao/DocumentosParaValidacao.html'
 			}
 		)
 		.when(

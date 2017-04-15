@@ -45,7 +45,11 @@
 						<a ng-click="itemClicked(1)" class="usu" ng-class="{ 'selected': 1 == root.itemSelecionadoDoMenu }" href="#/usuarios">Usuários</a>
 					</li>
 					<li>
-						<a ng-click="itemClicked(2)" class="doc" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos</a>
+						<a ng-click="itemClicked(2)" class="doc" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos<span ng-if="menuExpanded" class="seta_direita"></span></a><span></span>
+						<ul>
+							<li><a ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(2)" href="#/documentos">para Atualizar</a></li>
+							<li><a ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(2)" href="#/dpvs">para Validar</a></li>
+						</ul>
 					</li>
 					<li>
 						<a ng-click="itemClicked(3)" class="dsc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
@@ -75,7 +79,7 @@
 		<script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
 		<script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 		
-		<!-- carregamento do angular local --
+		<!-- carregamento do angular 1.4.4 local --
 		<script src="js/angular/angular.min.js"></script>
 		<script src="js/angular/angular-route.min.js"></script>
 		<script src="js/angular/angular-cookies.min.js"></script>
@@ -103,6 +107,7 @@
 		<script src="app/modules/Clientes/ClientesController.js"></script>
 		<script src="app/modules/Configuracoes/ConfiguracoesController.js"></script>
 		<script src="app/modules/Documentos/DocumentosController.js"></script>
+		<script src="app/modules/DocumentosParaValidacao/DocumentosParaValidacaoController.js"></script>
 		<script src="app/modules/Disciplinas/DisciplinasController.js"></script>
 		<script src="app/modules/Nav/NavController.js"></script>
 		<script src="app/modules/Opcoes/OpcoesController.js"></script>
