@@ -1561,9 +1561,20 @@
 					// Tudo ok! A documento a ser adicionada é do mesmo cliente do usuário
 					$sql = 'INSERT INTO gdoks_documentos (nome,id_area,id_subdisciplina) VALUES (?,?,?)';
 					try {
+						// Salvando documento
 						$db->query($sql,'sii',$documento->nome,$documento->id_area,$documento->id_subdisciplina);
+
+						// Salvando o novo id do documento recém adicionado
+						$newId = $db->insert_id;
+
+						// salvando vínculos de dependencia
+						$sql = 'INSERT INTO gdoks_documentos_x_dependencias (id_documento,id_dependencia) VALUES (?,?)';
+						foreach ($documento->dependencias as $id_dependencia) {
+							$db->query($sql,'ii',$newId,$id_dependencia);
+						}
+
 						$response = new response(0,'Documento adicionado com sucesso.');
-						$response->newId = $db->insert_id;
+						$response->newId = $newId;
 						$response->flush();
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
@@ -1574,7 +1585,7 @@
 
 					// removendo dependencias do objeto para salvar no log
 					unset($documento->dependencias);
-					
+
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,implode(',', (array)$documento));
 				} else {
