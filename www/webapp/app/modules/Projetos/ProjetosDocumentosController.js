@@ -151,7 +151,32 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 		}
 	}
 
-	$scope.getDocumentosCadastrados = function(query,id){
-		return $scope.projeto.documentos.filter(function(d){return (d.nome.toUpperCase().indexOf(this[0].toUpperCase()) != -1) && d.id != this[1]},[query,id]);
+	$scope.getDependenciasPossiveis = function(query,doc){
+		var result = $scope.projeto.documentos.filter(
+			function(d){
+				// calculando condicao de nao ser ancestral
+				var naoEAncestral = dependenciasDeDocumento(this[1]).indexOf(d.id) == -1;
+
+				// calculando condicao de evitar documento próprio
+				var docDiferente = d.id != this[1].id;
+
+				// calculando condicao do nome do documento conter o trecho digitado pelo usuário
+				var contemTrecho = d.nome.toUpperCase().indexOf(this[0].toUpperCase()) != -1
+				
+				return naoEAncestral && docDiferente && contemTrecho;
+			},[query,doc]);
+		return result;
+	}
+
+	var dependenciasDeDocumento = function(doc){
+		if(doc.dependencias.length == 0){
+			return [];
+		} else {
+			var dep = doc.dependencias.map(function(d){return d.id});
+			for (var i = doc.dependencias.length - 1; i >= 0; i--) {
+				dep = dep.concat(dependenciasDeDocumento(doc.dependencias[i]));
+			}
+			return dep;
+		}
 	}
 }

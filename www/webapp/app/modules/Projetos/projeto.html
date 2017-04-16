@@ -165,9 +165,8 @@
 				</td>
 				<td ng-if="doc.id == documentoEditado.id">
 					<tags-input ng-model="documentoEditado.dependencias" display-property="nome" add-from-autocomplete-only="true" placeholder="Digite...">
-						<auto-complete source="getDocumentosCadastrados($query,documentoEditado.id)"></auto-complete>
+						<auto-complete source="getDependenciasPossiveis($query,documentoEditado)"></auto-complete>
 					</tags-input>
-					{{doc.dependencias}}
 				</td>
 
 				<!-- botões de ação sobre o documento -->
