@@ -8,12 +8,12 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>GDoks</title>
-		<!-- <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet"> -->
 		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="css/normalizer.css">
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/WebGDoks.css">
+		<link rel="stylesheet" type="text/css" href="css/ng-tags-input.css">
 		<link rel="stylesheet" href="js/jquery-ui-1.12.1/jquery-ui.css">
 	</head>
 	<body ng-controller="RootController">
@@ -100,6 +100,7 @@
 		<script src="js/angular/ng-currency.min.js"></script>
 		<script src="js/angular/angular-ui-mask.min.js"></script>
 		<script src="js/angular/ng-file-upload.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.2/ng-tags-input.min.js"></script>
 		<!-- Fim de Scripts externos -->
 		<!-- Scripts do app -->
 

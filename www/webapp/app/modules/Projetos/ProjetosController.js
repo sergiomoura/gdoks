@@ -1,6 +1,11 @@
-angular.module('Projetos',['ngFileUpload'])
+angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 .controller('ProjetosController',ProjetosController)
-.controller('ProjetoController',ProjetoController);
+.controller('ProjetoController',ProjetoController)
+.filter('nomesDasDependencias',function(){
+	return function(dependencias){
+		return dependencias.map(function(dep){return dep.nome}).join(', ');
+	}
+})
 
 
 function ProjetosController($scope,GDoksFactory){
@@ -87,6 +92,15 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					$scope.usuarios.selecionado = $scope.usuarios.dados.filter(function(a){return a.id==this},$scope.projeto.id_responsavel)[0];
 					$scope.projeto.ativo = ($scope.projeto.ativo == 1);
 					$scope.inicialmenteAtivo = $scope.projeto.ativo;
+
+					// parsing dependencias dos documentos
+					var doc;
+					for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
+						doc = $scope.projeto.documentos[i];
+						for	(var j = doc.dependencias.length - 1; j >= 0; j--) {
+							doc.dependencias[j] = $scope.projeto.documentos.find(function(d){return d.id == this},1*doc.dependencias[j]);
+						}
+					}
 				})
 				.error(function(error){
 				})

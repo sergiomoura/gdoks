@@ -21,7 +21,7 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 
 	// Watch a subdisciplina selecionada. caso elas mudem, muda os valores correspondentes no documentoEditado
 	$scope.$watch('srcSubdisciplinas.selected',function(newSub,oldSub){
-		if(newSub){1
+		if(newSub){
 			$scope.documentoEditado.id_subdisciplina = newSub.id;
 			$scope.documentoEditado.nome_subdisciplina = newSub.nome;
 			$scope.documentoEditado.id_disciplina = newSub.id_disciplina;
@@ -66,7 +66,8 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 				id_subdisciplina:0,
 				nome_subdisciplina:'',
 				id_disciplina:0,
-				nome_disciplina:''
+				nome_disciplina:'',
+				dependencias:[]
 			};
 
 			// adicionando documento vazio a lista de documentos
@@ -91,7 +92,8 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 			nome:$scope.documentoEditado.nome,
 			id_subdisciplina:$scope.srcSubdisciplinas.selected.id,
 			id_area:$scope.srcAreas.selected.id,
-			id_projeto:$scope.projeto.id
+			id_projeto:$scope.projeto.id,
+			dependencias:$scope.documentoEditado.dependencias.map(function(d){return d.id})
 		};
 		
 		if(doc.id != 0){
@@ -106,6 +108,7 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 					docAlterado.nome_subdisciplina	= $scope.documentoEditado.nome_subdisciplina;
 					docAlterado.id_disciplina		= $scope.documentoEditado.id_disciplina;
 					docAlterado.nome_disciplina		= $scope.documentoEditado.nome_disciplina;
+					docAlterado.dependencias		= angular.copy($scope.documentoEditado.dependencias);
 					$scope.documentoEditado = null;
 				}
 			)
@@ -146,5 +149,9 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 					}
 				);
 		}
+	}
+
+	$scope.getDocumentosCadastrados = function(query,id){
+		return $scope.projeto.documentos.filter(function(d){return (d.nome.toUpperCase().indexOf(this[0].toUpperCase()) != -1) && d.id != this[1]},[query,id]);
 	}
 }

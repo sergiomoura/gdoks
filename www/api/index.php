@@ -947,6 +947,13 @@
 							WHERE areas.id_projeto=?';
 					$projeto->documentos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
+					// Levantando dependências de cada documento
+					$sql = 'SELECT id_dependencia from gdoks_documentos_x_dependencias where id_documento=?';
+					foreach ($projeto->documentos as $doc) {
+						$doc->dependencias = Array();
+						$doc->dependencias = array_map(function($a){return $a['id_dependencia'];}, $db->query($sql,'i',$doc->id));
+					}
+
 					// Criando o objeto response 
 					$response = new response(0,'Ok');
 					$response->projeto = $projeto;
@@ -1239,13 +1246,6 @@
 			});
 
 			$app->post('/projetos/:id_projeto/daos/',function($id_projeto) use ($app,$db){
-				/*
-				echo('<pre>');
-				print_r($_FILES);
-				print_r($_POST);
-				echo('</pre>');
-				die();
-				*/
 				// lendo dados
 				$token = $app->request->headers->get('Authorization');
 
@@ -1514,6 +1514,20 @@
 						$response->flush();
 						return;
 					}
+					// removendo dependências antigas
+					$sql = 'DELETE FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
+					$db->query($sql,'i',$documento->id);
+
+					// Inserindo novas dependencia
+					print_r($documento->dependencias);
+					$sql = 'INSERT INTO gdoks_documentos_x_dependencias (id_documento,id_dependencia) VALUES (?,?)';
+					foreach ($documento->dependencias as $dp) {
+						$db->query($sql,'ii',$documento->id,$dp);
+					}
+
+					// removendo dependencias do objeto para salvar no log
+					unset($documento->dependencias);
+					
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DOCUMENTO,implode(',', (array)$documento));
 				} else {
@@ -1557,6 +1571,10 @@
 						$response->flush();
 						return;
 					}
+
+					// removendo dependencias do objeto para salvar no log
+					unset($documento->dependencias);
+					
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,implode(',', (array)$documento));
 				} else {
