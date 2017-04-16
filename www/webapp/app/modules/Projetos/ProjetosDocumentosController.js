@@ -141,6 +141,10 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 				.success(
 					function(response){
 						$scope.projeto.documentos = $scope.projeto.documentos.filter(function(a){ return a.id != this},doc.id);
+						// removendo as relações dedependencia com o documento removido
+						for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
+							$scope.projeto.documentos[i].dependencias = $scope.projeto.documentos[i].dependencias.filter(function(a){return a.id != this},doc.id);
+						}
 					}
 				)
 				.error(
