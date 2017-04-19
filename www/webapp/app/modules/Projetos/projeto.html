@@ -191,7 +191,11 @@
 					<button ng-if="doc.id != documentoEditado.id" class="bt_cancelar" ng-click="removerDocumento(doc)">Remover</button>
 					<button ng-if="doc.id != documentoEditado.id" class="bt_alterar" ng-click="editarDocumento(doc.id)">Alterar</button>
 					<button ng-if="doc.id == documentoEditado.id" class="bt_limpo" ng-click="cancelarEdicaoDeDocumento()">Cancelar</button>
-					<button ng-if="doc.id == documentoEditado.id" class="bt_salvar" ng-click="salvarDocumento()" ng-disabled="documentoEditado.nome==''||srcAreas.selected==''||srcSubdisciplinas.selected.id==0||srcAreas.selected==null">Salvar</button>
+					<button
+						ng-if="doc.id == documentoEditado.id"
+						class="bt_salvar"
+						ng-click="salvarDocumento()"
+						ng-disabled="documentoEditado.data_limite==null||SdocumentoEditado.nome==''||srcAreas.selected==''||srcSubdisciplinas.selected.id==0||srcAreas.selected==null">Salvar</button>
 				</td>
 			</tr>
 	</table>
