@@ -67,7 +67,8 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 				nome_subdisciplina:'',
 				id_disciplina:0,
 				nome_disciplina:'',
-				dependencias:[]
+				dependencias:[],
+				data_limite:new Date()
 			};
 
 			// adicionando documento vazio a lista de documentos
@@ -93,7 +94,8 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 			id_subdisciplina:$scope.srcSubdisciplinas.selected.id,
 			id_area:$scope.srcAreas.selected.id,
 			id_projeto:$scope.projeto.id,
-			dependencias:$scope.documentoEditado.dependencias.map(function(d){return d.id})
+			dependencias:$scope.documentoEditado.dependencias.map(function(d){return d.id}),
+			data_limite	:$scope.documentoEditado.data_limite
 		};
 		
 		if(doc.id != 0){
@@ -109,6 +111,7 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 					docAlterado.id_disciplina		= $scope.documentoEditado.id_disciplina;
 					docAlterado.nome_disciplina		= $scope.documentoEditado.nome_disciplina;
 					docAlterado.dependencias		= angular.copy($scope.documentoEditado.dependencias);
+					docAlterado.data_limite			= $scope.documentoEditado.data_limite;
 					$scope.documentoEditado = null;
 				}
 			)

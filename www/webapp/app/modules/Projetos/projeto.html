@@ -144,7 +144,7 @@
 		<tbody>
 			<tr ng-repeat="doc in projeto.documentos">
 				<!-- Campo de nome -->
-				<td ng-if="doc.id != documentoEditado.id">{{doc.id}}){{doc.nome}}</td>
+				<td ng-if="doc.id != documentoEditado.id">{{doc.nome}}</td>
 				<td ng-if="doc.id == documentoEditado.id"><input focus type="text" id="nome_documento_{{documentoEditado.id}}" ng-model="documentoEditado.nome"></td>
 
 				<!-- campo de subdisciplina -->
@@ -158,8 +158,17 @@
 						<option value="">Selecione...</option>		
 					</select>
 				</td>
-				<td>data limite...</td>
-
+				
+				<!-- Campos de data_limite -->
+				<td ng-if="doc.id != documentoEditado.id">{{doc.data_limite|date:'dd/MM/yyyy'}}</td>
+				<td ng-if="doc.id == documentoEditado.id">
+						<md-datepicker
+								md-open-on-focus
+								md-hide-icons="calendar"
+								ng-model="documentoEditado.data_limite"
+								></md-datepicker></td>
+				
+				<!-- Campos de dependências -->
 				<td ng-if="doc.id != documentoEditado.id">
 					{{doc.dependencias|nomesDasDependencias}}
 				</td>

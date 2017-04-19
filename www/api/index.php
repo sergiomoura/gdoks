@@ -934,6 +934,7 @@
 					// Levantando documentos do projeto
 					$sql = 'SELECT docs.id,
 								   docs.nome,
+								  docs.data_limite,
 								  id_area,
 								  areas.nome as nome_area,
 								  id_subdisciplina,
@@ -1474,7 +1475,7 @@
 				$id_projeto = 1*$id_projeto;
 				$id_documento = 1*$id_documento;
 				$documento = json_decode($app->request->getBody());
-
+				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
 				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
 				if($id_documento != $documento->id) {
 					$app->response->setStatus(401);
@@ -1503,9 +1504,9 @@
 				$id_usuario = $rs['id_usuario'];
 				if($ok == 1){
 					// Tudo ok! O documento a ser alterado é da mesma empresa do usuário
-					$sql = 'UPDATE gdoks_documentos SET nome=?,id_area=?,id_subdisciplina=? WHERE id=?';
+					$sql = 'UPDATE gdoks_documentos SET nome=?,id_area=?,id_subdisciplina=?,data_limite=? WHERE id=?';
 					try {
-						$db->query($sql,'siii',$documento->nome,$documento->id_area,$documento->id_subdisciplina,$id_documento);
+						$db->query($sql,'siisi',$documento->nome,$documento->id_area,$documento->id_subdisciplina,$documento->data_limite,$id_documento);
 						$response = new response(0,'Documento alterado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
@@ -1519,7 +1520,6 @@
 					$db->query($sql,'i',$documento->id);
 
 					// Inserindo novas dependencia
-					print_r($documento->dependencias);
 					$sql = 'INSERT INTO gdoks_documentos_x_dependencias (id_documento,id_dependencia) VALUES (?,?)';
 					foreach ($documento->dependencias as $dp) {
 						$db->query($sql,'ii',$documento->id,$dp);
@@ -1541,7 +1541,8 @@
 				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$documento = json_decode($app->request->getBody());
-
+				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
+				
 				// verificando se o usário enviado é do mesmo cliente da projeto atual
 				$sql = 'SELECT A.id AS id_usuario,
 						       count(*) AS ok
@@ -1559,10 +1560,10 @@
 				$id_usuario = $rs['id_usuario'];
 				if($ok == 1){
 					// Tudo ok! A documento a ser adicionada é do mesmo cliente do usuário
-					$sql = 'INSERT INTO gdoks_documentos (nome,id_area,id_subdisciplina) VALUES (?,?,?)';
+					$sql = 'INSERT INTO gdoks_documentos (nome,id_area,id_subdisciplina,data_limite) VALUES (?,?,?,?)';
 					try {
 						// Salvando documento
-						$db->query($sql,'sii',$documento->nome,$documento->id_area,$documento->id_subdisciplina);
+						$db->query($sql,'siis',$documento->nome,$documento->id_area,$documento->id_subdisciplina,$documento->data_limite);
 
 						// Salvando o novo id do documento recém adicionado
 						$newId = $db->insert_id;

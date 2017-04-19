@@ -15,6 +15,7 @@
 		<link rel="stylesheet" href="css/WebGDoks.css">
 		<link rel="stylesheet" type="text/css" href="css/ng-tags-input.css">
 		<link rel="stylesheet" href="js/jquery-ui-1.12.1/jquery-ui.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 	</head>
 	<body ng-controller="RootController">
 		<div id="topo" ng-controller="TopoController">
@@ -89,6 +90,9 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-cookies.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-resource.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+  		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
 		<!-- fim carregamento do angular via CDN -->
 		<!-- fim de carregamento do angular local -->
 		<!-- carregamento do angular 1.6.3 via CDN --
@@ -96,7 +100,11 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-route.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-cookies.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-resource.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-animate.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-aria.min.js"></script>
+  		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-messages.min.js"></script>
 		<!-- fim carregamento do angular via CDN -->
+		<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 		<script src="js/angular/ng-currency.min.js"></script>
 		<script src="js/angular/angular-ui-mask.min.js"></script>
 		<script src="js/angular/ng-file-upload.min.js"></script>

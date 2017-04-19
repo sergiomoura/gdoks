@@ -4,6 +4,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'ngCookies',
 								'ng-currency',
 								'ngLocale',
+								'ngMaterial',
 								'ui.mask',
 								'ngFileUpload',
 								'Clientes',
@@ -115,6 +116,24 @@ WebGDoks.config(
 		.otherwise({redirectTo:'/visaogeral'});
 	}
 )
+
+// Configurando o Locale do DatePicker
+WebGDoks.config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+       return date.toLocaleDateString();
+    };
+
+    // Brazilian localization.
+    $mdDateLocaleProvider.months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+    $mdDateLocaleProvider.shortMonths = ['jan','fev','mar', 'abr','mai','jun','ago','set','out','nov','dez'];
+    $mdDateLocaleProvider.days = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+    $mdDateLocaleProvider.shortDays = ['D','S','T','Q','Q','S','S'];
+    $mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
+      return 'Semana ' + weekNumber;
+    };
+    $mdDateLocaleProvider.msgCalendar = 'Calendário';
+    $mdDateLocaleProvider.msgOpenCalendar = 'Abrir calendário';
+});
 
 // Definindo próprio controller
 WebGDoks.controller('RootController',RootController);

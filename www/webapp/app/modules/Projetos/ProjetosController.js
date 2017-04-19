@@ -97,6 +97,10 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					var doc;
 					for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
 						doc = $scope.projeto.documentos[i];
+						if(doc.data_limite != null){
+							doc.data_limite = new Date(doc.data_limite);
+							doc.data_limite.setTime(doc.data_limite.getTime()-(3*90*60*1000)); // ajustando para o horário local do brasil!
+						}
 						for	(var j = doc.dependencias.length - 1; j >= 0; j--) {
 							doc.dependencias[j] = $scope.projeto.documentos.find(function(d){return d.id == this},1*doc.dependencias[j]);
 						}
