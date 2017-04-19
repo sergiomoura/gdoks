@@ -11,11 +11,10 @@
 		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="css/normalizer.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/WebGDoks.css">
 		<link rel="stylesheet" type="text/css" href="css/ng-tags-input.css">
-		<link rel="stylesheet" href="js/jquery-ui-1.12.1/jquery-ui.css">
-		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 	</head>
 	<body ng-controller="RootController">
 		<div id="topo" ng-controller="TopoController">
@@ -76,10 +75,6 @@
 				echo('Última Atualização: '.date('d/m/Y H:i:s - e',filemtime(realpath('../'))));
 			?>
 		</div>
-		<!-- Scripts externos -->
-		<script src="js/jquery-3.1.1.min.js" type="text/javascript"></script>
-		<script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-		
 		<!-- carregamento do angular 1.4.4 local --
 		<script src="js/angular/angular.min.js"></script>
 		<script src="js/angular/angular-route.min.js"></script>

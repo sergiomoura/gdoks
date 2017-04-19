@@ -75,8 +75,8 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 				$scope.projeto.codigo = '';
 				$scope.projeto.id_cliente = 0;
 				$scope.projeto.id_responsavel = 0;
-				$scope.projeto.data_inicio_p = undefined;
-				$scope.projeto.data_final_p = undefined;
+				$scope.projeto.data_inicio_p = new Date();
+				$scope.projeto.data_final_p = new Date();
 				$scope.projeto.ativo = true;
 				$scope.projeto.daos = [];
 				$scope.projeto.areas = [];
@@ -93,13 +93,23 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					$scope.projeto.ativo = ($scope.projeto.ativo == 1);
 					$scope.inicialmenteAtivo = $scope.projeto.ativo;
 
+					// parsing dates
+					if($scope.projeto.data_inicio_p != null){
+						$scope.projeto.data_inicio_p = new Date($scope.projeto.data_inicio_p);
+						$scope.projeto.data_inicio_p.setTime($scope.projeto.data_inicio_p.getTime() + (3*60*60*1000)) // ajustando para horário local do Brasil
+					}
+					if($scope.projeto.data_final_p != null){
+						$scope.projeto.data_final_p = new Date($scope.projeto.data_final_p);
+						$scope.projeto.data_final_p.setTime($scope.projeto.data_final_p.getTime() + (3*60*60*1000)) // ajustando para horário local do Brasil
+					}
+
 					// parsing dependencias dos documentos
 					var doc;
 					for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
 						doc = $scope.projeto.documentos[i];
 						if(doc.data_limite != null){
 							doc.data_limite = new Date(doc.data_limite);
-							doc.data_limite.setTime(doc.data_limite.getTime()-(3*90*60*1000)); // ajustando para o horário local do brasil!
+							doc.data_limite.setTime(doc.data_limite.getTime() + (3*60*60*1000)); // ajustando para o horário local do brasil!
 						}
 						for	(var j = doc.dependencias.length - 1; j >= 0; j--) {
 							doc.dependencias[j] = $scope.projeto.documentos.find(function(d){return d.id == this},1*doc.dependencias[j]);

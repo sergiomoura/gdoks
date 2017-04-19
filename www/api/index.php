@@ -972,6 +972,8 @@
 				// Lendo dados
 				$token = $app->request->headers->get('Authorization');
 				$projeto = json_decode($app->request->getBody());
+				$projeto->data_final_p = $projeto->data_final_p==null?'null':substr($projeto->data_final_p,0,10);
+				$projeto->data_inicio_p = $projeto->data_inicio_p==null?'null':substr($projeto->data_inicio_p,0,10);
 
 				// verifricando consistência de dados
 				if($projeto->id != $id){
@@ -1542,7 +1544,7 @@
 				$id_projeto = 1*$id_projeto;
 				$documento = json_decode($app->request->getBody());
 				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
-				
+
 				// verificando se o usário enviado é do mesmo cliente da projeto atual
 				$sql = 'SELECT A.id AS id_usuario,
 						       count(*) AS ok

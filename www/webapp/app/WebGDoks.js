@@ -120,7 +120,12 @@ WebGDoks.config(
 // Configurando o Locale do DatePicker
 WebGDoks.config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function(date) {
-       return date.toLocaleDateString();
+    	if(date){
+       		return date.toLocaleDateString();
+       	} else {
+       		return '';
+       	}
+
     };
 
     // Brazilian localization.
