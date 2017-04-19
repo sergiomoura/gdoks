@@ -587,10 +587,10 @@ nav .cfg{
 	margin-bottom: 24px;
 }
 
-#addprojeto_documentos_container table>tr>td>span{{
+#addprojeto_documentos_container table>tr>td>span{
 	display: block;
 	color:#CCC;
-	font-size: 12px
+	font-size: 12px;
 }
 
 #addprojeto_documentos_container .bt_adicionar{
