@@ -1,6 +1,47 @@
 <div class="bloco_conteudo dpv">
-	<h1>{{dpv.nome}}</h1>
+	<h2>{{dpv.nome}}</h2>
 	<h3>{{dpv.nome_subdisciplina}}[{{dpv.nome_disciplina}}]</h3>
-	<h3>Data Limite: {{dpv.dl|date:'dd/MM/yyyy':'+0000'}}</h3>
-	<h3>{{dpv.dl|daysFromNow}}</h3>
+	<h3>{{dpv.area}}</h3>
+	<h3 class="data_limite">Data Limite: {{dpv.data_limite|date:'dd/MM/yyyy':'+0000'}}</h3>
+	<h3 class="dias_restantes">{{dpv.data_limite|daysFromNow}}</h3>
+	<div class="progresso">
+		<span class="validado">{{dpv.progresso[dpv.progresso.length -1].prgValidado*100}}%</span>
+		<span class="aValidar">{{dpv.progresso[dpv.progresso.length -1].prgAValidar*100}}%</span>
+	</div>
+	<div class="hbar">
+		<div
+			class="prgValidado"
+			ng-if="dpv.progresso[dpv.progresso.length -1].prgValidado>0"
+			style="width: calc({{dpv.progresso[dpv.progresso.length -1].prgValidado*100|number}}% - 2px)">
+			{{dpv.progresso[dpv.progresso.length -1].prgValidado*100|number}}%
+		</div
+		><div
+			class="prgAValidar"
+			ng-if="dpv.progresso[dpv.progresso.length -1].prgAValidar>0"
+			style="width: calc({{dpv.progresso[dpv.progresso.length -1].prgAValidar*100|number}}% - 2px)">
+			{{dpv.progresso[dpv.progresso.length -1].prgAValidar*100|number}}%
+		</div>
+	</div>
+	<div class="ultima_atualizacao">Ultima Atualização: {{dpv.progresso[dpv.progresso.length -1].data|date:"dd/MM/yyyy à's' hh:mm":'+0000'}} por {{dpv.progresso[dpv.progresso.length -1].usuario.nome}}</div>
+	<div class="historico">
+		<div>Progresso</div>
+		<div class="historico-item" ng-repeat="prg in dpv.progresso">
+			<div class="hbar">
+				<div
+					class="prgValidado"
+					ng-if="prg.prgValidado>0"
+					style="width: calc({{prg.prgValidado*100|number}}% - 2px)">
+					{{prg.prgValidado*100|number}}%
+				</div
+				><div
+					class="prgAValidar"
+					ng-if="prg.prgAValidar>0"
+					style="width: calc({{prg.prgAValidar*100|number}}% - 2px)">
+					{{prg.prgAValidar*100|number}}%
+				</div>	
+			</div><span
+			>{{prg.data|date:"dd/MM/yyyy à's' hh:mm"}}</span
+			><a class="download_file" ng-click="downloadFile(prg.id)"></a>
+		</div>
+	</div>
 </div>

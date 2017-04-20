@@ -1,6 +1,18 @@
 <div id="dpvs_container" class="container_80">
+	<h2>Documentos para Validação</h2>
+	<div class="controles">
+		<input type="text" id="dpvs_filtro" placeholder="Filtrar...">
+		<div class="item">
+			<label for="dpvs_ordem">Ordenar por</label>
+			<select name="dpvs_ordem" id="dpvs_ordem">
+				<option value="1">Nome do Documento</option>
+				<option value="2">Data Limite</option>
+				<option value="3">Percentual Concluído</option>
+			</select>
+		</div>
+	</div>
 	<div id="lista_de_dpvs">
 		<gdoks-dpv ng-repeat="dpv in dpvs" dpv="dpv"></gdoks-dpv>
 	</div>
-	{{dpvs|json}}
+	<button ng-click="update()">Update</button>
 </div>

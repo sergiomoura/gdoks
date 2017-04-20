@@ -79,40 +79,42 @@ function DocumentosParaValidacaoController($scope){
 		$scope.dpvs.push(
 			{
 				id:1,
-				id_arquivo:10,
-				tamanho_arquivo:40000,
-				nome:'doc1',
+				nome:'Doc 1',
 				area:'Área x',
 				cod_area:'aix',
 				id_subdisciplina:2,
-				dl:'2017-04-14',
-				prgValidado:0.53,
-				prgAValidar:0.10,
-				idu:1,
+				data_limite:new Date('2017-04-14'),
 				progresso:[
 					{
 						id_arquivo:1,
 						prgValidado:0.1,
-						prgValidado:0,
-						data:'2017-04-01',
+						data:new Date('2017-04-15'),
 						idu:1
 					},{
 						id_arquivo:3,
 						prgValidado:0.2,
-						prgValidado:0,
-						data:'2017-04-02',
+						data:new Date('2017-04-16'),
 						idu:1
 					},{
 						id_arquivo:6,
 						prgValidado:0.3,
-						prgValidado:0,
-						data:'2017-04-05',
+						data:new Date('2017-04-19'),
 						idu:1
 					},{
-						id_arquivo:1,
+						id_arquivo:10,
 						prgValidado:0.43,
-						prgValidado:0.0,
-						data:'2017-04-10',
+						data:new Date('2017-04-20'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.53,
+						data:new Date('2017-04-20'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.63,
+						prgAValidar:0.10,
+						data:new Date('2017-04-20'),
 						idu:1
 					}
 				]
@@ -121,59 +123,330 @@ function DocumentosParaValidacaoController($scope){
 		$scope.dpvs.push(
 			{
 				id:2,
-				id_arquivo:15,
-				tamanho_arquivo:5000,
-				nome:'doc2',
-				area:'Área Y',
-				cod_area:'awsiY',
-				id_subdisciplina:1,
-				dl:'2017-04-3',
-				prgValidado:0.53,
-				prgAValidar:0.10,
-				idu:1,
+				nome:'Doc 2',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
 				progresso:[
 					{
 						id_arquivo:12,
 						prgValidado:0.1,
-						prgValidado:0,
-						data:'2017-04-01',
+						data:new Date('2017-04-01'),
 						idu:1
 					},{
 						id_arquivo:15,
 						prgValidado:0.2,
-						prgValidado:0,
-						data:'2017-04-02',
+						data:new Date('2017-04-02'),
 						idu:1
 					},{
 						id_arquivo:20,
 						prgValidado:0.3,
-						prgValidado:0,
-						data:'2017-04-05',
+						data:new Date('2017-04-05'),
 						idu:1
 					},{
 						id_arquivo:25,
 						prgValidado:0.43,
-						prgValidado:0.0,
-						data:'2017-04-10',
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
 						idu:1
 					}
 				]
 			}
 		);
-		
-		var sub;
-		for (var i = $scope.dpvs.length - 1; i >= 0; i--) {
-			sub = subdisciplinas.find(function(a){return a.id==this},$scope.dpvs[i].id_subdisciplina);
-			$scope.dpvs[i].nome_subdisciplina = sub.nome;
-			$scope.dpvs[i].nome_disciplina = sub.nome_disciplina;
-			$scope.dpvs[i].data = new Date($scope.dpvs[i].data);
-			$scope.dpvs[i].dl = new Date($scope.dpvs[i].dl);
-			$scope.dpvs[i].now = new Date();
-			for (var j = $scope.dpvs[i].progresso.length - 1; j >= 0; j--) {
-				$scope.dpvs[i].progresso[j].data = new Date($scope.dpvs[i].progresso[j].data);
+
+		$scope.dpvs.push(
+			{
+				id:2,
+				nome:'Doc 3',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
+				progresso:[
+					{
+						id_arquivo:12,
+						prgValidado:0.1,
+						data:new Date('2017-04-01'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.2,
+						data:new Date('2017-04-02'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.3,
+						data:new Date('2017-04-05'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					}
+				]
+			}
+		);
+
+		$scope.dpvs.push(
+			{
+				id:2,
+				nome:'Doc 4',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
+				progresso:[
+					{
+						id_arquivo:12,
+						prgValidado:0.1,
+						data:new Date('2017-04-01'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.2,
+						data:new Date('2017-04-02'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.3,
+						data:new Date('2017-04-05'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.3,
+						data:new Date('2017-04-05'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					}
+				]
+			}
+		);
+
+		$scope.dpvs.push(
+			{
+				id:2,
+				nome:'Doc 5',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
+				progresso:[
+					{
+						id_arquivo:12,
+						prgValidado:0.1,
+						data:new Date('2017-04-01'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.2,
+						data:new Date('2017-04-02'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.3,
+						data:new Date('2017-04-05'),
+						idu:1
+					}
+				]
+			}
+		);
+
+		$scope.dpvs.push(
+			{
+				id:2,
+				nome:'Doc 6',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
+				progresso:[
+					{
+						id_arquivo:12,
+						prgValidado:0.1,
+						data:new Date('2017-04-01'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.2,
+						data:new Date('2017-04-02'),
+						idu:1
+					}
+				]
+			}
+		);
+
+		$scope.dpvs.push(
+			{
+				id:2,
+				nome:'Doc 7',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
+				progresso:[
+					{
+						id_arquivo:12,
+						prgValidado:0.1,
+						data:new Date('2017-04-01'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.2,
+						data:new Date('2017-04-02'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.3,
+						data:new Date('2017-04-05'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					}
+				]
+			}
+		);
+
+		$scope.dpvs.push(
+			{
+				id:2,
+				nome:'Doc 8',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
+				progresso:[
+					{
+						id_arquivo:12,
+						prgValidado:0.1,
+						data:new Date('2017-04-01'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.2,
+						data:new Date('2017-04-02'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.3,
+						data:new Date('2017-04-05'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					}
+				]
+			}
+		);
+
+		$scope.dpvs.push(
+			{
+				id:2,
+				nome:'Doc 9',
+				area:'Área x',
+				cod_area:'aix',
+				id_subdisciplina:2,
+				data_limite: new Date('2017-04-14'),
+				progresso:[
+					{
+						id_arquivo:12,
+						prgValidado:0.1,
+						data:new Date('2017-04-01'),
+						idu:1
+					},{
+						id_arquivo:15,
+						prgValidado:0.2,
+						data:new Date('2017-04-02'),
+						idu:1
+					},{
+						id_arquivo:20,
+						prgValidado:0.3,
+						data:new Date('2017-04-05'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					},{
+						id_arquivo:25,
+						prgValidado:0.43,
+						prgAValidar:0.01,
+						data:new Date('2017-04-10'),
+						idu:1
+					}
+				]
+			}
+		);
+
+		// Parsing idu->usuários
+		var usuarios = [];
+		indexedDB.open('gdoks').onsuccess = function(evt){
+			evt.target.result.transaction('usuarios').objectStore('usuarios').getAll().onsuccess = function(evt){
+				usuarios = evt.target.result;
+				parseDpvs();
+				delete usuarios;
 			}
 		}
+		
+		function parseDpvs(){
+			var sub;
+			for (var i = $scope.dpvs.length - 1; i >= 0; i--) {
+				sub = subdisciplinas.find(function(a){return a.id==this},$scope.dpvs[i].id_subdisciplina);
+				$scope.dpvs[i].nome_subdisciplina = sub.nome;
+				$scope.dpvs[i].nome_disciplina = sub.nome_disciplina;
+				$scope.dpvs[i].data = new Date($scope.dpvs[i].data);
+				$scope.dpvs[i].dl = new Date($scope.dpvs[i].dl);
+				$scope.dpvs[i].now = new Date();
+				for (var j = $scope.dpvs[i].progresso.length - 1; j >= 0; j--) {
+					$scope.dpvs[i].progresso[j].data = new Date($scope.dpvs[i].progresso[j].data);
+					$scope.dpvs[i].progresso[j].usuario = usuarios.filter(function(u){return u.id == this},$scope.dpvs[i].progresso[j].idu)[0];
+				}
+			}
+			$scope.$apply();
+		}
+	}
 
-		$scope.$apply();
+	$scope.update = function(){
+		$scope.dpvs[1].progresso[$scope.dpvs[1].progresso.length - 1].prgAValidar = 0.1;
 	}
 };
