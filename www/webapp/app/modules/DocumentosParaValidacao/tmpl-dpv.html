@@ -1,7 +1,12 @@
 <div class="bloco_conteudo dpv">
-	<h2>{{dpv.nome}}</h2>
+	<h2>{{dpv.nome}} - {{mostrandoHistorico}}</h2>
 	<h3>{{dpv.nome_subdisciplina}}[{{dpv.nome_disciplina}}]</h3>
 	<h3>{{dpv.area}}</h3>
+	<div class="controles">
+		<a class="download_file" ng-click="downloadFile(dpv.progresso[dpv.progresso.length - 1].id)"></a>
+		<a class="valida_progresso" ng-click="mostraFormValidacao(dpv.progresso[dpv.progresso.length - 1].id)"></a>
+		<a class="mostra_historico" ng-click="mostrandoHistorico = !mostrandoHistorico"></a>
+	</div>
 	<h3 class="data_limite">Data Limite: {{dpv.data_limite|date:'dd/MM/yyyy':'+0000'}}</h3>
 	<h3 class="dias_restantes">{{dpv.data_limite|daysFromNow}}</h3>
 	<div class="progresso">
@@ -23,7 +28,7 @@
 		</div>
 	</div>
 	<div class="ultima_atualizacao">Ultima Atualização: {{dpv.progresso[dpv.progresso.length -1].data|date:"dd/MM/yyyy à's' hh:mm":'+0000'}} por {{dpv.progresso[dpv.progresso.length -1].usuario.nome}}</div>
-	<div class="historico">
+	<div class="historico" ng-style="mostrandoHistorico?{'max-height':'600px'}:{'max-height':0}">
 		<div>Progresso</div>
 		<div class="historico-item" ng-repeat="prg in dpv.progresso">
 			<div class="hbar">

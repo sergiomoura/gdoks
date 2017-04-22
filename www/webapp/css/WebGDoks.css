@@ -678,16 +678,17 @@ nav .cfg{
 	border:none;
 }
 
+#lista_de_dpvs {
+	column-count:2;
+	column-gap: 50px;
+}
+
 #lista_de_dpvs>*>.bloco_conteudo{
-	width: calc(50% - 35px);
 	display:inline-block;
 	padding: 10px 10px 0px 10px;
 	position:relative;
 	margin-bottom: 30px;
-}
-
-#lista_de_dpvs>*:nth-child(2n)>.bloco_conteudo{
-	margin-left:30px;
+	width: 100%;
 }
 
 #lista_de_dpvs>*>.bloco_conteudo .data_limite{
@@ -754,6 +755,9 @@ nav .cfg{
 
 #lista_de_dpvs>*>.bloco_conteudo .historico{
 	margin: 5px 0 0 0;
+	overflow:hidden;
+	max-height: 0;
+	transition: max-height 0.5s cubic-bezier(0.65, 0.01, 0, 1);
 }
 
 #lista_de_dpvs>*>.bloco_conteudo .historico .historico-item{
@@ -778,16 +782,52 @@ nav .cfg{
 	text-align: center;
 }
 
+#lista_de_dpvs>*>.bloco_conteudo .download_file:hover{
+	background-position: 0 -16px;
+}
+
+#lista_de_dpvs>*>.bloco_conteudo .controles{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
 #lista_de_dpvs>*>.bloco_conteudo .download_file{
 	display:inline-block;
 	width:15px;
 	height:15px;
 	background-image:url(../img/mini-icons.png);
 	cursor: pointer;
+}
+
+#lista_de_dpvs>*>.bloco_conteudo .valida_progresso{
+	display:inline-block;
+	width:15px;
+	height:15px;
+	background-image:url(../img/mini-icons.png);
+	cursor: pointer;
+	background-position: 34px 0px;
+}
+
+#lista_de_dpvs>*>.bloco_conteudo .valida_progresso:hover{
+	background-position: 34px -16px;
+}
+
+#lista_de_dpvs>*>.bloco_conteudo .mostra_historico{
+	display:inline-block;
+	width: 16px;
+	height:15px;
+	background-image:url(../img/mini-icons.png);
+	cursor: pointer;
+	background-position: 16px 0;
+}
+
+#lista_de_dpvs>*>.bloco_conteudo .mostra_historico:hover{
+	background-position: 16px 30px;
+}
+
+#lista_de_dpvs>*>.bloco_conteudo .historico .historico-item .download_file{
 	position: absolute;
 	top: 1px;
 	right: 0px;
-}
-#lista_de_dpvs>*>.bloco_conteudo .download_file:hover{
-	background-position: 0 -16px;
 }

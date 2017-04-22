@@ -6,7 +6,11 @@ angular.module('DocumentosParaValidacao',[])
 		restrict:'E',
 		scope:{
 			dpv:'=dpv'
-		}
+		},
+		controller:['$scope',function($scope){
+			// definindo a variável que mostra o histótico ou não
+			$scope.mostrandoHistorico = false;
+		}]
 	}
 })
 .filter('daysFromNow',function(){
