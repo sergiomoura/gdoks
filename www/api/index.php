@@ -1650,9 +1650,69 @@
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
-
-
 		// FIM DE ROTAS DE PROJETOS
+
+		// ROTAS DE DOCUMENTOS
+			$app->get('/documentos/paraValidar',function() use ($app,$db){
+				// Lendo o token
+				$token = $app->request->headers->get('Authorization');
+
+				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
+				$sql = 'SELECT id
+						FROM gdoks_usuarios
+						WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				if(sizeof($rs) == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Refresh failed!');
+					$response->flush();
+					return;
+				} else {
+					$idu = $rs[0]['id'];
+					$sql = 'SELECT a.id,
+							       a.nome,
+							       a.data_limite,
+							       datahora_do_checkout,
+							       idu_checkout,
+							       a.id_area,
+							       b.nome AS nome_area,
+							       b.codigo AS codigo_area,
+							       b.id_projeto,
+							       c.nome AS nome_projeto,
+							       a.id_subdisciplina,
+							       d.nome AS nome_subdisciplina,
+							       d.id_disciplina,
+							       e.nome AS nome_disciplina
+							FROM gdoks_documentos a
+							INNER JOIN gdoks_areas b ON a.id_area=b.id
+							INNER JOIN gdoks_projetos c ON c.id=b.id_projeto
+							INNER JOIN gdoks_subdisciplinas d ON d.id=a.id_subdisciplina
+							INNER JOIN gdoks_disciplinas e ON d.id_disciplina=e.id
+							INNER JOIN gdoks_validadores f ON f.id_disciplina=e.id
+							LEFT JOIN gdoks_arquivos g ON g.id_documento=a.id
+							WHERE f.id_usuario=?';
+					$documentos = $db->query($sql,'s',$idu);
+
+					// levantando arquivos deste documento
+					$sql = 'SELECT id,
+							       idu,
+							       datahora_upload,
+							       progresso_percentual,
+							       progresso_validado
+							FROM gdoks_arquivos
+							WHERE id_documento=?
+							ORDER BY datahora_upload';
+					for ($i=0; $i < sizeof($documentos); $i++) { 
+						$documentos[$i] = (object)$documentos[$i];
+						$documentos[$i]->arquivos = array_map( function($a){return (object)$a;}, $db->query($sql,'i',$documentos[$i]->id));
+					}					
+					$response = new response(0,'ok');
+					$response->documentos = $documentos;
+					$response->flush();
+				}
+			});
+		// FIM DE ROTAS DE DOCUMENTOS */
 		
 		// ROTAS DE CLIENTES
 			$app->get('/clientes',function() use ($app,$db){
