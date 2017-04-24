@@ -137,6 +137,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/clientes',cliente, {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getDocumentosParaValidar = function(){
+				return $http.get(API_ROOT+'/documentos/paraValidar',{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]
