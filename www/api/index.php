@@ -1709,6 +1709,74 @@
 					$response->flush();
 				}
 			});
+
+			$app->put('/documentos/:id/validarProgresso',function($id) use ($app,$db){
+				// Lendo o token
+				$token = $app->request->headers->get('Authorization');
+				$id_documento = 1*$id;
+				$progresso = 1*$app->request->getBody();
+				
+				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
+				$sql = 'SELECT id
+						FROM gdoks_usuarios
+						WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				// Verificando se o token é válido
+				if(sizeof($rs) == 0){
+					// Token inválido...
+					$app->response->setStatus(401);
+					$response = new response(1,'Refresh failed!');
+					$response->flush();
+					return;
+				} else {
+					// Token é válido
+					// Verificando se o usuário logado é um validador deste documento
+					$idu = $rs[0]['id'];
+					$sql = 'SELECT count(*)=1 AS ok
+							FROM gdoks_documentos a
+							INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+							INNER JOIN gdoks_validadores c ON c.id_disciplina=b.id_disciplina
+							WHERE c.id_usuario=?
+							  AND a.id=?';
+					$ok = $db->query($sql,'ii',$idu,$id_documento)['0']['ok'];
+
+					if($ok){
+						// Levantando o id do documento a ter o progresso validado
+						$sql = 'SELECT id_progresso_a_validar FROM gdoks_documentos WHERE id=?';
+						$rs = $db->query($sql,'i',$id_documento);
+						if(sizeof($rs)>0){
+							// atualizando dados na tabela de arquivos
+							$id_arquivo = $rs[0]['id_progresso_a_validar'];
+							$sql = 'UPDATE gdoks_arquivos SET progresso_total=?,idu_validador=?,datahora_validacao=now() WHERE id=?';
+							$db->query($sql,'iii',$progresso,$idu,$id_arquivo);
+
+							// atualizando dados na tabela de documentos
+							$sql = 'UPDATE gdoks_documentos SET id_progresso_a_validar=null WHERE id=?';
+							$db->query($sql,'i',$id_documento);
+
+							// registrando realização da ação.
+							registrarAcao($db,$idu,ACAO_VALIDOU_PROGRESSO,$progresso.','.$id_documento);
+
+							// retornando resultado
+							$response = new response(0,'ok');
+							$response->flush();
+							return;
+						} else {
+							$app->response->setStatus(401);
+							$response = new response(1,'Documento não está pendente de validação.');
+							$response->flush();
+							return;
+						}
+					} else {
+						// usuário não é validador da disciplina deste documento
+						$app->response->setStatus(401);
+						$response = new response(1,'Usuário não é validador da disciplina deste documento');
+						$response->flush();
+						return;
+					}
+				}
+			});
 		// FIM DE ROTAS DE DOCUMENTOS */
 
 		// ROTAS DE ARQUIVOS

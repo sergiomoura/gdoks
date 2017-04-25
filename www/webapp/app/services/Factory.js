@@ -164,8 +164,10 @@ WebGDoks.factory('GDoksFactory',
 
 				// removendo o form da dom
 				form.parentNode.removeChild(form);
-
-				//return $http.get(API_ROOT+'/arquivos/'+idArquivo,{headers: {'Authorization': $cookies.getObject('user').token}});	
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.validarProgresso = function(idDocumento,progresso){
+				return $http.put(API_ROOT+'/documentos/'+idDocumento+'/validarProgresso', progresso, {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;

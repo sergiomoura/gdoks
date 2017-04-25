@@ -19,6 +19,20 @@ angular.module('DocumentosParaValidacao',[])
 
 			$scope.escondeFormDeValidacao = function(){
 				$scope.mostrandoFormDeValidacao = false;
+				$scope.progresso = $scope.dpv.progressoAValidar;
+			}
+
+			$scope.validarProgresso = function(){
+				GDoksFactory.validarProgresso($scope.dpv.id, $scope.dpv.progressoValidado + $scope.progresso)
+				.success(function(response){
+					if(response.error == 0){
+						$scope.dpv.progressoValidado += $scope.progresso;
+						$scope.dpv.progressoAValidar = 0;
+					}
+				})
+				.error(function(error){
+					
+				})
 			}
 		}]
 	}

@@ -53,12 +53,12 @@
 		</div>
 	</div>
 	<div class="formValidadorContainer" ng-show="mostrandoFormDeValidacao">
-		<span class="bt"></span>
+		<span class="bt" ng-click="escondeFormDeValidacao()"></span>
 		<div class="form">
 			Validar <input type="number" ng-model="progresso" min="0" max="{{100 - dpv.progressoValidado}}">  % de progresso.<br>
 			Progresso total de {{dpv.progressoValidado + progresso}}%
-			<button class="bt_limpo bt_cancelar_progresso">Cancelar</button>
-			<button class="bt_limpo bt_validar_progresso">Validar</button>
+			<button class="bt_limpo bt_cancelar_progresso" ng-click="escondeFormDeValidacao()">Cancelar</button>
+			<button class="bt_limpo bt_validar_progresso" ng-click="validarProgresso()">Validar</button>
 		</div>
 	</div>
 </div>
