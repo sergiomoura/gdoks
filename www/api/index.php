@@ -1710,6 +1710,55 @@
 				}
 			});
 		// FIM DE ROTAS DE DOCUMENTOS */
+
+		// ROTAS DE ARQUIVOS
+			$app->get('/arquivos/:id',function($id) use ($app,$db){
+				// Lendo o token
+				$token = $_GET['token'];
+
+				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
+				$sql = 'SELECT id
+						FROM gdoks_usuarios
+						WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				if(sizeof($rs) == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Refresh failed!');
+					$response->flush();
+					return;
+				} else {
+					// Salvando o idu
+					$idu = $rs[0]['id'];
+
+					// levantando o caminnho do arquivo
+					$sql = 'SELECT caminho FROM gdoks_arquivos WHERE id=?';
+					$caminho = 	$db->query($sql,'i',$id)[0]['caminho'];	
+
+					// Verificando se o arquivo existe
+					if(file_exists($caminho)){
+						// configurando o header
+						header('Content-Description: File Transfer');
+						header('Content-Type: application/octet-stream');
+						header('Content-Disposition: attachment; filename="'.basename($caminho).'"');
+						header('Content-Transfer-Encoding: binary');
+						header('Expires: 0');
+						header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+						header('Pragma: public');
+						header('Content-Length: ' . filesize($caminho));
+
+						// enviando o arquivo
+						readfile($caminho);
+						registrarAcao($db,$idu,ACAO_BAIXOU_ARQUIVO,''.$id);
+					} else {
+						$app->response->setStatus(404);
+						$response = new response(1,'Arquivo ('.$caminho.') não encontrado.');
+						$response->flush();
+						return;
+					}
+				}
+			});
+		// FIM DE ROTAS DE ARQUIVOS
 		
 		// ROTAS DE CLIENTES
 			$app->get('/clientes',function() use ($app,$db){

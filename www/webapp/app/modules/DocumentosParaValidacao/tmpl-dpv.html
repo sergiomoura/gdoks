@@ -1,11 +1,11 @@
-<div class="bloco_conteudo dpv">
+<div class="bloco_conteudo dpv" id="id_{{dpv.id}}" click-outside="escondeFormDeValidacao()">
 	<h2>{{dpv.nome}}</h2>
 	<h3>{{dpv.nome_projeto}}</h3>
 	<h3>{{dpv.nome_subdisciplina}}[{{dpv.nome_disciplina}}]</h3>
 	<h3>{{dpv.nome_area}}</h3>
 	<div class="controles">
 		<a class="download_file" ng-click="downloadFile(dpv.progressos[dpv.progressos.length - 1].id)"></a>
-		<a class="valida_progresso" ng-click="mostraFormValidacao(dpv.progressos[dpv.progressos.length - 1].id)"></a>
+		<a class="valida_progresso" ng-click="mostrandoFormDeValidacao = true"></a>
 		<a class="mostra_historico" ng-click="mostrandoHistorico = !mostrandoHistorico"></a>
 	</div>
 	<h3 class="data_limite">Data Limite: {{dpv.data_limite|date:'dd/MM/yyyy':'+0000'}}</h3>
@@ -50,6 +50,15 @@
 			</div><span
 			>{{prg.data|date:"dd/MM/yyyy à's' hh:mm"}}</span
 			><a class="download_file" ng-click="downloadFile(prg.id)"></a>
+		</div>
+	</div>
+	<div class="formValidadorContainer" ng-show="mostrandoFormDeValidacao">
+		<span class="bt"></span>
+		<div class="form">
+			Validar <input type="number" ng-model="progresso" min="0" max="{{100 - dpv.progressoValidado}}">  % de progresso.<br>
+			Progresso total de {{dpv.progressoValidado + progresso}}%
+			<button class="bt_limpo bt_cancelar_progresso">Cancelar</button>
+			<button class="bt_limpo bt_validar_progresso">Validar</button>
 		</div>
 	</div>
 </div>

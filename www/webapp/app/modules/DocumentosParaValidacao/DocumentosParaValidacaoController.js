@@ -7,12 +7,18 @@ angular.module('DocumentosParaValidacao',[])
 		scope:{
 			dpv:'=dpv'
 		},
-		controller:['$scope',function($scope){
-			// definindo a variável que mostra o histótico ou não
+		controller:['$scope','GDoksFactory',function($scope,GDoksFactory){
+			// Inicializando variáveis;
 			$scope.mostrandoHistorico = false;
+			$scope.progresso = $scope.dpv.progressoAValidar;
+			$scope.mostrandoFormDeValidacao = false;
 
 			$scope.downloadFile = function(idArquivo){
-				console.log(idArquivo);
+				GDoksFactory.downloadArquivo(idArquivo);
+			}
+
+			$scope.escondeFormDeValidacao = function(){
+				$scope.mostrandoFormDeValidacao = false;
 			}
 		}]
 	}
@@ -41,6 +47,9 @@ function DocumentosParaValidacaoController($scope,GDoksFactory){
 
 	// definindo variáveis de controle de carregamento de dependencias
 	var carregouUsuarios = false;
+
+	// Definindo qual o campo padrão para se ordenar os documentos
+	$scope.ordem = 'nome';
 
 	// Levantando usuarios da base local
 	var usuarios = [];

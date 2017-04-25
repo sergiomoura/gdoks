@@ -831,3 +831,72 @@ nav .cfg{
 	top: 1px;
 	right: 0px;
 }
+
+#lista_de_dpvs .formValidadorContainer{
+	position: absolute;
+	top:10px;
+	right:27px;
+	width: 70%;
+	height: 170px;
+	max-width: 330px;
+}
+
+#lista_de_dpvs .formValidadorContainer>*{
+  box-shadow: 0 0 5px #000;
+}
+
+#lista_de_dpvs .formValidadorContainer .bt{
+	background-color: #2B2B2B;
+	display: block;
+	width: 16px;
+	background-image: url(../img/mini-icons.png);
+	height: 16px;
+	position: absolute;
+	background-position: -15px 15px;
+	border: 2px solid #2B2B2B;
+	right: 0;
+	top: 0;
+}
+
+#lista_de_dpvs .formValidadorContainer .form{
+	top: 20px;
+	background-color: #2B2B2B;
+	padding: 15px;
+	height: 100px;
+	color: #CCC;
+	font-size: 14px;
+	position: relative;
+	width: calc(100% - 30px);
+}
+
+#lista_de_dpvs .formValidadorContainer .form .bt_limpo{
+	font-size: 14px;
+}
+
+#lista_de_dpvs .formValidadorContainer .form .bt_limpo:hover{
+  color: #FFF !important;
+}
+
+#lista_de_dpvs .formValidadorContainer .form input{
+	border: none;
+	background: #FFF;
+	padding:3px;
+	width:50px;
+}
+
+
+#lista_de_dpvs .formValidadorContainer .bt_cancelar_progresso{
+	position: absolute;
+	bottom: 5px;
+	left:0px;
+	width:40%;
+	text-align: left;
+}
+
+#lista_de_dpvs .formValidadorContainer .bt_validar_progresso{
+	position: absolute;
+	bottom: 5px;
+	right:0;
+	width:40%;
+	text-align: right;
+}

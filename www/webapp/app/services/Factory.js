@@ -141,6 +141,33 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/documentos/paraValidar',{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.downloadArquivo = function(idArquivo){
+				// Criando um formulário para enviar a requisição pelo arquivo
+				var form = document.createElement("form");
+				form.setAttribute('action',API_ROOT+'/arquivos/'+idArquivo);
+				form.setAttribute('method','GET');
+				form.setAttribute('style','display:none');
+
+				// criando o campo para o token
+				var input = document.createElement('input');
+				input.setAttribute('name','token');
+				input.setAttribute('value',$cookies.getObject('user').token);
+
+				// adicionando input ao form
+				form.appendChild(input);
+
+				// adicionando form a dom
+				document.body.appendChild(form);
+
+				// submetendo o form
+				form.submit();
+
+				// removendo o form da dom
+				form.parentNode.removeChild(form);
+
+				//return $http.get(API_ROOT+'/arquivos/'+idArquivo,{headers: {'Authorization': $cookies.getObject('user').token}});	
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

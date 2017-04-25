@@ -128,6 +128,7 @@
 		<script src="app/WebGDoks.js"></script>
 		<script src="app/services/Factory.js"></script>
 		<script src="app/directives/directives.js"></script>
+		<script src="app/directives/clickoutside.directives.js"></script>
 		<!-- Fim de Scripts do app -->
 	</body>
 </html>
