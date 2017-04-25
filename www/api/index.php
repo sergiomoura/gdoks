@@ -1333,7 +1333,7 @@
 										$caminho = $caminho.'/'.$id_projeto;
 										$pastaDoProjetoExiste = file_exists($caminho);
 										if(!$pastaDoProjetoExiste){
-											$pastaDoProjetoExiste = @mkdir($caminho);
+											$pastaDoProjetoExiste = mkdir($caminho);
 										}
 									}
 
