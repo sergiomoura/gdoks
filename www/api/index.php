@@ -1369,7 +1369,7 @@
 									// registrando falha na consulta no vetor de falhas.
 									$erro = new stdClass();
 									$erro->arquivo = $nomeCliente;
-									$erro->msg = $e1->getMessage();
+									$erro->msg = $e2->getMessage();
 									$erro->codigo = -2;
 									array_push($erros, $erro);
 								}
