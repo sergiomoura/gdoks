@@ -1,5 +1,22 @@
-<div id="documentos_container">
-	<div id="documentos_para_validar" class="container_80">
-		<input id="busca_documentos" type="text" placeholder="Buscar documentos">
+<div id="dpvs_container" class="container_80">
+	<h2>Documentos</h2>
+	<div class="controles">
+		<input type="text" id="dpvs_filtro" placeholder="Filtrar..." ng-model="q.nome">
+		<div class="item">
+			<label for="docs_ordem">Ordenar por</label>
+			<select name="docs_ordem" id="docs_ordem" ng-model="ordem">
+				<option value="nome">Nome do Documento</option>
+				<option value="data_limite">Data Limite</option>
+				<option value="nome_projeto">Projeto</option>
+				<option value="progressoValidado">Percentual Concluído</option>
+			</select>
+		</div>
 	</div>
+	<div id="lista_de_docs">
+		<gdoks-doc ng-repeat="doc in docs | orderBy:ordem | filter:q as result" doc="doc"></gdoks-doc>
+		<div ng-if="result.length==0">Nenhum documento a exibir</div>
+	</div>
+	<pre>
+		{{docs | json}}
+	</pre>
 </div>

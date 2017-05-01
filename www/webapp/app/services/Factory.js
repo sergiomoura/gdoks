@@ -170,6 +170,17 @@ WebGDoks.factory('GDoksFactory',
 				return $http.put(API_ROOT+'/documentos/'+idDocumento+'/validarProgresso', progresso, {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getDocumentos = function(){
+				return $http.get(API_ROOT+'/documentos/paraAtualizar',{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.lockDoc = function(idDoc){
+				return $http.get(API_ROOT+'/documentos/'+idDoc+'/lock',{headers: {'Authorization': $cookies.getObject('user').token}});	
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.delockDoc = function(idDoc){
+				return $http.get(API_ROOT+'/documentos/'+idDoc+'/delock',{headers: {'Authorization': $cookies.getObject('user').token}});	
+			}
 			return GDoksFactory;
 		}
 	]

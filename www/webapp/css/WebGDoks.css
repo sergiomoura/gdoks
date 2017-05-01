@@ -661,6 +661,11 @@ nav .cfg{
 	font-size:12px;
 	text-indent:3px
 }
+
+#dpvs_container .controles a:focus{
+	outline:none;
+}
+
 #dpvs_ordem {
 	outline:none;
 	border:none;
@@ -992,6 +997,10 @@ nav .cfg{
 	width: 100%;
 }
 
+#lista_de_docs>*>.locked{
+	background-color:#2B2B2B;
+}
+
 #lista_de_docs>*>.bloco_conteudo .data_limite{
 	position:absolute;
 	right:10px;
@@ -1087,10 +1096,44 @@ nav .cfg{
 	background-position: 0 -16px;
 }
 
+#lista_de_docs>*>.locked .download_file:hover{
+	background-position: 0px -32px;
+}
+
 #lista_de_docs>*>.bloco_conteudo .controles{
 	position: absolute;
 	top: 10px;
 	right: 10px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .controles button{
+	border:none;
+	background-color:transparent;
+}
+
+#lista_de_docs>*>.bloco_conteudo .controles button:focus{
+	outline:none;
+}
+
+#lista_de_docs>*>.bloco_conteudo .lock_doc{
+	display:inline-block;
+	width:15px;
+	height:15px;
+	background-image:url(../img/mini-icons.png);
+	cursor: pointer;
+	background-position: -78px -1px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .lock_doc:hover{
+	background-position: -78px 33px;
+}
+
+#lista_de_docs>*>.locked .lock_doc{
+	background-position: -65px 1px;
+}
+
+#lista_de_docs>*>.locked .lock_doc:hover{
+	background-position: -65px 20px;
 }
 
 #lista_de_docs>*>.bloco_conteudo .download_file{
@@ -1099,19 +1142,25 @@ nav .cfg{
 	height:15px;
 	background-image:url(../img/mini-icons.png);
 	cursor: pointer;
+	background-position: 1px 0px;
+	background-repeat: no-repeat;
 }
 
-#lista_de_docs>*>.bloco_conteudo .valida_progresso{
+#lista_de_docs>*>.bloco_conteudo .upload_file{
 	display:inline-block;
 	width:15px;
 	height:15px;
 	background-image:url(../img/mini-icons.png);
 	cursor: pointer;
-	background-position: 34px 0px;
+	background-position: 42px 0px;
 }
 
-#lista_de_docs>*>.bloco_conteudo .valida_progresso:hover{
-	background-position: 34px -16px;
+#lista_de_docs>*>.bloco_conteudo .upload_file:hover{
+	background-position: 42px -16px;
+}
+
+#lista_de_docs>*>.locked .upload_file:hover{
+	background-position: 42px -32px;
 }
 
 #lista_de_docs>*>.bloco_conteudo .mostra_historico{
@@ -1120,11 +1169,15 @@ nav .cfg{
 	height:15px;
 	background-image:url(../img/mini-icons.png);
 	cursor: pointer;
-	background-position: 16px 0;
+	background-position: 60px 0;
 }
 
 #lista_de_docs>*>.bloco_conteudo .mostra_historico:hover{
-	background-position: 16px 30px;
+	background-position: 60px 35px;
+}
+
+#lista_de_docs>*>.locked .mostra_historico:hover{
+	background-position: 60px -32px;
 }
 
 #lista_de_docs>*>.bloco_conteudo .historico .historico-item .download_file{
@@ -1133,33 +1186,33 @@ nav .cfg{
 	right: 0px;
 }
 
-#lista_de_docs .formValidadorContainer{
+#lista_de_docs .formUploadContainer{
 	position: absolute;
 	top:10px;
-	right:27px;
+	right: 68px;
 	width: 70%;
 	height: 170px;
 	max-width: 330px;
 }
 
-#lista_de_docs .formValidadorContainer>*{
+#lista_de_docs .formUploadContainer>*{
   box-shadow: 0 0 5px #000;
 }
 
-#lista_de_docs .formValidadorContainer .bt{
+#lista_de_docs .formUploadContainer .bt{
 	background-color: #2B2B2B;
 	display: block;
 	width: 16px;
 	background-image: url(../img/mini-icons.png);
 	height: 16px;
 	position: absolute;
-	background-position: -15px 15px;
+	background-position: -50px 19px;
 	border: 2px solid #2B2B2B;
 	right: 0;
 	top: 0;
 }
 
-#lista_de_docs .formValidadorContainer .form{
+#lista_de_docs .formUploadContainer .form{
 	top: 20px;
 	background-color: #2B2B2B;
 	padding: 15px;
@@ -1170,15 +1223,15 @@ nav .cfg{
 	width: calc(100% - 30px);
 }
 
-#lista_de_docs .formValidadorContainer .form .bt_limpo{
+#lista_de_docs .formUploadContainer .form .bt_limpo{
 	font-size: 14px;
 }
 
-#lista_de_docs .formValidadorContainer .form .bt_limpo:hover{
+#lista_de_docs .formUploadContainer .form .bt_limpo:hover{
   color: #FFF !important;
 }
 
-#lista_de_docs .formValidadorContainer .form input{
+#lista_de_docs .formUploadContainer .form input{
 	border: none;
 	background: #FFF;
 	padding:3px;
@@ -1186,7 +1239,7 @@ nav .cfg{
 }
 
 
-#lista_de_docs .formValidadorContainer .bt_cancelar_progresso{
+#lista_de_docs .formUploadContainer .bt_cancelar_progresso{
 	position: absolute;
 	bottom: 5px;
 	left:0px;
@@ -1194,7 +1247,7 @@ nav .cfg{
 	text-align: left;
 }
 
-#lista_de_docs .formValidadorContainer .bt_validar_progresso{
+#lista_de_docs .formUploadContainer .bt_validar_progresso{
 	position: absolute;
 	bottom: 5px;
 	right:0;
