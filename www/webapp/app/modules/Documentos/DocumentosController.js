@@ -12,17 +12,17 @@ angular.module('Documentos',[])
 			// Inicializando variáveis;
 			$scope.mostrandoHistorico = false;
 			$scope.mostrandoFormDeUpload = false;
+			$scope.hoje = new Date();
 
 			$scope.downloadFile = function(idArquivo){
 				GDoksFactory.downloadArquivo(idArquivo);
 			}
 
 			$scope.mostraFormDeUpload = function(){
-				console.log("aqui...");
 				$scope.mostrandoFormDeUpload = true;
 			}
 
-			$scope.escondeForm = function(){
+			$scope.escondeFormDeUpload = function(){
 				$scope.mostrandoFormDeUpload = false;
 			}
 
@@ -66,6 +66,11 @@ angular.module('Documentos',[])
 					}
 				})
 				.error(function(error){});
+			}
+
+			$scope.upload = function(){
+				console.log("Vamos subir arquivo!!!");
+				console.dir($scope.docFile);
 			}
 		}]
 	}

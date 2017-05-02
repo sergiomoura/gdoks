@@ -6,7 +6,7 @@ html {
 }
 
 body {
-	background-color: rgb(238, 238, 238);
+	background-color: #E9E9E9;
 	font-family: $fontFamily;
 	margin: 0;
 	padding: 0;
@@ -14,7 +14,7 @@ body {
 	height: 100%;
 }
 
-input[type=text],input[type=password]{
+input[type=text],input[type=password],textarea{
 	border: 1px solid $azul;
 	background-color: #FFF;
 }

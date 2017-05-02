@@ -1,9 +1,6 @@
-<div ng-class="{'bloco_conteudo':true, 'doc':true, 'locked':(doc.idu_checkout!=null)}" id="id_{{doc.id}}" click-outside="escondeFormDeValidacao()">
+<div ng-class="{'bloco_conteudo':true, 'doc':true, 'locked':(doc.idu_checkout!=null)}" id="id_{{doc.id}}">
 	<h2>{{doc.nome}}</h2>
-	<h3>{{doc.nome_projeto}}</h3>
-	<h3>{{doc.nome_subdisciplina}}[{{doc.nome_disciplina}}]</h3>
-	<h3>{{doc.nome_area}}</h3>
-
+	
 	<div class="controles">
 		<!-- Botão de upload -->
 		<button ng-if="doc.idu_checkout==null && doc.progressoAValidar==0" class="upload_file" ng-click="mostraFormDeUpload()"></button>
@@ -19,8 +16,38 @@
 		<!-- Botão de exibir histórico -->
 		<button class="mostra_historico" ng-click="mostrandoHistorico = !mostrandoHistorico"></button>
 	</div>
-	<h3 class="data_limite">Data Limite: {{doc.data_limite|date:'dd/MM/yyyy':'+0000'}}</h3>
-	<h3 class="dias_restantes">{{doc.data_limite|daysFromNow}}</h3>
+
+	<div class="formUploadContainer" ng-show="mostrandoFormDeUpload">
+		<span class="bt" ng-click="escondeFormDeUpload()"></span>
+		<div class="form">
+			<div class="fucItem">
+				<label for="">Arquivo:</label>
+				<button ngf-select ng-model="docFile" ngf-multiple="false" class="bt_upload">Selecione...</button>
+				{{docFile.name}}
+			</div>
+			<div class="fucItem">
+				<label>Progresso (%):</label><input type="number" min={{doc.progressoValidado}} max="100" ng-model="novoProgresso">
+			</div>
+			<div class="fucItem">
+				<label>Observações: <span ng-if="hoje>doc.data_limite">*Obrigatório</span>	 </label><textarea ng-model="obs"></textarea>
+			</div>
+			<button class="bt_cancelar" ng-click="escondeFormDeUpload()">Cancelar</button>
+			<button
+				class="bt_salvar"
+				ng-click="upload()"
+				ng-disabled="novoProgresso==undefined || docFile==undefined || (hoje>doc.data_limite && (obs=='' || obs==undefined))">Enviar Arquivo</button>
+		</div>
+	</div>
+
+	<div class="docInfo">
+		<h3>{{doc.nome_projeto}}</h3>
+		<h3>{{doc.nome_subdisciplina}}[{{doc.nome_disciplina}}]</h3>
+		<h3>{{doc.nome_area}}</h3>
+		<h3 class="data_limite">Data Limite: {{doc.data_limite|date:'dd/MM/yyyy':'+0000'}}</h3>
+		<h3 class="dias_restantes">{{doc.data_limite|daysFromNow}}</h3>
+	</div>
+	
+
 	<div class="progresso">
 		<span class="validado">{{doc.progressoValidado}}%</span>
 		<span class="aValidar">{{doc.progressoAValidar}}%</span>
@@ -63,15 +90,6 @@
 			</div><span
 			>{{prg.data|date:"dd/MM/yyyy à's' hh:mm"}}</span
 			><a class="download_file" ng-click="downloadFile(prg.id)"></a>
-		</div>
-	</div>
-	<div class="formUploadContainer" ng-show="mostrandoFormDeUpload">
-		<span class="bt" ng-click="escondeFormDeDownload()"></span>
-		<div class="form">
-			<button ngf-select ng-model="docFile" ngf-multiple="false" class="bt_upload">Selecione prquivo para upload ...</button>
-			<label>Progresso: </label><input type="number" min={{doc.progressoValidado}} max="100" ng-model="novoProgresso">
-			<button class="bt_limpo bt_cancelar_upload" ng-click="mostrandoFormDeUpload = false">Cancelar</button>
-			<button class="bt_limpo bt_realizar_upload" ng-click="downloadFile(doc.progressos[doc.progressos.length - 1])">Atualização de arquivo</button>
 		</div>
 	</div>
 </div>
