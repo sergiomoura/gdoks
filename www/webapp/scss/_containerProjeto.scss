@@ -1,0 +1,101 @@
+#addprojeto_container .bt_salvar{
+	position: absolute;
+	right: 15px;
+	bottom:15px;
+}
+
+#addprojeto_container .bt_cancelar{
+	margin-left: 15px;
+}
+
+#addprojeto_dao_container{
+  padding-bottom: 56px;
+}
+
+#addprojeto_dao_container .bt_salvar{
+	position: absolute;
+	right: 15px;
+	bottom: -45px;
+}
+
+#addprojeto_dao_container table input[type=text]{
+	width: 100%;
+}
+
+#addprojeto_areas_container {
+	padding-bottom: 56px
+}
+
+#addprojeto_areas_container .bt_adicionar{
+	position: absolute;
+	right: 15px;
+	bottom: 15px;
+}
+
+#addprojeto_areas_container table input[type=text]{
+	width: 100%;
+}
+
+#addprojeto_documentos_container {
+	padding-bottom: 56px;
+	margin-bottom: 180px;
+}
+
+#addprojeto_dao_container .bt_upload{
+  width: 380px;
+	position: relative;
+	left: 22px;
+}
+
+#addprojeto_dao_container .progress_bar{
+	height: 27px;
+	position: absolute;
+	width: calc(100% - 370px);
+	left: 20px;
+	bottom: -45px;
+	border-radius: 5px;
+}
+
+#addprojeto_dao_container>form {
+	position: relative;
+}
+
+#addprojeto_dao_container>form>table{
+	margin-bottom: 80px;
+}
+
+#addprojeto_dao_container>form>table td:last-child{
+	width: 60px;
+}
+
+#addprojeto_dao_container>form>table td:nth-child(3){
+	width: 215px;
+	color: #FF5722;
+	text-align: center;
+}
+
+#addprojeto_dao_container .progress_bar>div>span{
+	display: inline-block;
+	padding: 0 10px 0 0;
+}
+
+#addprojeto_dao_container .sub_bloco h3{
+	width:120px;
+}
+
+#addprojeto_dao_container .sub_bloco table{
+	width: calc(100% - 180px);
+	margin-bottom: 24px;
+}
+
+#addprojeto_documentos_container table>tr>td>span{
+	display: block;
+	color:#CCC;
+	font-size: 12px;
+}
+
+#addprojeto_documentos_container .bt_adicionar{
+	position: absolute;
+	right:15px;
+	bottom: 15px;
+}

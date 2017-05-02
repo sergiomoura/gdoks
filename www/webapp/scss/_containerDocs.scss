@@ -1,0 +1,341 @@
+#docs_container{
+	padding-top:20px;
+	position:relative;
+}
+
+#docs_container .controles {
+	position: absolute;
+	right:0;
+	top:20px;
+}
+
+#docs_filtro{
+	background-color:#EEE;
+	border:none;
+	font-family:Poppins;
+	padding:10px;
+	width:200px;
+	color:#BABABA;
+	margin-right:20px;
+}
+
+#docs_filtro:focus{
+	outline:none;
+	border:none;
+}
+
+#docs_filtro::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #BABABA;
+    opacity: 1;
+}
+#docs_filtro:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #BABABA;
+   opacity:  1;
+}
+#docs_filtro::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #BABABA;
+   opacity:  1;
+}
+#docs_filtro:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    #BABABA;
+   opacity:1;
+}
+
+
+#docs_container .controles .item{
+	display:inline-block;
+}
+
+#docs_container .controles .item label{
+	display:block;
+	color:#BABABA;
+	font-size:12px;
+	text-indent:3px
+}
+#docs_ordem {
+	outline:none;
+	border:none;
+	background-color:#EEE;
+	border:none;
+	font-family:Poppins;
+	padding:9px;
+	width:250px;
+	color:#BABABA;
+	
+}
+
+#docs_ordem:focus {
+	outline:none;
+	border:none;
+}
+
+#lista_de_docs {
+	column-count:2;
+	column-gap: 50px;
+}
+
+#lista_de_docs>*>.bloco_conteudo{
+	display:inline-block;
+	padding: 10px 10px 0px 10px;
+	position:relative;
+	margin-bottom: 30px;
+	width: 100%;
+}
+
+#lista_de_docs>*>.locked{
+	background-color:#2B2B2B;
+}
+
+#lista_de_docs>*>.bloco_conteudo .data_limite{
+	position:absolute;
+	right:10px;
+	top:44px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .dias_restantes{
+	position:absolute;
+	right:10px;
+	top:68px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .ultima_atualizacao{
+	font-size: 12px;
+	color:#666;
+	text-align:right;
+	margin: 7px 0 0 0;
+}
+
+#lista_de_docs>*>.bloco_conteudo .progresso{
+	margin-top: 5px;
+	text-align: right;
+	font-size:20px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .progresso .validado{
+	color:#6DD900;
+}
+
+#lista_de_docs>*>.bloco_conteudo .progresso .aValidar:before{
+	content:"+"
+}
+
+#lista_de_docs>*>.bloco_conteudo .hbar{
+	background-color: #DFDFDF;
+	height: 16px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .hbar>div{
+	cursor:default;
+	transition: width 0.3s ease-out;
+	display: inline-block;
+	height: 16px;
+	font-size: 11px;
+	text-align: right;
+	padding-right: 2px;
+	position: relative;
+	top: -2px;
+	left: 0;
+	overflow: hidden;
+}
+
+#lista_de_docs>*>.bloco_conteudo .hbar>.prgValidado{
+	background-color: #6DD900;
+	color: #FFF;
+}
+
+#lista_de_docs>*>.bloco_conteudo .hbar>.prgAValidar{
+	background-color: $azul;
+	color: #FFF;
+}
+
+#lista_de_docs>*>.bloco_conteudo .historico{
+	margin: 5px 0 0 0;
+	overflow:hidden;
+	max-height: 0;
+	transition: max-height 0.5s cubic-bezier(0.65, 0.01, 0, 1);
+}
+
+#lista_de_docs>*>.bloco_conteudo .historico .historico-item{
+	margin-top: 3px;
+	position: relative;
+}
+
+#lista_de_docs>*>.bloco_conteudo .historico .historico-item .hbar {
+	width: calc(100% - 151px);
+	display: inline-block;
+}
+
+#lista_de_docs>*>.bloco_conteudo .historico .historico-item span{
+	display:inline-block;
+	font-size:12px;
+	margin-left:3px;
+	text-align:right;
+	color:#666;
+	position:relative;
+	top:-5px;
+	width: 130px;
+	text-align: center;
+}
+
+#lista_de_docs>*>.bloco_conteudo .download_file:hover{
+	background-position: 0 -16px;
+}
+
+#lista_de_docs>*>.locked .download_file:hover{
+	background-position: 0px -32px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .controles{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .controles button{
+	border:none;
+	background-color:transparent;
+}
+
+#lista_de_docs>*>.bloco_conteudo .controles button:focus{
+	outline:none;
+}
+
+#lista_de_docs>*>.bloco_conteudo .lock_doc{
+	display:inline-block;
+	width:15px;
+	height:15px;
+	background-image:url(../img/mini-icons.png);
+	cursor: pointer;
+	background-position: -78px -1px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .lock_doc:hover{
+	background-position: -78px 33px;
+}
+
+#lista_de_docs>*>.locked .lock_doc{
+	background-position: -65px 1px;
+}
+
+#lista_de_docs>*>.locked .lock_doc:hover{
+	background-position: -65px 20px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .download_file{
+	display:inline-block;
+	width:15px;
+	height:15px;
+	background-image:url(../img/mini-icons.png);
+	cursor: pointer;
+	background-position: 1px 0px;
+	background-repeat: no-repeat;
+}
+
+#lista_de_docs>*>.bloco_conteudo .upload_file{
+	display:inline-block;
+	width:15px;
+	height:15px;
+	background-image:url(../img/mini-icons.png);
+	cursor: pointer;
+	background-position: 42px 0px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .upload_file:hover{
+	background-position: 42px -16px;
+}
+
+#lista_de_docs>*>.locked .upload_file:hover{
+	background-position: 42px -32px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .mostra_historico{
+	display:inline-block;
+	width: 16px;
+	height:15px;
+	background-image:url(../img/mini-icons.png);
+	cursor: pointer;
+	background-position: 60px 0;
+}
+
+#lista_de_docs>*>.bloco_conteudo .mostra_historico:hover{
+	background-position: 60px 35px;
+}
+
+#lista_de_docs>*>.locked .mostra_historico:hover{
+	background-position: 60px -32px;
+}
+
+#lista_de_docs>*>.bloco_conteudo .historico .historico-item .download_file{
+	position: absolute;
+	top: 1px;
+	right: 0px;
+}
+
+#lista_de_docs .formUploadContainer{
+	position: absolute;
+	top:10px;
+	right: 68px;
+	width: 70%;
+	height: 170px;
+	max-width: 330px;
+}
+
+#lista_de_docs .formUploadContainer>*{
+  box-shadow: 0 0 5px #000;
+}
+
+#lista_de_docs .formUploadContainer .bt{
+	background-color: #2B2B2B;
+	display: block;
+	width: 16px;
+	background-image: url(../img/mini-icons.png);
+	height: 16px;
+	position: absolute;
+	background-position: -50px 19px;
+	border: 2px solid #2B2B2B;
+	right: 0;
+	top: 0;
+}
+
+#lista_de_docs .formUploadContainer .form{
+	top: 20px;
+	background-color: #2B2B2B;
+	padding: 15px;
+	height: 100px;
+	color: #CCC;
+	font-size: 14px;
+	position: relative;
+	width: calc(100% - 30px);
+}
+
+#lista_de_docs .formUploadContainer .form .bt_limpo{
+	font-size: 14px;
+}
+
+#lista_de_docs .formUploadContainer .form .bt_limpo:hover{
+  color: #FFF !important;
+}
+
+#lista_de_docs .formUploadContainer .form input{
+	border: none;
+	background: #FFF;
+	padding:3px;
+	width:50px;
+}
+
+
+#lista_de_docs .formUploadContainer .bt_cancelar_progresso{
+	position: absolute;
+	bottom: 5px;
+	left:0px;
+	width:40%;
+	text-align: left;
+}
+
+#lista_de_docs .formUploadContainer .bt_validar_progresso{
+	position: absolute;
+	bottom: 5px;
+	right:0;
+	width:40%;
+	text-align: right;
+}
