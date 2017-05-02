@@ -1,12 +1,13 @@
-@import 'colors';
+@import 'includeColors';
+@import 'includeFonts';
 
 html {
 	height: 100%;
 }
 
 body {
-	background-color: RGBA(229, 229, 229, 0.9);
-	font-family: "Poppins", sans-serif;
+	background-color: rgb(238, 238, 238);
+	font-family: $fontFamily;
 	margin: 0;
 	padding: 0;
 	color: $azul;
@@ -22,7 +23,7 @@ input[type=checkbox]{
 	margin-right: 5px;
 }
 button {
-	font-family: "Poppins", sans-serif;
+	font-family: $fontFamily;
 }
 
 .bt_azul{
@@ -33,11 +34,12 @@ button {
 .bloco_conteudo{
 	background-color: #FFF;
 	display: block;
-	/*box-shadow: 0 0 2px 2px rgba(0,0,0,0.05);*/
+	box-shadow: 0 0 2px 2px rgba(0,0,0,0.05);
+	margin-top:3px;
 }
 
 .bloco_conteudo .sub_bloco {
-  border-top:1px solid $azul;
+	border-top:1px solid $azul;
 	margin: 20px 0 0 0;
 	display:flex;
 	background-color:#E8F4FE;
