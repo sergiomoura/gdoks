@@ -1,6 +1,6 @@
 <div id="disciplinas_container" class="container_80">
 	<button class="bt_salvar" ng-click="goToAddDisciplina()">+ Adicionar Disciplina</button>
-	<div id="lista_de_disciplinas">
+	<div class="lista">
 		<a ng-repeat="d in disciplinas" href="#/disciplinas/{{d.id}}" class="bloco_conteudo disciplina">
 			<h2>{{d.nome}}</h2>
 			<h3>{{d.sigla}}</h3>

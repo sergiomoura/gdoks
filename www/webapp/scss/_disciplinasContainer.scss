@@ -1,0 +1,44 @@
+#disciplinas_container button{
+	
+	position: absolute;
+	left: 0;
+	top: 16px;
+}
+
+#disciplinas_container {
+
+	.lista{
+
+		position: relative;
+		top: 60px;
+		column-count: 4;
+		column-gap: 40px;
+		
+		.disciplina{
+			display: inline-block;
+			width: 100%;
+			margin-bottom: 20px;
+			padding: 20px;
+			text-decoration: none;
+			margin-right:20px;
+		}
+
+	}
+
+	.aviso{
+		color: #FF5722;
+	}
+
+	.bt_salvar{
+		position: absolute;
+		right: 15px;
+	}
+
+	.bt_cancelar{
+		position: relative;
+		left: 15px;
+	}
+}
+
+
+

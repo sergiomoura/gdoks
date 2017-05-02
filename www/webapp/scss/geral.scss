@@ -1,3 +1,5 @@
+@import 'colors';
+
 html {
 	height: 100%;
 }
@@ -7,12 +9,12 @@ body {
 	font-family: "Poppins", sans-serif;
 	margin: 0;
 	padding: 0;
-	color: #2196F3;
+	color: $azul;
 	height: 100%;
 }
 
 input[type=text],input[type=password]{
-	border: 1px solid #2196F3;
+	border: 1px solid $azul;
 	background-color: #FFF;
 }
 
@@ -24,18 +26,18 @@ button {
 }
 
 .bt_azul{
-	background-color: #2196F3;
+	background-color: $azul;
 	color: #FFF;
 }
 
 .bloco_conteudo{
 	background-color: #FFF;
 	display: block;
-	box-shadow: 0 0 2px 2px rgba(0,0,0,0.05);
+	/*box-shadow: 0 0 2px 2px rgba(0,0,0,0.05);*/
 }
 
 .bloco_conteudo .sub_bloco {
-  border-top:1px solid #2196F3;
+  border-top:1px solid $azul;
 	margin: 20px 0 0 0;
 	display:flex;
 	background-color:#E8F4FE;
@@ -43,7 +45,7 @@ button {
 
 .bloco_conteudo .sub_bloco h3{
 	display: block;
-	background-color: #2196F3;
+	background-color: $azul;
 	color:#FFF;
 	text-align: center;
 	padding: 30px;
@@ -92,7 +94,7 @@ button {
 	font-size: 18px;
 	font-weight:normal;
 	margin:0 0 5px 0;
-	color: #2196F3;
+	color: $azul;
 }
 
 .bloco_conteudo h3{
@@ -154,7 +156,7 @@ h2 {
 }
 
 #view .bt_salvar{
-	background-color:#2196F3;
+	background-color:$azul;
 	border:none;
 	height:27px;
 	font-size:11px;
@@ -244,7 +246,7 @@ h2 {
 	border-radius: 5px;
 	padding: 5px 20px;
 	height: 29px;
-	background-color: #2196F3;
+	background-color: $azul;
 	color: #FFF;
 	text-align: center;
 	cursor: pointer;
@@ -295,7 +297,7 @@ h2 {
 }
 
 .bloco_conteudo table>thead>tr>td{
-	color:#2196F3;
+	color:$azul;
 	font-size: 18px;
 }
 
@@ -372,7 +374,7 @@ help:hover>text{
 	height:27px;
 }
 .progress_bar>div{
-	background-color: #2196F3;
+	background-color: $azul;
 	height: 100%;
 	border-radius: 5px 0 0 5px;
 	text-align: right;

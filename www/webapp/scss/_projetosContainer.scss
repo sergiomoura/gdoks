@@ -1,0 +1,23 @@
+#projetos_container{
+
+	button {
+		position: absolute;
+		left: 0;
+		top: 16px;
+	}
+
+	.lista{
+		position: relative;
+		top: 60px;
+		column-count: 3;
+		column-gap: 40px;
+
+		.projeto{
+			display: inline-block;
+			width: 100%;
+			margin-bottom: 20px;
+			padding: 20px;
+			text-decoration: none;
+		}
+	}
+}

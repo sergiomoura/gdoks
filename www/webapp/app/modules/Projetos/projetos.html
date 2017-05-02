@@ -1,6 +1,6 @@
 <div id="projetos_container" class="container_80">
 	<button class="bt_salvar" ng-click="goToAddProjeto()">+ Cadastrar Novo Projeto</button>
-	<div id="lista_de_projetos">
+	<div class="lista">
 		<a ng-repeat="p in projetos" href="#/projetos/{{p.id}}" class="bloco_conteudo projeto">
 			<h2>{{p.nome}}</h2>
 			<h3>{{p.codigo}}</h3>

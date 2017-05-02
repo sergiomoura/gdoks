@@ -1,0 +1,235 @@
+#topo {
+	height: 36px;
+	background-color: $azul;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+
+#abreMenu{
+    background-image: url(../img/menu.png);
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    cursor: pointer;
+    padding: 0 12px 4px 14px;
+    background-repeat: no-repeat;
+    background-position-x: 13px;
+
+}
+
+#logo{
+	margin: 6px;
+}
+
+#container_horizontal{
+	position: fixed;
+	top: 36px;
+	left: 0;
+	min-width: 800px;
+	height: calc(100% - 36px);
+	width: 100%;
+	overflow: auto;
+}
+
+nav {
+	position: fixed;
+	left: 0px;
+	top: 36px;
+	transition: width 0.3s;
+	transition-timing-function: ease-out;
+	height: calc(100% - 36px);
+	background-color: RGBA(43, 43, 43,0.8);
+	width: 50px;
+	overflow: hidden;
+}
+
+.nav_expanded{
+	overflow: visible;
+	width: 201px;
+}
+
+nav ul{
+	list-style:none;
+	position:relative;
+	float:left;
+	margin:0;
+	padding:0;
+	height: 100%;
+	width: 100%;
+}
+
+nav ul a{
+	cursor: pointer;
+	display: block;
+	text-decoration: none;
+	color: #FFF;
+	font-size: 16px;
+	padding: 7px 10px;
+  width: calc(100% + -20px);
+  white-space: nowrap;
+}
+
+nav>ul>li li a{
+  background-color: rgba(43,43,43,0.8);
+}
+
+
+nav>ul>li ul{
+	position:absolute;
+	margin-top: -41px;
+	margin-left: 100%;
+	padding: 0;
+	display: none;
+}
+
+nav>ul li:hover>ul{
+	display: block;
+}
+
+nav li{
+	list-style: none;
+	display: block;
+	position: relative;
+	width: 100%;
+}
+
+nav>ul>li>a{
+  text-indent: 45px;
+	background-repeat: no-repeat;
+  background-position: 6px 5px;
+}
+
+nav>ul>li:last-child{
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+}
+
+nav a:hover{
+	background-color: #296a9e;
+}
+
+nav a:hover span{
+	opacity: 1;
+}
+
+nav .selected{
+	background-color: rgba(43,43,43,0.8);
+	cursor: default;
+	text-decoration: underline;
+	border-left: 5px solid $azul;
+	padding-left: 5px;
+	background-position-x: 1px;
+}
+
+nav .home{
+	background-image: url(../img/icon_home.png);
+}
+
+nav .prj{
+	background-image: url(../img/icon_projetos.png);
+}
+
+nav .usu{
+	background-image: url(../img/icon_usuarios.png);
+}
+
+nav .doc{
+	background-image: url(../img/icon_documentos.png);
+}
+
+nav .dsc{
+	background-image: url(../img/icon_disciplinas.png);
+}
+
+nav .cal{
+	background-image: url(../img/icon_calendario.png);
+}
+
+nav .cli{
+	background-image: url(../img/icon_clientes.png);
+}
+
+nav .cfg{
+	background-image: url(../img/icon_configuracoes.png);
+}
+
+#view_container{
+	width: calc(100% - 50px);
+	position: relative;
+	transition: width 0.3s, left 0.3s;
+	transition-timing-function: ease-out;
+	left: 50px;
+	min-width: 800px;
+	top: 0px;
+	z-index: -1;
+	height: 100%;
+}
+
+#view {
+	width: 100%;
+	position: relative;
+}
+
+#ua{
+	position: fixed;
+	bottom: 0px;
+	font-size: 12px;
+	color: #BBB;
+	padding: 2px 2px 2px 3px;
+	background-color: #EAEAEA;
+	right: 20px;
+}
+
+#lk_opcoes{
+    background-image: url(../img/min-menu.png);
+    display: block;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: 17px 11px;
+}
+
+#opcoes{
+    background-color: $azul;
+    position: absolute;
+    top: -85px;
+    /*top: 36px;*/
+    right: 0;
+    width: 200px;
+    height: 90px;
+    color: #FFF;
+    transition: top 0.5s;
+    transition-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+
+#opcoes a{
+	display: block;
+	background-repeat: no-repeat;
+	background-position: 5px 8px;
+	text-indent: 36px;
+	cursor: pointer;
+	padding: 10px;
+	text-decoration: none;
+	color: #FFF;
+}
+
+#opcoes a:hover{
+	background-color: rgba(255,255,255,0.3);
+}
+
+#opcoes .trocar_senha{
+	background-image: url(../img/chpass.png);
+	background-position: 5px 8px;
+}
+
+#opcoes .sair{
+	background-image: url(../img/onoff.png);
+	background-position: 8px 5px;
+}
