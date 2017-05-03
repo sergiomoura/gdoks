@@ -83,14 +83,25 @@ angular.module('Documentos',['ngFileUpload'])
 				$scope.docFile.upload.then(
 					function(response){
 						if(response.status == 200){
-							
 							$scope.doc.progressoAValidar = $scope.novoProgresso - $scope.doc.progressoValidado;
 							$scope.docFile = undefined;
 							$scope.novoProgresso = undefined;
 							$scope.obs = '';
 							$scope.escondeFormDeUpload();
-							$scope.progressos.push(response.progresso);
-							$scope.doc.id_progresso_a_validar = $scope.progressos[$scope.progressos.length - 1];
+
+							// tratando do progresso que veio como resposta
+							var progresso = response.data.progresso;
+							progresso.data = new Date(progresso.data);
+							
+							indexedDB.open('gdoks').onsuccess = function(evt){
+								evt.target.result.transaction('usuarios').objectStore('usuarios').get(progresso.idu).onsuccess = function(evt){
+									progresso.usuario = evt.target.result;
+									$scope.$apply();
+								}
+							}
+
+							$scope.doc.progressos.push(progresso);
+							$scope.doc.id_progresso_a_validar = $scope.doc.progressos[$scope.doc.progressos.length - 1].id;
 
 						} else {
 							console.dir(response);

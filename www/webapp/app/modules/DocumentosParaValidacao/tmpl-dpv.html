@@ -5,7 +5,7 @@
 	<h3>{{dpv.nome_area}}</h3>
 	<div class="controles">
 		<a class="download_file" ng-click="downloadFile(dpv.progressos[dpv.progressos.length - 1].id)"></a>
-		<a class="valida_progresso" ng-click="mostrandoFormDeValidacao = true"></a>
+		<a class="valida_progresso" ng-click="mostraFormDeValidacao()"></a>
 		<a class="mostra_historico" ng-click="mostrandoHistorico = !mostrandoHistorico"></a>
 	</div>
 	<h3 class="data_limite">Data Limite: {{dpv.data_limite|date:'dd/MM/yyyy':'+0000'}}</h3>
@@ -15,12 +15,12 @@
 		<span class="aValidar">{{dpv.progressoAValidar}}%</span>
 	</div>
 	<div class="hbar">
-		<div
+		<div ng-if="dpv.progressoValidado>0"
 			class="prgValidado"
 			style="width: calc({{dpv.progressoValidado|number}}% - 2px)">
 			{{dpv.progressoValidado|number}}%
 		</div
-		><div
+		><div ng-if="dpv.progressoAValidar>0"
 			class="prgAValidar"
 			style="width: calc({{dpv.progressoAValidar|number}}% - 2px)">
 			{{dpv.progressoAValidar|number}}%
@@ -31,18 +31,18 @@
 		<div>Progresso</div>
 		<div class="historico-item" ng-repeat="prg in dpv.progressos">
 			<div class="hbar" ng-if="!$last">
-				<div
+				<div ng-if="prg.progresso_total>0"
 					class="prgValidado"
 					style="width: calc({{prg.progresso_total|number}}% - 2px)">
 					{{prg.progresso_total|number}}%
 				</div>	
 			</div><div class="hbar" ng-if="$last">
-				<div
+				<div ng-if="dpv.progressoValidado>0"
 					class="prgValidado"
 					style="width: calc({{dpv.progressoValidado|number}}% - 2px)">
 					{{dpv.progressoValidado|number}}%
 				</div
-				><div
+				><div ng-if="dpv.progressoAValidar>0"
 					class="prgAValidar"
 					style="width: calc({{dpv.progressoAValidar|number}}% - 2px)">
 					{{dpv.progressoAValidar|number}}%

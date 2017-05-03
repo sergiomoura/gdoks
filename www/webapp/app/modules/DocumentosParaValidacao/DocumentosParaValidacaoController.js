@@ -19,6 +19,10 @@ angular.module('DocumentosParaValidacao',[])
 
 			$scope.escondeFormDeValidacao = function(){
 				$scope.mostrandoFormDeValidacao = false;
+			}
+
+			$scope.mostraFormDeValidacao = function(){
+				$scope.mostrandoFormDeValidacao = true;
 				$scope.progresso = $scope.dpv.progressoAValidar;
 			}
 

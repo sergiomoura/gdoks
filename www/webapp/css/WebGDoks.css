@@ -766,7 +766,8 @@ nav .cfg {
   background-position: -33px 0; }
 
 #lista_de_dpvs > * > .bloco_conteudo .mostra_historico:hover {
-  background-position: -33px 32px; }
+  background-position: -33px 35px;
+  }
 
 #lista_de_dpvs > * > .bloco_conteudo .historico .historico-item .download_file {
   position: absolute;

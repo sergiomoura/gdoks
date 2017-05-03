@@ -1076,8 +1076,8 @@
                     		$projeto->id_cliente,
                     		$projeto->id_responsavel,
                     		$id_empresa,
-                    		$projeto->data_inicio_p,
-                    		$projeto->data_final_p,
+                    		substr($projeto->data_inicio_p, 0, 10),
+                    		substr($projeto->data_final_p, 0, 10),
                     		$projeto->ativo);
                     } catch (Exception $e) {
                     	$response = new response(1,'Erro na consulta: '.$e->getMessage());
