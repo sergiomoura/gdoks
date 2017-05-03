@@ -2006,6 +2006,140 @@
 					}
 				}
 			});
+
+			$app->post('/documentos/:idDoc/arquivos/',function($id_doc) use ($app,$db){
+				// lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$id_doc = 1*$id_doc; 
+
+				// Verificando se o documento é da mesma empresa do usuário
+				$sql = 'SELECT
+							A.id,A.id_empresa,COUNT(*) as ok
+						FROM (
+							SELECT
+								id,id_empresa
+							FROM gdoks.gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+									SELECT c.id_empresa
+									FROM gdoks_documentos a
+									INNER JOIN gdoks_areas b ON b.id=a.id_area
+									INNER JOIN gdoks_projetos c ON c.id=b.id_projeto
+									WHERE a.id = ?) B on A.id_empresa=B.id_empresa;';
+				$rs = $db->query($sql,'si',$token,$id_doc)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
+				$id_empresa = $rs['id_empresa'];
+
+
+				// Indo adiante
+				if($ok == 1) {
+
+					// verificando se há erro
+					if($_FILES['file']['error'] == 0){
+						// UPLOAD COM SUCESSO
+						// Organizando informações a serem salvas na base
+						$nomeUnico = uniqid(true);
+						$caminho = UPLOAD_PATH.$id_empresa.'/';
+						$nomeTemporario = $_FILES['file']['tmp_name'];
+						$nomeCliente = $_FILES['file']['name'];
+						$tipo = $_FILES['file']['type'];
+						$tamanho = $_FILES['file']['size'];
+						$progresso = 1*$_POST['progresso'];
+
+						// Registrando informações na base
+						$registradoNaBase = false;
+						$sql = "INSERT INTO gdoks_arquivos (caminho,nome_cliente,id_documento,datahora_upload,progresso_total,idu,tamanho)
+								VALUES (?,?,?,NOW(),?,?,?)";
+						$idInserido = null;
+						try {
+							$db->query($sql,'ssiiii',
+								$caminho.$nomeUnico,
+								$nomeCliente,
+								$id_doc,
+								$progresso,
+								$id_usuario,
+								$tamanho);
+							$id_inserido = $db->insert_id;
+						} catch (Exception $e1) {
+							// registrando falha na consulta no vetor de falhas.
+							$app->response->setStatus(401);
+							$response = new Response(1,$e1->getMessage());
+							$response->flush();
+							die();
+						}
+
+						// Salvando arquivo no FS
+						try {
+							// verificando se existe uma pasta da empresa. Se não houver, tenta criar.
+							$caminho = UPLOAD_PATH.$id_empresa;
+							$pastaDaEmpresaExiste = file_exists($caminho);
+							if(!$pastaDaEmpresaExiste){
+								$pastaDaEmpresaExiste = @mkdir($caminho);
+							}
+
+							if($pastaDaEmpresaExiste){
+								// Salvando arquivo na pasta do cliente
+								$salvoNoFS = @move_uploaded_file($nomeTemporario, $caminho.'/'.$nomeUnico);	
+							} else {
+								$salvoNoFS = false;
+							}
+
+							if($salvoNoFS){
+								// Registrando na tabela de documentos que este arquivo é um progresso a ser validado
+								$sql = 'UPDATE gdoks_documentos SET id_progresso_a_validar=? WHERE id=?';
+								$db->query($sql,'ii',$id_inserido,$id_doc);
+
+								// Criando elemento progresso
+								$progressoAValidar = new stdClass();
+								$progressoAValidar->id_doc = $id_doc;
+								$progressoAValidar->id = $id_inserido;
+								$progressoAValidar->idu = $id_usuario;
+								$progressoAValidar->progresso_total = $progresso;
+								$progressoAValidar->data = date('Y-m-dTH:i:s');
+								
+								// retornando;
+								$response = new response(0,'Arquivo processado.');
+								$response->progresso = $progressoAValidar;
+								$response->flush();
+
+								// Registrando a ação
+								unset($progressoAValidar->data);
+								unset($progressoAValidar->idu);
+								registrarAcao($db,$id_usuario,ACAO_ATUALIZOU_DOCUMENTO,implode(',', (array)$progressoAValidar));
+								die();
+							} else {
+								// registrando falha no processo de salvar no FS
+								$erro = new stdClass();
+								$erro->arquivo = $nomeCliente;
+								$erro->msg = $e1->getMessage();
+								array_push($erros, $erro);
+
+								// removendo registro na base de dados
+								$sql = "DELETE from gdoks_arquivos WHERE id=?";
+								$db->query($sql,'i',$id_inserido);
+							}
+						} catch (Exception $e2) {
+							// registrando falha na consulta no vetor de falhas.
+							$app->response->setStatus(401);
+							$response = new Response(1,$e2->getMessage());
+							$response->flush();
+							die();
+						}
+					} else {
+						// Respondendo falha no upload.
+						$app->response->setStatus(401);
+						$response = new Response(1,'Upload falhou. Erro: '.$_FILES['file']['error']);
+						$response->flush();
+						die();
+					}
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response->flush();
+					die();
+				}
+			});
 		// FIM DE ROTAS DE DOCUMENTOS */
 
 		// ROTAS DE ARQUIVOS
@@ -2029,15 +2163,17 @@
 					$idu = $rs[0]['id'];
 
 					// levantando o caminnho do arquivo
-					$sql = 'SELECT caminho FROM gdoks_arquivos WHERE id=?';
-					$caminho = 	$db->query($sql,'i',$id)[0]['caminho'];	
+					$sql = 'SELECT caminho,nome_cliente FROM gdoks_arquivos WHERE id=?';
+					$fileInfo = $db->query($sql,'i',$id)[0];
+					$caminho = 	$fileInfo['caminho'];
+					$nome_cliente = $fileInfo['nome_cliente'];
 
 					// Verificando se o arquivo existe
 					if(file_exists($caminho)){
 						// configurando o header
 						header('Content-Description: File Transfer');
 						header('Content-Type: application/octet-stream');
-						header('Content-Disposition: attachment; filename="'.basename($caminho).'"');
+						header('Content-Disposition: attachment; filename="'.basename($nome_cliente).'"');
 						header('Content-Transfer-Encoding: binary');
 						header('Expires: 0');
 						header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -2055,6 +2191,7 @@
 					}
 				}
 			});
+
 		// FIM DE ROTAS DE ARQUIVOS
 		
 		// ROTAS DE CLIENTES
@@ -2206,8 +2343,7 @@
 				registrarAcao($db,$id,ACAO_ADICIONOU_CLIENTE,$db->insert_id.','.$cliente->nome);
 			});
 		// FIM DE ROTAS DE CLIENTES
-
-		
+	
 	});
 
 

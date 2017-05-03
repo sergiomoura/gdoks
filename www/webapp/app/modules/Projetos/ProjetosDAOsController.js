@@ -41,7 +41,6 @@ function ProjetosDAOsController($scope,Upload,$cookies,GDoksFactory){
             	}
             ).then(
             	function (response){
-            		console.dir(response);
             		if(response.status == 200){
             			// Upload Concluído com sucesso!
             			var result = response.data;

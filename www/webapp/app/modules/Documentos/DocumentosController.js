@@ -1,5 +1,5 @@
-angular.module('Documentos',[])
-.controller('DocumentosController',DocumentosController)
+angular.module('Documentos',['ngFileUpload'])
+.controller('DocumentosController',['$scope','GDoksFactory',DocumentosController])
 .directive('gdoksDoc',function(){
 	return {
 		templateUrl:'app/modules/Documentos/tmpl-doc.html',
@@ -7,7 +7,7 @@ angular.module('Documentos',[])
 		scope:{
 			doc:'=doc'
 		},
-		controller:['$scope','GDoksFactory','$cookies',function($scope,GDoksFactory,$cookies){
+		controller:['$scope','GDoksFactory','$cookies','Upload',function($scope,GDoksFactory,$cookies,Upload){
 
 			// Inicializando variáveis;
 			$scope.mostrandoHistorico = false;
@@ -69,8 +69,34 @@ angular.module('Documentos',[])
 			}
 
 			$scope.upload = function(){
-				console.log("Vamos subir arquivo!!!");
-				console.dir($scope.docFile);
+				$scope.docFile.upload = Upload.upload(
+					{
+						url:API_ROOT+'/documentos/'+$scope.doc.id+'/arquivos/',
+						data: {
+							progresso: $scope.novoProgresso,
+							observacao: $scope.obs,
+							file:$scope.docFile
+						},
+                		headers: {'Authorization':$cookies.getObject('user').token}
+					});
+
+				$scope.docFile.upload.then(
+					function(response){
+						if(response.status == 200){
+							
+							$scope.doc.progressoAValidar = $scope.novoProgresso - $scope.doc.progressoValidado;
+							$scope.docFile = undefined;
+							$scope.novoProgresso = undefined;
+							$scope.obs = '';
+							$scope.escondeFormDeUpload();
+							$scope.progressos.push(response.progresso);
+							$scope.doc.id_progresso_a_validar = $scope.progressos[$scope.progressos.length - 1];
+
+						} else {
+							console.dir(response);
+						}
+					}
+				)
 			}
 		}]
 	}
@@ -92,7 +118,7 @@ angular.module('Documentos',[])
 	}
 })
 
-function DocumentosController($scope,GDoksFactory){
+function DocumentosController($scope,GDoksFactory,Upload){
 
 	// Definindo vetor de dpvs
 	$scope.docs = [];

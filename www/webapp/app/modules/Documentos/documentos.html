@@ -16,7 +16,4 @@
 		<gdoks-doc ng-repeat="doc in docs | orderBy:ordem | filter:q as result" doc="doc"></gdoks-doc>
 		<div ng-if="result.length==0">Nenhum documento a exibir</div>
 	</div>
-	<pre>
-		{{docs | json}}
-	</pre>
 </div>
