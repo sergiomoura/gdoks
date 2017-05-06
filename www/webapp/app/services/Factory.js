@@ -181,6 +181,19 @@ WebGDoks.factory('GDoksFactory',
 			GDoksFactory.delockDoc = function(idDoc){
 				return $http.get(API_ROOT+'/documentos/'+idDoc+'/delock',{headers: {'Authorization': $cookies.getObject('user').token}});	
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getAcoes = function(){
+				return $http.get(API_ROOT+'/acoes',{headers: {'Authorization': $cookies.getObject('user').token}});		
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getLogs = function(q){
+				var query = [];
+				if(!isNaN(q.uid)){query.push('uid='+q.uid)};
+				if(!isNaN(q.aid)){query.push('aid='+q.aid)};
+				query.push('de='  + q.de.toJSON().substr(0,10));
+				query.push('ate=' + q.ate.toJSON().substr(0,10));
+				return $http.get(API_ROOT+'/logs/?'+query.join('&'),{headers: {'Authorization': $cookies.getObject('user').token}});		
+			}
 			return GDoksFactory;
 		}
 	]

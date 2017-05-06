@@ -2191,7 +2191,6 @@
 					}
 				}
 			});
-
 		// FIM DE ROTAS DE ARQUIVOS
 		
 		// ROTAS DE CLIENTES
@@ -2343,7 +2342,46 @@
 				registrarAcao($db,$id,ACAO_ADICIONOU_CLIENTE,$db->insert_id.','.$cliente->nome);
 			});
 		// FIM DE ROTAS DE CLIENTES
-	
+		
+		// ROTAS DE AÇÕES
+			$app->get('/acoes',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$sql = 'SELECT id,
+						       nome,
+						       descricao
+						FROM gdoks_acoes';
+				$response = new response(0,'ok');
+				$response->acoes = $db->query($sql);
+				$response->flush();
+			});
+		// FIM DE ROTAS DE AÇÕES
+
+		// ROTAS DE LOGS
+			$app->get('/logs/',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$uid = 1*$_GET['uid'];
+				$aid = 1*$_GET['aid'];
+				$de  = (DateTime::createFromFormat('Y-m-d', $_GET['de'] ))->format('Y-m-d').' 00:00:00';
+				$ate = (DateTime::createFromFormat('Y-m-d', $_GET['ate']))->format('Y-m-d').' 23:59:59';
+
+				$condicaoUid = ($uid == 0?"id_usuario>?":"id_usuario=?");
+				$condicaoAid = ($aid == 0?"id_acao>?":"id_acao=?");
+				
+				$sql = "SELECT id_usuario,
+						       id_acao,
+						       parametros,
+						       data
+						FROM gdoks_log
+						WHERE data>=? and data<=? and $condicaoUid and $condicaoAid
+						ORDER BY data desc
+						";
+						
+				$response = new response(0,'ok');
+				$response->logs = $db->query($sql,'ssii',$de,$ate,$uid,$aid);
+				$response->flush();
+				
+			});
+		// FIM DE ROTAS DE LOGS
 	});
 
 

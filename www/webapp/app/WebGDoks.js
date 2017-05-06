@@ -13,6 +13,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'Disciplinas',
 								'Documentos',
 								'DocumentosParaValidacao',
+								'Log',
 								'Nav',
 								'Opcoes',
 								'Projetos',
@@ -105,6 +106,13 @@ WebGDoks.config(
 			{
 				controller: 'ClienteController',
 				templateUrl: 'app/modules/Clientes/cliente.html'
+			}
+		)
+		.when(
+			'/log',
+			{
+				controller: 'LogController',
+				templateUrl: 'app/modules/Log/log.html'
 			}
 		)
 		.when(

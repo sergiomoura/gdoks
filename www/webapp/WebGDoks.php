@@ -58,7 +58,10 @@
 						<a ng-click="itemClicked(4)" class="cli" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/clientes">Clientes</a>
 					</li>
 					<li>
-						<a ng-click="itemClicked(5)" class="cfg" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
+						<a ng-click="itemClicked(5)" class="log" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/log">Log do Sistema</a>
+					</li>
+					<li>
+						<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
 					</li>
 				</ul>
 			</nav>
@@ -114,6 +117,7 @@
 		<script src="app/modules/DocumentosParaValidacao/DocumentosParaValidacaoController.js"></script>
 		<script src="app/modules/Disciplinas/DisciplinasController.js"></script>
 		<script src="app/modules/Nav/NavController.js"></script>
+		<script src="app/modules/Log/LogController.js"></script>
 		<script src="app/modules/Opcoes/OpcoesController.js"></script>
 		<script src="app/modules/Projetos/ProjetosController.js"></script>
 		<script src="app/modules/Projetos/ProjetosAreasController.js"></script>

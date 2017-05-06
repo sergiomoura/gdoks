@@ -1,0 +1,78 @@
+#logs_container{
+	padding-top:20px;
+	position:relative;
+}
+
+#logs_container>.controles {
+	position: absolute;
+	right:0;
+	top:20px;
+	width:800px;
+}
+
+#logs_filtro{
+	background-color:$mainFieldsBgc;
+	border:none;
+	font-family:Poppins;
+	padding:10px;
+	width:200px;
+	color:$mainFieldsFgc;
+	margin-right:20px;
+}
+
+#logs_filtro:focus{
+	outline:none;
+	border:none;
+}
+
+#logs_filtro::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: $mainFieldsFgc;
+    opacity: 1;
+}
+#logs_filtro:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    $mainFieldsFgc;
+   opacity:  1;
+}
+#logs_filtro::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    $mainFieldsFgc;
+   opacity:  1;
+}
+#logs_filtro:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    $mainFieldsFgc;
+   opacity:1;
+}
+
+
+#logs_container .controles .item{
+	display:inline-block;
+}
+
+#logs_container table{
+	width: 100%;
+	border-collapse: collapse;;
+}
+
+#logs_container table td {
+	border-top: 1px solid #999;
+	color:#999;
+	font-family: monospace;
+	font-size: 16px;
+	padding: 10px;
+}
+
+#logs_container table td:nth-child(1){
+	width:200px;
+}
+#logs_container table td:nth-child(2){
+	width:200px;
+	text-align:center;
+}
+
+#logs_container table tr:hover td{
+	background-color: #FFF;
+	color:#333;
+}
+
+#logs_container table tr:last-child td{
+	border-bottom: 1px solid #999;
+}

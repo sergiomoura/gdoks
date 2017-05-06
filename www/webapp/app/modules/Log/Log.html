@@ -1,0 +1,52 @@
+<div id="logs_container" class="container_80">
+	<h2>Log</h2>
+	<div class="controles" layout="row">
+		<md-input-container class="md-block" flex-sm>
+			<label>De: </label>
+			<md-datepicker
+				md-open-on-focus
+				md-hide-icons="calendar"
+				ng-model="q.de"
+				></md-datepicker>
+		</md-input-container>
+		<md-input-container class="md-block" flex-sm>
+			<label>Até: </label>
+			<md-datepicker
+				md-open-on-focus
+				md-hide-icons="calendar"
+				ng-model="q.ate"
+				></md-datepicker>
+		</md-input-container>
+		<md-input-container class="md-block" flex-sm>
+          <label>Usuário</label>
+          <md-select ng-model="q.uid">
+          	<md-option ng-value="0"><em>Todos Usuários</em></md-option>
+            <md-option ng-repeat="usuario in usuarios|orderBy:'nome'" ng-value="usuario.id">
+              {{usuario.nome}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container class="md-block" flex-sm>
+          <label>Ações</label>
+          <md-select ng-model="q.aid">
+            <md-option ng-value="0"><em>Todas Ações</em></md-option>
+            <md-option ng-repeat="acao in acoes|orderBy:'nome'" ng-value="acao.id">
+              {{acao.nome}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+		<md-input-container class="md-block" flex-sm>
+			<md-button ng-click="getLogs()" class="md-raised md-primary" ng-disabled="!(acoesCarregadas && usuariosCarregados)">Buscar</md-button>
+		</md-input-container>
+	</div>
+	<div id="lista_de_logs">
+		<table ng-if="logs.length>0">
+			<tr ng-repeat="log in logs">
+				<td>{{log.data|date:"dd.MM.yyyy à's' hh:mm:ss"}}</td>
+				<td>{{log|logUsername:dicUsuarios}}</td>
+				<td>{{log|logDescreveAcao:dicAcoes}}</td>
+			</tr>
+		</table>
+		<div ng-if="logs.length == 0">Nenhuma atividade encontrada para o período.</div>
+	</div>
+</div>
