@@ -2357,7 +2357,7 @@
 		// FIM DE ROTAS DE AÇÕES
 
 		// ROTAS DE LOGS
-			$app->get('/logs',function() use ($app,$db){
+			$app->get('/logs/',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');
 				$uid = 1*$_GET['uid'];
 				$aid = 1*$_GET['aid'];
