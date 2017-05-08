@@ -61,7 +61,16 @@
 						<a ng-click="itemClicked(5)" class="log" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/log">Log do Sistema</a>
 					</li>
 					<li>
-						<a ng-click="itemClicked(6)" class="cfg" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
+						<a ng-click="itemClicked(6)" class="cad" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }">Cadastrar...<span ng-if="menuExpanded" class="seta_direita"></span></a><span></span>
+						<ul>
+							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/disciplinas">Disciplinas</a></li>
+							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/usuarios">Usuários</a></li>
+							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/clientes">Clientes</a></li>
+							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/cargoss">Cargos</a></li>
+						</ul>
+					</li>
+					<li>
+						<a ng-click="itemClicked(7)" class="cfg" ng-class="{ 'selected': 7 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
 					</li>
 				</ul>
 			</nav>

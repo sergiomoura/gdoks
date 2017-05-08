@@ -100,10 +100,12 @@ nav a:hover span {
 nav .selected {
   background-color: rgba(43, 43, 43, 0.8);
   cursor: default;
-  text-decoration: underline;
   border-left: 5px solid #2196F3;
   padding-left: 5px;
   background-position-x: 1px; }
+
+nav .selected:focus {
+  outline: none; }
 
 nav .home {
   background-image: url(../img/icon_home.png); }
@@ -128,6 +130,9 @@ nav .cli {
 
 nav .log {
   background-image: url(../img/icon_log.png); }
+
+nav .cad {
+  background-image: url(../img/icon_clips.png); }
 
 nav .cfg {
   background-image: url(../img/icon_configuracoes.png); }
