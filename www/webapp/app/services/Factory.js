@@ -192,7 +192,7 @@ WebGDoks.factory('GDoksFactory',
 				if(!isNaN(q.aid)){query.push('aid='+q.aid)};
 				query.push('de='  + q.de.toJSON().substr(0,10));
 				query.push('ate=' + q.ate.toJSON().substr(0,10));
-				return $http.get(API_ROOT+'/logs/?'+query.join('&'),{headers: {'Authorization': $cookies.getObject('user').token}});		
+				return $http.get(API_ROOT+'/logs?'+query.join('&'),{headers: {'Authorization': $cookies.getObject('user').token}});		
 			}
 			return GDoksFactory;
 		}
