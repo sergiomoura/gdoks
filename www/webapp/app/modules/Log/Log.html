@@ -39,6 +39,7 @@
 			<md-button ng-click="getLogs()" class="md-raised md-primary" ng-disabled="!(acoesCarregadas && usuariosCarregados)">Buscar</md-button>
 		</md-input-container>
 	</div>
+
 	<div id="lista_de_logs">
 		<table ng-if="logs.length>0">
 			<tr ng-repeat="log in logs">
@@ -49,4 +50,5 @@
 		</table>
 		<div ng-if="logs.length == 0">Nenhuma atividade encontrada para o período.</div>
 	</div>
+	
 </div>
