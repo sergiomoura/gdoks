@@ -2357,13 +2357,18 @@
 		// FIM DE ROTAS DE AÇÕES
 
 		// ROTAS DE LOGS
-			$app->get('/logs/',function() use ($app,$db){
+			$app->get('/logs/:uid/:aid/:de/:ate',function($uid,$aid,$de,$ate) use ($app,$db){
 				$token = $app->request->headers->get('Authorization');
+				$uid = 1*$uid;
+				$aid = 1*$aid;
+				$de  = (DateTime::createFromFormat('Y-m-d', $de ))->format('Y-m-d').' 00:00:00';
+				$ate = (DateTime::createFromFormat('Y-m-d', $ate))->format('Y-m-d').' 23:59:59';
+				/*
 				$uid = 1*$_GET['uid'];
 				$aid = 1*$_GET['aid'];
 				$de  = (DateTime::createFromFormat('Y-m-d', $_GET['de'] ))->format('Y-m-d').' 00:00:00';
 				$ate = (DateTime::createFromFormat('Y-m-d', $_GET['ate']))->format('Y-m-d').' 23:59:59';
-
+				*/
 				$condicaoUid = ($uid == 0?"id_usuario>?":"id_usuario=?");
 				$condicaoAid = ($aid == 0?"id_acao>?":"id_acao=?");
 				
