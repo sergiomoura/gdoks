@@ -8,6 +8,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'ui.mask',
 								'ngFileUpload',
 								'angular-click-outside',
+								'Cargos',
 								'Clientes',
 								'Configuracoes',
 								'Disciplinas',
@@ -64,6 +65,13 @@ WebGDoks.config(
 			{
 				controller: 'UsuarioController',
 				templateUrl: 'app/modules/Usuarios/usuario.html'
+			}
+		)
+		.when(
+			'/cargos',
+			{
+				controller: 'CargosController',
+				templateUrl: 'app/modules/Cargos/cargos.html'
 			}
 		)
 		.when(

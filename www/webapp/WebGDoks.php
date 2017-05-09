@@ -66,7 +66,7 @@
 							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/disciplinas">Disciplinas</a></li>
 							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/usuarios">Usuários</a></li>
 							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/clientes">Clientes</a></li>
-							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/cargoss">Cargos</a></li>
+							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/cargos">Cargos</a></li>
 						</ul>
 					</li>
 					<li>
@@ -120,6 +120,7 @@
 		<!-- Scripts do app -->
 
 		<!-- Controllers -->
+		<script src="app/modules/Cargos/CargosController.js"></script>
 		<script src="app/modules/Clientes/ClientesController.js"></script>
 		<script src="app/modules/Configuracoes/ConfiguracoesController.js"></script>
 		<script src="app/modules/Documentos/DocumentosController.js"></script>
