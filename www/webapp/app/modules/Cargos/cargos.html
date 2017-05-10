@@ -13,7 +13,7 @@
 			</md-input-container>
 		</div>
 	</div>
-	<table>
+	<table ng-if="cargos.length>0">
 		<thead>
 			<tr>
 				<td>Nome</td>
@@ -36,4 +36,5 @@
 			</tr>
 		</tbody>
 	</table>
+	<div ng-if="cargos.length == 0">Nenhum cargo cadastrado nesta empresa.</div>
 </div>

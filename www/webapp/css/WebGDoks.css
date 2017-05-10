@@ -93,7 +93,8 @@
   padding: 40px 20px 20px 20px; }
 
 .cargo_dialog md-dialog-content {
-  overflow: hidden; }
+  overflow: hidden;
+  padding: 16px 0 0 0; }
 
 #cliente_container .bt_salvar {
   position: absolute;

@@ -2387,6 +2387,132 @@
 				
 			});
 		// FIM DE ROTAS DE LOGS
+
+		// ROTAS DE CLIENTES
+			$app->get('/cargos',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$sql = 'SELECT a.id,
+						       a.nome,
+						       a.hh
+						FROM gdoks_cargos a
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?) b ON a.id_empresa=b.id_empresa
+							ORDER by a.nome';
+				$response = new response(0,'ok');
+				$response->cargos = $db->query($sql,'s',$token);
+				$response->flush();
+			});
+
+			$app->get('/cargos/:id',function($id) use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$idCargo = 1*$id;
+				$sql = 'SELECT a.id,
+						       a.nome,
+						       a.hh
+						FROM gdoks_cargos a
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?) b ON a.id_empresa=b.id_empresa
+						WHERE a.id=?';
+				$response = new response(0,'ok');
+				$response->cargos = $db->query($sql,'si',$token,$idCargo);
+				$response->flush();
+			});
+
+			$app->put('/cargos/:id',function($id) use ($app,$db){
+				// Lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$cargo = json_decode($app->request->getBody());
+
+				// verifricando consistência de dados
+				if($cargo->id != $id){
+					$response = new response(1,'Dados inconsistentes.');
+					$response->flush();
+					die();
+				}
+				
+				// Verificando se o cargo é da mesma empresa do usuário
+				$sql = 'SELECT
+							A.id,COUNT(*) as ok
+						FROM (
+							SELECT
+								id,id_empresa
+							FROM gdoks.gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+							SELECT
+								id_empresa
+							FROM gdoks.gdoks_cargos
+								WHERE id=?) B on A.id_empresa=B.id_empresa;';
+				$rs = $db->query($sql,'si',$token,$id)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
+
+				// Indo adiante
+				if($ok == 1) {
+					$sql = "UPDATE gdoks_cargos
+							SET	
+								nome=?,
+         						hh=?
+                            WHERE id=?";
+                    try {
+                    	$db->query($sql,'sdi',$cargo->nome,$cargo->hh,$cargo->id);
+                    } catch (Exception $e) {
+                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+						$response->flush();
+						die();
+                    }
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					die();
+				}
+
+				// retornando
+				$response = new response(0,'Dados do cargo alterados com sucesso.');
+				$response->flush();
+
+				// registrando alteração
+				registrarAcao($db,$id_usuario,ACAO_ALTEROU_CARGO,$cargo->id.','.$cargo->nome.','.$cargo->hh);
+			});
+			
+			$app->post('/cargos',function() use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$cargo = json_decode($app->request->getBody());
+
+				// Capturando o id e o id_empresa do usuário atual
+				$sql = 'SELECT
+							id,id_empresa
+						FROM 
+							gdoks_usuarios
+						WHERE
+							token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token)[0];
+				$id_empresa = $rs['id_empresa'];
+				$id = $rs['id'];
+
+				// Inserindo novo cliente.
+				$sql = 'INSERT INTO gdoks_cargos (nome,hh,id_empresa) VALUES (?,?,?)';
+				try {
+					$db->query($sql,'sdi',$cargo->nome,$cargo->hh,$id_empresa);
+					$response = new response(0,'Cargo criado com sucesso.');
+					$response->newId = $db->insert_id;
+					$response->flush();
+				} catch (Exception $e) {
+					$app->response->setStatus(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					return;
+				}
+				// Registrando a ação
+				registrarAcao($db,$id,ACAO_ADICIONOU_CLIENTE,$db->insert_id.','.$cliente->nome);
+			});
+			
+		// FIM DE ROTAS DE CLIENTES
 	});
 
 

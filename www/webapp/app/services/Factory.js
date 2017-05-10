@@ -194,6 +194,19 @@ WebGDoks.factory('GDoksFactory',
 				query.push(q.ate.toJSON().substr(0,10));
 				return $http.get(API_ROOT+'/logs/'+query.join('/'),{headers: {'Authorization': $cookies.getObject('user').token}});		
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getCargos = function(){
+				return $http.get(API_ROOT+'/cargos',{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.atualizarCargo = function(cargo){
+				return $http.put(API_ROOT+'/cargos/'+cargo.id,cargo, {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.inserirCargo = function(cargo){
+				return $http.post(API_ROOT+'/cargos/',cargo, {headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+
 			return GDoksFactory;
 		}
 	]
