@@ -160,7 +160,7 @@ WebGDoks.config(function($mdDateLocaleProvider) {
 
 // Definindo próprio controller
 WebGDoks.controller('RootController',RootController);
-function RootController($scope,$interval,$cookies,GDoksFactory){
+function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav){
 
 	// definindo o objeto root.
 	$scope.root = {};
@@ -404,17 +404,16 @@ function RootController($scope,$interval,$cookies,GDoksFactory){
 	// Acionando timer que renova o token de tempo em tempo
 	$interval(refreshToken,TOKEN_REFRESH_IN);
 	
-	// Definindo valores padrão para a interface
-	$scope.root.itemSelecionadoDoMenu = 0;
-
-	// Defininfo valor inicial do item do submenu de projetos.
-	$scope.root.itemSelecionadoDoPrjMenu = "prj_documentos";
-
 	// definindo valor inicial para mostrandoMenu
 	$scope.root.mostrandoMenu = false;
 
 	// definindo o objeto que guarda as info do usuário logado.
 	$scope.root.user = $cookies.getObject('user');
+
+	$scope.toggleMenu = function(){
+		$mdSidenav('menu_principal').toggle();
+		console.log(1)
+	}
 }
 
 

@@ -5,10 +5,11 @@
   margin: 0;
   padding: 0 16px;
   border-radius: 0;
-  background-color: #fff;
+  background-color: #ffffff;
   text-align: left;
   text-rendering: optimizeLegibility;
-  text-transform: none; }
+  text-transform: none;
+  }
   .md-sidemenu .md-button:hover {
     background-color: #eee; }
 
@@ -24,7 +25,8 @@ md-sidemenu-button {
 
 .md-sidemenu-button md-icon:first-child {
   max-width: 24px;
-  margin-right: 32px; }
+  margin-right: 14px;
+  }
 
 .md-sidemenu-button span {
   flex: 1; }
@@ -55,7 +57,8 @@ md-sidemenu-button {
 
 .md-sidemenu-toggle md-icon:first-child {
   max-width: 24px;
-  margin-right: 32px; }
+  margin-right: 14px;
+  }
 
 .md-sidemenu-toggle.md-active md-icon:last-child {
   transform: rotate(180deg) translateZ(0); }

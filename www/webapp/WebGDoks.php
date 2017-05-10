@@ -14,14 +14,14 @@
 
 		<link rel="stylesheet" href="css/normalizer.css">
 		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/angular-material-sidemenu.css">
+		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/WebGDoks.css">
 		<link rel="stylesheet" type="text/css" href="css/ng-tags-input.css">
 	</head>
 	<body ng-controller="RootController" layout="column" ng-cloak>
 		<md-toolbar layout="row" layout-align="start center" md-whiteframe="6dp" style="z-index: 100">
-			<md-button class="md-icon-button" aria-label="Settings">
+			<md-button class="md-icon-button" aria-label="Settings" ng-click="toggleMenu()">
 				<md-icon class="material-icons step" aria-label="menu">list</md-icon>
 			</md-button>
 			<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
@@ -31,7 +31,7 @@
 			</md-button>
 		</md-toolbar>
 		<div layout="row" style="height:100%">
-			<md-sidenav layout="column" md-is-locked-open='true' md-whiteframe="1dp">
+			<md-sidenav layout="column" md-is-locked-open="root.mostrandoMenu" md-whiteframe="1dp" md-component-id="menu_principal">
 				<md-sidemenu>
 					<md-sidemenu-button href="#/dashboard"><md-icon class="material-icons step" aria-label="home">home</md-icon>Home</md-sidemenu-button>
 					<md-sidemenu-group>

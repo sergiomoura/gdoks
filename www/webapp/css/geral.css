@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html {
   height: 100%; }
 
@@ -343,5 +344,18 @@ help:hover > text {
   vertical-align: middle;
   color: #FF5722;
   text-align: justify; }
+
+/* Corre├º├Áes no Angular Material */
+.md-sidemenu {
+  margin-top: 64px;
+  color: #757575; }
+
+.md-sidemenu-button md-icon:first-child {
+  max-width: 24px;
+  margin-right: 14px; }
+
+.md-sidemenu-toggle md-icon:first-child {
+  max-width: 24px;
+  margin-right: 14px; }
 
 /*# sourceMappingURL=geral.css.map */
