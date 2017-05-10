@@ -160,7 +160,7 @@ WebGDoks.config(function($mdDateLocaleProvider) {
 
 // Definindo próprio controller
 WebGDoks.controller('RootController',RootController);
-function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav){
+function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMenu){
 
 	// definindo o objeto root.
 	$scope.root = {};
@@ -404,22 +404,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav){
 	// Acionando timer que renova o token de tempo em tempo
 	$interval(refreshToken,TOKEN_REFRESH_IN);
 	
-	// definindo valor inicial para mostrandoMenu
-	$scope.root.mostrandoMenu = false;
-
 	// definindo o objeto que guarda as info do usuário logado.
 	$scope.root.user = $cookies.getObject('user');
 
 	$scope.toggleMenu = function(){
 		$mdSidenav('menu_principal').toggle();
-		console.log(1)
 	}
 }
-
-
-// Definindo opções do DatePiscker
-var datePickerOptions = {};
-datePickerOptions.dayNamesMin = [ "D", "S", "T", "Q", "Q", "S", "S" ];
-datePickerOptions.monthNames = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-datePickerOptions.dateFormat = "yy-mm-dd";
-datePickerOptions.showAnim = "";

@@ -86,6 +86,15 @@
   background-image: url(../img/onoff.png);
   background-position: 8px 5px; }
 
+#cargos_container {
+  padding: 20px; }
+
+.cargo_dialog {
+  padding: 40px 20px 20px 20px; }
+
+.cargo_dialog md-dialog-content {
+  overflow: hidden; }
+
 #cliente_container .bt_salvar {
   position: absolute;
   right: 15px; }

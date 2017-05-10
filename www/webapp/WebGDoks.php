@@ -26,9 +26,25 @@
 			</md-button>
 			<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
 			<span flex></span>
-			<md-button class="md-icon-button" aria-label="Settings">
-				<md-icon class="material-icons step" aria-label="description">more_vert</md-icon>
-			</md-button>
+			<md-menu ng-controller="OpcoesController">
+				<md-button ng-click="$mdOpenMenu()" aria-label="Abre Menu de Oções" class="md-icon-button">
+					<md-icon class="material-icons step" aria-label="menu">more_vert</md-icon>
+				</md-button>
+				<md-menu-content width="4">
+					<md-menu-item>
+						<md-button ng-click="onTrocarSenhaClick()">
+							<md-icon class="material-icons step" aria-label="Trocar Senha">lock_outline</md-icon>
+							Trocar Senha
+						</md-button>
+					</md-menu-item>
+					<md-menu-item>
+						<md-button ng-click="logout()">
+							<md-icon class="material-icons step" aria-label="Sair do GDoks">exit_to_app</md-icon>
+							Sair
+						</md-button>
+					</md-menu-item>
+				</md-menu-content>
+			</md-menu>
 		</md-toolbar>
 		<div layout="row" style="height:100%">
 			<md-sidenav layout="column" md-is-locked-open="root.mostrandoMenu" md-whiteframe="1dp" md-component-id="menu_principal">
@@ -60,80 +76,6 @@
 			</md-content>
 		</div>
 	</body>
-	<!--
-	<body ng-controller="RootController">
-		<div id="topo" ng-controller="TopoController">
-			<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
-			<a ng-click="toggleOpcoesMenu()" id="lk_opcoes"></a>
-		</div>
-		
-		<div id="container_horizontal">
-			<nav id="menu" ng-controller="NavController" ng-class="{nav_expanded:menuExpanded}" ng-mouseenter="expandMenu()" ng-mouseleave="contractMenu()">
-				<ul>
-					<li>
-						<a ng-class="{ 'selected': 0 == root.itemSelecionadoDoMenu }" href="#/projetos" class="prj">Projetos<span ng-if="menuExpanded" class="seta_direita"></span></a>
-						<ul>
-							<li><a ng-click="itemClicked(0)" href="#/visaogeral">Visão Geral</a></li>
-							<li><a ng-click="itemClicked(0)" href="#/projetos">Ver Todos Projetos</a></li>
-							<li><a ng-click="itemClicked(0)" href="#/projetos/0">Cadastrar Novo Projeto</a></li>
-							<li>
-								<a ng-click="itemClicked(0)">Ir Para Projeto<span class="seta_direita"></span></a>
-								<ul>
-									<li><a ng-click="itemClicked(0)" href="#/projetos/1">Projeto 1</a></li>
-									<li><a ng-click="itemClicked(0)" href="#/projetos/2">Projeto 2</a></li>
-									<li><a ng-click="itemClicked(0)" href="#/projetos/3">Projeto 3</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a ng-click="itemClicked(1)" class="usu" ng-class="{ 'selected': 1 == root.itemSelecionadoDoMenu }" href="#/usuarios">Usuários</a>
-					</li>
-					<li>
-						<a ng-click="itemClicked(2)" class="doc" ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" href="#/documentos">Documentos<span ng-if="menuExpanded" class="seta_direita"></span></a><span></span>
-						<ul>
-							<li><a ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(2)" href="#/documentos">para Atualizar</a></li>
-							<li><a ng-class="{ 'selected': 2 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(2)" href="#/dpvs">para Validar</a></li>
-						</ul>
-					</li>
-					<li>
-						<a ng-click="itemClicked(3)" class="dsc" ng-class="{ 'selected': 3 == root.itemSelecionadoDoMenu }" href="#/disciplinas">Disciplinas</a>
-					</li>
-					<li>
-						<a ng-click="itemClicked(4)" class="cli" ng-class="{ 'selected': 4 == root.itemSelecionadoDoMenu }" href="#/clientes">Clientes</a>
-					</li>
-					<li>
-						<a ng-click="itemClicked(5)" class="log" ng-class="{ 'selected': 5 == root.itemSelecionadoDoMenu }" href="#/log">Log do Sistema</a>
-					</li>
-					<li>
-						<a ng-click="itemClicked(6)" class="cad" ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }">Cadastrar...<span ng-if="menuExpanded" class="seta_direita"></span></a><span></span>
-						<ul>
-							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/disciplinas">Disciplinas</a></li>
-							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/usuarios">Usuários</a></li>
-							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/clientes">Clientes</a></li>
-							<li><a ng-class="{ 'selected': 6 == root.itemSelecionadoDoMenu }" ng-click="itemClicked(6)" href="#/cargos">Cargos</a></li>
-						</ul>
-					</li>
-					<li>
-						<a ng-click="itemClicked(7)" class="cfg" ng-class="{ 'selected': 7 == root.itemSelecionadoDoMenu }" href="#/configuracoes">Configurações</a>
-					</li>
-				</ul>
-			</nav>
-			<div id="view_container">
-				<div id="view" ng-view></div>
-			</div>
-		</div>
-		<div id="opcoes" ng-controller="OpcoesController">
-			<a class="trocar_senha" ng-click="onTrocarSenhaClick()" href="#/senha">Trocar Senha</a>
-			<a class="sair" ng-click="logout()">Sair</a>
-		</div>
-		<div id="ua">
-			<?php
-				echo('Última Atualização: '.date('d/m/Y H:i:s - e',filemtime(realpath('../'))));
-			?>
-		</div>
-	</body>
-	-->
 	<!-- carregamento do angular 1.4.4 local --
 	<script src="js/angular/angular.min.js"></script>
 	<script src="js/angular/angular-route.min.js"></script>

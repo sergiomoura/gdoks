@@ -10,13 +10,6 @@ body {
   color: #2196F3;
   height: 100%; }
 
-input[type=text], input[type=password], textarea {
-  border: 1px solid #2196F3;
-  background-color: #FFF; }
-
-input[type=checkbox] {
-  margin-right: 5px; }
-
 button {
   font-family: "Poppins", sans-serif; }
 
@@ -249,7 +242,8 @@ ng-view .container_80 {
 
 .bloco_conteudo table > thead > tr > td {
   color: #2196F3;
-  font-size: 18px; }
+  font-size: 18px;
+  }
 
 .bloco_conteudo table > tbody > tr > td {
   color: #2B2B2B;
@@ -357,5 +351,8 @@ help:hover > text {
 .md-sidemenu-toggle md-icon:first-child {
   max-width: 24px;
   margin-right: 14px; }
+
+.md-button {
+  text-transform: none; }
 
 /*# sourceMappingURL=geral.css.map */

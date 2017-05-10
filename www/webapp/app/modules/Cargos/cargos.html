@@ -1,7 +1,39 @@
-<md-card>
-		<md-tabs>
-		  <md-tab label="Tab #1">1</md-tab>
-		  <md-tab label="Tab #2">2</md-tab>
-		  <md-tab label="Tab #3">3</md-tab>
-		</md-tabs>
-</md-card>
+<div md-whiteframe="dp" id="cargos_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp" layout="column">
+	<h1>Cargos</h1>
+	<div layout="row">
+		<div class="controles_esquerda" layout="row" layout-align="start start">
+			<md-button class="md-raised" aria-label="Novo Cargo" ng-click="openDialog($event,0)">Novo Cargo</md-button>
+		</div>
+		<span flex></span>
+		<div class="controles_direita" layout="row" layout-align="end start">
+			<md-input-container>
+				<label>Buscar por Cargo</label>
+				<md-icon class="material-icons step" aria-label="Buscar Cargo">search</md-icon>
+				<input type="text" ng-model="q.nome" placeholder="Digite">
+			</md-input-container>
+		</div>
+	</div>
+	<table>
+		<thead>
+			<tr>
+				<td>Nome</td>
+				<td>Valor da Hora x Homem (HH)</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="cargo in cargos|filter:q as result">
+				<td>{{cargo.nome}}</td>
+				<td>{{cargo.hh|currency:'R$ '}}</td>
+				<td>
+					<md-button class="md-icon-button" aria-label="Remover Cargo" ng-click="openConfirm($event,cargo.id)">
+						<md-icon class="material-icons step" aria-label="Remover Cargo">delete</md-icon>
+					</md-button>
+					<md-button class="md-icon-button" aria-label="Alterar Cargo" ng-click="openDialog($event,cargo.id)">
+						<md-icon class="material-icons step" aria-label="Alterar Cargo">mode_edit</md-icon>
+					</md-button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

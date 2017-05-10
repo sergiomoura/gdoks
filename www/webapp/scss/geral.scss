@@ -14,14 +14,6 @@ body {
 	height: 100%;
 }
 
-input[type=text],input[type=password],textarea{
-	border: 1px solid $azul;
-	background-color: #FFF;
-}
-
-input[type=checkbox]{
-	margin-right: 5px;
-}
 button {
 	font-family: $fontFamily;
 }
@@ -419,4 +411,8 @@ help:hover>text{
 .md-sidemenu-toggle md-icon:first-child {
     max-width: 24px;
     margin-right: 14px;
+}
+
+.md-button{
+    text-transform: none;
 }

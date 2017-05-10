@@ -1,7 +1,7 @@
 angular.module('Opcoes',[])
-.controller('OpcoesController',function($scope,$cookies){
+.controller('OpcoesController',function($scope,$cookies,$location){
 	$scope.onTrocarSenhaClick  = function(){
-		$scope.root.itemSelecionadoDoMenu = null;
+		$location.path("/senha");
 	}
 	$scope.logout = function(){
 		$cookies.put('token',null);
