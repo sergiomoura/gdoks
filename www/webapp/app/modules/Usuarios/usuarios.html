@@ -1,7 +1,7 @@
 <div id="usuarios_container" class="container_80">
 	<button class="bt_salvar" ng-click="goToAddUsuario()">+ Adicionar Usuário</button>
 	<div class="lista">
-		<a ng-repeat="u in usuarios" href="#/usuarios/{{u.id}}" class="bloco_conteudo usuario">
+		<a ng-repeat="u in usuarios" href="#/usuarios/{{u.id}}" class="bloco_conteudo usuario" md-whiteframe="1dp">
 			<h2>{{u.nome}}</h2>
 			<h3>{{u.email}}</h3>
 		</a>

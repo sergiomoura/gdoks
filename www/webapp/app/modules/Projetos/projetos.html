@@ -2,7 +2,7 @@
 	<button class="bt_salvar" ng-click="goToAddProjeto()">+ Cadastrar Novo Projeto</button>
 	<div class="lista">
 		<span ng-if="projetos.length == 0">Não existe nenhum projeto cadastrado.</span>
-		<a ng-repeat="p in projetos" href="#/projetos/{{p.id}}" class="bloco_conteudo projeto">
+		<a ng-repeat="p in projetos" href="#/projetos/{{p.id}}" class="bloco_conteudo projeto" md-whiteframe="1dp">
 			<h2>{{p.nome}}</h2>
 			<h3>{{p.codigo}}</h3>
 		</a>

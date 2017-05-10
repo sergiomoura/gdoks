@@ -14,7 +14,7 @@
 
         .cliente{
             display: inline-block;
-            width: 100%;
+            width: calc(100% - 23px);
             margin-bottom: 20px;
             padding: 20px;
             text-decoration: none;

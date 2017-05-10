@@ -1,6 +1,6 @@
 <div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
 <form name="form_projetoInfo" novalidate>
-	<div id="addprojeto_container" class="bloco_conteudo bloco_central_80">
+	<div id="addprojeto_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
 		<h1><img src="img/projeto.png">Dados {{ (projeto.id == 0 || projeto.id==undefinded) ? "do Novo Projeto" : "do Projeto " + projeto.nome}}</h1>
 		<div>
 			<div class="item">
@@ -46,7 +46,7 @@
 	</div>
 </form>
 
-<div ng-if="projeto.id!=0" id="addprojeto_areas_container" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosAreasController">
+<div ng-if="projeto.id!=0" id="addprojeto_areas_container" md-whiteframe="1dp" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosAreasController">
 	<h1>Áreas de {{projeto.nome}}</h1>
 	<table>
 		<thead>
@@ -82,7 +82,7 @@
 	<button class="bt_adicionar" ng-click="editarArea(0)" ng-disabled="areaEditada.id==0">+ Adicionar Área</button>
 </div>
 
-<div ng-if="projeto.id!=0" id="addprojeto_dao_container" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosDAOsController">
+<div ng-if="projeto.id!=0" id="addprojeto_dao_container" md-whiteframe="1dp" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosDAOsController">
 	<h1>Documentos de Abertura de Operações</h1>
 	<form id="form_daos" name="form_daos" novalidate>
 		<button ngf-select ng-model="daoFiles" ngf-multiple="true" ng-model="daoFiles" class="bt_upload" ng-disabled="daoFiles.length>0">Selecione Documentos de Abertura de Operções ...</button>
@@ -136,7 +136,7 @@
 	</div>
 </div>
 
-<div ng-if="projeto.id!=0" id="addprojeto_documentos_container" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosDocumentosController">
+<div ng-if="projeto.id!=0" id="addprojeto_documentos_container" md-whiteframe="1dp" class="bloco_conteudo bloco_central_80" ng-controller="ProjetosDocumentosController">
 	<h1>Documentos</h1>
 	<table>
 		<thead>

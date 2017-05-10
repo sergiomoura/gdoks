@@ -17,8 +17,7 @@
   background-position-x: 13px; }
 
 #logo {
-  margin: 6px;
-  }
+  margin: 6px; }
 
 #container_horizontal {
   position: fixed;
@@ -28,126 +27,6 @@
   height: calc(100% - 36px);
   width: 100%;
   overflow: auto; }
-
-nav {
-  position: fixed;
-  left: 0px;
-  top: 36px;
-  transition: width 0.3s;
-  transition-timing-function: ease-out;
-  height: calc(100% - 36px);
-  background-color: RGBA(43, 43, 43, 0.8);
-  width: 50px;
-  overflow: hidden; }
-
-.nav_expanded {
-  overflow: visible;
-  width: 201px; }
-
-nav ul {
-  list-style: none;
-  position: relative;
-  float: left;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%; }
-
-nav ul a {
-  cursor: pointer;
-  display: block;
-  text-decoration: none;
-  color: #FFF;
-  font-size: 16px;
-  padding: 7px 10px;
-  width: calc(100% + -20px);
-  white-space: nowrap; }
-
-nav > ul > li li a {
-  background-color: rgba(43, 43, 43, 0.8); }
-
-nav > ul > li ul {
-  position: absolute;
-  margin-top: -41px;
-  margin-left: 100%;
-  padding: 0;
-  display: none; }
-
-nav > ul li:hover > ul {
-  display: block; }
-
-nav li {
-  list-style: none;
-  display: block;
-  position: relative;
-  width: 100%; }
-
-nav > ul > li > a {
-  text-indent: 45px;
-  background-repeat: no-repeat;
-  background-position: 6px 5px; }
-
-nav > ul > li:last-child {
-  position: absolute;
-  bottom: 0px;
-  width: 100%; }
-
-nav a:hover {
-  background-color: #296a9e; }
-
-nav a:hover span {
-  opacity: 1; }
-
-nav .selected {
-  background-color: rgba(43, 43, 43, 0.8);
-  cursor: default;
-  border-left: 5px solid #2196F3;
-  padding-left: 5px;
-  background-position-x: 1px; }
-
-nav .selected:focus {
-  outline: none; }
-
-nav .home {
-  background-image: url(../img/icon_home.png); }
-
-nav .prj {
-  background-image: url(../img/icon_projetos.png); }
-
-nav .usu {
-  background-image: url(../img/icon_usuarios.png); }
-
-nav .doc {
-  background-image: url(../img/icon_documentos.png); }
-
-nav .dsc {
-  background-image: url(../img/icon_disciplinas.png); }
-
-nav .cal {
-  background-image: url(../img/icon_calendario.png); }
-
-nav .cli {
-  background-image: url(../img/icon_clientes.png); }
-
-nav .log {
-  background-image: url(../img/icon_log.png); }
-
-nav .cad {
-  background-image: url(../img/icon_clips.png); }
-
-nav .cfg {
-  background-image: url(../img/icon_configuracoes.png); }
-
-#view_container {
-  width: calc(100% - 50px);
-  position: relative;
-  transition: width 0.3s, left 0.3s;
-  transition-timing-function: ease-out;
-  left: 50px;
-  min-width: 800px;
-  top: 0px;
-  z-index: -1;
-  height: 100%; }
 
 #view {
   width: 100%;
@@ -224,7 +103,7 @@ nav .cfg {
   column-gap: 40px; }
   #clientes_container .lista .cliente {
     display: inline-block;
-    width: 100%;
+    width: calc(100% - 23px);
     margin-bottom: 20px;
     padding: 20px;
     text-decoration: none;
@@ -374,7 +253,7 @@ nav .cfg {
   display: inline-block;
   padding: 10px 10px 0px 10px;
   position: relative;
-  margin-bottom: 30px;
+  margin: 2px 2px 30px 2px;
   width: 100%; }
 
 #lista_de_docs > * > .locked {
@@ -660,7 +539,7 @@ nav .cfg {
   display: inline-block;
   padding: 10px 10px 0px 10px;
   position: relative;
-  margin-bottom: 30px;
+  margin: 3px 3px 30px 3px;
   width: 100%; }
 
 #lista_de_dpvs > * > .bloco_conteudo .data_limite {
@@ -1026,11 +905,11 @@ nav .cfg {
 .lista {
   position: relative;
   top: 60px;
-  column-count: 4;
+  column-count: 3;
   column-gap: 40px; }
   .lista .usuario {
     display: inline-block;
-    width: 100%;
+    width: calc(100% - 23px);
     margin-bottom: 20px;
     padding: 20px;
     text-decoration: none;

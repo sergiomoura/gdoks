@@ -1,6 +1,6 @@
 <div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
 <form name="form_disciplina" novalidate="">
-	<div id="disciplina_container" class="bloco_conteudo bloco_central_80">
+	<div id="disciplina_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
 		<h1><img src="img/disciplina.png">Dados de {{ disciplina.id==0 ? 'Nova Disciplina' : disciplina.nome}}</h1>
 		<div>
 			<div class="item">
@@ -23,7 +23,7 @@
 </form>
 
 <div class="avisa_resultado_50 negativo" ng-show="erroEmOperacaoDeSubdisciplina!=null">{{erroEmOperacaoDeSubdisciplina}}</div>
-<div ng-if="disciplina.id!=0" id="subdisciplina_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="disciplina.id!=0" id="subdisciplina_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
 	<h1>Subdisciplinas de {{disciplina.nome}}</h1>
 	<table>
 		<thead>
@@ -69,7 +69,7 @@
 	</help>
 </div>
 
-<div ng-if="disciplina.id!=0" id="especialista_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="disciplina.id!=0" id="especialista_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
 	<h1>Especialistas de {{disciplina.nome}}</h1>
 	<table>
 		<thead>
@@ -113,7 +113,7 @@
 	</help>
 </div>
 
-<div ng-if="disciplina.id!=0" id="validador_container" class="bloco_conteudo bloco_central_80">
+<div ng-if="disciplina.id!=0" id="validador_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
 	<h1>Validadores da {{disciplina.nome}}</h1>
 	<table>
 		<thead>
