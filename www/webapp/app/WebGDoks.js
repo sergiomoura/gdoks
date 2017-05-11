@@ -158,6 +158,13 @@ WebGDoks.config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.msgOpenCalendar = 'Abrir calendário';
 });
 
+// Configurando cores
+WebGDoks.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryPalette('blue')
+    .accentPalette('orange',{'default':'800'});
+})
+
 // Definindo próprio controller
 WebGDoks.controller('RootController',RootController);
 function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMenu){
