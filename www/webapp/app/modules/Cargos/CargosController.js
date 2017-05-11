@@ -2,7 +2,7 @@
 	
 	var modCargos = angular.module('Cargos',[]);
 
-	var CargosController = function($scope,$mdDialog,GDoksFactory){
+	var CargosController = function($scope,$mdDialog,GDoksFactory,$mdToast){
 
 		$scope.cargos = [];
 
@@ -26,20 +26,51 @@
 
 			$mdDialog.show(
 				{
-					controller: function($scope,cargo,parentCargo){
+					controller: function($scope,cargo,parentCargo,parentCargos){
 						$scope.cargo = cargo;
 
 						$scope.salvar = function(cargo){
 							if(cargo.id == 0){
-								GDoksFactory.inserirCargo(cargo);
+								GDoksFactory.inserirCargo(cargo)
+								.success(function(response){
+									cargo.id = response.newId;
+									parentCargos.push(cargo);
+									$mdToast.show(
+										$mdToast.simple()
+										.textContent('Novo cargo inserido com sucesso!')
+										.position('bottom left')
+										.hideDelay(5000)
+									);
+								})
+								.error(function(err){
+									console.dir(err);
+									$mdToast.show(
+										$mdToast.simple()
+										.textContent('Um erro ocorreu. Não foi possível completar ação!')
+										.position('bottom left')
+										.hideDelay(5000)
+									);
+								});
 							} else {
 								GDoksFactory.atualizarCargo(cargo)
 								.success(function(response){
 									parentCargo.hh = cargo.hh;
 									parentCargo.nome = cargo.nome;
+									$mdToast.show(
+										$mdToast.simple()
+										.textContent('Cargo alterado com sucesso!')
+										.position('bottom left')
+										.hideDelay(5000)
+									);
 								})
 								.error(function(err){
 									console.dir(err);
+									$mdToast.show(
+										$mdToast.simple()
+										.textContent('Um erro ocorreu. Não foi possível completar ação!')
+										.position('bottom left')
+										.hideDelay(5000)
+									);
 								});
 							}
 
@@ -48,14 +79,13 @@
 						};
 
 						$scope.cancelar = function(cargo){
-							console.log('Cancelando:');
-							console.dir(cargo);
 							$mdDialog.hide(cargo);
 						}
 					},
 					locals:{
 						cargo:angular.copy(cargoClicado),
-						parentCargo:cargoClicado
+						parentCargo:cargoClicado,
+						parentCargos:$scope.cargos
 					},
 					templateUrl: './app/modules/Cargos/cargo-dialog.tmpl.html',
 					parent: angular.element(document.body),
@@ -68,6 +98,32 @@
 				$scope.status = 'You cancelled the dialog.';
 				});
 		}
+
+		$scope.openConfirm = function(ev,idCargo) {
+			// Appending dialog to document.body to cover sidenav in docs app
+			var confirm = $mdDialog.confirm()
+				.title('Tem certeza que deseja remover este cargo?')
+				.textContent('A ação não poderá ser desfeita.')
+				.ariaLabel('Deseja remover o cargo')
+				.targetEvent(ev)
+				.ok('Sim')
+				.cancel('Não');
+
+			$mdDialog.show(confirm).then(
+				function() {
+					GDoksFactory.removerCargo(idCargo)
+					.success(function(response){
+						$scope.cargos = $scope.cargos.filter(function(c){return c.id!= this},idCargo);
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Cargo removido!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					})
+				}
+			);
+		};
 	}
 
 	modCargos.controller('CargosController',CargosController);

@@ -22,7 +22,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="cargo in cargos|filter:q as result">
+			<tr ng-repeat="cargo in cargos|orderBy:nome|filter:q as result">
 				<td>{{cargo.nome}}</td>
 				<td>{{cargo.hh|currency:'R$ '}}</td>
 				<td>

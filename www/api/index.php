@@ -2388,7 +2388,7 @@
 			});
 		// FIM DE ROTAS DE LOGS
 
-		// ROTAS DE CLIENTES
+		// ROTAS DE CARGOS
 			$app->get('/cargos',function() use ($app,$db){
 				$token = $app->request->headers->get('Authorization');
 				$sql = 'SELECT a.id,
@@ -2509,10 +2509,55 @@
 					return;
 				}
 				// Registrando a ação
-				registrarAcao($db,$id,ACAO_ADICIONOU_CLIENTE,$db->insert_id.','.$cliente->nome);
+				registrarAcao($db,$id,ACAO_ADICIONOU_CARGO,$db->insert_id.','.$cargo->nome,$cargo->hh);
 			});
 			
-		// FIM DE ROTAS DE CLIENTES
+			$app->delete('/cargos/:id',function($id) use ($app,$db){
+				// Lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$idCargo = 1*$id;
+
+				// Verificando se o cargo é da mesma empresa do usuário
+				$sql = 'SELECT
+							A.id,COUNT(*) as ok
+						FROM (
+							SELECT
+								id,id_empresa
+							FROM gdoks.gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+							SELECT
+								id_empresa
+							FROM gdoks.gdoks_cargos
+								WHERE id=?) B on A.id_empresa=B.id_empresa;';
+				$rs = $db->query($sql,'si',$token,$id)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
+
+				// Indo adiante
+				if($ok == 1) {
+					$sql = "DELETE FROM gdoks_cargos WHERE id=?";
+                    try {
+                    	$db->query($sql,'i',$idCargo);
+                    } catch (Exception $e) {
+                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+						$response->flush();
+						die();
+                    }
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					die();
+				}
+
+				// retornando
+				$response = new response(0,'Cargo removido com sucesso.');
+				$response->flush();
+
+				// registrando alteração
+				registrarAcao($db,$id_usuario,ACAO_REMOVEU_CARGO,$idCargo);
+			});
+		// FIM DE ROTAS DE CARGOS
 	});
 
 
