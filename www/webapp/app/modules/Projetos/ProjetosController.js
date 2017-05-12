@@ -37,8 +37,6 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 		evt.target.result.transaction("clientes").objectStore("clientes").getAll().onsuccess = function(evt){
 			$scope.$apply(function(){
 				$scope.clientes.dados = evt.target.result;
-				$scope.clientes.dados.unshift({'id':0,'nome':'Selecione o cliente...'});
-				$scope.clientes.selecionado = $scope.clientes.dados[0];
 				clientesCarregados = true;
 				mostraProjeto();
 			});
@@ -52,8 +50,6 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 		evt.target.result.transaction("usuarios").objectStore("usuarios").getAll().onsuccess = function(evt){
 			$scope.$apply(function(){
 				$scope.usuarios.dados = evt.target.result;
-				$scope.usuarios.dados.unshift({'id':0,'nome':'Selecione um responsável...'})
-				$scope.usuarios.selecionado = $scope.usuarios.dados[0];
 				usuariosCarregados = true;
 				mostraProjeto();
 			});

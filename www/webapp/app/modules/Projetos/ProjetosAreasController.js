@@ -1,85 +1,128 @@
 angular.module('Projetos').controller('ProjetosAreasController',ProjetosAreasController);
-function ProjetosAreasController($scope,GDoksFactory){
-	// Definindo função que remove área
-	$scope.removerArea = function(id){
-		if(confirm("Tem certeza que deseja excluir a área? A ação não poderá ser desfeita.")){
-			var area = $scope.projeto.areas.find(function(a){return a.id == this},id);
-			area.id_projeto = $scope.projeto.id;
-			GDoksFactory.removerArea(area)
-				.success(
-					function(response){
-						$scope.projeto.areas = $scope.projeto.areas.filter(function(a){return a.id!=this},id);
-					}
-				)
-				.error(
-					function(error){
-						$scope.erroEmOperacaoDeSubdisciplina = error.msg;
-					}
-				);
-		}
-	}
+function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
+	$scope.openAreaDialog = function(ev,idArea){
+		// Declarando o objeto area clicado
+		var areaClicada;
 
-	// definindo função que edita area
-	$scope.editarArea = function(id){
-		if(id != 0){
-			$scope.projeto.areas = $scope.projeto.areas.filter(function(a){return a.id!=0});
-			$scope.areaEditada = angular.copy($scope.projeto.areas.filter(function(a){return a.id == this},id)[0]);
-			$scope.areaEditada.id_projeto = $scope.projeto.id;
-			setTimeout(function(){document.getElementById("codigo_area_"+id).focus()},10);
+		// Definindo o objeto area clicado
+		if(idArea == 0) {
+			areaClicada = {id:0,nome:null,codigo:null};
 		} else {
-			$scope.areaEditada = {};
-			$scope.areaEditada.id = 0;
-			$scope.areaEditada.id_projeto = $scope.projeto.id;
-			$scope.areaEditada.nome = "";
-			$scope.areaEditada.codigo = "";
-			$scope.projeto.areas.push($scope.areaEditada);
-			setTimeout(function(){document.getElementById("codigo_area_0").focus()},10);
+			areaClicada = $scope.projeto.areas.find(function(a){return a.id == this},idArea);
 		}
-	}
+		areaClicada.id_projeto = $scope.projeto.id;
 
-	// definindo função que cancela alterações em area
-	$scope.cancelarAlteracoesEmArea = function(){
-		if($scope.areaEditada.id == 0){
-			$scope.projeto.areas = $scope.projeto.areas.filter(function(a){return a.id!=0});
-		}
-		$scope.areaEditada = null;
-	}
+		$mdDialog.show(
+			{
+				controller: function($scope,area,parentArea,parentAreas){
+					
+					$scope.area = area;
+					$scope.salvar = function(area){
+						if(area.id == 0){
+							GDoksFactory.adicionarArea(area)
+							.success(function(response){
+								area.id = response.newId;
+								parentAreas.push(area);
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Nova área inserida com sucesso!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							})
+							.error(function(err){
+								console.dir(err);
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Um erro ocorreu. Não foi possível completar ação!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							});
+						} else {
+							GDoksFactory.atualizarArea(area)
+							.success(function(response){
+								parentArea.nome = area.nome;
+								parentArea.codigo = area.codigo;
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Área alterada com sucesso!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							})
+							.error(function(err){
+								console.dir(err);
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Um erro ocorreu. Não foi possível completar ação!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							});
+						}
 
-	// definindo função que salva alterações em area
-	$scope.salvarArea = function(){
-		if($scope.areaEditada != null){
-			if($scope.areaEditada.id != 0){
-				GDoksFactory.atualizarArea($scope.areaEditada)
-					.success(
-						function(response){
-							
-							var area = $scope.projeto.areas.find(function(a){return a.id == this},$scope.areaEditada.id);
-							area.nome = $scope.areaEditada.nome;
-							area.codigo = $scope.areaEditada.codigo;
-							
-							$scope.areaEditada = null;
-							$scope.erroEmOperacaoDeArea = null;
-						}
-					)
-					.error(
-						function(error){
-							$scope.erroEmOperacaoDeArea = error.msg;
-						}
-					);
-			} else {
-				GDoksFactory.adicionarArea($scope.areaEditada)
-					.success(
-						function(response){
-							$scope.areaEditada.id = response.newId;
-							$scope.areaEditada = null;
-						}
-					)
-					.error(
-						function(error){
-							$scope.erroEmOperacaoDeArea = error.msg;
-						}
-					);
+						// Escondendo o dialog.
+						$mdDialog.hide(area);
+					};
+					
+					$scope.cancelar = function(area){
+						$mdDialog.hide(area);
+					}
+					
+				},
+				locals:{
+					area:angular.copy(areaClicada),
+					parentArea:areaClicada,
+					parentAreas:$scope.projeto.areas
+				},
+				templateUrl: './app/modules/Projetos/area-dialog.tmpl.html',
+				parent: angular.element(document.body),
+				targetEvent: ev,
+				clickOutsideToClose:true
+			})
+			.then(function(answer) {
+			$scope.status = 'You said the information was "' + answer + '".';
+			}, function() {
+			$scope.status = 'You cancelled the dialog.';
 			}
-		}
+		);
 	}
+
+	$scope.openConfirm = function(ev,idArea) {
+		// Appending dialog to document.body to cover sidenav in docs app
+		var confirm = $mdDialog.confirm()
+			.title('Tem certeza que deseja remover esta área?')
+			.textContent('A ação não poderá ser desfeita.')
+			.ariaLabel('Deseja remover a área?')
+			.targetEvent(ev)
+			.ok('Sim')
+			.cancel('Não');
+
+		$mdDialog.show(confirm).then(
+			function() {
+				var area = $scope.projeto.areas.find(function(a){return a.id==this},idArea);
+				area.id_projeto = $scope.projeto.id;
+				GDoksFactory.removerArea(area)
+				.success(function(response){
+					$scope.projeto.areas = $scope.projeto.areas.filter(function(a){return a.id!= this},idArea);
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Área removida!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				})
+				.error(function(err){
+					console.log(err);
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha ao tentar remover a área.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				});
+			}
+		);
+	};
 }
