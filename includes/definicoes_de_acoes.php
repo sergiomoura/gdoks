@@ -34,4 +34,5 @@
 	define('ACAO_REMOVEU_CARGO', 33);
 	define('ACAO_ALTEROU_SUBAREA',34);
 	define('ACAO_CRIOU_SUBAREA',35);
+	define('ACAO_REMOVEU_SUBAREA',36);
 ?>

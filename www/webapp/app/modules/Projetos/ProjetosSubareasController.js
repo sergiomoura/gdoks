@@ -104,7 +104,7 @@
 			}
 
 			
-			$scope.openConfirm = function(ev,idArea) {
+			$scope.openConfirm = function(ev,idSubarea) {
 				// Appending dialog to document.body to cover sidenav in docs app
 				var confirm = $mdDialog.confirm()
 					.title('Tem certeza que deseja remover esta sub-área?')
@@ -116,10 +116,10 @@
 
 				$mdDialog.show(confirm).then(
 					function() {
-						var subarea = $scope.projeto.subareas.find(function(a){return a.id==this},idArea);
+						var subarea = $scope.projeto.subareas.find(function(a){return a.id==this},idSubarea);
 						GDoksFactory.removerSubarea(subarea)
 						.success(function(response){
-							$scope.projeto.areas = $scope.projeto.areas.filter(function(a){return a.id!= this},idArea);
+							$scope.projeto.subareas = $scope.projeto.subareas.filter(function(a){return a.id!= this},idSubarea);
 							$mdToast.show(
 								$mdToast.simple()
 								.textContent('Sub-área removida!')
