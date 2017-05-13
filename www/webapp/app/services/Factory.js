@@ -101,6 +101,18 @@ WebGDoks.factory('GDoksFactory',
 				return $http.delete(API_ROOT+'/projetos/'+area.id_projeto+'/areas/'+area.id,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.adicionarSubarea = function(subarea){
+				return $http.post(API_ROOT+'/subareas/',subarea,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.atualizarSubarea = function(subarea){
+				return $http.put(API_ROOT+'/subareas/'+subarea.id,subarea,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.removerSubarea = function(subarea){
+				return $http.delete(API_ROOT+'/subareas/'+subarea.id,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.salvarDAOs = function(){
 				// implementada em ProjetoDAOsControlller
 			}

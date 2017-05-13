@@ -66,6 +66,7 @@
 		</md-tab>
 
 		<md-tab label="Áreas" ng-disabled="projeto.id==0">
+			
 			<md-content class="md-padding" ng-controller="ProjetosAreasController">
 				<h1 class="md-display-2">Áreas do Projeto</h1>
 				<div layout="row" layout-align="space-between center">
@@ -86,21 +87,53 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="area in projeto.areas|filter:qArea">
-							<!-- Campo de código -->
-							<td ng-if="area.id!=areaEditada.id">{{area.codigo}}</td>
-							<td ng-if="area.id==areaEditada.id"><input type="text" ng-model="areaEditada.codigo" id="codigo_area_{{area.id}}"></td>
-							
-							<!-- Campo de nome -->
-							<td ng-if="area.id!=areaEditada.id">{{area.nome}}</td>
-							<td ng-if="area.id==areaEditada.id"><input type="text" ng-model="areaEditada.nome" id="nome_area_{{area.id}}"></td>
-							
-							<!-- Botões-->
+							<td>{{area.codigo}}</td>
+							<td>{{area.nome}}</td>
 							<td>
 								<md-button class="md-icon-button" aria-label="Remover Área" ng-click="openConfirm($event,area.id)">
 									<md-icon class="material-icons step" aria-label="Remover Área">delete</md-icon>
 								</md-button>
 								<md-button class="md-icon-button" aria-label="Alterar Área" ng-click="openAreaDialog($event,area.id)">
 									<md-icon class="material-icons step" aria-label="Alterar Área">mode_edit</md-icon>
+								</md-button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</md-content>
+			
+			<md-divider></md-divider>
+			
+			<md-content class="md-padding" ng-controller="ProjetosSubareasController">
+				<h1 class="md-display-2">Sub-áreas do Projeto</h1>
+				<div layout="row" layout-align="space-between center">
+					<md-button class="md-raised md-primary" aria-label="Nova Sub-área" ng-click="openDialog($event,0)">Nova Sub-área</md-button>
+					<md-input-container>
+						<label>Buscar por Sub-área</label>
+						<md-icon class="material-icons step" aria-label="Buscar Sub-área">search</md-icon>
+						<input type="text" ng-model="qSubarea" placeholder="Digite">
+					</md-input-container>
+				</div>
+				<table>
+					<thead>
+						<tr>
+							<td>Cód. da Sub-área</td>
+							<td>Nome da Sub-área</td>
+							<td>Área</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="subarea in projeto.subareas|filter:qSubarea">
+							<td>{{subarea.codigo}}</td>
+							<td>{{subarea.nome}}</td>
+							<td>{{subarea.area.nome}}</td>
+							<td>
+								<md-button class="md-icon-button" aria-label="Remover Sub-área" ng-click="openConfirm($event,subarea.id)">
+									<md-icon class="material-icons step" aria-label="Remover Sub-área">delete</md-icon>
+								</md-button>
+								<md-button class="md-icon-button" aria-label="Alterar Sub-área" ng-click="openDialog($event,subarea.id)">
+									<md-icon class="material-icons step" aria-label="Alterar Sub-área">mode_edit</md-icon>
 								</md-button>
 							</td>
 						</tr>

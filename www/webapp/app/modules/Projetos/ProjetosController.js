@@ -99,6 +99,13 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 						$scope.projeto.data_final_p.setTime($scope.projeto.data_final_p.getTime() + (3*60*60*1000)) // ajustando para horário local do Brasil
 					}
 
+					// parsing subareas
+					var area;
+					for (var i = $scope.projeto.subareas.length - 1; i >= 0; i--) {
+						$scope.projeto.subareas[i].area = $scope.projeto.areas.find(function(a){return a.id== this},$scope.projeto.subareas[i].id_area);
+						delete $scope.projeto.subareas[i].id_area;
+					}
+
 					// parsing dependencias dos documentos
 					var doc;
 					for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {

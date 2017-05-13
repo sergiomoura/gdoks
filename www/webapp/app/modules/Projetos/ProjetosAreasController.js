@@ -1,5 +1,6 @@
 angular.module('Projetos').controller('ProjetosAreasController',ProjetosAreasController);
 function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
+	
 	$scope.openAreaDialog = function(ev,idArea){
 		// Declarando o objeto area clicado
 		var areaClicada;

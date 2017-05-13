@@ -121,6 +121,7 @@
 	<script src="app/modules/Opcoes/OpcoesController.js"></script>
 	<script src="app/modules/Projetos/ProjetosController.js"></script>
 	<script src="app/modules/Projetos/ProjetosAreasController.js"></script>
+	<script src="app/modules/Projetos/ProjetosSubareasController.js"></script>
 	<script src="app/modules/Projetos/ProjetosDAOsController.js"></script>
 	<script src="app/modules/Projetos/ProjetosDocumentosController.js"></script>
 	<script src="app/modules/Senha/SenhaController.js"></script>
