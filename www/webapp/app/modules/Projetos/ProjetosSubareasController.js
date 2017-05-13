@@ -103,27 +103,26 @@
 				);
 			}
 
-			/*
+			
 			$scope.openConfirm = function(ev,idArea) {
 				// Appending dialog to document.body to cover sidenav in docs app
 				var confirm = $mdDialog.confirm()
-					.title('Tem certeza que deseja remover esta área?')
+					.title('Tem certeza que deseja remover esta sub-área?')
 					.textContent('A ação não poderá ser desfeita.')
-					.ariaLabel('Deseja remover a área?')
+					.ariaLabel('Deseja remover a sub-área?')
 					.targetEvent(ev)
 					.ok('Sim')
 					.cancel('Não');
 
 				$mdDialog.show(confirm).then(
 					function() {
-						var area = $scope.projeto.areas.find(function(a){return a.id==this},idArea);
-						area.id_projeto = $scope.projeto.id;
-						GDoksFactory.removerArea(area)
+						var subarea = $scope.projeto.subareas.find(function(a){return a.id==this},idArea);
+						GDoksFactory.removerSubarea(subarea)
 						.success(function(response){
 							$scope.projeto.areas = $scope.projeto.areas.filter(function(a){return a.id!= this},idArea);
 							$mdToast.show(
 								$mdToast.simple()
-								.textContent('Área removida!')
+								.textContent('Sub-área removida!')
 								.position('bottom left')
 								.hideDelay(5000)
 							);
@@ -132,7 +131,7 @@
 							console.log(err);
 							$mdToast.show(
 								$mdToast.simple()
-								.textContent('Falha ao tentar remover a área.')
+								.textContent('Falha ao tentar remover a sub-área.')
 								.position('bottom left')
 								.hideDelay(5000)
 							);
@@ -140,7 +139,7 @@
 					}
 				);
 			};
-			*/
+			
 	}
 
 })()

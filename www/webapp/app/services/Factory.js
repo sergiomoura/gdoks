@@ -110,6 +110,7 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerSubarea = function(subarea){
+				console.log("foi");
 				return $http.delete(API_ROOT+'/subareas/'+subarea.id,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
