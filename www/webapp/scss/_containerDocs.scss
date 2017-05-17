@@ -334,3 +334,25 @@
     padding: 6px;
 	width:50px;
 }
+
+#docs_container{
+	padding: 20px;
+}
+
+.doc_dialog{
+	padding: 40px 20px 20px 20px;
+}
+
+.doc_dialog md-dialog-content{
+	overflow: hidden;
+	padding: 16px 0 0 0;
+}
+
+
+.doc_dialog md-dialog-actions{
+	padding: 0;
+}
+
+.doc_dialog md-dialog-actions button{
+	margin: 0 !important;
+}

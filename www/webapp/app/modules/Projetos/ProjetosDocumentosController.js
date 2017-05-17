@@ -1,5 +1,5 @@
 angular.module('Projetos').controller('ProjetosDocumentosController',ProjetosDocumentosController);
-function ProjetosDocumentosController($scope,GDoksFactory){
+function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdDialog){
 	
 	// Carregando subdisciplinas da base
 	$scope.srcSubdisciplinas = {data:[{'id':0,'nome':'Selecione...','id_disciplina':0,'nome_disciplina':''}],selected:null};
@@ -158,32 +158,160 @@ function ProjetosDocumentosController($scope,GDoksFactory){
 		}
 	}
 
-	$scope.getDependenciasPossiveis = function(query,doc){
-		var result = $scope.projeto.documentos.filter(
-			function(d){
-				// calculando condicao de nao ser ancestral
-				var naoEAncestral = dependenciasDeDocumento(this[1]).indexOf(d.id) == -1;
-
-				// calculando condicao de evitar documento próprio
-				var docDiferente = d.id != this[1].id;
-
-				// calculando condicao do nome do documento conter o trecho digitado pelo usuário
-				var contemTrecho = d.nome.toUpperCase().indexOf(this[0].toUpperCase()) != -1
-				
-				return naoEAncestral && docDiferente && contemTrecho;
-			},[query,doc]);
-		return result;
+	$scope.collapsePanel = function(index){
+		$mdExpansionPanel('panel_'+index).collapse();
 	}
 
-	var dependenciasDeDocumento = function(doc){
-		if(doc.dependencias.length == 0){
-			return [];
+	$scope.openDocumentoDialog = function(evt,idDoc){
+		// Declarando o objeto area clicado
+		var documentoClicado;
+
+		// Definindo o objeto area clicado
+		if(idDoc == 0) {
+			documentoClicado = {
+				id:0,
+				nome:null,
+				codigo:null,
+				dependencias:[]
+			};
 		} else {
-			var dep = doc.dependencias.map(function(d){return d.id});
-			for (var i = doc.dependencias.length - 1; i >= 0; i--) {
-				dep = dep.concat(dependenciasDeDocumento(doc.dependencias[i]));
-			}
-			return dep;
+			documentoClicado = $scope.projeto.documentos.find(function(d){return d.id == this},idDoc);
 		}
+		documentoClicado.id_projeto = $scope.projeto.id;
+
+		$mdDialog.show(
+			{
+				controller: function(
+								$scope,
+								doc,
+								parentDoc,
+								parentDocs,
+								disciplinas,
+								subdisciplinas,
+								areas,
+								subareas){
+					$scope.disciplinas = disciplinas;
+					$scope.subdisciplinas = subdisciplinas;
+					$scope.documentos = parentDocs;
+
+					$scope.disciplinaSelecionada = doc.subdisciplina.disciplina;
+
+					// Definindo funções
+					$scope.getDependenciasPossiveis = function(query,doc){
+						var result = parentDocs.filter(
+							function(d){
+								// calculando condicao de nao ser ancestral
+								var naoEAncestral = dependenciasDeDocumento(this[1]).indexOf(d.id) == -1;
+
+								// calculando condicao de evitar documento próprio
+								var docDiferente = d.id != this[1].id;
+
+								// calculando condicao do nome do documento conter o trecho digitado pelo usuário
+								var contemTrecho = d.nome.toUpperCase().indexOf(this[0].toUpperCase()) != -1
+								
+								return naoEAncestral && docDiferente && contemTrecho;
+							},[query,doc]);
+						return result;
+					}
+
+					var dependenciasDeDocumento = function(doc){
+						if(doc.dependencias.length == 0){
+							return [];
+						} else {
+							var dep = doc.dependencias.map(function(d){return d.id});
+							for (var i = doc.dependencias.length - 1; i >= 0; i--) {
+								dep = dep.concat(dependenciasDeDocumento(doc.dependencias[i]));
+							}
+							return dep;
+						}
+					}
+
+					// construindo vetor de subareas para cada área
+					var tmpArea;
+					for (var i = subareas.length - 1; i >= 0; i--) {
+						tmpArea = areas.find(function(a){return a.id==this},subareas[i].area.id);
+						if(tmpArea.subareas == undefined){
+							tmpArea.subareas = [];
+						}
+						tmpArea.subareas.push(subareas[i]);
+					}
+					$scope.areas = areas;
+					$scope.subareas = subareas;
+					$scope.doc = doc;
+
+					$scope.salvar = function(doc){
+						if(doc.id == 0){
+							GDoksFactory.adicionarDocumento(doc)
+							.success(function(response){
+								doc.id = response.newId;
+								parentDocs.push(doc);
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Nova documento inserido com sucesso!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							})
+							.error(function(err){
+								console.dir(err);
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Um erro ocorreu. Não foi possível completar ação!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							});
+						} else {
+							GDoksFactory.alterarDocumento(doc)
+							.success(function(response){
+								parentDoc.nome = doc.nome;
+								parentDoc.codigo = doc.codigo;
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Documento alterado com sucesso!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							})
+							.error(function(err){
+								console.dir(err);
+								$mdToast.show(
+									$mdToast.simple()
+									.textContent('Um erro ocorreu. Não foi possível completar ação!')
+									.position('bottom left')
+									.hideDelay(5000)
+								);
+							});
+						}
+
+						// Escondendo o dialog.
+						$mdDialog.hide(doc);
+					};
+					
+					$scope.cancelar = function(doc){
+						$mdDialog.hide(doc);
+					}
+				},
+				locals:{
+					doc:angular.copy(documentoClicado),
+					parentDoc:documentoClicado,
+					parentDocs:$scope.projeto.documentos,
+					disciplinas:$scope.disciplinas,
+					subdisciplinas:$scope.subdisciplinas,
+					areas:$scope.projeto.areas,
+					subareas:$scope.projeto.subareas,
+					cargos:$scope.cargos
+				},
+				templateUrl: './app/modules/Documentos/doc-dialog.tmpl.html',
+				parent: angular.element(document.body),
+				targetEvent: evt,
+				clickOutsideToClose:true
+			})
+			.then(function(answer) {
+			$scope.status = 'You said the information was "' + answer + '".';
+			}, function() {
+			$scope.status = 'You cancelled the dialog.';
+			}
+		);
 	}
 }

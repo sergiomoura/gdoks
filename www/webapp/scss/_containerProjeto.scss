@@ -99,3 +99,38 @@
 	right:15px;
 	bottom: 15px;
 }
+
+md-expansion-panel-collapsed{
+	cursor: pointer;
+	.md-expansion-panel-item{
+		margin:25px 10px 25px 0;
+		.label{
+			color: #bcbcbc;
+			font-size: 12px;
+			line-height: 20px;
+			height: 20px;
+		}
+		.value{
+			font-size: 14px;
+			height:24px;
+			line-height:24px;
+		}
+	}
+}
+
+md-expansion-panel-expanded {
+	.md-expansion-panel-item{
+		margin:25px 10px 25px 0;
+		.label{
+			color: #bcbcbc;
+			font-size: 12px;
+			line-height: 20px;
+			height: 20px;
+		}
+		.value{
+			font-size: 14px;
+			height:24px;
+			line-height:24px;
+		}
+	}
+}

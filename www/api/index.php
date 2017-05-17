@@ -935,22 +935,8 @@
 					$sql = 'SELECT id,nome,nome_cliente,tipo,tamanho FROM gdoks_daos WHERE id_projeto=?';
 					$projeto->daos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
-					// Levantando documentos do projeto
-					$sql = 'SELECT docs.id,
-								   docs.nome,
-								  docs.data_limite,
-								  id_area,
-								  areas.nome as nome_area,
-								  id_subdisciplina,
-								  subs.nome as nome_subdisciplina,
-								  id_disciplina,
-								  disc.nome as nome_disciplina
-							FROM gdoks_documentos docs
-							INNER JOIN gdoks_subdisciplinas subs on subs.id=docs.id_subdisciplina
-							INNER JOIN gdoks_disciplinas disc on subs.id_disciplina=disc.id
-							INNER JOIN gdoks_areas areas ON docs.id_area=areas.id
-							WHERE areas.id_projeto=?';
-					$projeto->documentos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
+					// Levantando documentos do projeto -> feita em outra requisição
+					$projeto->documentos = Array();
 
 					// Levantando dependências de cada documento
 					$sql = 'SELECT id_dependencia from gdoks_documentos_x_dependencias where id_documento=?';
@@ -1652,6 +1638,122 @@
 				} else {
 					$app->response->setStatus(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
+			$app->get('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+				
+				// Verificando se projeto é do mesmo cliente do usuário atual
+				$sql = 'SELECT COUNT(*) AS ok
+						FROM
+						  ( SELECT id,
+						           id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  ( SELECT id_empresa
+						   FROM gdoks.gdoks_projetos
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
+			
+				$ok = $db->query($sql,'si',$token,$id_projeto)[0]['ok'];
+
+				// Segiundo em frente
+				if($ok){
+					// Carregando documentos da base
+					$sql = 'SELECT
+								a.id,
+								a.nome,
+								a.codigo,
+								a.data_limite,
+								b.id as id_subdisciplina,
+								d.id as id_subarea    
+							FROM
+								gdoks_documentos a
+								INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+								INNER JOIN gdoks_disciplinas c on b.id_disciplina=c.id
+								INNER JOIN gdoks_subareas d on a.id_subarea=d.id
+								INNER JOIN gdoks_areas e on d.id_area=e.id
+							WHERE
+								e.id_projeto=?';
+					$documentos = array_map(
+						function($a){
+							$a = (object)$a;
+							$a->dependencias = Array();
+							$a->hhs = Array();
+							return $a;
+						}, $db->query($sql,'i',$id_projeto));
+
+					// Carregando dependencias da base
+					$sql = 'SELECT
+								f.id_documento,f.id_dependencia
+							FROM
+								gdoks_documentos a
+								INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+								INNER JOIN gdoks_disciplinas c on b.id_disciplina=c.id
+								INNER JOIN gdoks_subareas d on a.id_subarea=d.id
+								INNER JOIN gdoks_areas e on d.id_area=e.id
+								INNER JOIN gdoks_documentos_x_dependencias f on f.id_documento=a.id
+							WHERE
+								e.id_projeto=?';
+					$dependencias = $db->query($sql,'i',$id_projeto);
+					
+					// Parsing DEPENDÊNCIAS
+					for ($i=0; $i < sizeof($dependencias); $i++) { 
+						// determinando o documento da dependência[i]
+						$achou = false;
+						$j = 0;
+						while ($j < sizeof($documentos) && !$achou) {
+							$achou = ($documentos[$j]->id == $dependencias[$i]['id_documento']);
+							if($achou){
+								array_push($documentos[$j]->dependencias, $dependencias[$i]['id_dependencia']);
+							}
+							$j++;
+						}
+					}
+
+					// Carregando HHs
+					$sql = 'SELECT
+								f.id_doc,f.id_cargo,f.hh
+							FROM
+								gdoks_documentos a
+								INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+								INNER JOIN gdoks_disciplinas c on b.id_disciplina=c.id
+								INNER JOIN gdoks_subareas d on a.id_subarea=d.id
+								INNER JOIN gdoks_areas e on d.id_area=e.id
+								INNER JOIN gdoks_hhemdocs f on f.id_doc=a.id
+							WHERE
+								e.id_projeto=?';
+					$hhs = $db->query($sql,'i',$id_projeto);
+
+					// Parsing HHs
+					for ($i=0; $i < sizeof($hhs); $i++) { 
+						// determinando o documento da hhs[i]
+						$achou = false;
+						$j = 0;
+						while ($j < sizeof($documentos) && !$achou) {
+							$achou = ($documentos[$j]->id == $hhs[$i]['id_doc']);
+							if($achou){
+								$hh = new stdClass();
+								$hh->id_cargo = $hhs[$i]['id_cargo'];
+								$hh->hh = $hhs[$i]['hh'];
+								array_push($documentos[$j]->hhs, $hh);
+							}
+							$j++;
+						}
+					}
+
+					// Ajeitando resposta para o cliente
+
+					$response = new response(0,'ok');
+					$response->documentos = $documentos;
+					$response->flush();
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não lê dados de outra empresa.');
 				}
 			});
 		// FIM DE ROTAS DE PROJETOS

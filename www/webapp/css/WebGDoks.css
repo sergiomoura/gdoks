@@ -492,6 +492,22 @@
   padding: 6px;
   width: 50px; }
 
+#docs_container {
+  padding: 20px; }
+
+.doc_dialog {
+  padding: 40px 20px 20px 20px; }
+
+.doc_dialog md-dialog-content {
+  overflow: hidden;
+  padding: 16px 0 0 0; }
+
+.doc_dialog md-dialog-actions {
+  padding: 0; }
+
+.doc_dialog md-dialog-actions button {
+  margin: 0 !important; }
+
 #dpvs_container {
   padding-top: 20px;
   position: relative; }
@@ -901,6 +917,32 @@
   position: absolute;
   right: 15px;
   bottom: 15px; }
+
+md-expansion-panel-collapsed {
+  cursor: pointer; }
+  md-expansion-panel-collapsed .md-expansion-panel-item {
+    margin: 25px 10px 25px 0; }
+    md-expansion-panel-collapsed .md-expansion-panel-item .label {
+      color: #bcbcbc;
+      font-size: 12px;
+      line-height: 20px;
+      height: 20px; }
+    md-expansion-panel-collapsed .md-expansion-panel-item .value {
+      font-size: 14px;
+      height: 24px;
+      line-height: 24px; }
+
+md-expansion-panel-expanded .md-expansion-panel-item {
+  margin: 25px 10px 25px 0; }
+  md-expansion-panel-expanded .md-expansion-panel-item .label {
+    color: #bcbcbc;
+    font-size: 12px;
+    line-height: 20px;
+    height: 20px; }
+  md-expansion-panel-expanded .md-expansion-panel-item .value {
+    font-size: 14px;
+    height: 24px;
+    line-height: 24px; }
 
 #projetos_container button {
   position: absolute;

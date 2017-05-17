@@ -3,7 +3,8 @@ angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 .controller('ProjetoController',ProjetoController)
 .filter('nomesDasDependencias',function(){
 	return function(dependencias){
-		return dependencias.map(function(dep){return dep.nome}).join(', ');
+		return '';
+		// return dependencias.map(function(dep){return dep.nome}).join(', ');
 	}
 })
 
@@ -29,6 +30,8 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 	// Variáveis de controle sobre o conteúdo de clientes e usuários (se info já foi carregada da base);
 	var clientesCarregados = false;
 	var usuariosCarregados = false;
+	var disciplinasCarregadas = false;
+	var cargosCarregados = false;
 
 	// Carregando clientes da base local
 	$scope.clientes = {};
@@ -38,7 +41,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			$scope.$apply(function(){
 				$scope.clientes.dados = evt.target.result;
 				clientesCarregados = true;
-				mostraProjeto();
+				carregaProjeto();
 			});
 		}
 	}
@@ -51,15 +54,35 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			$scope.$apply(function(){
 				$scope.usuarios.dados = evt.target.result;
 				usuariosCarregados = true;
-				mostraProjeto();
+				carregaProjeto();
 			});
 		}
 	}
 
+	// Carregando disciplinas da base local
+	$scope.disciplinas = [];
+	indexedDB.open("gdoks").onsuccess = function(evt){
+		evt.target.result.transaction("disciplinas").objectStore("disciplinas").getAll().onsuccess = function(evt){
+			$scope.$apply(function(){
+				$scope.disciplinas = evt.target.result;
+				disciplinasCarregadas = true;
+				carregaProjeto();
+			});
+		}
+	}
+
+	// Carregando cargos do servidor
+	$scope.cargos = [];
+	GDoksFactory.getCargos().success(function(response){
+		$scope.cargos = response.cargos;
+		cargosCarregados = true;
+		carregaProjeto();
+	});
+
 	// Função a ser executada depois de carregados clientes e usuários da base
-	var mostraProjeto = function(){
+	function carregaProjeto(){
 		// Só executa quando clientes e usuários foram carregados.
-		if(clientesCarregados && usuariosCarregados){
+		if(clientesCarregados && usuariosCarregados && disciplinasCarregadas && cargosCarregados){
 			$scope.projeto = {};
 			$scope.projeto.id = $routeParams.id;
 			
@@ -122,7 +145,53 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 				.error(function(error){
 				})
 			}
+			carregaDocumentos();
 		}
+	}
+
+	function carregaDocumentos(){
+		GDoksFactory.getDocumentos($scope.projeto.id)
+		.success(function(response){
+			var docs = response.documentos;
+			var achouSub,j,k;
+			for (var i = docs.length - 1; i >= 0; i--) {
+				// parsing subarea
+				docs[i].subarea = $scope.projeto.subareas.find(function(a){return a.id == this},docs[i].id_subarea);
+				delete docs[i].id_subarea;
+
+				// parsing subdisciplinas
+				achouSub = false;
+				j = 0;
+				while(j<$scope.disciplinas.length && !achouSub){
+					k = 0;
+					while(k<$scope.disciplinas[j].subs.length && !achouSub){
+						achouSub = ($scope.disciplinas[j].subs[k].id == docs[i].id_subdisciplina);
+						if(achouSub){
+							docs[i].subdisciplina = $scope.disciplinas[j].subs[k];
+							docs[i].subdisciplina.disciplina = $scope.disciplinas[j];
+							delete docs[i].id_subdisciplina;
+						}
+						k++;
+					}
+					j++;
+				}
+
+				// parsing dependências
+				for (var j = docs[i].dependencias.length - 1; j >= 0; j--) {
+					docs[i].dependencias[j] = docs.find(function(a){return a.id==this},docs[i].dependencias[j]);
+				}
+
+				// Parsing HHs
+				for (var j = docs[i].hhs.length - 1; j >= 0; j--) {
+					docs[i].hhs[j].cargo = $scope.cargos.find(function(a){return a.id == this},docs[i].hhs[j].id_cargo);
+					delete docs[i].hhs[j].id_cargo;
+				}
+			}
+			$scope.projeto.documentos = docs;
+		})
+		.error(function(err){
+
+		})
 	}
 
 	// definindo função Cancel

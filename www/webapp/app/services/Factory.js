@@ -153,6 +153,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/documentos/paraValidar',{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getDocumentos = function(id_projeto){
+				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/documentos/',{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.downloadArquivo = function(idArquivo){
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");
@@ -180,10 +184,6 @@ WebGDoks.factory('GDoksFactory',
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.validarProgresso = function(idDocumento,progresso){
 				return $http.put(API_ROOT+'/documentos/'+idDocumento+'/validarProgresso', progresso, {headers: {'Authorization': $cookies.getObject('user').token}});
-			}
-			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.getDocumentos = function(){
-				return $http.get(API_ROOT+'/documentos/paraAtualizar',{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.lockDoc = function(idDoc){

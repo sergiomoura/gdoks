@@ -14,6 +14,7 @@
 
 		<link rel="stylesheet" href="css/normalizer.css">
 		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+		<link rel="stylesheet" href="css/md-expansion-panel.min.css">
 		<link rel="stylesheet" href="css/angular-material-sidemenu.css">
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/WebGDoks.css">
@@ -105,6 +106,7 @@
 	<script src="js/angular/angular-ui-mask.min.js"></script>
 	<script src="js/angular/ng-file-upload.min.js"></script>
 	<script src="js/angular/angular-material-sidemenu.js"></script>
+	<script src="js/angular/md-expansion-panel.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.2/ng-tags-input.min.js"></script>
 	<!-- Fim de Scripts externos -->
 	<!-- Scripts do app -->
