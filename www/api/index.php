@@ -2493,7 +2493,7 @@
 				$token = $app->request->headers->get('Authorization');
 				$sql = 'SELECT a.id,
 						       a.nome,
-						       a.hh
+						       a.valor_hh
 						FROM gdoks_cargos a
 						INNER JOIN
 						  (SELECT id_empresa

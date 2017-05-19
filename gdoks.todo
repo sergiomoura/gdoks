@@ -1,0 +1,19 @@
+GDoks:
+  Cadastro de Projeto 1 - Documentos:
+    ☐ Resolver Bugs avulsos 1
+    ☐ Fazer campo de dependências funcionar corretamente
+    ☐ Salvar alterações em no cadastro de um documento
+    ☐ Inserir um novo documento no projeto
+    ☐ Remover um documento do projeto
+  Gerenciamento de Documentos:
+    ☐ Atualizar BD para que guarde revisões de um documento
+    ☐ Atualizar BD para que uma revisão possa ter vários arquivos
+    ☐ Listar documentos da alçada do usuário logado
+    ☐ Atualizar uma revisão fazendo upload de novo conjunto de arquivos
+    Atentar para campos para cada arquivo
+      - Número de páginas
+      - Tamanho do papel
+    Atentar para campos para cada revisão
+      - Percentual concluído
+      - Data Limite
+      - 

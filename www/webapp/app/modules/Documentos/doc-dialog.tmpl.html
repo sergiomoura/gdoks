@@ -18,7 +18,6 @@
 				  <md-option ng-value="opt" ng-repeat="opt in disciplinas">{{ opt.nome }}</md-option>
 				</md-select>
 			</md-input-container>
-
 			<md-input-container flex="50">
 				<label>Subdisciplina</label>
 				<md-select ng-model="doc.subdisciplina">
@@ -29,32 +28,75 @@
 		<div layout="row">
 			<md-input-container flex="50">
 				<label>Área</label>
-				<md-select ng-model="areaSelecionada">
+				<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()">
 				  <md-option ng-value="opt" ng-repeat="opt in areas">{{ opt.nome }}</md-option>
 				</md-select>
 			</md-input-container>
-
 			<md-input-container flex="50">
 				<label>Subárea</label>
 				<md-select ng-model="doc.subarea">
-				  <md-option ng-value="opt" ng-repeat="opt in areaSelecionada.subareas">{{ opt.nome }}</md-option>
+					<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{ opt.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 		</div>
-		<md-input-container flex="50">
-			<label>Dependências</label>
-			<tags-input ng-model="tags" add-from-autocomplete-only="true" placeholder="Digite dependências">
-				<auto-complete
-					source="getDependenciasPossiveis($query,doc)"
-					load-on-focus="true"
-					load-on-empty="true"
-					max-results-to-show="32"></auto-complete>
-			</tags-input>
-			
-		</md-input-container></md-dialog-content>
-	<md-dialog-actions layout="row" layout-align="space-between center">
-		<md-button ng-click="cancelar(doc)" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
+		<div layout="row" layout-align="center center">
+			<md-input-container flex="90">
+				<label>Dependências</label>
+				<md-select
+					ng-model="doc.dependencias"
+					data-md-container-class="SelectDpsHeader"
+					multiple>
+					<md-option
+							ng-value="dp"
+							ng-repeat="dp in dependenciasPossiveis">{{dp.nome}}</md-option>
+				</md-select>
+			</md-input-container>
+		</div>
 		
-		<md-button ng-click="salvar(doc)" class="md-raised md-primary" aria-label="Salvar Documento">Salvar Documento</md-button>
+		<md-divider></md-divider>
+
+		<div layout="column">
+			<label>Trabalho (Homem x Hora)</label>
+			<div ng-repeat="hh in doc.hhs" layout="row" layout-align="center start">
+				<md-input-container flex>
+					<label>Cargo</label>
+					<md-select
+						ng-model="hh.cargo"
+						data-md-container-class="SelectDpsHeader">
+						<md-option
+								ng-value="cargo"
+								ng-repeat="cargo in cargos">{{cargo.nome}}
+						</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container flex>
+					<label>Qtde. de Horas</label>
+					<input type="number" ng-model="hh.hh">
+				</md-input-container>
+				<md-button flex="none" class="md-icon-button" aria-label="Excluir HHs"><md-icon class="material-icons step" aria-label="Excluir HHs">close</md-icon></md-button>
+			</div>
+			<div layout="row">
+				<md-input-container flex>
+					<label>Cargo</label>
+					<md-select
+						ng-model="nova_hh.cargo"
+						data-md-container-class="SelectDpsHeader">
+						<md-option
+								ng-value="cargo"
+								ng-repeat="cargo in cargos">{{cargo.nome}}
+						</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container flex>
+					<label>Qtde. de Horas</label>
+					<input type="number" ng-model="nova_hh.hh">
+				</md-input-container>
+				<md-button flex="none" class="md-icon-button" aria-label="Adicionar HHs"><md-icon class="material-icons step" aria-label="Adicionar HHs">add_circle_outline</md-icon></md-button>
+			</div>
+		</div>
+	</md-dialog-content>
+	<md-dialog-actions layout="row" layout-align="space-between center">
+		<md-button ng-click="cancelar(docSelecionado)" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
+		<md-button ng-click="salvar(docSelecionado)" class="md-raised md-primary" aria-label="Salvar Documento">Salvar Documento</md-button>
 	</md-dialog-actions>
 </md-dialog>
