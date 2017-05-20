@@ -36,8 +36,8 @@ GDoks:
   BUGS Avulsos:
     ✔ Erro na criação de um novo projeto @done (17-05-20 13:47)
     ☐ Botão de salvar cadastro de documento está ficando habilitado com o form inválido
-    ☐ Consertar comportamento pesado do menu principal
-    ☐ Listando pProjetos com nome errado (C e D)
+    ✔ Consertar comportamento pesado do menu principal @done (17-05-20 14:02)
+    ☐ Listando Projetos com nome errado (C e D)
     ☐ Ao atualizar dados de um projeto as informações não são salvas no base do browser
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿

@@ -50,25 +50,25 @@
 		<div layout="row" style="height:100%">
 			<md-sidenav layout="column" md-is-locked-open="root.mostrandoMenu" md-whiteframe="1dp" md-component-id="menu_principal">
 				<md-sidemenu>
-					<md-sidemenu-button href="#/dashboard"><md-icon class="material-icons step" aria-label="home">home</md-icon>Home</md-sidemenu-button>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/dashboard"><md-icon class="material-icons step" aria-label="home">home</md-icon>Home</md-sidemenu-button>
 					<md-sidemenu-group>
 						<md-sidemenu-content md-icon="group_work" md-heading="Projetos" md-arrow="true">
-							<md-sidemenu-button href="#/projetos/0">Novo Projeto</md-sidemenu-button>
-							<md-sidemenu-button href="#/projetos">Ver Todos</md-sidemenu-button>
+							<md-sidemenu-button  ng-click="toggleMenu()" href="#/projetos/0">Novo Projeto</md-sidemenu-button>
+							<md-sidemenu-button  ng-click="toggleMenu()" href="#/projetos">Ver Todos</md-sidemenu-button>
 						</md-sidemenu-content>
 					</md-sidemenu-group>
-					<md-sidemenu-button href="#/usuarios"><md-icon class="material-icons step" aria-label="Usuários">face</md-icon>Usuários</md-sidemenu-button>
+					<md-sidemenu-button href="#/usuarios" ng-click="toggleMenu()"><md-icon class="material-icons step" aria-label="Usuários">face</md-icon>Usuários</md-sidemenu-button>
 					<md-sidemenu-group>
 						<md-sidemenu-content md-icon="insert_drive_file" md-heading="Documentos" md-arrow="true">
-							<md-sidemenu-button href="#/documentos">... Para Atualizar</md-sidemenu-button>
-							<md-sidemenu-button href="#/dpvs">... Para Validar</md-sidemenu-button>
+							<md-sidemenu-button ng-click="toggleMenu()" href="#/documentos">... Para Atualizar</md-sidemenu-button>
+							<md-sidemenu-button ng-click="toggleMenu()" href="#/dpvs">... Para Validar</md-sidemenu-button>
 						</md-sidemenu-content>
 					</md-sidemenu-group>
-					<md-sidemenu-button href="#/disciplinas"><md-icon class="material-icons step" aria-label="Disciplinas">account_balance</md-icon>Disciplinas</md-sidemenu-button>
-					<md-sidemenu-button href="#/clientes"><md-icon class="material-icons step" aria-label="Clientes">record_voice_over</md-icon>Clientes</md-sidemenu-button>
-					<md-sidemenu-button href="#/cargos"><md-icon class="material-icons step" aria-label="Cargos">work</md-icon>Cargos</md-sidemenu-button>
-					<md-sidemenu-button href="#/log"><md-icon class="material-icons step" aria-label="Log">history</md-icon>Log</md-sidemenu-button>
-					<md-sidemenu-button href="#/configuracoes"><md-icon class="material-icons step" aria-label="Configurações">build</md-icon>Configurações</md-sidemenu-button>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/disciplinas"><md-icon class="material-icons step" aria-label="Disciplinas">account_balance</md-icon>Disciplinas</md-sidemenu-button>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/clientes"><md-icon class="material-icons step" aria-label="Clientes">record_voice_over</md-icon>Clientes</md-sidemenu-button>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/cargos"><md-icon class="material-icons step" aria-label="Cargos">work</md-icon>Cargos</md-sidemenu-button>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/log"><md-icon class="material-icons step" aria-label="Log">history</md-icon>Log</md-sidemenu-button>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/configuracoes"><md-icon class="material-icons step" aria-label="Configurações">build</md-icon>Configurações</md-sidemenu-button>
 				</md-sidemenu>
 			</md-sidenav>
 			<md-content flex>

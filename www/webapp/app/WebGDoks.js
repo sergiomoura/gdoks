@@ -174,7 +174,7 @@ WebGDoks.config(function($mdThemingProvider) {
 // Definindo próprio controller
 WebGDoks.controller('RootController',RootController);
 function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMenu){
-
+	
 	// definindo o objeto root.
 	$scope.root = {};
 
