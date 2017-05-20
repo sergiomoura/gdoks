@@ -4,7 +4,7 @@
 	angular.module('Projetos').controller('ProjetosDocumentosController',ProjetosDocumentosController);
 	
 	// Definindo o controller
-	function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdDialog){
+	function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdDialog,$mdToast){
 		
 		$scope.collapsePanel = function(index){
 			$mdExpansionPanel('panel_'+index).collapse();
@@ -57,6 +57,40 @@
 				console.log(answer + "<<<<");
 			});
 		}
+
+		$scope.openRemoverConfirm = function(ev,documento) {
+			// Appending dialog to document.body to cover sidenav in docs app
+			var confirm = $mdDialog.confirm()
+				.title('Tem certeza que deseja remover o cadastro deste documento?')
+				.textContent('A ação não poderá ser desfeita.')
+				.ariaLabel('Deseja remover cadastro de documento?')
+				.targetEvent(ev)
+				.ok('Sim')
+				.cancel('Não');
+
+			$mdDialog.show(confirm).then(
+				function() {
+					documento.id_projeto = $scope.projeto.id;
+					GDoksFactory.removerDocumento(documento)
+					.success(function(response){
+						
+						// Localizando o index do documento excluído do projeto
+						var pos = $scope.projeto.documentos.findIndex(function(a){return a.id==this},documento.id);
+
+						// Removendo o documento do vetor de documentos do projeto
+						$scope.projeto.documentos.splice(pos,1);
+
+						// Retornando Toast para usuário!
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Documento removido com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					})
+				}
+			);
+		};
 
 		function dialogController($scope,disciplinas,areas,subareas,doc,documentos,cargos,parentScope){
 			
@@ -219,12 +253,29 @@
 
 						// Fechando caixa de diálogo
 						$mdDialog.hide();
-						
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Documento cadastrado com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
 					})
 					.error(function(err){
-						console.log(err);
-					});
 
+						// Mostrando erro no console
+						console.warn(err);
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Não foi possível completar a ação.')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					});
 				} else {
 					// Atualizar documento existente
 					GDoksFactory.alterarDocumento(doc)
@@ -238,10 +289,28 @@
 
 						// Fechando caixa de diálogo
 						$mdDialog.hide();
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Cadastro do documento alterado com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
 						
 					})
 					.error(function(err){
-						console.log(err);
+
+						// Mostrando o erro no console
+						console.warn(err);
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Não foi possível completar a ação.')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
 					});
 				}				
 			}
@@ -252,77 +321,6 @@
 
 			$scope.removeHH = function(pos){
 				$scope.doc.hhs.splice(pos,1);
-			}
-
-			$scope.salvarDocumento = function(){
-				var doc = {
-					id:$scope.documentoEditado.id,
-					nome:$scope.documentoEditado.nome,
-					id_subdisciplina:$scope.srcSubdisciplinas.selected.id,
-					id_area:$scope.srcAreas.selected.id,
-					id_projeto:$scope.projeto.id,
-					dependencias:$scope.documentoEditado.dependencias.map(function(d){return d.id}),
-					data_limite	:$scope.documentoEditado.data_limite
-				};
-				
-				if(doc.id != 0){
-					GDoksFactory.alterarDocumento(doc)
-					.success(
-						function(response){
-							var docAlterado = $scope.projeto.documentos.filter(function(a){return a.id == this},doc.id)[0];
-							docAlterado.nome				= $scope.documentoEditado.nome;
-							docAlterado.id_area				= $scope.documentoEditado.id_area;
-							docAlterado.nome_area			= $scope.documentoEditado.nome_area;
-							docAlterado.id_subdisciplina	= $scope.documentoEditado.id_subdisciplina;
-							docAlterado.nome_subdisciplina	= $scope.documentoEditado.nome_subdisciplina;
-							docAlterado.id_disciplina		= $scope.documentoEditado.id_disciplina;
-							docAlterado.nome_disciplina		= $scope.documentoEditado.nome_disciplina;
-							docAlterado.dependencias		= angular.copy($scope.documentoEditado.dependencias);
-							docAlterado.data_limite			= $scope.documentoEditado.data_limite;
-							$scope.documentoEditado = null;
-						}
-					)
-					.error(
-						function(error){
-
-						}
-					);
-				} else {
-					GDoksFactory.adicionarDocumento(doc)
-					.success(
-						function(response){
-							delete $scope.documentoEditado.id_projeto;
-							$scope.documentoEditado.id = response.newId;
-							$scope.documentoEditado = null;
-						}
-					)
-					.error(
-						function(error){
-
-						}
-					);
-				}
-			}
-
-			$scope.removerDocumento = function(doc){
-				if(confirm("Tem certeza que deseja remover o documento "+doc.nome+" do projeto "+$scope.projeto.nome+"?\nEssa ação não poderá ser desfieta.")){
-				doc.id_projeto = $scope.projeto.id;
-					GDoksFactory.removerDocumento(doc)
-						.success(
-							function(response){
-								$scope.projeto.documentos = $scope.projeto.documentos.filter(function(a){ return a.id != this},doc.id);
-								// removendo as relações dedependencia com o documento removido
-								for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
-									$scope.projeto.documentos[i].dependencias = $scope.projeto.documentos[i].dependencias.filter(function(a){return a.id != this},doc.id);
-								}
-							}
-						)
-						.error(
-							function(error){
-
-							}
-						);
-				}
 			}
 		}
 	}

@@ -1619,7 +1619,7 @@
 				// levantando documento na base de dados
 				$sql = 'SELECT id,
 						       nome,
-						       id_area,
+						       id_subarea,
 						       id_subdisciplina
 						FROM gdoks_documentos
 						WHERE id=?';
@@ -1638,7 +1638,8 @@
 						  (SELECT id_empresa
 						   FROM gdoks_projetos p
 						   INNER JOIN gdoks_areas a ON p.id=a.id_projeto
-						   INNER JOIN gdoks_documentos d ON d.id_area = a.id
+						   INNER JOIN gdoks_subareas s ON s.id_area=a.id
+						   INNER JOIN gdoks_documentos d ON d.id_subarea = s.id
 						   AND d.id=?) B ON A.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'si',$token,$id_documento)[0];
 				$ok = $rs['ok'];
