@@ -76,6 +76,9 @@
 				</ng-view>
 			</md-content>
 		</div>
+		<div id="carregando" ng-show="root.carregando" class="carregando-show-hide" layout="row" layout-align="center center">
+			<md-progress-circular md-mode="indeterminate" md-diameter="64"></md-progress-circular>
+		</div>
 	</body>
 	<!-- carregamento do angular 1.4.4 local --
 	<script src="js/angular/angular.min.js"></script>

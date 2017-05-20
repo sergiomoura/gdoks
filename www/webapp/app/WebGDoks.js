@@ -4,6 +4,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'ngCookies',
 								'ng-currency',
 								'ngLocale',
+								'ngAnimate',
 								'ngMaterial',
 								'ngMaterialSidemenu',
 								'material.components.expansionPanels',
@@ -174,9 +175,12 @@ WebGDoks.config(function($mdThemingProvider) {
 // Definindo próprio controller
 WebGDoks.controller('RootController',RootController);
 function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMenu){
-	
+
 	// definindo o objeto root.
 	$scope.root = {};
+
+	// Flag para mostrar se está carregando ou não
+	$scope.root.carregando = false;
 
 	// Definindo função que carrega usuários do servidor
 	$scope.root.loadUsuarios = function(){

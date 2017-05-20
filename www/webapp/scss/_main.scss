@@ -98,3 +98,18 @@
 	background-image: url(../img/onoff.png);
 	background-position: 8px 5px;
 }
+
+#carregando {
+	background-color: rgba(255, 255, 255, 0.70);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.carregando-show-hide {
+  transition: opacity linear 0.3s;
+}
+.carregando-show-hide.ng-hide {
+  opacity: 0;
+}

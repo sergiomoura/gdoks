@@ -1026,6 +1026,9 @@
 				$response = new response(0,'Dados do projeto alterados com sucesso.');
 				$response->flush();
 
+				// Removendo alguns campos para o registro no log
+				unset($projeto->subareas);
+
 				// registrando alteração
 				registrarAcao($db,$id_usuario,ACAO_ALTEROU_PROJETO,implode(',',(array)$projeto));
 			});

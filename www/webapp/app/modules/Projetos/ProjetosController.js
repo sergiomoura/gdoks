@@ -201,6 +201,9 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 	// Definindo função que salva o projeto
 	$scope.salvarProjeto = function(){
 
+		// Mostra carregando
+		$scope.root.carregando = true;
+
 		// copiando o objeto projeto
 		var projeto = angular.copy($scope.projeto);
 		projeto.id_cliente = $scope.clientes.selecionado.id;
@@ -215,6 +218,10 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			GDoksFactory.adicionarProjeto(projeto)
 			.success(
 				function(response){
+
+					// Esconde Carregando
+					$scope.root.carregando = false;
+
 					$scope.obteve_resposta = true;
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
@@ -238,6 +245,9 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			)
 			.error(
 				function(error){
+					// Esconde Carregando
+					$scope.root.carregando = false;
+
 					$scope.obteve_resposta = true;
 					$scope.ok = (error.error==0);
 					$scope.msg = error.msg;
@@ -247,6 +257,9 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			GDoksFactory.atualizarProjeto(projeto)
 			.success(
 				function(response){
+					// Esconde Carregando
+					$scope.root.carregando = false;
+
 					$scope.obteve_resposta = true;
 					$scope.ok = (response.error==0);
 					$scope.msg = response.msg;
@@ -266,6 +279,9 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			)
 			.error(
 				function(error){
+					// Esconde Carregando
+					$scope.root.carregando = false;
+
 					$scope.obteve_resposta = true;
 					$scope.ok = (error.error==0);
 					$scope.msg = error.msg;
