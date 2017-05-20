@@ -140,7 +140,12 @@ WebGDoks.config(
 WebGDoks.config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function(date) {
     	if(date){
-       		return date.toLocaleDateString();
+    		var d = date.getDate();
+			var m = date.getMonth()+1;
+			var y = date.getFullYear();
+			d = d<10?'0'+d:d;
+			m =  m<10?'0'+m:m;
+			return d+'/'+m+'/'+y;
        	} else {
        		return '';
        	}
