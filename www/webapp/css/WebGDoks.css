@@ -497,7 +497,7 @@
 
 .doc_dialog {
   padding: 40px 20px 20px 20px;
-  width: 500px;
+  width: 800px;
   	/*
   	.SelectDpsHeader {
   
@@ -525,6 +525,13 @@
   .doc_dialog md-dialog-content {
     overflow: hidden;
     padding: 16px 0 0 0; }
+    .doc_dialog md-dialog-content > div:nth-child(2) {
+      border-left: 1px solid #e0e0e0;
+      margin-left: 20px;
+      padding-left: 20px; }
+      .doc_dialog md-dialog-content > div:nth-child(2) .section-title {
+        margin: 0 0 20px 0;
+        text-align: center; }
   .doc_dialog md-dialog-actions {
     padding: 0; }
   .doc_dialog md-dialog-actions button {

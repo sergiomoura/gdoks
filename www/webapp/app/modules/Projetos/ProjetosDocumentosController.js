@@ -208,114 +208,16 @@ function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdD
 			}
 		)
 		.then(function(answer) {
-			console.log(answer + "<<");
-			$scope.status = 'You said the information was "' + answer + '".';
-		}, function() {
-			$scope.status = 'You cancelled the dialog.';
+			//console.log(answer + "<<");
+			//$scope.status = 'You said the information was "' + answer + '".';
+		}, function(answer) {
+			//$scope.status = 'You cancelled the dialog.';
 			console.log(answer + "<<<<");
 		});
 	}
 
 	function dialogController($scope,disciplinas,areas,subareas,doc,documentos,cargos){
-		/*
-			$scope.disciplinas = disciplinas;
-			$scope.subdisciplinas = subdisciplinas;
-			$scope.documentos = parentDocs;
-
-			$scope.disciplinaSelecionada = doc.subdisciplina.disciplina;
-
-			// Definindo funções
-			$scope.getDependenciasPossiveis = function(query,doc){
-				var result = parentDocs.filter(
-					function(d){
-						// calculando condicao de nao ser ancestral
-						var naoEAncestral = dependenciasDeDocumento(this[1]).indexOf(d.id) == -1;
-
-						// calculando condicao de evitar documento próprio
-						var docDiferente = d.id != this[1].id;
-
-						// calculando condicao do nome do documento conter o trecho digitado pelo usuário
-						var contemTrecho = d.nome.toUpperCase().indexOf(this[0].toUpperCase()) != -1
-						
-						return naoEAncestral && docDiferente && contemTrecho;
-					},[query,doc]);
-				return result;
-			}
-
-			var dependenciasDeDocumento = function(doc){
-				if(doc.dependencias.length == 0){
-					return [];
-				} else {
-					var dep = doc.dependencias.map(function(d){return d.id});
-					for (var i = doc.dependencias.length - 1; i >= 0; i--) {
-						dep = dep.concat(dependenciasDeDocumento(doc.dependencias[i]));
-					}
-					return dep;
-				}
-			}
-
-			// construindo vetor de subareas para cada área
-			var tmpArea;
-			for (var i = subareas.length - 1; i >= 0; i--) {
-				tmpArea = areas.find(function(a){return a.id==this},subareas[i].area.id);
-				if(tmpArea.subareas == undefined){
-					tmpArea.subareas = [];
-				}
-				tmpArea.subareas.push(subareas[i]);
-			}
-			$scope.areas = areas;
-			$scope.subareas = subareas;
-			$scope.doc = doc;
-
-			$scope.salvar = function(doc){
-				if(doc.id == 0){
-					GDoksFactory.adicionarDocumento(doc)
-					.success(function(response){
-						doc.id = response.newId;
-						parentDocs.push(doc);
-						$mdToast.show(
-							$mdToast.simple()
-							.textContent('Nova documento inserido com sucesso!')
-							.position('bottom left')
-							.hideDelay(5000)
-						);
-					})
-					.error(function(err){
-						console.dir(err);
-						$mdToast.show(
-							$mdToast.simple()
-							.textContent('Um erro ocorreu. Não foi possível completar ação!')
-							.position('bottom left')
-							.hideDelay(5000)
-						);
-					});
-				} else {
-					GDoksFactory.alterarDocumento(doc)
-					.success(function(response){
-						parentDoc.nome = doc.nome;
-						parentDoc.codigo = doc.codigo;
-						$mdToast.show(
-							$mdToast.simple()
-							.textContent('Documento alterado com sucesso!')
-							.position('bottom left')
-							.hideDelay(5000)
-						);
-					})
-					.error(function(err){
-						console.dir(err);
-						$mdToast.show(
-							$mdToast.simple()
-							.textContent('Um erro ocorreu. Não foi possível completar ação!')
-							.position('bottom left')
-							.hideDelay(5000)
-						);
-					});
-				}
-
-				// Escondendo o dialog.
-				$mdDialog.hide(doc);
-			};
-		*/
+		
 		// Copiando doc para o scope
 		$scope.doc = doc;
 		delete doc;
@@ -335,6 +237,9 @@ function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdD
 		// Copiando cargos para o scope
 		$scope.cargos = cargos;
 		delete cargos;
+
+		// inserindo um objeto hh ao final do vetor de hh's
+		$scope.doc.hhs.push({cargo:null,hh:1});
 
 		// Determinando o valor da disciplina selecionada
 		$scope.disciplinaSelecionada = (doc.id==0 ? null : $scope.disciplinas.find(
@@ -419,14 +324,12 @@ function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdD
 			},doc).map(function(a){return a.id});
 		}
 
-
 		// Linkando Cargos das HHs com os elementos do vetor de cargos
 		for (var i = $scope.doc.hhs.length - 1; i >= 0; i--) {
-			$scope.doc.hhs[i].cargo = $scope.cargos.find(function(a){return a.id==this},$scope.doc.hhs[i].cargo.id)
+			if($scope.doc.hhs[i].cargo!=null){
+				$scope.doc.hhs[i].cargo = $scope.cargos.find(function(a){return a.id==this},$scope.doc.hhs[i].cargo.id);
+			}
 		}
-
-		// Setando valor inicial para nova hh
-		$scope.nova_hh = {cargo:null,hh:1};
 
 		// Função que cancela e esconde o dialog
 		$scope.cancelar = function(doc){
@@ -444,6 +347,14 @@ function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdD
 			doc.dependencias = doc.dependencias.map(function(a){return a.id});
 
 			console.log(doc);
+		}
+
+		$scope.addNewHH = function(){
+			$scope.doc.hhs.push({cargo:null,hh:1});
+		}
+
+		$scope.removeHH = function(pos){
+			$scope.doc.hhs.splice(pos,1);
 		}
 	}
 }
