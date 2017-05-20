@@ -1,13 +1,6 @@
 angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 .controller('ProjetosController',ProjetosController)
 .controller('ProjetoController',ProjetoController)
-.filter('nomesDasDependencias',function(){
-	return function(dependencias){
-		return '';
-		// return dependencias.map(function(dep){return dep.nome}).join(', ');
-	}
-})
-
 
 function ProjetosController($scope,GDoksFactory){
 	// levantando projetos na base de dados local
@@ -155,6 +148,12 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			var docs = response.documentos;
 			var achouSub,j,k;
 			for (var i = docs.length - 1; i >= 0; i--) {
+				// parsing data_limite
+				docs[i].data_limite = new Date(docs[i].data_limite);
+
+				// Corrigindo fuso
+				docs[i].data_limite.setMinutes(docs[i].data_limite.getMinutes() + docs[i].data_limite.getTimezoneOffset());
+				
 				// parsing subarea
 				docs[i].subarea = $scope.projeto.subareas.find(function(a){return a.id == this},docs[i].id_subarea);
 				delete docs[i].id_subarea;

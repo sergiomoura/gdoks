@@ -1,44 +1,20 @@
 angular.module('Projetos').controller('ProjetosDocumentosController',ProjetosDocumentosController);
 function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdDialog){
 	
-	// Carregando subdisciplinas da base
-	$scope.srcSubdisciplinas = {data:[{'id':0,'nome':'Selecione...','id_disciplina':0,'nome_disciplina':''}],selected:null};
-	
 	indexedDB.open('gdoks').onsuccess = function(evt){
 		evt.target.result.transaction('disciplinas').objectStore('disciplinas').getAll().onsuccess = function(evt){
 			var disciplinas = evt.target.result;
-			var disc;
-			var sub;
-			for (var i = disciplinas.length - 1; i >= 0; i--) {
-				disc = disciplinas[i];
-				for (var j = disc.subs.length - 1; j >= 0; j--) {
-					sub = disc.subs[j];
-					$scope.srcSubdisciplinas.data.push({'id':sub.id,'nome':sub.nome,'id_disciplina':disc.id,'nome_disciplina':disc.nome});
-				}
-			}
+			//var disc;
+			//var sub;
+			//for (var i = disciplinas.length - 1; i >= 0; i--) {
+			//	disc = disciplinas[i];
+			//	for (var j = disc.subs.length - 1; j >= 0; j--) {
+			//		sub = disc.subs[j];
+			//		$scope.srcSubdisciplinas.data.push({'id':sub.id,'nome':sub.nome,'id_disciplina':disc.id,'nome_disciplina':disc.nome});
+			//	}
+			//}
 		}
 	}
-
-	// Watch a subdisciplina selecionada. caso elas mudem, muda os valores correspondentes no documentoEditado
-	$scope.$watch('srcSubdisciplinas.selected',function(newSub,oldSub){
-		if(newSub){
-			$scope.documentoEditado.id_subdisciplina = newSub.id;
-			$scope.documentoEditado.nome_subdisciplina = newSub.nome;
-			$scope.documentoEditado.id_disciplina = newSub.id_disciplina;
-			$scope.documentoEditado.nome_disciplina = newSub.nome_disciplina;
-		}
-	})
-
-	// Watch a area selecionada. caso elas mudem, muda os valores correspondentes no documentoEditado
-	$scope.$watch('srcAreas.selected',function(newArea,oldArea){
-		if(newArea){
-			$scope.documentoEditado.id_area = newArea.id;
-			$scope.documentoEditado.nome_area = newArea.nome;
-		}
-	})
-
-	// declarando variável para lidar com o select de áreas
-	$scope.srcAreas = {selected:''}
 
 	// Definindo função que abre campos para edição de documento
 	$scope.editarDocumento = function(id){
@@ -337,7 +313,11 @@ function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdD
 		}
 
 		$scope.salvar = function(documento){
-			doc = angular.copy(documento)
+			// Fazendo cópia do objeto documento
+			doc = angular.copy(documento);
+			console.log(doc);
+
+			// Removendo campos desnecessários
 			doc.id_subdisciplina = doc.subdisciplina.id;
 			delete doc.subdisciplina;
 
@@ -345,6 +325,18 @@ function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdD
 			delete doc.subarea;
 
 			doc.dependencias = doc.dependencias.map(function(a){return a.id});
+
+			doc.hhs = doc.hhs.filter(function(a){
+				return a.cargo != null;
+			});
+
+			doc.hhs = doc.hhs.map(function(a){
+				a.id_cargo = a.cargo.id;
+				delete a.cargo;
+				return a;
+			});
+
+
 
 			console.log(doc);
 		}
