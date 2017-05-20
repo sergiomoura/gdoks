@@ -1462,12 +1462,14 @@
 			});
 
 			$app->put('/projetos/:id_projeto/documentos/:id_documento',function($id_projeto,$id_documento) use ($app,$db){
+				
 				// Lendo e saneando as informações da requisição
 				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$id_documento = 1*$id_documento;
 				$documento = json_decode($app->request->getBody());
 				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
+
 				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
 				if($id_documento != $documento->id) {
 					$app->response->setStatus(401);
@@ -1489,16 +1491,18 @@
 						  (SELECT id_empresa
 						   FROM gdoks_projetos p
 						   INNER JOIN gdoks_areas a on a.id_projeto=p.id
-						   INNER JOIN gdoks_documentos d ON a.id=d.id_area
+						   INNER JOIN gdoks_subareas s on s.id_area=a.id
+						   INNER JOIN gdoks_documentos d ON s.id=d.id_subarea
 						   AND d.id=?) B ON A.id_empresa=B.id_empresa';
 				$rs = $db->query($sql,'si',$token,$id_documento)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
+
 				if($ok == 1){
 					// Tudo ok! O documento a ser alterado é da mesma empresa do usuário
-					$sql = 'UPDATE gdoks_documentos SET nome=?,id_area=?,id_subdisciplina=?,data_limite=? WHERE id=?';
+					$sql = 'UPDATE gdoks_documentos SET nome=?,codigo=?,id_subarea=?,id_subdisciplina=?,data_limite=? WHERE id=?';
 					try {
-						$db->query($sql,'siisi',$documento->nome,$documento->id_area,$documento->id_subdisciplina,$documento->data_limite,$id_documento);
+						$db->query($sql,'ssiisi',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina,$documento->data_limite,$id_documento);
 						$response = new response(0,'Documento alterado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
@@ -1507,7 +1511,7 @@
 						$response->flush();
 						return;
 					}
-					// removendo dependências antigas
+					// Removendo dependências antigas
 					$sql = 'DELETE FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
 					$db->query($sql,'i',$documento->id);
 
@@ -1517,8 +1521,19 @@
 						$db->query($sql,'ii',$documento->id,$dp);
 					}
 
-					// removendo dependencias do objeto para salvar no log
+					// Removendo horas a serem gastas em documento
+					$sql = 'DELETE FROM gdoks_hhemdocs WHERE id_doc=?';
+					$db->query($sql,'i',$documento->id);
+
+					// Inserindo novas horas a serem gastas em documento
+					$sql = 'INSERT INTO gdoks_hhemdocs (id_doc,id_cargo,hh) VALUES (?,?,?)';
+					foreach ($documento->hhs as $hh) {
+						$db->query($sql,'iii',$documento->id,$hh->id_cargo,$hh->hh);
+					}
+
+					// removendo dependencias e hhs do objeto para salvar no log
 					unset($documento->dependencias);
+					unset($documento->hhs);
 					
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DOCUMENTO,implode(',', (array)$documento));

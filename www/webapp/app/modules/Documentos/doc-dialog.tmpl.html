@@ -48,6 +48,8 @@
 							md-open-on-focus
 							md-hide-icons="calendar"></md-datepicker>
 				</md-input-container>
+			</div>
+			<div layout="column">
 				<md-input-container>
 					<label>Dependências</label>
 					<md-select
@@ -59,8 +61,6 @@
 								ng-repeat="dp in dependenciasPossiveis">{{dp.nome}}</md-option>
 					</md-select>
 				</md-input-container>
-			</div>
-			<div layout="column">
 				<div class="section-title">Trabalho (Homem x Hora)</div>
 				<div ng-repeat="hh in doc.hhs" layout="row" layout-align="center start">
 					<md-input-container flex>
