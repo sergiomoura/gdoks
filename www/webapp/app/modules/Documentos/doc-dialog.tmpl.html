@@ -1,82 +1,85 @@
 <md-dialog class="doc_dialog">
-	<md-dialog-content  layout="row">
-		<div layout="column">
-			<div layout="row">
-				<md-input-container flex="50">
-					<label>Nome do Documento</label>
-					<input type="text" ng-model="doc.nome">
-				</md-input-container>
+	<md-dialog-content>
+		<form name="formdoc" layout="row" novalidate>
+			<div layout="column">
+				<div layout="row">
+					<md-input-container flex="50">
+						<label>Nome do Documento</label>
+						<input type="text" ng-model="doc.nome" required>
+					</md-input-container>
 
-				<md-input-container flex="50">
-					<label>Código do Documento</label>
-					<input type="text" ng-model="doc.codigo">
-				</md-input-container>
-			</div>
-			<div layout="row">
-				<md-input-container flex="50">
-					<label>Disciplina</label>
-					<md-select ng-model="disciplinaSelecionada">
-					  <md-option ng-value="opt" ng-repeat="opt in disciplinas">{{ opt.nome }}</md-option>
-					</md-select>
-				</md-input-container>
-				<md-input-container flex="50">
-					<label>Subdisciplina</label>
-					<md-select ng-model="doc.subdisciplina">
-					  <md-option ng-value="opt" ng-repeat="opt in disciplinaSelecionada.subs">{{ opt.nome }}</md-option>
-					</md-select>
-				</md-input-container>
-			</div>
-			<div layout="row">
-				<md-input-container flex="50">
-					<label>Área</label>
-					<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()">
-					  <md-option ng-value="opt" ng-repeat="opt in areas">{{ opt.nome }}</md-option>
-					</md-select>
-				</md-input-container>
-				<md-input-container flex="50">
-					<label>Subárea</label>
-					<md-select ng-model="doc.subarea">
-						<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{ opt.nome }}</md-option>
-					</md-select>
-				</md-input-container>
-			</div>
-			<md-input-container>
-				<label>Dependências</label>
-				<md-select
-					ng-model="doc.dependencias"
-					data-md-container-class="SelectDpsHeader"
-					multiple>
-					<md-option
-							ng-value="dp"
-							ng-repeat="dp in dependenciasPossiveis">{{dp.nome}}</md-option>
-				</md-select>
-			</md-input-container>
-		</div>
-		<div layout="column">
-			<div class="section-title">Trabalho (Homem x Hora)</div>
-			<div ng-repeat="hh in doc.hhs" layout="row" layout-align="center start">
-				<md-input-container flex>
-					<label>Cargo</label>
+					<md-input-container flex="50">
+						<label>Código do Documento</label>
+						<input type="text" ng-model="doc.codigo" required>
+					</md-input-container>
+				</div>
+				<div layout="row">
+					<md-input-container flex="50">
+						<label>Disciplina</label>
+						<md-select ng-model="disciplinaSelecionada" required>
+						  <md-option ng-value="opt" ng-repeat="opt in disciplinas">{{ opt.nome }}</md-option>
+						</md-select>
+					</md-input-container>
+					<md-input-container flex="50">
+						<label>Subdisciplina</label>
+						<md-select ng-model="doc.subdisciplina" required>
+						  <md-option ng-value="opt" ng-repeat="opt in disciplinaSelecionada.subs">{{ opt.nome }}</md-option>
+						</md-select>
+					</md-input-container>
+				</div>
+				<div layout="row">
+					<md-input-container flex="50">
+						<label>Área</label>
+						<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()" required>
+						  <md-option ng-value="opt" ng-repeat="opt in areas">{{ opt.nome }}</md-option>
+						</md-select>
+					</md-input-container>
+					<md-input-container flex="50">
+						<label>Subárea</label>
+						<md-select ng-model="doc.subarea" required>
+							<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{ opt.nome }}</md-option>
+						</md-select>
+					</md-input-container>
+				</div>
+				<md-input-container>
+					<label>Dependências</label>
 					<md-select
-						ng-model="hh.cargo"
-						data-md-container-class="SelectDpsHeader">
+						ng-model="doc.dependencias"
+						data-md-container-class="SelectDpsHeader"
+						multiple>
 						<md-option
-								ng-value="cargo"
-								ng-repeat="cargo in cargos">{{cargo.nome}}
-						</md-option>
+								ng-value="dp"
+								ng-repeat="dp in dependenciasPossiveis">{{dp.nome}}</md-option>
 					</md-select>
 				</md-input-container>
-				<md-input-container flex>
-					<label>Qtde. de Horas</label>
-					<input type="number" ng-model="hh.hh">
-				</md-input-container>
-				<md-button ng-if="!$last" ng-click="removeHH($index)" flex="none" class="md-icon-button" aria-label="Excluir HHs"><md-icon class="material-icons step" aria-label="Excluir HHs">close</md-icon></md-button>
-				<md-button ng-if="$last" ng-click="addNewHH()" flex="none" class="md-icon-button" aria-label="Adicionar HH"><md-icon class="material-icons step" aria-label="Adicionar HHs">add_circle_outline</md-icon></md-button>
 			</div>
-		</div>
+			<div layout="column">
+				<div class="section-title">Trabalho (Homem x Hora)</div>
+				<div ng-repeat="hh in doc.hhs" layout="row" layout-align="center start">
+					<md-input-container flex>
+						<label>Cargo</label>
+						<md-select
+							ng-model="hh.cargo"
+							name="hh_{{$index}}"
+							data-md-container-class="SelectDpsHeader">
+							<md-option
+									ng-value="cargo"
+									ng-repeat="cargo in cargos">{{cargo.nome}}
+							</md-option>
+						</md-select>
+					</md-input-container>
+					<md-input-container flex>
+						<label>Qtde. de Horas</label>
+						<input type="number" ng-model="hh.hh">
+					</md-input-container>
+					<md-button ng-if="!$last" ng-click="removeHH($index)" flex="none" class="md-icon-button" aria-label="Excluir HHs"><md-icon class="material-icons step" aria-label="Excluir HHs">close</md-icon></md-button>
+					<md-button ng-if="$last" ng-click="addNewHH()" flex="none" class="md-icon-button" aria-label="Adicionar HH"><md-icon class="material-icons step" aria-label="Adicionar HHs">add_circle_outline</md-icon></md-button>
+				</div>
+			</div>
+		</form>
 	</md-dialog-content>
 	<md-dialog-actions layout="row" layout-align="space-between center">
 		<md-button ng-click="cancelar(docSelecionado)" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
-		<md-button ng-click="salvar(docSelecionado)" class="md-raised md-primary" aria-label="Salvar Documento">Salvar Documento</md-button>
+		<md-button ng-disabled="!formdoc.$valid" ng-click="salvar(docSelecionado)" class="md-raised md-primary" aria-label="Salvar Documento">Salvar Documento</md-button>
 	</md-dialog-actions>
 </md-dialog>
