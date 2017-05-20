@@ -1,14 +1,9 @@
 GDoks:
   Cadastro de Projeto 1 - Documentos:
-    ✔ Fazer campo de dependências funcionar corretamente @done (17-05-20 10:41)
-    ✔ Salvar alterações em no cadastro de um documento @done (17-05-20 10:42)
-    ✔ Inserir um novo documento no projeto @done (17-05-20 11:05)
-    ✔ Mostrar Toasts quando altera existente, quando salva novo, quando dá erro na inserção e na alteração @done (17-05-20 11:19)
-    ☐ Remover um documento do projeto
     ☐ Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
     ☐ Fazer filtro de documentos funcionar
     ☐ Adicionar Campo para ordenar documentos
-    ☐ limpar código
+    ☐ Limpar código
   Gerenciamento de Documentos:
     ☐ Atualizar BD para que guarde revisões de um documento
     ☐ Atualizar BD para que uma revisão possa ter vários arquivos
@@ -20,7 +15,35 @@ GDoks:
     Atentar para campos para cada revisão
       - Percentual concluído
       - Data Limite
-      - 
+    ☐ Validar Progresso de um documento
+  Gerenciamento de GRDs:
+    ☐ Listar GRDs
+      ☐ Fazer desenho de tela html
+      ☐ Dar funcionalidade a tela
+    ☐ Gerar GRDs
+    ☐ Alterar GRD
+    ☐ Submeter GRD
+    ☐ Buscar GRDs
+    ☐ Registrar Retorno de GRD
+      ☐ Desenhar tela de registro de retorno de GRD
+      ☐ Registrar Observações sobre arquivos que compões a GRD
+      Na tela de registro de retorno de GRD o usuário será capaz de
+        - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
+        - Dar o documento como concluído
+        - Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
+        
+      
   BUGS Avulsos:
-    ☐ Erro na criação de um novo projeto
+    ✔ Erro na criação de um novo projeto @done (17-05-20 13:47)
     ☐ Botão de salvar cadastro de documento está ficando habilitado com o form inválido
+    ☐ Consertar comportamento pesado do menu principal
+    ☐ Listando pProjetos com nome errado (C e D)
+    ☐ Ao atualizar dados de um projeto as informações não são salvas no base do browser
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ Remover um documento do projeto @done (17-05-20 11:49) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+ ✔ Mostrar Toasts quando altera existente, quando salva novo, quando dá erro na inserção e na alteração @done (17-05-20 11:19) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+ ✔ Inserir um novo documento no projeto @done (17-05-20 11:05) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+ ✔ Salvar alterações em no cadastro de um documento @done (17-05-20 10:42) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+ ✔ Fazer campo de dependências funcionar corretamente @done (17-05-20 10:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)

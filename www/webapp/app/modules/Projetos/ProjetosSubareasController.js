@@ -32,8 +32,14 @@
 								if(subarea.id == 0){
 									GDoksFactory.adicionarSubarea(subarea)
 									.success(function(response){
+										// Atribuindo novo id para a subárea recém criada
 										subarea.id = response.newId;
+
+										// Adicionando a subárea ao vetor de subáreas. Caso vetor não exista, cria-se
+										parentSubareas = (parentSubareas == undefined ? [] : parentSubareas);
 										parentSubareas.push(subarea);
+
+										// Retornando Toast para usuário
 										$mdToast.show(
 											$mdToast.simple()
 											.textContent('Nova Sub-área inserida com sucesso!')

@@ -143,54 +143,54 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 	}
 
 	function carregaDocumentos(){
-		GDoksFactory.getDocumentos($scope.projeto.id)
-		.success(function(response){
-			var docs = response.documentos;
-			var achouSub,j,k;
-			for (var i = docs.length - 1; i >= 0; i--) {
-				// parsing data_limite
-				docs[i].data_limite = new Date(docs[i].data_limite);
+		if ($scope.projeto.id != 0) {
+			GDoksFactory.getDocumentos($scope.projeto.id)
+			.success(function(response){
+				var docs = response.documentos;
+				var achouSub,j,k;
+				for (var i = docs.length - 1; i >= 0; i--) {
+					// parsing data_limite
+					docs[i].data_limite = new Date(docs[i].data_limite);
 
-				// Corrigindo fuso
-				docs[i].data_limite.setMinutes(docs[i].data_limite.getMinutes() + docs[i].data_limite.getTimezoneOffset());
-				
-				// parsing subarea
-				docs[i].subarea = $scope.projeto.subareas.find(function(a){return a.id == this},docs[i].id_subarea);
-				delete docs[i].id_subarea;
+					// Corrigindo fuso
+					docs[i].data_limite.setMinutes(docs[i].data_limite.getMinutes() + docs[i].data_limite.getTimezoneOffset());
+					
+					// parsing subarea
+					docs[i].subarea = $scope.projeto.subareas.find(function(a){return a.id == this},docs[i].id_subarea);
+					delete docs[i].id_subarea;
 
-				// parsing subdisciplinas
-				achouSub = false;
-				j = 0;
-				while(j<$scope.disciplinas.length && !achouSub){
-					k = 0;
-					while(k<$scope.disciplinas[j].subs.length && !achouSub){
-						achouSub = ($scope.disciplinas[j].subs[k].id == docs[i].id_subdisciplina);
-						if(achouSub){
-							docs[i].subdisciplina = $scope.disciplinas[j].subs[k];
-							docs[i].subdisciplina.disciplina = $scope.disciplinas[j];
-							delete docs[i].id_subdisciplina;
+					// parsing subdisciplinas
+					achouSub = false;
+					j = 0;
+					while(j<$scope.disciplinas.length && !achouSub){
+						k = 0;
+						while(k<$scope.disciplinas[j].subs.length && !achouSub){
+							achouSub = ($scope.disciplinas[j].subs[k].id == docs[i].id_subdisciplina);
+							if(achouSub){
+								docs[i].subdisciplina = $scope.disciplinas[j].subs[k];
+								docs[i].subdisciplina.disciplina = $scope.disciplinas[j];
+								delete docs[i].id_subdisciplina;
+							}
+							k++;
 						}
-						k++;
+						j++;
 					}
-					j++;
-				}
 
-				// parsing dependências
-				for (var j = docs[i].dependencias.length - 1; j >= 0; j--) {
-					docs[i].dependencias[j] = docs.find(function(a){return a.id==this},docs[i].dependencias[j]);
-				}
+					// parsing dependências
+					for (var j = docs[i].dependencias.length - 1; j >= 0; j--) {
+						docs[i].dependencias[j] = docs.find(function(a){return a.id==this},docs[i].dependencias[j]);
+					}
 
-				// Parsing HHs
-				for (var j = docs[i].hhs.length - 1; j >= 0; j--) {
-					docs[i].hhs[j].cargo = $scope.cargos.find(function(a){return a.id == this},docs[i].hhs[j].id_cargo);
-					delete docs[i].hhs[j].id_cargo;
+					// Parsing HHs
+					for (var j = docs[i].hhs.length - 1; j >= 0; j--) {
+						docs[i].hhs[j].cargo = $scope.cargos.find(function(a){return a.id == this},docs[i].hhs[j].id_cargo);
+						delete docs[i].hhs[j].id_cargo;
+					}
 				}
-			}
-			$scope.projeto.documentos = docs;
-		})
-		.error(function(err){
-
-		})
+				$scope.projeto.documentos = docs;
+			})
+			.error(function(err){});
+		}
 	}
 
 	// definindo função Cancel
