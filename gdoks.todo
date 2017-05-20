@@ -1,10 +1,11 @@
 GDoks:
   Cadastro de Projeto 1 - Documentos:
     ☐ Resolver Bugs avulsos 1
-    ☐ Fazer campo de dependências funcionar corretamente
-    ☐ Salvar alterações em no cadastro de um documento
+    ✔ Fazer campo de dependências funcionar corretamente @done (17-05-20 10:41)
+    ✔ Salvar alterações em no cadastro de um documento @done (17-05-20 10:42)
     ☐ Inserir um novo documento no projeto
     ☐ Remover um documento do projeto
+    ☐ Mostrar Toasts quando altera existente, quando salva novo, quando dá erro na inserção e na alteração
   Gerenciamento de Documentos:
     ☐ Atualizar BD para que guarde revisões de um documento
     ☐ Atualizar BD para que uma revisão possa ter vários arquivos

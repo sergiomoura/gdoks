@@ -22,6 +22,7 @@
 					hhs: [],
 					subdisciplina:null,
 					subarea:null,
+					data_limite:null
 				};
 			} else {
 				$scope.docSelecionado = $scope.projeto.documentos.find(function(d){return d.id == this},idDoc);
@@ -91,30 +92,34 @@
 																				 ));
 
 			// Linkando doc.subdisciplina a um elemento de disciplinaSelecionada.subs
-			$scope.doc.subdisciplina = $scope.disciplinaSelecionada.subs.find(
+			$scope.doc.subdisciplina = (doc.id==0 ? null : $scope.disciplinaSelecionada.subs.find(
 																			function(a){
 																				return a.id==this;
 																			},$scope.doc.subdisciplina.id
-																		)
+																		));
 			// Determinando o valor da area selecionada
-			$scope.areaSelecionada = $scope.areas.find(
+			$scope.areaSelecionada = (doc.id==0 ? null : $scope.areas.find(
 													function(a){
 														return a.id == this
-													}, $scope.doc.subarea.area.id);
+													}, $scope.doc.subarea.area.id));
 
 			// Construindo vertor de subareas de area selecionada
 			$scope.subareasDeAreaSelecionada = [{}];
 			$scope.setSubareasDeAreaSelecionada = function(){
-				$scope.subareasDeAreaSelecionada = $scope.subareas.filter(function(a){return a.area.id==this},$scope.areaSelecionada.id);
+				if($scope.areaSelecionada != null){
+					$scope.subareasDeAreaSelecionada = $scope.subareas.filter(function(a){return a.area.id==this},$scope.areaSelecionada.id);
+				} else {
+					$scope.subareasDeAreaSelecionada = [];
+				}
 			}
 			$scope.setSubareasDeAreaSelecionada();
 
 			// Linkando doc.subarea com um elemento de subareasDeAreaSelecionada
-			$scope.doc.subarea = $scope.subareasDeAreaSelecionada.find(
+			$scope.doc.subarea = ($scope.doc.subarea==null ? null : $scope.subareasDeAreaSelecionada.find(
 													function(a){
 														return a.id == this
 													},$scope.doc.subarea.id
-			);
+			));
 
 			// Determinando quais documentos são dependencias possíveis
 			$scope.dependenciasPossiveis = getDependenciasPossiveis($scope.doc);
@@ -203,10 +208,27 @@
 				// Verificando se é inserção de documento ou atualização pelo id
 				if(doc.id == 0){
 					// Inserir novo documento
-					console.log("Inserir novo documento...");
+					GDoksFactory.adicionarDocumento(doc)
+					.success(function(response){
+
+						// Atribuindo id ao novo documento
+						documento.id = response.newId;
+
+						// Adicionando novo documento ao vetor de documentos do projeto
+						parentScope.projeto.documentos.push(documento)
+
+						// Fechando caixa de diálogo
+						$mdDialog.hide();
+						
+					})
+					.error(function(err){
+						console.log(err);
+					});
+
 				} else {
 					// Atualizar documento existente
-					GDoksFactory.alterarDocumento(doc).success(function(response){
+					GDoksFactory.alterarDocumento(doc)
+					.success(function(response){
 						
 						// Determinando a posição do objeto atual
 						var pos = parentScope.projeto.documentos.findIndex(function(a){return a.id == this},documento.id);
@@ -217,6 +239,9 @@
 						// Fechando caixa de diálogo
 						$mdDialog.hide();
 						
+					})
+					.error(function(err){
+						console.log(err);
 					});
 				}				
 			}

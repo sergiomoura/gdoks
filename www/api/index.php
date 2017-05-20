@@ -1544,6 +1544,7 @@
 			});
 
 			$app->post('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db){
+
 				// Lendo e saneando as informações da requisição
 				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
@@ -1567,10 +1568,10 @@
 				$id_usuario = $rs['id_usuario'];
 				if($ok == 1){
 					// Tudo ok! A documento a ser adicionada é do mesmo cliente do usuário
-					$sql = 'INSERT INTO gdoks_documentos (nome,id_area,id_subdisciplina,data_limite) VALUES (?,?,?,?)';
+					$sql = 'INSERT INTO gdoks_documentos (nome,codigo,id_subarea,id_subdisciplina,data_limite) VALUES (?,?,?,?,?)';
 					try {
 						// Salvando documento
-						$db->query($sql,'siis',$documento->nome,$documento->id_area,$documento->id_subdisciplina,$documento->data_limite);
+						$db->query($sql,'ssiis',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina,$documento->data_limite);
 
 						// Salvando o novo id do documento recém adicionado
 						$newId = $db->insert_id;
@@ -1579,6 +1580,12 @@
 						$sql = 'INSERT INTO gdoks_documentos_x_dependencias (id_documento,id_dependencia) VALUES (?,?)';
 						foreach ($documento->dependencias as $id_dependencia) {
 							$db->query($sql,'ii',$newId,$id_dependencia);
+						}
+
+						// salvando horas de trabalho para este documento
+						$sql = 'INSERT INTO gdoks_hhemdocs (id_doc,id_cargo,hh) VALUES (?,?,?)';
+						foreach ($documento->hhs as $hh) {
+							$db->query($sql,'iii',$newId,$hh->id_cargo,$hh->hh);
 						}
 
 						$response = new response(0,'Documento adicionado com sucesso.');
@@ -1593,6 +1600,7 @@
 
 					// removendo dependencias do objeto para salvar no log
 					unset($documento->dependencias);
+					unset($documento->hhs);
 
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,implode(',', (array)$documento));
