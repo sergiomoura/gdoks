@@ -356,11 +356,6 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 				})		
 			}
 		}
-		
-		// Criando um objeto para lidar com os tipos de validadores
-		$scope.tiposDeValidadores = {};
-		$scope.tiposDeValidadores.tipos = [{"id":1,"nome":"Necessário"},{"id":2,"nome":"Suficiente"}];
-		$scope.tiposDeValidadores.selecionado = {"id":1,"nome":"Necessário"};
 	}
 
 	// definindo função que remove validador
@@ -408,7 +403,6 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 						// alterando o scope.validadores para consistencia da interface
 						transaction.objectStore('usuarios').get($scope.dataValidadores.selecionado.id).onsuccess = function(evt){
 							var validador = evt.target.result;
-							validador.tipo = $scope.tiposDeValidadores.selecionado.id;
 							$scope.$apply(function(){
 								$scope.validadores.push(validador);
 								$scope.inserindoNovoValidador = false;			

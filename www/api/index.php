@@ -785,7 +785,6 @@
 				$id_disciplina = 1*$id_disciplina;
 				$data = json_decode($app->request->getBody());
 				$id_validador = $data->idu;
-				$tipo = $data->tipo;
 
 				// verificando se o usário enviado é do mesmo cliente da subdisciplina atual
 				$sql = 'SELECT A.id as id_usuario,
@@ -809,9 +808,9 @@
 				$id_usuario = $rs['id_usuario'];
 				if($ok == 1){
 					// Tudo ok! A subdisciplina a ser adicionada é do mesmo cliente do usuário
-					$sql = 'INSERT INTO gdoks_validadores (id_usuario,id_disciplina,tipo) VALUES (?,?,?)';
+					$sql = 'INSERT INTO gdoks_validadores (id_usuario,id_disciplina) VALUES (?,?)';
 					try {
-						$db->query($sql,'iii',$id_validador,$id_disciplina,$tipo);
+						$db->query($sql,'ii',$id_validador,$id_disciplina);
 						$response = new response(0,'Validador adicionado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
@@ -821,7 +820,7 @@
 						return;
 					}
 					// Registrando a ação
-					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina.','.$tipo);
+					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina);
 				} else {
 					$app->response->setStatus(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
@@ -2537,7 +2536,7 @@
 				$idCargo = 1*$id;
 				$sql = 'SELECT a.id,
 						       a.nome,
-						       a.hh
+						       a.valor_hh
 						FROM gdoks_cargos a
 						INNER JOIN
 						  (SELECT id_empresa
@@ -2583,10 +2582,10 @@
 					$sql = "UPDATE gdoks_cargos
 							SET	
 								nome=?,
-         						hh=?
+         						valor_hh=?
                             WHERE id=?";
                     try {
-                    	$db->query($sql,'sdi',$cargo->nome,$cargo->hh,$cargo->id);
+                    	$db->query($sql,'sdi',$cargo->nome,$cargo->valor_hh,$cargo->id);
                     } catch (Exception $e) {
                     	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 						$response->flush();
@@ -2603,7 +2602,7 @@
 				$response->flush();
 
 				// registrando alteração
-				registrarAcao($db,$id_usuario,ACAO_ALTEROU_CARGO,$cargo->id.','.$cargo->nome.','.$cargo->hh);
+				registrarAcao($db,$id_usuario,ACAO_ALTEROU_CARGO,$cargo->id.','.$cargo->nome.','.$cargo->valor_hh);
 			});
 			
 			$app->post('/cargos',function() use ($app,$db){
@@ -2623,9 +2622,9 @@
 				$id = $rs['id'];
 
 				// Inserindo novo cliente.
-				$sql = 'INSERT INTO gdoks_cargos (nome,hh,id_empresa) VALUES (?,?,?)';
+				$sql = 'INSERT INTO gdoks_cargos (nome,valor_hh,id_empresa) VALUES (?,?,?)';
 				try {
-					$db->query($sql,'sdi',$cargo->nome,$cargo->hh,$id_empresa);
+					$db->query($sql,'sdi',$cargo->nome,$cargo->valor_hh,$id_empresa);
 					$response = new response(0,'Cargo criado com sucesso.');
 					$response->newId = $db->insert_id;
 					$response->flush();
@@ -2636,7 +2635,7 @@
 					return;
 				}
 				// Registrando a ação
-				registrarAcao($db,$id,ACAO_ADICIONOU_CARGO,$db->insert_id.','.$cargo->nome,$cargo->hh);
+				registrarAcao($db,$id,ACAO_ADICIONOU_CARGO,$db->insert_id.','.$cargo->nome,$cargo->valor_hh);
 			});
 			
 			$app->delete('/cargos/:id',function($id) use ($app,$db){

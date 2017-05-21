@@ -8,7 +8,7 @@
 
 		GDoksFactory.getCargos().success(function(response){
 			for (var i = response.cargos.length - 1; i >= 0; i--) {
-				response.cargos[i].hh *= 1;
+				response.cargos[i].valor_hh *= 1;
 			}
 			$scope.cargos = response.cargos;	
 		});
@@ -19,7 +19,7 @@
 
 			// Definindo o objeto cargo clicado
 			if(idCargo == 0) {
-				cargoClicado = {id:0,nome:null,hh:null};
+				cargoClicado = {id:0,nome:null,valor_hh:null};
 			} else {
 				cargoClicado = $scope.cargos.find(function(c){return c.id == this},idCargo);
 			}
@@ -54,7 +54,7 @@
 							} else {
 								GDoksFactory.atualizarCargo(cargo)
 								.success(function(response){
-									parentCargo.hh = cargo.hh;
+									parentCargo.valor_hh = cargo.valor_hh;
 									parentCargo.nome = cargo.nome;
 									$mdToast.show(
 										$mdToast.simple()

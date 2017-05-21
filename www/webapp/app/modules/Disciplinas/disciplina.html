@@ -120,7 +120,6 @@
 			<tr>
 				<td>Nome</td>
 				<td>E-mail</td>
-				<td>Tipo</td>
 				<td></td>
 			</tr>
 		</thead>
@@ -128,7 +127,6 @@
 			<tr ng-repeat="val in validadores track by $index">
 				<td>{{val.nome}}</td>
 				<td>{{val.email}}</td>
-				<td>{{val.tipo=="1"?"Necessário":"Suficiente"}}</td>
 				<td>
 					<button class="bt_cancelar" ng-click="removerValidador(val.id)">Remover</button>
 				</td>
@@ -143,14 +141,6 @@
 					</select>
 				</td>
 				<td>
-					<select
-						name="selTipoValidador"
-						id="selTipoValidador"
-						ng-options="option.nome for option in tiposDeValidadores.tipos track by option.id"
-						ng-model="tiposDeValidadores.selecionado">
-					</select>
-				</td>
-				<td>
 					<button class="bt_limpo" ng-click="cancelarAlteracoesEmNovoValidador()">Cancelar</button>
 					<button class="bt_salvar" ng-click="salvarValidador()" ng-disabled="dataValidadores.selecionado.id == 0">Salvar</button>
 				</td>
@@ -162,13 +152,6 @@
 		<text>
 			<p>Validadores são usuários que validam as alterações feitas nos documentos.</p>
 			<p>Uma disciplina pode ter vários validadores.</p>
-			<p>Um validador pode ser de dois tipos: Suficiente ou Necessário.</p>
-			<p>Um documento é tido como validado se uma das duas coisas abaixo acontecer:
-			<ul>
-				<li>Todos os validadores necessários validam o documento</li>
-				<li>Pelo menos um validador suficiente valida o documento</li>
-			</ul>
-		</p>
 		</text>
 	</help>
 </div>
