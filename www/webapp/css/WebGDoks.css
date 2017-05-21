@@ -196,6 +196,16 @@
 #validador_container table tr td:first-child select {
   width: 100%; }
 
+.sub_dialog {
+  padding: 40px 20px 20px 20px; }
+  .sub_dialog md-dialog-content {
+    overflow: hidden;
+    padding: 16px 0 0 0; }
+  .sub_dialog md-dialog-actions {
+    padding: 0; }
+    .sub_dialog md-dialog-actions button {
+      margin: 0 !important; }
+
 #disciplinas_container button {
   position: absolute;
   left: 0;

@@ -350,8 +350,7 @@
 
 				// Carregando validadores
 				$sql = 'SELECT a.id_disciplina,
-						       a.id_usuario as id,
-						       a.tipo
+						       a.id_usuario as id
 						FROM gdoks_validadores a
 						INNER JOIN gdoks_disciplinas b ON a.id_disciplina=b.id
 						INNER JOIN gdoks_usuarios c ON c.id_empresa=b.id_empresa
@@ -366,7 +365,7 @@
 					});
 					
 					// mapeando o vetor para mostrar somente dados dos validadores
-					$d->validadores = array_values(array_map(function($a){return (object)Array('id'=>(1*$a->id),'tipo'=>(1*$a->tipo) );}, $validadoresDestaDisciplina));
+					$d->validadores = array_values(array_map(function($a){return 1*$a->id;}, $validadoresDestaDisciplina));
 				}
 
 
@@ -576,7 +575,7 @@
 						$response->flush();
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
-						$response = new response(1,'Já existe uma subdisciplina cadastrado com esta sigla ou nome.');
+						$response = new response(1,'Já existe uma subdisciplina cadastrado com esta sigla ou nome.' . $e->getMessage());
 						$response->flush();
 						return;
 					}

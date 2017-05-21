@@ -1,6 +1,7 @@
 angular.module('Disciplinas',[])
 .controller('DisciplinasController',DisciplinasController)
-.controller('DisciplinaController',DisciplinaController);
+.controller('DisciplinaController',DisciplinaController)
+.controller('SubdisciplinaController',SubdisciplinaController)
 
 function DisciplinasController($scope,GDoksFactory){
 	// Definindo variável que carrega aa disciplinas
@@ -21,30 +22,23 @@ function DisciplinasController($scope,GDoksFactory){
 	}
 };
 
-function DisciplinaController($scope,$routeParams,GDoksFactory){
-	// Capturando o id passado na url
+
+function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast){
+	// Lendo id da url
 	var id = $routeParams.id;
-	$scope.subdisciplinaEditada = null;
-	$scope.erroEmOperacaoDeSubdisciplina = null;
-	$scope.especialistas = [];
-	$scope.inserindoNovoEspecialista = false;
-	$scope.possiveisEspecialistas = [];
-	$scope.validadores = [];
-	$scope.inserindoNovoValidador = false;
-	$scope.possiveisValidadores = [];
 
-
-	// se id== 0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
+	// se id==0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
 	if(id == 0) {
 		// Criando uma disciplina vazia.
-		$scope.disciplina = {};
-		$scope.disciplina.id = 0;
-		$scope.disciplina.nome = '';
-		$scope.disciplina.ativa = true;
-		$scope.inicialmenteAtiva = true;
-		$scope.disciplina.subs = [];
-		$scope.disciplina.especialistas = [];
-		$scope.disciplina.validadores = [];
+		$scope.disciplina = {
+			id : 0,
+			nome : '',
+			sigla : '',
+			ativa : true,
+			subs : [],
+			especialistas : [],
+			validadores : []
+		};
 	} else {
 		// Carregando dados da disciplina a partir da base no cliente
 		var openReq = indexedDB.open('gdoks');
@@ -59,7 +53,7 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 					// parsing especialistas
 					for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
 						transaction.objectStore('usuarios').get($scope.disciplina.especialistas[i]*1).onsuccess = function(evt){
-							$scope.$apply(function(){$scope.especialistas.push(evt.target.result);});
+							$scope.$apply(function(){$scope.disciplina.especialistas.push(evt.target.result);});
 						}
 					};
 
@@ -69,8 +63,7 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 						var validador;
 						for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
 							validador = usuarios.find(function(u){return u.id == this},$scope.disciplina.validadores[i].id);
-							validador.tipo = $scope.disciplina.validadores[i].tipo;
-							$scope.$apply(function(){$scope.validadores.push(validador);});
+							$scope.$apply(function(){$scope.disciplina.validadores.push(validador);});
 						};
 					}
 				})
@@ -78,36 +71,68 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 		}
 	}
 
+	// Definindo função para salvar disciplina
 	$scope.salvarDisciplina = function(){
+
+		// Mostra carregando
+		$scope.root.carregando = true;
+
 		if($scope.disciplina.id == 0){
 			GDoksFactory.adicionarDisciplina($scope.disciplina)
 			.success(
 				function(response){
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Atribuindo novo id a disciplina
 					$scope.disciplina.id = response.newId;
 
 					// salvando na base de dados local
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').add($scope.disciplina);
 					}
+
+					// retornando toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Dados da disciplina inseridos com sucesso!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
 				}
 			)
 			.error(
 				function(error){
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
-					$scope.msg = error.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Retornando toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível completar a ação')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Exibindo erro no console.
+					console.warn(error)
+					
 				}
 			);
 		} else {
 			GDoksFactory.atualizarDisciplina($scope.disciplina)
 			.success(
 				function(response){
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Retornando toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Dados da disciplina atualizados com sucesso!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
 
 					// atualizando usuário na base local
 					indexedDB.open('gdoks').onsuccess = function(evt){
@@ -117,9 +142,19 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 			)
 			.error(
 				function(error){
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
-					$scope.msg = error.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Retornando toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível completar a ação')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Exibindo erro no console
+					console.warn(error);
 				}
 			);
 		}
@@ -128,8 +163,114 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 	// Definindo função que cancela as alterações
 	$scope.cancel = function(){
 		window.location = "WebGDoks.php#/disciplinas";
-		$scope.root.itemSelecionadoDoMenu = 3;
 	}
+}
+
+function SubdisciplinaController($scope,$mdDialog){
+	$scope.openSubDialog = function(evt,sub){
+		$mdDialog.show(
+				{
+					controller: SubDialogController,
+					locals:{
+						sub:angular.copy(sub),
+						parentSub:sub,
+						parentScope:$scope
+					},
+					templateUrl: './app/modules/Disciplinas/sub-dialog.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: evt,
+					clickOutsideToClose:true
+				})
+	}
+}
+
+function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFactory,$mdToast){
+	$scope.sub = sub;
+
+	$scope.salvar = function(sub){
+		// Mostrar Carregando
+		parentScope.root.carregando = true;
+
+		// Atribuindo o id da disciplina
+		sub.id_disciplina = parentScope.disciplina.id;
+
+		// Verificando se vai adicionar ou atualizar subdisciplina
+		if(sub.id != 0){
+			GDoksFactory.atualizarSubdisciplina(sub)
+				.success(
+					function(response){
+						// Esconde Carregando
+						parentScope.root.carregando = false;
+
+						// Copiando informações da sub para a parentSub
+						parentSub.nome = sub.nome;
+						parentSub.sigla = sub.sigla;
+						parentSub.ativa = sub.ativa;
+
+						// atualizar na base local
+						indexedDB.open('gdoks').onsuccess = function(evt){
+							evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put(parentScope.disciplina);
+						}
+
+						// Retornando toast para usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Dados da subdisciplina atualizados com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					}
+				)
+				.error(
+					function(error){
+						// Retornando toast para usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Não foi possível realizar a ação. ' + error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Exibindo erro no console
+						console.warn(error);
+
+						// Esconde Carregando
+						parentScope.root.carregando = false;
+					}
+				);
+		} else {
+			GDoksFactory.adicionarSubdisciplina($scope.subdisciplinaEditada)
+				.success(
+					function(response){
+						$scope.subdisciplinaEditada.id = response.newId;
+						$scope.subdisciplinaEditada = null;
+
+						// atualizar na base local
+						var openReq = indexedDB.open('gdoks');
+						openReq.onsuccess = function(){
+							var db = openReq.result;
+							db.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
+						}
+					}
+				)
+				.error(
+					function(error){
+						$scope.erroEmOperacaoDeSubdisciplina = error.msg;
+					}
+				);
+		}
+
+		// Escondendo
+		$mdDialog.hide();
+	};
+
+	$scope.cancelar = function(){
+		$mdDialog.hide();
+	}
+}
+
+function OldDisciplinaController($scope,$routeParams,GDoksFactory){
+	
 
 	// definindo função que remove subdisciplina
 	$scope.removerSubdisciplina = function(id){

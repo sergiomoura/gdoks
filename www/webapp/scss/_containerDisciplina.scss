@@ -52,3 +52,19 @@
 #validador_container table tr td:first-child select{
 	width: 100%;
 }
+
+.sub_dialog{
+	padding: 40px 20px 20px 20px;
+	md-dialog-content {
+		overflow: hidden;
+		padding: 16px 0 0 0;
+	}
+	md-dialog-actions{
+		padding: 0;
+		button{
+			margin: 0 !important;
+		}
+	}
+
+
+}

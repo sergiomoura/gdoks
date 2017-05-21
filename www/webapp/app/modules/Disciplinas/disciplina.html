@@ -1,26 +1,73 @@
-<div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
-<form name="form_disciplina" novalidate="">
-	<div id="disciplina_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
-		<h1><img src="img/disciplina.png">Dados de {{ disciplina.id==0 ? 'Nova Disciplina' : disciplina.nome}}</h1>
-		<div>
-			<div class="item">
-				<label for="disciplina">Nome:</label>
-				<input type="text" placeholder="Digite o nome da disciplina" ng-model="disciplina.nome" required>
-			</div>
-			<div class="item">
-				<label for="sigla">Sigla:</label>
-				<input type="text" name="sigla" placeholder="Digite a sigla da disciplina (4 caracteres)" ng-model="disciplina.sigla" required>
-			</div>
-			<div class="item">
-				<label for="ativa">Ativa:</label>
-				<input type="checkbox" name="ativa" ng-model="disciplina.ativa">
-				<span ng-if="disciplina.ativa != inicialmenteAtiva" class="aviso">A disciplina será {{disciplina.ativa?'ATIVADA':'INATIVADA'}}</span>
-			</div>
-		</div>
-		<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
-		<button	class="bt_salvar" ng-click="salvarDisciplina()" ng-disabled="form.$invalid || (disciplina.nome==disciplinaRef.nome && disciplinaRef.sigla==disciplina.sigla && disciplina.ativa==disciplinaRef.ativa)">Salvar</button>
-	</div>
-</form>
+<div id="disciplina_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
+	<md-tabs md-dynamic-height md-border-bottom>
+		<md-tab label="Dados">
+			<md-content class="md-padding">
+				<h1 class="md-display-2">Dados da Disciplina</h1>
+				<form name="form_disciplinaInfo" novalidate>
+					<div layout="row" layout-align="space-between center">
+						<md-input-container flex="30">
+							<label>Nome</label>
+							<input type="text" placeholder="Dê um nome para a disciplina" ng-model="disciplina.nome" required>
+						</md-input-container>
+						
+						<md-input-container flex="30">
+							<label>Sigla</label>
+							<input type="text" placeholder="Digite uma sigla identificadora para a disciplina" ng-model="disciplina.sigla" required>
+						</md-input-container>
+
+						<md-input-container flex="30">
+							<md-checkbox class="md-primary" ng-model="disciplina.ativa" name="string" aria-label="Disciplina Ativa?">
+								Ativa
+							</md-checkbox>
+						</md-input-container>
+					</div>
+					<div layout="row" layout-align="end start">
+						<md-button class="md-raised md-accent" ng-click="cancel()">Cancelar</md-button>
+						<md-button class="md-raised md-primary" ng-click="salvarDisciplina()" ng-disabled="form_disciplinaInfo.$pristine || !form_disciplinaInfo.$valid">Salvar</md-button>
+					</div>
+				</form>
+			</md-content>
+		</md-tab>
+
+		<md-tab label="Subdisciplinas">
+			<md-content class="md-padding" ng-controller="SubdisciplinaController">
+				<h1 class="md-display-2">Subdisciplinas</h1>
+				<table>
+					<thead>
+						<tr>
+							<td>Nome</td>
+							<td>Sigla</td>
+							<td>Status</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="sub in disciplina.subs track by $index">
+							<td>{{sub.nome}}</td>
+							<td>{{sub.sigla}}</td>
+							<td>{{sub.ativa?"Ativa":"Inativa"}}</td>
+							<td>
+								<md-button class="md-icon-button" aria-label="Alterar Subdisciplina" ng-click="openSubDialog($event,sub)">
+									<md-icon class="material-icons step" aria-label="Alterar Subdisciplina">mode_edit</md-icon>
+								</md-button>
+							</td>
+							<!-- botões --
+							<td>
+								 em modo normal: botões de remover e alterar --
+								<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_cancelar" ng-click="removerSubdisciplina(sub.id)">Remover</button>
+								<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_alterar" ng-click="editarSubdisciplina(sub.id)">Alterar</button>
+
+								-- em modo edição: botões de salvar e cancelar --
+								<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_limpo" ng-click="cancelarAlteracoesEmSubdisciplina(sub.id)">Cancelar</button>
+								<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_salvar" ng-click="salvarSubdisciplina(sub.id)">Salvar</button>
+							</td>-->
+						</tr>
+					</tbody>
+				</table>
+			</md-content>
+		</md-tab>
+	</md-tabs>
+</div>
 
 <div class="avisa_resultado_50 negativo" ng-show="erroEmOperacaoDeSubdisciplina!=null">{{erroEmOperacaoDeSubdisciplina}}</div>
 <div ng-if="disciplina.id!=0" id="subdisciplina_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
