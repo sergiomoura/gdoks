@@ -36,7 +36,7 @@ GDoks:
   BUGS Avulsos:
     ☐	As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
     Cannot read property 'find' of undefined at ProjetosController.js:159
-
+    ☐	melhorar look do helm (MD)
     ☐ Mostrar Carregando para ações
       ☐ Inserir Cargo
       ☐ Atualizar Cargo

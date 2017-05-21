@@ -239,23 +239,41 @@ function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFac
 					}
 				);
 		} else {
-			GDoksFactory.adicionarSubdisciplina($scope.subdisciplinaEditada)
+			GDoksFactory.adicionarSubdisciplina(sub)
 				.success(
 					function(response){
-						$scope.subdisciplinaEditada.id = response.newId;
-						$scope.subdisciplinaEditada = null;
+						// Escondendo o carregando
+						parentScope.root.carregando = false;
+
+						// Retornando toast para usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Subdisciplina atualizada com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Adicionando a subdisciplina ao vetor de subs da disciplina
+						parentScope.disciplina.subs.push(sub);
 
 						// atualizar na base local
-						var openReq = indexedDB.open('gdoks');
-						openReq.onsuccess = function(){
-							var db = openReq.result;
-							db.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
+						indexedDB.open('gdoks').onsuccess = function(evt){
+							evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put(parentScope.disciplina);
 						}
 					}
 				)
 				.error(
 					function(error){
-						$scope.erroEmOperacaoDeSubdisciplina = error.msg;
+						// Retornando toast para usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Não foi possível completar ação. ' + error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Exibindo erro no console
+						console.warn(error);
 					}
 				);
 		}

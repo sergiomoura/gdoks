@@ -575,7 +575,7 @@
 						$response->flush();
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
-						$response = new response(1,'Já existe uma subdisciplina cadastrado com esta sigla ou nome.' . $e->getMessage());
+						$response = new response(1,'Verifique se já não existe uma subdisciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
 						return;
 					}

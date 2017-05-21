@@ -29,9 +29,22 @@
 			</md-content>
 		</md-tab>
 
-		<md-tab label="Subdisciplinas">
+		<md-tab label="Subdisciplinas" ng-disabled="disciplina.id==0">
 			<md-content class="md-padding" ng-controller="SubdisciplinaController">
 				<h1 class="md-display-2">Subdisciplinas</h1>
+				<help>
+					<text>
+						Subdisciplinas são divisões de uma disciplina.
+					</text>
+				</help>
+				<div layout="row" layout-align="space-between center">
+					<md-button class="md-raised md-primary" aria-label="Nova Subdisciplina" ng-click="openSubDialog($event,{id:0,ativa:true})">Nova Subdisciplina</md-button>
+					<md-input-container>
+						<label>Buscar por Subdisciplina</label>
+						<md-icon class="material-icons step" aria-label="Buscar Subdisciplina">search</md-icon>
+						<input type="text" ng-model="q.nome" placeholder="Digite">
+					</md-input-container>
+				</div>
 				<table>
 					<thead>
 						<tr>
@@ -42,7 +55,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="sub in disciplina.subs track by $index">
+						<tr ng-repeat="sub in disciplina.subs | filter:q.nome">
 							<td>{{sub.nome}}</td>
 							<td>{{sub.sigla}}</td>
 							<td>{{sub.ativa?"Ativa":"Inativa"}}</td>
@@ -51,69 +64,12 @@
 									<md-icon class="material-icons step" aria-label="Alterar Subdisciplina">mode_edit</md-icon>
 								</md-button>
 							</td>
-							<!-- botões --
-							<td>
-								 em modo normal: botões de remover e alterar --
-								<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_cancelar" ng-click="removerSubdisciplina(sub.id)">Remover</button>
-								<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_alterar" ng-click="editarSubdisciplina(sub.id)">Alterar</button>
-
-								-- em modo edição: botões de salvar e cancelar --
-								<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_limpo" ng-click="cancelarAlteracoesEmSubdisciplina(sub.id)">Cancelar</button>
-								<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_salvar" ng-click="salvarSubdisciplina(sub.id)">Salvar</button>
-							</td>-->
 						</tr>
 					</tbody>
 				</table>
 			</md-content>
 		</md-tab>
 	</md-tabs>
-</div>
-
-<div class="avisa_resultado_50 negativo" ng-show="erroEmOperacaoDeSubdisciplina!=null">{{erroEmOperacaoDeSubdisciplina}}</div>
-<div ng-if="disciplina.id!=0" id="subdisciplina_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
-	<h1>Subdisciplinas de {{disciplina.nome}}</h1>
-	<table>
-		<thead>
-			<tr>
-				<td>Nome</td>
-				<td>Sigla</td>
-				<td>Status</td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="sub in disciplina.subs track by $index">
-				<!-- Campo de nome -->
-				<td ng-if="sub.id != subdisciplinaEditada.id">{{sub.nome}}</td>
-				<td ng-if="sub.id == subdisciplinaEditada.id"><input type="text" name="nome_{{sub.id}}" id="nome_{{sub.id}}" ng-model="subdisciplinaEditada.nome"></td>
-				
-				<!-- Campo de sigla -->
-				<td ng-if="sub.id != subdisciplinaEditada.id">{{sub.sigla}}</td>
-				<td ng-if="sub.id == subdisciplinaEditada.id"><input type="text" maxlength="4" name="sigla_{{sub.id}}" ng-model="subdisciplinaEditada.sigla"></td>
-				
-				<!-- Campo de Status -->
-				<td ng-if="sub.id != subdisciplinaEditada.id">{{sub.ativa?"Ativa":"Inativa"}}</td>
-				<td ng-if="sub.id == subdisciplinaEditada.id"><input type="checkbox" name="ativa_{{sub.id}}" ng-model="subdisciplinaEditada.ativa">{{subdisciplinaEditada.ativa?"Ativa":"Inativa"}}</td>
-
-				<!-- botões -->
-				<td>
-					<!-- em modo normal: botões de remover e alterar -->
-					<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_cancelar" ng-click="removerSubdisciplina(sub.id)">Remover</button>
-					<button ng-if="sub.id!=subdisciplinaEditada.id" class="bt_alterar" ng-click="editarSubdisciplina(sub.id)">Alterar</button>
-
-					<!-- em modo edição: botões de salvar e cancelar -->
-					<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_limpo" ng-click="cancelarAlteracoesEmSubdisciplina(sub.id)">Cancelar</button>
-					<button ng-if="sub.id==subdisciplinaEditada.id" class="bt_salvar" ng-click="salvarSubdisciplina(sub.id)">Salvar</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	<button class="bt_adicionar" ng-click="editarSubdisciplina(0)" ng-disabled="subdisciplinaEditada!=null">+ Adicionar Subdisciplina</button>
-	<help>
-		<text>
-			Subdisciplinas são divisões de uma disciplina.
-		</text>
-	</help>
 </div>
 
 <div ng-if="disciplina.id!=0" id="especialista_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">

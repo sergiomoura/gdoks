@@ -1,17 +1,12 @@
 <div md-whiteframe="dp" id="cargos_container" class="bloco_conteudo bloco_central_80" md-whiteframe="1dp" layout="column">
 	<h1>Cargos</h1>
-	<div layout="row">
-		<div class="controles_esquerda" layout="row" layout-align="start start">
-			<md-button class="md-raised md-primary" aria-label="Novo Cargo" ng-click="openDialog($event,0)">Novo Cargo</md-button>
-		</div>
-		<span flex></span>
-		<div class="controles_direita" layout="row" layout-align="end start">
-			<md-input-container>
-				<label>Buscar por Cargo</label>
-				<md-icon class="material-icons step" aria-label="Buscar Cargo">search</md-icon>
-				<input type="text" ng-model="q.nome" placeholder="Digite">
-			</md-input-container>
-		</div>
+	<div layout="row" layout-align="space-between center">
+		<md-button class="md-raised md-primary" aria-label="Novo Cargo" ng-click="openDialog($event,0)">Novo Cargo</md-button>
+		<md-input-container>
+			<label>Buscar por Cargo</label>
+			<md-icon class="material-icons step" aria-label="Buscar Cargo">search</md-icon>
+			<input type="text" ng-model="q.nome" placeholder="Digite">
+		</md-input-container>
 	</div>
 	<table ng-if="cargos.length>0">
 		<thead>
