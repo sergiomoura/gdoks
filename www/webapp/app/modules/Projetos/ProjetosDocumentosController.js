@@ -239,6 +239,11 @@
 					return a;
 				});
 
+				// Limpando HHs de cargo nulo do documento
+				documento.hhs = documento.hhs.filter(function(a){
+					return a.cargo != null;
+				});				
+
 				// Verificando se é inserção de documento ou atualização pelo id
 				if(doc.id == 0){
 					// Inserir novo documento

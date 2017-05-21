@@ -18,7 +18,7 @@ function ProjetosController($scope,GDoksFactory){
 }
 
 
-function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory){
+function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast){
 
 	// Variáveis de controle sobre o conteúdo de clientes e usuários (se info já foi carregada da base);
 	var clientesCarregados = false;
@@ -222,15 +222,20 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					// Esconde Carregando
 					$scope.root.carregando = false;
 
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Dados do projeto inseridos com sucesso!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
 					$scope.projeto.id = response.newId;
 					projeto.id = response.newId;
 
 					// Adicionando projeto na base local
 					indexedDB.open('gdoks').onsuccess = function(evt){
-						// limpando dados para armazenamento.
+						// limpando dados para armazenamento na base local.
 						delete projeto.id_cliente;
 						delete projeto.id_responsavel;
 						delete projeto.data_inicio_p;
@@ -248,9 +253,16 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					// Esconde Carregando
 					$scope.root.carregando = false;
 
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
-					$scope.msg = error.msg;
+					// Exibindo mensagem de erro no console
+					console.warn(error);
+
+					// Retornando Toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível completar ação.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
 				}
 			);
 		} else {
@@ -260,9 +272,13 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					// Esconde Carregando
 					$scope.root.carregando = false;
 
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+					// Retornando toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Dados do projeto alterados com sucesso!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
 
 					// Atualizando projeto na base local
 					indexedDB.open('gdoks').onsuccess = function(evt){
@@ -282,9 +298,16 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					// Esconde Carregando
 					$scope.root.carregando = false;
 
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
-					$scope.msg = error.msg;
+					// Exibindo mensagem de erro no console
+					console.warn(error);
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível completar a ação!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
 				}
 			);
 		}

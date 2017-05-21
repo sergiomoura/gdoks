@@ -34,8 +34,8 @@ GDoks:
         
       
   BUGS Avulsos:
-    ☐ Botão de salvar cadastro de documento está ficando habilitado com o form inválido
-    ☐	Documentos sem hhs atribuídas ficam com uma hh atribuída
+    ✔ Botão de salvar cadastro de documento está ficando habilitado com o form inválido @done (17-05-21 00:25)
+    ✔	Documentos sem hhs atribuídas ficam com uma hh atribuída @done (17-05-21 00:46)
     ☐ Listando Projetos com nome errado (C e D)
     ☐ Ao atualizar dados de um projeto as informações não são salvas no base do browser
     ☐	Consertar erro ao cadastrar nova disciplina (Cannot set property 'onsuccess' of null at DisciplinasController.js:93)
