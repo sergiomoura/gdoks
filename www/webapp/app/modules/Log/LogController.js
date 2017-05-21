@@ -1,5 +1,5 @@
-angular.module('Log',[]).
-controller('LogController',function($scope,$cookies,GDoksFactory){
+angular.module('Log',[])
+.controller('LogController',function($scope,$cookies,GDoksFactory){
 	// Definindo logs
 	$scope.logs = [];
 
@@ -37,8 +37,8 @@ controller('LogController',function($scope,$cookies,GDoksFactory){
 	$scope.q = {
 					de:(new Date()),
 					ate:(new Date()),
-					uid:null,
-					aid:null
+					uid:$cookies.getObject('user').id,
+					aid:0
 				};
 	// Flags de controle
 	$scope.usuariosCarregados = false;
@@ -53,6 +53,10 @@ controller('LogController',function($scope,$cookies,GDoksFactory){
 			}
 		});
 	}
+
+	// Chamando a função logo quando carrega a tela
+	$scope.getLogs();
+
 }).filter('logDescreveAcao',function(){
 	return function(log,dicAcoes){
 		var descricao = '';
@@ -70,6 +74,13 @@ controller('LogController',function($scope,$cookies,GDoksFactory){
 	}
 }).filter('logUsername',function(){
 	return function(log,dicUsuarios){
-		return(dicUsuarios[log.id_usuario].nome.split(' ').splice(0,2).join(' '));
+		// verificando se os usuários já foram carregados da base local e o dicionário foi criado
+		if(dicUsuarios[log.id_usuario] == undefined){
+			// Ainda não carregou dados da base, retornando string vazia
+			return '';
+		} else {
+			// Carregou dados da base. Dois primeiros nomes do usuário.
+			return(dicUsuarios[log.id_usuario].nome.split(' ').splice(0,2).join(' '));
+		}
 	}
 })
