@@ -35,9 +35,11 @@ GDoks:
       
   BUGS Avulsos:
     ☐ Botão de salvar cadastro de documento está ficando habilitado com o form inválido
+    ☐	Documentos sem hhs atribuídas ficam com uma hh atribuída
     ☐ Listando Projetos com nome errado (C e D)
     ☐ Ao atualizar dados de um projeto as informações não são salvas no base do browser
     ☐	Consertar erro ao cadastrar nova disciplina (Cannot set property 'onsuccess' of null at DisciplinasController.js:93)
+    ☐	Cannot read property 'find' of undefined at ProjetosController.js:159
     ☐	Retirar tipo de validador (necessário x suficiente) da base e da tela de cadastro de disciplina
     ☐	Consertar tela de cadastro de cargos para suportar o novo nome da coluna na tabel cargos
     ☐	Logo que abrir a página de log, tentar carregar ações realizadas pelo usuário no dia atual
