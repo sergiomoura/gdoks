@@ -89,10 +89,8 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 					$scope.disciplina.id = response.newId;
 
 					// salvando na base de dados local
-					var openReq = indexedDB.open('gdoks').onsuccess;
-					openReq.onsuccess = function(){
-						var db = openReq.result;
-						db.transaction('disciplinas').objectStore('disciplinas').add($scope.disciplina);
+					indexedDB.open('gdoks').onsuccess = function(evt){
+						evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').add($scope.disciplina);
 					}
 				}
 			)
@@ -112,10 +110,8 @@ function DisciplinaController($scope,$routeParams,GDoksFactory){
 					$scope.msg = response.msg;
 
 					// atualizando usuário na base local
-					var openReq = indexedDB.open('gdoks').onsuccess;
-					openReq.onsuccess = function(){
-						var db = openReq.result;
-						var putReq = db.transaction('disciplinas').objectStore('disciplinas').put($scope.disciplina);
+					indexedDB.open('gdoks').onsuccess = function(evt){
+						evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put($scope.disciplina);
 					}
 				}
 			)
