@@ -213,6 +213,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 		delete projeto.daos;
 		delete projeto.areas;
 		delete projeto.documentos;
+		delete projeto.subareas;
 
 		if(projeto.id == 0){
 			GDoksFactory.adicionarProjeto(projeto)
