@@ -2,6 +2,8 @@ angular.module('Disciplinas',[])
 .controller('DisciplinasController',DisciplinasController)
 .controller('DisciplinaController',DisciplinaController)
 .controller('SubdisciplinaController',SubdisciplinaController)
+.controller('EspecialistasController',EspecialistasController)
+.controller('ValidadoresController',ValidadoresController)
 
 function DisciplinasController($scope,GDoksFactory){
 	// Definindo variável que carrega aa disciplinas
@@ -22,55 +24,76 @@ function DisciplinasController($scope,GDoksFactory){
 	}
 };
 
-
 function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast){
 	// Lendo id da url
 	var id = $routeParams.id;
 
-	// se id==0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
-	if(id == 0) {
-		// Criando uma disciplina vazia.
-		$scope.disciplina = {
-			id : 0,
-			nome : '',
-			sigla : '',
-			ativa : true,
-			subs : [],
-			especialistas : [],
-			validadores : []
-		};
-	} else {
-		// Carregando dados da disciplina a partir da base no cliente
-		var openReq = indexedDB.open('gdoks');
-		openReq.onsuccess = function(evt){
-			var db = evt.target.result;
-			var transaction = db.transaction(['disciplinas','usuarios']);
-			transaction.objectStore('disciplinas').get(id*1).onsuccess = function(evt){
+	$scope.usuarios = [];
+	$scope.dicUsuarios = [];
+	$scope.usuariosCarregados = false;
+
+	function carregaUsuarios(){
+		// Levantando usuários da base
+		indexedDB.open("gdoks").onsuccess = function(evt){
+			evt.target.result.transaction("usuarios").objectStore("usuarios").getAll().onsuccess = function(evt){
 				$scope.$apply(function(){
-					$scope.disciplina = evt.target.result;
-					$scope.inicialmenteAtiva = $scope.disciplina.ativa;
-
-					// parsing especialistas
-					for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
-						transaction.objectStore('usuarios').get($scope.disciplina.especialistas[i]*1).onsuccess = function(evt){
-							$scope.$apply(function(){$scope.disciplina.especialistas.push(evt.target.result);});
-						}
-					};
-
-					// parsing validadores
-					transaction.objectStore('usuarios').getAll().onsuccess = function(evt){
-						var usuarios = evt.target.result;
-						var validador;
-						for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
-							validador = usuarios.find(function(u){return u.id == this},$scope.disciplina.validadores[i].id);
-							$scope.$apply(function(){$scope.disciplina.validadores.push(validador);});
-						};
+					$scope.usuarios = evt.target.result;
+					$scope.usuariosCarregados = true;
+					// criando dicionário de usuários
+					for (var i = $scope.usuarios.length - 1; i >= 0; i--) {
+						$scope.dicUsuarios[$scope.usuarios[i].id] = $scope.usuarios[i];
 					}
-				})
+				});
+				onUsuariosCarregados();
 			}
 		}
 	}
 
+	function onUsuariosCarregados(){
+		carregaDisciplina(id);
+	}
+
+	function carregaDisciplina(id){
+		if(id == 0) {
+			// Criando uma disciplina vazia.
+			$scope.disciplina = {
+				id : 0,
+				nome : '',
+				sigla : '',
+				ativa : true,
+				subs : [],
+				especialistas : [],
+				validadores : []
+			};
+		} else {
+			// Carregando dados da disciplina a partir da base no cliente
+			indexedDB.open('gdoks').onsuccess = function(evt){
+				var db = evt.target.result;
+				var transaction = db.transaction(['disciplinas','usuarios']);
+				transaction.objectStore('disciplinas').get(id*1).onsuccess = function(evt){
+					$scope.$apply(function(){
+						$scope.disciplina = evt.target.result;
+
+						// parsing especialistas
+						for (var i = $scope.disciplina.especialistas.length - 1; i >= 0; i--) {
+							$scope.disciplina.especialistas[i] = $scope.dicUsuarios[$scope.disciplina.especialistas[i]];
+						};
+						
+						// parsing validadores
+						for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
+							$scope.disciplina.validadores[i] = $scope.dicUsuarios[$scope.disciplina.validadores[i]];
+						};
+					})
+				}
+			}
+		}
+	}
+
+	carregaUsuarios();
+	return;
+	
+	// se id==0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
+	
 	// Definindo função para salvar disciplina
 	$scope.salvarDisciplina = function(){
 
@@ -286,6 +309,41 @@ function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFac
 		$mdDialog.hide();
 	}
 }
+
+function EspecialistasController($scope){
+
+	// Copiando vetor de especialistas para comportamento de interface
+	$scope.$watch('disciplina',function(){
+		if($scope.disciplina != undefined){
+			$scope.especialistas = angular.copy($scope.disciplina.especialistas);
+		}
+	})
+
+	// Função que filtra opções de especialista ao digitar
+	$scope.filtrarTexto = function(search){
+		// filtrando quanto ao texto
+		return $scope.usuarios.filter(
+			function(a){
+				return a.nome.toLowerCase().indexOf(this.toLowerCase()) != -1;
+			},search);
+	}
+
+	// Função que salva vetor de especialistas
+	$scope.salvar = function(){
+		console.log($scope.especialistas);
+	}
+}
+
+function ValidadoresController($scope){
+	$scope.filtrarTexto = function(search){
+			// filtrando quanto ao texto
+			return $scope.usuarios.filter(
+				function(a){
+					return a.nome.toLowerCase().indexOf(this.toLowerCase()) != -1;
+				},search);
+		}
+}
+
 
 function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 	
