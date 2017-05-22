@@ -217,6 +217,9 @@
 			}
 
 			$scope.salvar = function(documento){
+				// Mostrando carregando
+				parentScope.root.carregando = true;
+
 				// Fazendo cópia do objeto documento
 				doc = angular.copy(documento);
 
@@ -249,6 +252,8 @@
 					// Inserir novo documento
 					GDoksFactory.adicionarDocumento(doc)
 					.success(function(response){
+						// Esconde carregando
+						parentScope.root.carregando = false;
 
 						// Atribuindo id ao novo documento
 						documento.id = response.newId;
@@ -280,11 +285,16 @@
 							.position('bottom left')
 							.hideDelay(5000)
 						);
+
+						// Esconde carregando
+						parentScope.root.carregando = false;
 					});
 				} else {
 					// Atualizar documento existente
 					GDoksFactory.alterarDocumento(doc)
 					.success(function(response){
+						// Esconde carregando
+						parentScope.root.carregando = false;
 						
 						// Determinando a posição do objeto atual
 						var pos = parentScope.projeto.documentos.findIndex(function(a){return a.id == this},documento.id);
@@ -302,6 +312,9 @@
 							.position('bottom left')
 							.hideDelay(5000)
 						);
+
+						// Esconde carregando
+						parentScope.root.carregando = false;
 						
 					})
 					.error(function(err){
@@ -316,6 +329,9 @@
 							.position('bottom left')
 							.hideDelay(5000)
 						);
+
+						// Esconde carregando
+						parentScope.root.carregando = false;
 					});
 				}				
 			}

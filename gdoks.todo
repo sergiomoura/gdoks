@@ -3,7 +3,7 @@ GDoks:
     ☐ Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
     ☐ Fazer filtro de documentos funcionar
     ☐ Adicionar Campo para ordenar documentos
-    ☐ Limpar código
+    ✔ Limpar código @done (17-05-22 11:09)
   Gerenciamento de Documentos:
     ☐ Atualizar BD para que guarde revisões de um documento
     ☐ Atualizar BD para que uma revisão possa ter vários arquivos
@@ -43,11 +43,13 @@ GDoks:
       ☐ Inserir Projeto
       ☐ Atualizar Projeto
     ☐ Deixar com look & feel de Material Design
-      ☐	Tela que Cadstrar Disciplina 
-      ☐ Tela que lista usuários
-      ☐	Tela de cadastro do usuário
-      ☐	Tela que lista disciplinas
-      ☐	Tela que lista clientes
+      ✔	Tela que Cadstrar Disciplina @done (17-05-22 11:05)
+      ☐ Lista de usuários
+      ☐	Cadastro do usuário
+      ☐	Lista disciplinas
+      ☐	Lista clientes
+      ☐	Cadastro de Clientes
+      ☐	Documento de Abertura de Operações
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
