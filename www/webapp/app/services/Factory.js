@@ -57,12 +57,8 @@ WebGDoks.factory('GDoksFactory',
 				return $http.delete(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/'+subdisciplina.id,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.adicionarEspecialista = function(id_disciplina,id_usuario){
-				return $http.post(API_ROOT+'/disciplinas/'+id_disciplina+'/especialistas/',id_usuario,{headers: {'Authorization': $cookies.getObject('user').token}});
-			}
-			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.removerEspecialista = function(id_disciplina,id_usuario){
-				return $http.delete(API_ROOT+'/disciplinas/'+id_disciplina+'/especialistas/'+id_usuario,{headers: {'Authorization': $cookies.getObject('user').token}});
+			GDoksFactory.salvarEspecialistas = function(id_disciplina,ids_especialistas){
+				return $http.put(API_ROOT+'/disciplinas/'+id_disciplina+'/especialistas/',ids_especialistas,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarValidador = function(id_disciplina,id_usuario,tipo){

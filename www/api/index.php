@@ -684,6 +684,57 @@
 				}
 			});
 
+			$app->put('/disciplinas/:id_disciplina/especialistas/',function($id_disciplina) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_disciplina = 1*$id_disciplina;
+				$ids_especialistas = json_decode($app->request->getBody());
+				
+				// verificando se o usário enviado é do mesmo cliente da disciplina atual
+				$sql = 'SELECT A.id as id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_disciplinas
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_disciplina)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					try {
+						// Removendo especialistas antigos
+						$sql = "DELETE FROM gdoks_especialistas WHERE id_disciplina=?";
+						$db->query($sql,'i',$id_disciplina);
+
+						// Inserindo novos especialistas
+						$sql = "INSERT INTO gdoks_especialistas (id_disciplina,id_usuario) VALUES (?,?)";
+						foreach ($ids_especialistas as $id_especialista) {
+							$db->query($sql,'ii',$id_disciplina,$id_especialista);
+						}
+
+						$response = new response(0,'Especialistas adicionados com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_ALTEROU_ESPECIALISTAS,$id_disciplina.',['.implode('|', $ids_especialistas).']');
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
+
 			$app->post('/disciplinas/:id_disciplina/especialistas/',function($id_disciplina) use ($app,$db){
 				// Lendo e saneando as informações da requisição
 				$token = $app->request->headers->get('Authorization');

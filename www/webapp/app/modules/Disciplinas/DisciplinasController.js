@@ -3,7 +3,6 @@ angular.module('Disciplinas',[])
 .controller('DisciplinaController',DisciplinaController)
 .controller('SubdisciplinaController',SubdisciplinaController)
 .controller('EspecialistasController',EspecialistasController)
-.controller('ValidadoresController',ValidadoresController)
 
 function DisciplinasController($scope,GDoksFactory){
 	// Definindo variável que carrega aa disciplinas
@@ -310,7 +309,7 @@ function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFac
 	}
 }
 
-function EspecialistasController($scope){
+function EspecialistasController($scope,GDoksFactory,$mdToast){
 
 	// Copiando vetor de especialistas para comportamento de interface
 	$scope.$watch('disciplina',function(){
@@ -330,7 +329,53 @@ function EspecialistasController($scope){
 
 	// Função que salva vetor de especialistas
 	$scope.salvar = function(){
-		console.log($scope.especialistas);
+		// Mostrando o carregando
+		$scope.root.carregando = true;
+
+		// limpando vetor para enviar só os ids dos especialistas
+		var ids = $scope.especialistas.map(function(a){return a.id});
+
+		// Enviando informações para salvamento
+		GDoksFactory.salvarEspecialistas($scope.disciplina.id,ids)
+		.success(function(response){
+			// Esconde o carregando
+			$scope.root.carregando = false;
+
+			// Salvando especialistas no scope.
+			$scope.disciplina.especialistas = $scope.especialistas;
+
+			// Salvando na base local
+			indexedDB.open('gdoks').onsuccess = function(evt){
+				// clonando disciplina a ser salva na base
+				var d = angular.copy($scope.disciplina);
+				d.especialistas = d.especialistas.map(function(a){return a.id});
+				evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put(d)
+			}
+
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Especialistas salvos com sucesso.')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+
+		})
+		.error(function(error){
+			// Esconde o carregando
+			$scope.root.carregando = false;
+
+			// Escrevendo erro no console
+			console.warn(error);
+
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Não foi possível completar a ação. ' + error.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		})
 	}
 }
 
