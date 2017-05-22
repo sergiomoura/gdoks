@@ -828,6 +828,57 @@
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
+
+			$app->put('/disciplinas/:id_disciplina/validadores/',function($id_disciplina) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_disciplina = 1*$id_disciplina;
+				$ids_validadores = json_decode($app->request->getBody());
+				
+				// verificando se o usário enviado é do mesmo cliente da disciplina atual
+				$sql = 'SELECT A.id as id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_disciplinas
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_disciplina)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					try {
+						// Removendo validadores antigos
+						$sql = "DELETE FROM gdoks_validadores WHERE id_disciplina=?";
+						$db->query($sql,'i',$id_disciplina);
+
+						// Inserindo novos validadores
+						$sql = "INSERT INTO gdoks_validadores (id_disciplina,id_usuario) VALUES (?,?)";
+						foreach ($ids_validadores as $id_validador) {
+							$db->query($sql,'ii',$id_disciplina,$id_validador);
+						}
+
+						$response = new response(0,'Validadores adicionados com sucesso.');
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+
+					// Registrando a ação
+					registrarAcao($db,$id_usuario,ACAO_ALTEROU_VALIDADORES,$id_disciplina.',['.implode('|', $ids_validadores).']');
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+				}
+			});
 			
 			$app->post('/disciplinas/:id_disciplina/validadores/',function($id_disciplina) use ($app,$db){
 				// Lendo e saneando as informações da requisição

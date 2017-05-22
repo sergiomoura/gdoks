@@ -3,6 +3,7 @@ angular.module('Disciplinas',[])
 .controller('DisciplinaController',DisciplinaController)
 .controller('SubdisciplinaController',SubdisciplinaController)
 .controller('EspecialistasController',EspecialistasController)
+.controller('ValidadoresController',ValidadoresController)
 
 function DisciplinasController($scope,GDoksFactory){
 	// Definindo variável que carrega aa disciplinas
@@ -82,6 +83,8 @@ function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast){
 						for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
 							$scope.disciplina.validadores[i] = $scope.dicUsuarios[$scope.disciplina.validadores[i]];
 						};
+
+						console.dir($scope.disciplina);
 					})
 				}
 			}
@@ -89,10 +92,7 @@ function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast){
 	}
 
 	carregaUsuarios();
-	return;
-	
-	// se id==0, adicionar uma nova disciplina. se não carregar o disciplinas de id passado
-	
+		
 	// Definindo função para salvar disciplina
 	$scope.salvarDisciplina = function(){
 
@@ -379,14 +379,74 @@ function EspecialistasController($scope,GDoksFactory,$mdToast){
 	}
 }
 
-function ValidadoresController($scope){
-	$scope.filtrarTexto = function(search){
-			// filtrando quanto ao texto
-			return $scope.usuarios.filter(
-				function(a){
-					return a.nome.toLowerCase().indexOf(this.toLowerCase()) != -1;
-				},search);
+function ValidadoresController($scope,GDoksFactory,$mdToast){
+
+	// Copiando vetor de validadores para comportamento de interface
+	$scope.$watch('disciplina',function(){
+		if($scope.disciplina != undefined){
+			$scope.validadores = angular.copy($scope.disciplina.validadores);
 		}
+	})
+
+	// Função que filtra opções de especialista ao digitar
+	$scope.filtrarTexto = function(search){
+		// filtrando quanto ao texto
+		return $scope.usuarios.filter(
+			function(a){
+				return a.nome.toLowerCase().indexOf(this.toLowerCase()) != -1;
+			},search);
+	}
+
+	// Função que salva vetor de validadores
+	$scope.salvar = function(){
+		// Mostrando o carregando
+		$scope.root.carregando = true;
+
+		// limpando vetor para enviar só os ids dos validadores
+		var ids = $scope.validadores.map(function(a){return a.id});
+
+		// Enviando informações para salvamento
+		GDoksFactory.salvarValidadores($scope.disciplina.id,ids)
+		.success(function(response){
+			// Esconde o carregando
+			$scope.root.carregando = false;
+
+			// Salvando validadores no scope.
+			$scope.disciplina.validadores = $scope.validadores;
+
+			// Salvando na base local
+			indexedDB.open('gdoks').onsuccess = function(evt){
+				// clonando disciplina a ser salva na base
+				var d = angular.copy($scope.disciplina);
+				d.validadores = d.validadores.map(function(a){return a.id});
+				evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put(d)
+			}
+
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Validadores salvos com sucesso.')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+
+		})
+		.error(function(error){
+			// Esconde o carregando
+			$scope.root.carregando = false;
+
+			// Escrevendo erro no console
+			console.warn(error);
+
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Não foi possível completar a ação. ' + error.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		})
+	}
 }
 
 
