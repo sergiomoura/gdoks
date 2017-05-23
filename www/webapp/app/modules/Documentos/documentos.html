@@ -1,19 +1,118 @@
-<div id="dpvs_container" class="container_80">
-	<h2>Documentos</h2>
-	<div class="controles">
-		<input type="text" id="dpvs_filtro" placeholder="Filtrar..." ng-model="q.nome">
-		<div class="item">
-			<label for="docs_ordem">Ordenar por</label>
-			<select name="docs_ordem" id="docs_ordem" ng-model="ordem">
-				<option value="nome">Nome do Documento</option>
-				<option value="data_limite">Data Limite</option>
-				<option value="nome_projeto">Projeto</option>
-				<option value="progressoValidado">Percentual Concluído</option>
-			</select>
+<md-content id="lista_de_documentos_container" layout-padding layout-wrap>
+    
+	<div layout="row">
+		<md-input-container flex>
+			<label>Busca</label>
+			<input focus type="text" ng-model="busca" placeholder="Digite o nome ou codigo do documento...">
+		</md-input-container>
+		<md-button ng-click="mostrandoBuscaAvancada = !mostrandoBuscaAvancada" flex="none" class="md-icon-button md-primary" aria-label="Busca Avançada">
+			<md-icon ng-if="!mostrandoBuscaAvancada" class="material-icons step" aria-label="Busca Avançada">line_style</md-icon>
+			<md-icon ng-if="mostrandoBuscaAvancada" class="material-icons step" aria-label="Busca Avançada">line_style</md-icon>
+		</md-button>
+	</div>
+
+	<div class=".busca_avancada-show-hide" layout="column" ng-show="mostrandoBuscaAvancada">
+		<div layout="row" layout-align="space-between center">
+			<md-input-container flex="20">
+				<label>Projeto</label>
+				<md-select ng-model="filtro.projeto">
+				  <md-option ng-value="0">Todos os Projetos</md-option>
+				  <md-option ng-value="p.id" ng-repeat="p in projetos">{{ p.nome }}</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Área</label>
+				<md-select ng-model="filtro.area">
+				  <md-option ng-value="0">Todas as Áreas</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Sub-área</label>
+				<md-select ng-model="filtro.subarea">
+				  <md-option ng-value="0">Todas as Sub-áreas</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Ordenar Por</label>
+				<md-select ng-model="ordem">
+				  <md-option ng-value="'nome'">Nome</md-option>
+				</md-select>
+			</md-input-container>
+		</div>
+		<div layout="row" layout-align="space-between center">
+			<md-input-container flex="20">
+				<label>Disciplina</label>
+				<md-select ng-model="filtro.disciplina">
+				  <md-option ng-value="0">Todas as Disciplinas</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Subdisciplinas</label>
+				<md-select ng-model="filtro.subdisciplina">
+				  <md-option ng-value="0">Todas as Subdisciplinas</md-option>
+				</md-select>
+			</md-input-container>
+			<md-checkbox flex="20" class="md-primary" ng-model="mostraConcluidos" aria-label="Mostra Concluídos">
+				Mostra Concluídos
+			</md-checkbox>
+			<md-checkbox flex="20" class="md-primary" ng-model="mostraPorValidar" aria-label="Mostra documentos por validar">
+				Mostra os por validar
+			</md-checkbox>
 		</div>
 	</div>
-	<div id="lista_de_docs">
-		<gdoks-doc ng-repeat="doc in docs | orderBy:ordem | filter:q as result" doc="doc"></gdoks-doc>
-		<div ng-if="result.length==0">Nenhum documento a exibir</div>
-	</div>
-</div>
+
+	<md-content>
+		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos">
+			<div layout="row">
+				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.nome}}</div>
+				<md-button ng-click="" flex="none" class="md-icon-button md-primary" aria-label="Visualizar Documento">
+					<md-icon class="material-icons step" aria-label="Visualizar Documento">open_in_new</md-icon>
+				</md-button>
+			</div>
+			<table class="info">
+				<tbody>
+					<tr>
+						<td>Projeto: {{doc.nome_projeto}}</td>
+						<td>Revisão: {{doc.serial_revisao==null?0:doc.serial_revisao}}</td>
+					</tr>
+					<tr>
+						<td>Área: {{doc.nome_area}}</td>
+						<td>Trabalho Estimado: {{doc.hh==null?0:doc.hh}}hh</td>
+					</tr>
+					<tr>
+						<td>Sub-área: {{doc.nome_subarea}}</td>
+						<td>Data Limite: {{doc.data_limite==null?"Não há":(doc.data_limite|date:'dd/MM/yyyy')}}</td>
+					</tr>
+					<tr>
+						<td>Disciplina: {{doc.nome_disciplina}}</td>
+						<td>45 dias restantes</td>
+					</tr>
+					<tr>
+						<td>Subdisciplina: {{doc.nome_subdisciplina}}</td>
+						<td></td>
+					</tr>
+
+				</tbody>
+			</table>
+			<div>
+				<div class="progresso">
+					<span class="validado">{{doc.progresso_validado}}%</span>
+					<span class="aValidar" ng-if="doc.progresso_a_validar>0">{{doc.progresso_a_validar}}%</span>
+				</div>
+				<div class="hbar">
+					<div ng-if="doc.progresso_validado>0"
+						class="prgValidado"
+						style="width: calc({{doc.progresso_validado}}% - 2px)">
+						{{doc.progresso_validado}}%
+					</div
+					><div ng-if="doc.progresso_a_validar>0"
+						class="prgAValidar"
+						style="width: calc({{doc.progresso_a_validar}}% - 2px)">
+						{{doc.progresso_a_validar}}%
+					</div>
+				</div>
+			</div>
+			<div class="ua">Última Atualização: 13/04/2017 às 15:22</div>
+		</div>
+	</md-content>
+</md-content>

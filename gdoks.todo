@@ -3,20 +3,54 @@ GDoks:
     ☐ Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
     ☐ Fazer filtro de documentos funcionar
     ☐ Adicionar Campo para ordenar documentos
-    ✔ Limpar código @done (17-05-22 11:09)
+    ☐	Tela que lista documentos, mostrar busca avançada de maneira animada
+    
   Gerenciamento de Documentos:
-    ☐ Atualizar BD para que guarde revisões de um documento
-    ☐ Atualizar BD para que uma revisão possa ter vários arquivos
-    ☐ Listar documentos da alçada do usuário logado
-    ☐ Atualizar uma revisão fazendo upload de novo conjunto de arquivos
+    Lista de Documentos: @due(17-05-23 06:00)
+	    ✔	Desenhar tela no FWorks com todas funcionalidades @due(17-05-23 00:30) @done (17-05-23 01:05)
+	    ☐	Desenhar tela onde lista-se os documentos (.html/js/css) @due(17-05-23 02:00)
+	    ☐	Criar dumb data na BD
+	    ☐	Linkar com os dados reais @due(17-05-23 06:00)
+	    ✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25)
+	    Filtros/Ordem
+	    	☐	Por Nome
+	    	☐	Por Projeto
+	    	☐	Por Disciplina
+	    	☐	Por Subdisciplina
+	    	☐	Por Área
+	    	☐	Por Subárea
+	    	☐	Ordenar por data limite
+	    	☐	Ordenar por HH
+	    	☐	Exibir os que aguardam validação
+	    	☐	Exibir os concluídos (100%)
+
+    Documento para atualizar:@due(17-05-25 06:00)
+    ☐ Desenhar tela no Fireworks
+    ☐	Implementar desenho em html/js/css com dados estáticos
+    ☐	Linkar desenho a lógica do Sistema
+    Atentar para as funcionalidades -
+    	☐	Mostrar Dados do documento/revisão
+    	☐	Mostrar histórico de atualizações/revisões
+    	☐	Poder baixar os arquivos da revisão se for possível
+    	☐	Poder upar os arquivos da revisão se for possível
+    	☐	Somente atualizar revisão se (Revisão não tiver nenhum arquivo OU Arquivos da Revisão atual tenham sidos baixados com bloqueio)
+ 
     Atentar para campos para cada arquivo
       - Número de páginas
       - Tamanho do papel
     Atentar para campos para cada revisão
       - Percentual concluído
       - Data Limite
-    ☐ Validar Progresso de um documento
-  Gerenciamento de GRDs:
+    Documento para validar progresso:@due(17-05-26 06:00)
+    ☐ Desenhar tela no fireworks
+    ☐	Implementar desenho em html/js/css com dados estáticos
+    ☐	Linkar desenho a lógica do Sistema
+    Atentar para as funcionalidades
+     	☐	Mostrar Dados do documento/revisão
+    	☐	Mostrar histórico de atualizações/revisões
+    	☐	Poder baixar os arquivos da revisão se for possível
+    	☐	Validar Progresso
+  Gerenciamento de GRDs: @due(17-05-29 23:59)
     ☐ Listar GRDs
       ☐ Fazer desenho de tela html
       ☐ Dar funcionalidade a tela
@@ -43,7 +77,6 @@ GDoks:
       ☐ Inserir Projeto
       ☐ Atualizar Projeto
     ☐ Deixar com look & feel de Material Design
-      ✔	Tela que Cadstrar Disciplina @done (17-05-22 11:05)
       ☐ Lista de usuários
       ☐	Cadastro do usuário
       ☐	Lista disciplinas
@@ -53,6 +86,10 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Atualizar BD para que uma revisão possa ter vários arquivos @done (17-05-22 14:25) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
+	✔ Atualizar BD para que guarde revisões de um documento @done (17-05-22 14:24) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
+	✔ Limpar código @done (17-05-22 11:09) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔	Tela que Cadstrar Disciplina @done (17-05-22 11:05) @project(GDoks / BUGS Avulsos)
 	✔	Verificar necessidade de subareas serem submetidas quando se salva dados de um projeto @done (17-05-21 02:19) @project(GDoks / BUGS Avulsos)
 	✔	Consertar erro quando tenta registrar no log a alteração de dados de um projeto @done (17-05-21 02:12) @project(GDoks / BUGS Avulsos)
 	✔	Logo que abrir a página de log, tentar carregar ações realizadas pelo usuário no dia atual @done (17-05-21 02:06) @project(GDoks / BUGS Avulsos)

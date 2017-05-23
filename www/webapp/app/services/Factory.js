@@ -153,8 +153,12 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/documentos/paraValidar',{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.getDocumentos = function(id_projeto){
+			GDoksFactory.getDocumentosDoProjeto = function(id_projeto){
 				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/documentos/',{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getDocumentos = function(id_projeto){
+				return $http.get(API_ROOT+'/documentos',{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.downloadArquivo = function(idArquivo){

@@ -144,7 +144,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 
 	function carregaDocumentos(){
 		if ($scope.projeto.id != 0) {
-			GDoksFactory.getDocumentos($scope.projeto.id)
+			GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
 			.success(function(response){
 				var docs = response.documentos;
 				var achouSub,j,k;

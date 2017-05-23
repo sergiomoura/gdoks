@@ -232,6 +232,72 @@
   position: relative;
   left: 15px; }
 
+#lista_de_documentos_container .md-errors-spacer {
+  display: none; }
+#lista_de_documentos_container .docCard {
+  padding: 0;
+  margin: 0 25px 30px 0;
+  display: inline-block;
+  width: calc(50% - 28px); }
+  #lista_de_documentos_container .docCard .titulo {
+    margin: 10px;
+    font-size: 20px; }
+  #lista_de_documentos_container .docCard .md-icon-button {
+    position: relative;
+    top: 5px; }
+  #lista_de_documentos_container .docCard .info {
+    width: 100%;
+    background-color: #E3F2FD;
+    color: #2196F3; }
+    #lista_de_documentos_container .docCard .info td {
+      padding: 0px 10px;
+      font-size: 14px; }
+    #lista_de_documentos_container .docCard .info td:nth-child(2n) {
+      text-align: right; }
+    #lista_de_documentos_container .docCard .info tr:first-child > td {
+      padding-top: 10px; }
+    #lista_de_documentos_container .docCard .info tr:last-child > td {
+      padding-bottom: 10px; }
+  #lista_de_documentos_container .docCard .progresso {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 0 10px 0 0; }
+    #lista_de_documentos_container .docCard .progresso .validado {
+      color: #2196F3; }
+    #lista_de_documentos_container .docCard .progresso .aValidar:before {
+      content: "+"; }
+    #lista_de_documentos_container .docCard .progresso .aValidar {
+      color: #6DD900; }
+  #lista_de_documentos_container .docCard .hbar {
+    background-color: #DFDFDF;
+    height: 16px;
+    width: calc(100% - 20px);
+    margin: 1px 10px 5px 10px; }
+    #lista_de_documentos_container .docCard .hbar div {
+      cursor: default;
+      transition: width 0.3s ease-out;
+      display: inline-block;
+      height: 16px;
+      font-size: 11px;
+      text-align: right;
+      padding-right: 2px;
+      position: relative;
+      top: -2px;
+      left: 0;
+      overflow: hidden; }
+    #lista_de_documentos_container .docCard .hbar .prgValidado {
+      background-color: #2196F3;
+      color: #FFF; }
+    #lista_de_documentos_container .docCard .hbar .prgAValidar {
+      background-color: #6DD900;
+      color: #FFF; }
+  #lista_de_documentos_container .docCard .ua {
+    margin: 0 10px 10px 10px;
+    text-align: right;
+    font-size: 12px; }
+
 #docs_container {
   padding-top: 20px;
   position: relative; }

@@ -2373,6 +2373,123 @@
 					die();
 				}
 			});
+			
+			$app->get('/documentos',function() use ($app,$db){
+				// Lendo o token
+				$token = $app->request->headers->get('Authorization');
+
+				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
+				$sql = 'SELECT id
+						FROM gdoks_usuarios
+						WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				if(sizeof($rs) == 0){
+					// Respondendo para um token inválido
+					$app->response->setStatus(401);
+					$response = new response(1,'Refresh failed!');
+					$response->flush();
+					return;
+				} else {
+					// Escrevendo o id do usuário em idu
+					$idu = $rs[0]['id'];
+
+					// Preparando consulta
+					$sql = 'SELECT
+								docs.id,
+						       docs.nome,
+						       docs.id_projeto,
+						       docs.nome_projeto,
+						       docs.id_area,
+						       docs.nome_area,
+						       docs.id_subarea,
+						       docs.nome_subarea,
+						       docs.id_disciplina,
+						       docs.nome_disciplina,
+						       docs.id_subdisciplina,
+						       docs.nome_subdisciplina,
+						       docs.hh,
+						       revs.id_revisao,
+						       revs.serial_revisao,
+						       revs.data_limite,
+						       revs.progresso_validado,
+						       revs.progresso_a_validar,
+						       revs.ua
+						FROM
+						  (SELECT e.id,
+						          e.nome,
+						          h.id AS id_projeto,
+						          h.nome AS nome_projeto,
+						          g.id AS id_area,
+						          g.nome AS nome_area,
+						          f.id AS id_subarea,
+						          f.nome AS nome_subarea,
+						          c.id_disciplina,
+						          c.nome_disciplina,
+						          c.ehEspecialista,
+						          c.ehValidador,
+						          d.id AS id_subdisciplina,
+						          d.nome AS nome_subdisciplina,
+						          SUM(i.hh) AS hh
+						   FROM gdoks_usuarios a
+						   INNER JOIN gdoks_especialistas b ON a.id=b.id_usuario
+						   INNER JOIN
+						     (SELECT a.id AS id_disciplina, a.nome AS nome_disciplina, !isnull(b.id_usuario) AS ehEspecialista, !isnull(c.id_usuario) AS ehValidador
+						      FROM gdoks_disciplinas a
+						      LEFT JOIN gdoks_especialistas b ON (a.id=b.id_disciplina
+						                                          AND b.id_usuario=?)
+						      LEFT JOIN gdoks_validadores c ON (a.id=c.id_disciplina
+						                                        AND c.id_usuario=?)
+						      WHERE !(isnull(b.id_usuario)
+						              AND isnull(c.id_usuario))) c ON b.id_disciplina=c.id_disciplina
+						   INNER JOIN gdoks_subdisciplinas d ON d.id_disciplina=c.id_disciplina
+						   INNER JOIN gdoks_documentos e ON e.id_subdisciplina=d.id
+						   INNER JOIN gdoks_subareas f ON f.id=e.id_subarea
+						   INNER JOIN gdoks_areas g ON g.id=f.id_area
+						   INNER JOIN gdoks_projetos h ON h.id=g.id_projeto
+						   LEFT JOIN gdoks_hhemdocs i ON i.id_doc=e.id
+						   WHERE a.id=?
+						   GROUP BY e.id,
+						            e.nome,
+						            h.id,
+						            h.nome,
+						            g.id,
+						            g.nome,
+						            c.id_disciplina,
+						            c.nome_disciplina,
+						            d.id,
+						            d.nome) docs
+						LEFT JOIN
+						  (SELECT X.id_documento,
+						          id_revisao,
+						          serial AS serial_revisao,
+						          data_limite,
+						          progresso_validado,
+						          progresso_a_validar,
+						          ua
+						   FROM
+						     (SELECT max(id) AS id_revisao,
+						             id_documento
+						      FROM gdoks_revisoes
+						      GROUP BY id_documento) X
+						   INNER JOIN gdoks_revisoes Y ON X.id_revisao=Y.id) revs ON revs.id_documento=docs.id';
+					try {
+						$rs = $db->query($sql,'iii',$idu,$idu,$idu);	
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro ao tentar listar documentos: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+					
+					$response = new response(0,'ok');
+					$response->documentos = array_map(function($a){return (object)$a;}, $rs);
+					$response->flush();
+					return;
+
+				}
+			});
+
 		// FIM DE ROTAS DE DOCUMENTOS */
 
 		// ROTAS DE ARQUIVOS
