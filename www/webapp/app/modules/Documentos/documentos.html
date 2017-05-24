@@ -93,7 +93,7 @@
 					</tr>
 					<tr>
 						<td>Subdisciplina: {{doc.nome_subdisciplina}}</td>
-						<td></td>
+						<td><span md-colors={color:'orange-800'}>{{(doc.data_limite < agora && doc.data_limite !=null) ? 'Atrasado' : ''}}</span></td>
 					</tr>
 
 				</tbody>

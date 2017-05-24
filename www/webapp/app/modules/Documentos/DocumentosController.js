@@ -22,11 +22,14 @@
 			mostrarConcluidos:'01' // ['0' | '01']
 		};
 
-		// Definindo se mostra busca avançada
-		$scope.mostraBuscaAvancada = false;
+		// Definindo 'agora'
+		$scope.agora = new Date();
 
 		// Definindo valor inicial para ordem
-		$scope.ordem = 'nome';
+		$scope.ordem = 'data_limite';
+
+		// Definindo se mostra busca avançada
+		$scope.mostraBuscaAvancada = false;
 
 		// Definindo o valor inicial para o vetor de areas
 		$scope.areas = [];
@@ -164,7 +167,7 @@
 		}
 	}
 
-	// Defininfo função filter
+	// Definindo função filter
 	function daysFromNow(){
 		return function(futureDate){
 			if(futureDate == null){
@@ -180,7 +183,7 @@
 				} else if(diff == -1 ) {
 					return ('1 dia atrás');
 				} else {
-					return ((diff) + ' dias atrás');
+					return ((-diff) + ' dias atrás');
 				}
 			}
 		}

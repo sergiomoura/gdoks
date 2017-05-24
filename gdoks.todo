@@ -12,9 +12,10 @@ GDoks:
 	    ✔	Criar dumb data na BD @done (17-05-23 17:05)
 	    ✔	Linkar com os dados reais @due(17-05-23 06:00) @done (17-05-23 17:05)
 	    ✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25)
-	    ☐	Aplicar filtro para mostrar dias restantes
+	    ✔	Aplicar filtro para mostrar dias restantes @done (17-05-24 09:19)
 	    ✔	Mostrar última at0ualização do documento @done (17-05-23 22:34)
 	    ✔	Fazer com que botão aponte para o abrir o documento @done (17-05-24 09:04)
+	    ☐	Destacar informação de quando um documento está atrasado
 	    Filtros/Ordem
 	    	✔	Por Nome @done (17-05-24 05:27)
 	    	✔	Por Projeto @done (17-05-24 05:27)

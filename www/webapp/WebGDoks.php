@@ -115,7 +115,6 @@
 	<script src="app/modules/Configuracoes/ConfiguracoesController.js"></script>
 	<script src="app/modules/Documentos/DocumentosController.js"></script>
 	<script src="app/modules/Documentos/DocumentoController.js"></script>
-	<script src="app/modules/DocumentosParaValidacao/DocumentosParaValidacaoController.js"></script>
 	<script src="app/modules/Disciplinas/DisciplinasController.js"></script>
 	<script src="app/modules/Nav/NavController.js"></script>
 	<script src="app/modules/Log/LogController.js"></script>
