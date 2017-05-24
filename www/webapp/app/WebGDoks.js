@@ -81,7 +81,14 @@ WebGDoks.config(
 			'/documentos',
 			{
 				controller: 'DocumentosController',
-				templateUrl: 'app/modules/Documentos/documentos.html'
+				templateUrl: 'app/modules/Documentos/Documentos.html'
+			}
+		)
+		.when(
+			'/documentos/:id',
+			{
+				controller: 'DocumentoController',
+				templateUrl: 'app/modules/Documentos/Documento.html'
 			}
 		)
 		.when(

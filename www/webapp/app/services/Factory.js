@@ -117,6 +117,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.delete(API_ROOT+'/subareas/'+subarea.id,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getSubareas = function(id_projeto,id_area){
+				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/areas/'+id_area+'/subareas',{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.salvarDAOs = function(){
 				// implementada em ProjetoDAOsControlller
 			}

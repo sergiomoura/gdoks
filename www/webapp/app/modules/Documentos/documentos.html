@@ -21,51 +21,55 @@
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Área</label>
-				<md-select ng-model="busca.id_area">
+				<md-select ng-model="busca.id_area" ng-change="onAreaChange()">
 				  <md-option ng-value="undefined">Todas as Áreas</md-option>
 				  <md-option ng-value="a.id" ng-repeat="a in areas">{{ a.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Sub-área</label>
-				<md-select ng-model="filtro.subarea">
-				  <md-option ng-value="0">Todas as Sub-áreas</md-option>
+				<md-select ng-model="busca.id_subarea">
+				  <md-option ng-value="undefined">Todas as Sub-áreas</md-option>
+				  <md-option ng-value="s.id" ng-repeat="s in subareas">{{ s.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Ordenar Por</label>
 				<md-select ng-model="ordem">
 				  <md-option ng-value="'nome'">Nome</md-option>
+				  <md-option ng-value="'data_limite'">Data Limite</md-option>
 				</md-select>
 			</md-input-container>
 		</div>
 		<div layout="row" layout-align="space-between center">
 			<md-input-container flex="20">
 				<label>Disciplina</label>
-				<md-select ng-model="filtro.disciplina">
-				  <md-option ng-value="0">Todas as Disciplinas</md-option>
+				<md-select ng-model="busca.id_disciplina" ng-change="onDisciplinaChange()">
+				  <md-option ng-value="undefined">Todas as Disciplinas</md-option>
+				  <md-option ng-value="d.id" ng-repeat="d in disciplinas">{{ d.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Subdisciplinas</label>
-				<md-select ng-model="filtro.subdisciplina">
-				  <md-option ng-value="0">Todas as Subdisciplinas</md-option>
+				<md-select ng-model="busca.id_subdisciplina">
+				  <md-option ng-value="undefined">Todas as Subdisciplinas</md-option>
+				  <md-option ng-value="sub.id" ng-repeat="sub in subdisciplinas">{{ sub.nome }}</md-option>
 				</md-select>
 			</md-input-container>
-			<md-checkbox flex="20" class="md-primary" ng-model="mostraConcluidos" aria-label="Mostra Concluídos">
-				Mostra Concluídos
+			<md-checkbox flex="20" ng-true-value="'0'" ng-false-value="'01'" class="md-primary" ng-model="busca.mostrarConcluidos" aria-label="Mostra Concluídos">
+				Exibir os concluídos
 			</md-checkbox>
-			<md-checkbox flex="20" class="md-primary" ng-model="mostraPorValidar" aria-label="Mostra documentos por validar">
-				Mostra os por validar
+			<md-checkbox flex="20" ng-true-value="'01'" ng-false-value="'0'" class="md-primary" ng-model="busca.mostrarPorValidar" aria-label="Mostra documentos por validar">
+				Exibir somente os por validar
 			</md-checkbox>
 		</div>
 	</div>
 
 	<md-content>
-		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos|filter:busca as result track by doc.id">
+		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos|orderBy:ordem|filter:busca as result track by doc.id">
 			<div layout="row">
 				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.nome}}</div>
-				<md-button ng-click="" flex="none" class="md-icon-button md-primary" aria-label="Visualizar Documento">
+				<md-button ng-click="onOpenClick(doc.id)" flex="none" class="md-icon-button md-primary" aria-label="Visualizar Documento">
 					<md-icon class="material-icons step" aria-label="Visualizar Documento">open_in_new</md-icon>
 				</md-button>
 			</div>

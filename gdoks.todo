@@ -13,19 +13,19 @@ GDoks:
 	    ✔	Linkar com os dados reais @due(17-05-23 06:00) @done (17-05-23 17:05)
 	    ✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25)
 	    ☐	Aplicar filtro para mostrar dias restantes
-	    ✔	Mostrar última atualização do documento @done (17-05-23 22:34)
-	    ☐	Fazer com que botão aponte para o abrir o documento
+	    ✔	Mostrar última at0ualização do documento @done (17-05-23 22:34)
+	    ✔	Fazer com que botão aponte para o abrir o documento @done (17-05-24 09:04)
 	    Filtros/Ordem
-	    	☐	Por Nome
-	    	☐	Por Projeto
-	    	☐	Por Disciplina
-	    	☐	Por Subdisciplina
-	    	☐	Por Área
-	    	☐	Por Subárea
-	    	☐	Ordenar por data limite
-	    	☐	Ordenar por HH
-	    	☐	Exibir os que aguardam validação
-	    	☐	Exibir os concluídos (100%)
+	    	✔	Por Nome @done (17-05-24 05:27)
+	    	✔	Por Projeto @done (17-05-24 05:27)
+	    	✔	Por Disciplina @done (17-05-24 05:27)
+	    	✔	Por Subdisciplina @done (17-05-24 05:27)
+	    	✔	Por Área @done (17-05-24 05:27)
+	    	✔	Por Subárea @done (17-05-24 05:27)
+	    	✔	Ordenar por data limite @done (17-05-24 05:27)
+	    	✔	Ordenar por HH @done (17-05-24 05:27)
+	    	✔	Exibir os que aguardam validação @done (17-05-24 08:53)
+	    	✔	Exibir os concluídos (100%) @done (17-05-24 08:53)
 
     Documento para atualizar:@due(17-05-25 06:00)
     ☐ Desenhar tela no Fireworks
