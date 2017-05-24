@@ -3,11 +3,10 @@
 	<div layout="row">
 		<md-input-container flex>
 			<label>Busca</label>
-			<input focus type="text" ng-model="busca" placeholder="Digite o nome ou codigo do documento...">
+			<input focus autocomplete="off" type="text" ng-model="busca.nome" placeholder="Digite o nome ou codigo do documento...">
 		</md-input-container>
 		<md-button ng-click="mostrandoBuscaAvancada = !mostrandoBuscaAvancada" flex="none" class="md-icon-button md-primary" aria-label="Busca Avançada">
-			<md-icon ng-if="!mostrandoBuscaAvancada" class="material-icons step" aria-label="Busca Avançada">line_style</md-icon>
-			<md-icon ng-if="mostrandoBuscaAvancada" class="material-icons step" aria-label="Busca Avançada">line_style</md-icon>
+			<md-icon class="material-icons step" aria-label="Busca Avançada">line_style</md-icon>
 		</md-button>
 	</div>
 
@@ -15,15 +14,16 @@
 		<div layout="row" layout-align="space-between center">
 			<md-input-container flex="20">
 				<label>Projeto</label>
-				<md-select ng-model="filtro.projeto">
-				  <md-option ng-value="0">Todos os Projetos</md-option>
+				<md-select ng-model="busca.id_projeto" ng-change="onProjetoChange()">
+				  <md-option ng-value="undefined">Todos os Projetos</md-option>
 				  <md-option ng-value="p.id" ng-repeat="p in projetos">{{ p.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Área</label>
-				<md-select ng-model="filtro.area">
-				  <md-option ng-value="0">Todas as Áreas</md-option>
+				<md-select ng-model="busca.id_area">
+				  <md-option ng-value="undefined">Todas as Áreas</md-option>
+				  <md-option ng-value="a.id" ng-repeat="a in areas">{{ a.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
@@ -62,7 +62,7 @@
 	</div>
 
 	<md-content>
-		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos">
+		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos|filter:busca as result track by doc.id">
 			<div layout="row">
 				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.nome}}</div>
 				<md-button ng-click="" flex="none" class="md-icon-button md-primary" aria-label="Visualizar Documento">
@@ -85,7 +85,7 @@
 					</tr>
 					<tr>
 						<td>Disciplina: {{doc.nome_disciplina}}</td>
-						<td>45 dias restantes</td>
+						<td>{{doc.data_limite|daysFromNow}}</td>
 					</tr>
 					<tr>
 						<td>Subdisciplina: {{doc.nome_subdisciplina}}</td>

@@ -1288,6 +1288,46 @@
 				}
 			});
 
+			$app->get('/projetos/:id_projeto/areas',function($id_projeto) use ($app,$db){
+				// Lendo e saneando as informações da requisição
+				$token = $app->request->headers->get('Authorization');
+				$id_projeto = 1*$id_projeto;
+
+				// verificando se o usário enviado é do mesmo cliente da area atual
+				$sql = 'SELECT A.id AS id_usuario,
+						       count(*) AS ok
+						FROM
+						  (SELECT id,
+						          id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks_projetos d WHERE d.id=?) B ON A.id_empresa=B.id_empresa';
+				$rs = $db->query($sql,'si',$token,$id_projeto)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id_usuario'];
+				if($ok == 1){
+					// Tudo ok! A area a ser adicionada é do mesmo cliente do usuário
+					$sql = 'SELECT id,nome,codigo FROM gdoks_areas WHERE id_projeto=? ';
+					try {
+						$response = new response(0,'ok');
+						$response->areas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não lê dados de outra empresa.');	
+				}
+			});
+
+
 			$app->delete('/projetos/:id_projeto/areas/:id_area',function($id_projeto,$id_area) use ($app,$db){
 				// Lendo e saneando as informações da requisição
 				$token = $app->request->headers->get('Authorization');
