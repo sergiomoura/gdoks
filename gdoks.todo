@@ -4,14 +4,17 @@ GDoks:
     ☐ Fazer filtro de documentos funcionar
     ☐ Adicionar Campo para ordenar documentos
     ☐	Tela que lista documentos, mostrar busca avançada de maneira animada
-    
+
   Gerenciamento de Documentos:
     Lista de Documentos: @due(17-05-23 06:00)
 	    ✔	Desenhar tela no FWorks com todas funcionalidades @due(17-05-23 00:30) @done (17-05-23 01:05)
-	    ☐	Desenhar tela onde lista-se os documentos (.html/js/css) @due(17-05-23 02:00)
-	    ☐	Criar dumb data na BD
-	    ☐	Linkar com os dados reais @due(17-05-23 06:00)
+	    ✔	Desenhar tela onde lista-se os documentos (.html/js/css) @due(17-05-23 02:00) @done (17-05-23 09:40)
+	    ✔	Criar dumb data na BD @done (17-05-23 17:05)
+	    ✔	Linkar com os dados reais @due(17-05-23 06:00) @done (17-05-23 17:05)
 	    ✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25)
+	    ☐	Aplicar filtro para mostrar dias restantes
+	    ✔	Mostrar última atualização do documento @done (17-05-23 22:34)
+	    ☐	Fazer com que botão aponte para o abrir o documento
 	    Filtros/Ordem
 	    	☐	Por Nome
 	    	☐	Por Projeto
