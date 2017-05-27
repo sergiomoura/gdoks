@@ -51,12 +51,7 @@
 			<md-sidenav layout="column" md-is-locked-open="root.mostrandoMenu" md-whiteframe="1dp" md-component-id="menu_principal">
 				<md-sidemenu>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/dashboard"><md-icon class="material-icons step" aria-label="home">home</md-icon>Home</md-sidemenu-button>
-					<md-sidemenu-group>
-						<md-sidemenu-content md-icon="group_work" md-heading="Projetos" md-arrow="true">
-							<md-sidemenu-button  ng-click="toggleMenu()" href="#/projetos/0">Novo Projeto</md-sidemenu-button>
-							<md-sidemenu-button  ng-click="toggleMenu()" href="#/projetos">Ver Todos</md-sidemenu-button>
-						</md-sidemenu-content>
-					</md-sidemenu-group>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/projetos"><md-icon class="material-icons step" aria-label="Projetos">group_work</md-icon>Projetos</md-sidemenu-button>
 					<md-sidemenu-button href="#/usuarios" ng-click="toggleMenu()"><md-icon class="material-icons step" aria-label="Usuários">face</md-icon>Usuários</md-sidemenu-button>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/documentos"><md-icon class="material-icons step" aria-label="Documentos">insert_drive_file</md-icon>Documentos</md-sidemenu-button>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/disciplinas"><md-icon class="material-icons step" aria-label="Disciplinas">account_balance</md-icon>Disciplinas</md-sidemenu-button>
