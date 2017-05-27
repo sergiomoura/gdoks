@@ -5,36 +5,13 @@ GDoks:
     ☐ Adicionar Campo para ordenar documentos
     ☐	Tela que lista documentos, mostrar busca avançada de maneira animada
 
-  Gerenciamento de Documentos:
-    Lista de Documentos: @due(17-05-23 06:00)
-	    ✔	Desenhar tela no FWorks com todas funcionalidades @due(17-05-23 00:30) @done (17-05-23 01:05)
-	    ✔	Desenhar tela onde lista-se os documentos (.html/js/css) @due(17-05-23 02:00) @done (17-05-23 09:40)
-	    ✔	Criar dumb data na BD @done (17-05-23 17:05)
-	    ✔	Linkar com os dados reais @due(17-05-23 06:00) @done (17-05-23 17:05)
-	    ✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25)
-	    ✔	Aplicar filtro para mostrar dias restantes @done (17-05-24 09:19)
-	    ✔	Mostrar última at0ualização do documento @done (17-05-23 22:34)
-	    ✔	Fazer com que botão aponte para o abrir o documento @done (17-05-24 09:04)
-	    ☐	Destacar informação de quando um documento está atrasado
-	    Filtros/Ordem
-	    	✔	Por Nome @done (17-05-24 05:27)
-	    	✔	Por Projeto @done (17-05-24 05:27)
-	    	✔	Por Disciplina @done (17-05-24 05:27)
-	    	✔	Por Subdisciplina @done (17-05-24 05:27)
-	    	✔	Por Área @done (17-05-24 05:27)
-	    	✔	Por Subárea @done (17-05-24 05:27)
-	    	✔	Ordenar por data limite @done (17-05-24 05:27)
-	    	✔	Ordenar por HH @done (17-05-24 05:27)
-	    	✔	Exibir os que aguardam validação @done (17-05-24 08:53)
-	    	✔	Exibir os concluídos (100%) @done (17-05-24 08:53)
-
-    Documento para atualizar:@due(17-05-25 06:00)
-    ☐ Desenhar tela no Fireworks
-    ☐	Implementar desenho em html/js/css com dados estáticos
-    ☐	Linkar desenho a lógica do Sistema
+    Documento para atualizar:@due(17-05-25 17:00)
+    ✔ Desenhar tela no Fireworks @due(17-05-24 23:00) @done (17-05-25 14:35)
+    ☐	Implementar desenho em html/js/css com dados estáticos @due(17-05-25 01:00)
+    ☐	Linkar desenho a lógica do Sistema @due(17-05-25 17:00)
     Atentar para as funcionalidades -
     	☐	Mostrar Dados do documento/revisão
-    	☐	Mostrar histórico de atualizações/revisões
+    	☐	Mostrar histórico de atualizações/revisões	
     	☐	Poder baixar os arquivos da revisão se for possível
     	☐	Poder upar os arquivos da revisão se for possível
     	☐	Somente atualizar revisão se (Revisão não tiver nenhum arquivo OU Arquivos da Revisão atual tenham sidos baixados com bloqueio)
@@ -45,6 +22,9 @@ GDoks:
     Atentar para campos para cada revisão
       - Percentual concluído
       - Data Limite
+
+  Gerenciamento de Documentos:
+  	☐	Melhorar a forma com que os documentos atrasados são destacados
     Documento para validar progresso:@due(17-05-26 06:00)
     ☐ Desenhar tela no fireworks
     ☐	Implementar desenho em html/js/css com dados estáticos
@@ -90,6 +70,27 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Lista de Documentos: @due(17-05-23 06:00) @done (17-05-24 10:35) @project(GDoks / Gerenciamento de Documentos)
+	✔	Destacar informação de quando um documento está atrasado @done (17-05-24 10:35) @project(GDoks / Gerenciamento de Documentos)
+		Filtros/Ordem
+	✔	Aplicar filtro para mostrar dias restantes @done (17-05-24 09:19) @project(GDoks / Gerenciamento de Documentos)
+	✔	Fazer com que botão aponte para o abrir o documento @done (17-05-24 09:04) @project(GDoks / Gerenciamento de Documentos)
+	✔	Exibir os que aguardam validação @done (17-05-24 08:53) @project(GDoks / Gerenciamento de Documentos)
+	✔	Exibir os concluídos (100%) @done (17-05-24 08:53) @project(GDoks / Gerenciamento de Documentos)
+	✔	Por Área @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Por Subárea @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Por Subdisciplina @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Por Projeto @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Por Nome @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Por Disciplina @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Ordenar por data limite @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Ordenar por HH @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔	Mostrar última at0ualização do documento @done (17-05-23 22:34) @project(GDoks / Gerenciamento de Documentos)
+	✔	Linkar com os dados reais @due(17-05-23 06:00) @done (17-05-23 17:05) @project(GDoks / Gerenciamento de Documentos)
+	✔	Criar dumb data na BD @done (17-05-23 17:05) @project(GDoks / Gerenciamento de Documentos)
+	✔	Desenhar tela onde lista-se os documentos (.html/js/css) @due(17-05-23 02:00) @done (17-05-23 09:40) @project(GDoks / Gerenciamento de Documentos)
+	✔	Desenhar tela no FWorks com todas funcionalidades @due(17-05-23 00:30) @done (17-05-23 01:05) @project(GDoks / Gerenciamento de Documentos)
+	✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25) @project(GDoks / Gerenciamento de Documentos)
 	✔ Atualizar BD para que uma revisão possa ter vários arquivos @done (17-05-22 14:25) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
 	✔ Atualizar BD para que guarde revisões de um documento @done (17-05-22 14:24) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
 	✔ Limpar código @done (17-05-22 11:09) @project(GDoks / Cadastro de Projeto 1 - Documentos)

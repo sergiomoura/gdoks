@@ -308,40 +308,6 @@
 						</md-expansion-panel-expanded>
 					</md-expansion-panel>
 				</md-expansion-panel-group>
-				
-				<!--
-				<table>
-					<thead>
-						<tr>
-							<td>Nome</td>
-							<td>Cód.</td>
-							<td>Subdisciplina</td>
-							<td>Área</td>
-							<td>Data Limite</td>
-							<td></td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="doc in projeto.documentos|filter:docnome">
-							<td>{{doc.nome}}</td>
-							<td>{{doc.codigo}}</td>
-							<td>{{doc.subdisciplina.nome}}<span>{{doc.subdisciplina.disciplina.nome}}</span></td>
-							<td>{{doc.subarea.nome}}<span>{{doc.subarea.area.nome}}</span></td>
-							<td>{{doc.data_limite|date:'dd/MM/yyyy'}}</td>
-							<td>
-								<md-button class="md-icon-button" aria-label="Remover Documento" ng-click="openConfirm($event,doc.id)">
-									<md-icon class="material-icons step" aria-label="Remover Área">delete</md-icon>
-								</md-button>
-								<md-button class="md-icon-button" aria-label="Alterar Documento" ng-click="openDialog($event,doc.id)">
-									<md-icon class="material-icons step" aria-label="Alterar Documento">mode_edit</md-icon>
-								</md-button>
-								<md-button class="md-icon-button" aria-label="Mais Informações">
-									<md-icon class="material-icons step" aria-label="Mais Informações">expand_more</md-icon>
-								</md-button>
-							</td>
-						</tr>
-				</table>
-				-->
 			</md-content>
 		</md-tab>
 	</md-tabs>

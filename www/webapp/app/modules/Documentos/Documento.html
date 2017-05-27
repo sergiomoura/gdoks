@@ -1,1 +1,168 @@
-Documento.html
+<md-content id="documento_container" class="container_80" layout="column" layout-padding>
+	<div layout="row" layout-align="space-between center">
+		<h3>{{documento.nome}}</h3>
+		<div layout="row" layout-align="end center">
+			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Baixar Para Revisão"><md-icon class="material-icons step" aria-label="Baixar para revisão">archive</md-icon>Baixar para Revisão</md-button>
+			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Baixar"><md-icon class="material-icons step" aria-label="Baixar">file_download</md-icon>Baixar</md-button>
+			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Validar Progresso"><md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso</md-button>
+		</div>
+	</div>
+	<table>
+		<tr>
+			<td>
+				<label>Área</label> {{documento.nome_area}}
+			</td>
+			<td>
+				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
+			</td>
+			<td>
+				<label>Sub-área</label> {{documento.nome_subarea}}
+			</td>
+			<td>
+				<label>Trabalho Estimado</label> {{documento.trav}}hh
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label>Disciplina</label> {{documento.nome_disciplina}}
+			</td>
+			<td>
+				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
+			</td>
+			<td>
+				<label>Subdisciplina</label> {{documento.nome_subdisciplina}}
+			</td>
+			<td>
+				<label>Última Atualização</label> {{documento.revisoes[0].ua|date:"dd/MM/yyyy à's' hh:mm"}}
+			</td>
+		</tr>
+	</table>
+	
+	<md-tabs md-dynamic-height md-border-bottom>
+		<md-tab label="Atualizar Revisão" ng-disabled="false">
+			<md-content class="md-padding">
+				<h3>Atualizar Revisão</h3>
+				<md-button
+					class="md-raised md-primary"
+					ng-disabled="false"
+					aria-label="Selecionar Arquivos"
+					ng-model="updateFiles"
+					ngf-select
+					ngf-multiple="true"
+					>
+						<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>Selecionar Arquivos
+				</md-button>
+				<table>
+					<thead>
+						<tr>
+							<td>Nome</td>
+							<td>Nº de Páginas</td>
+							<td>Tam. do Papel</td>
+							<td>Ação</td>
+							<td>...</td>
+						</tr>
+					</thead>
+					<tr ng-repeat="file in updateFiles">
+						<td>{{file.name}}</td>
+						<td>
+							<md-input-container>
+								<label></label>
+								<input type="number" ng-model="num" value="1">
+							</md-input-container>
+						</td>
+						<td>
+							<md-select ng-model="tamPapel">
+								<md-option ng-value="opt" ng-repeat="opt in options">{{ opt }}</md-option>
+							</md-select>
+						</td>
+					</tr>
+				</table>
+			</md-content>
+		</md-tab>
+
+		<md-tab label="Histórico">
+			<md-content layout-padding layout-wrap>
+			<h3>Histórico de Revisões</h3>
+			<div ng-if="documento.revisoes.length==0">Esse documento não teve nenhuma revisão registrada.</div>
+				<md-expansion-panel-group md-component-id="panelGroup" ng-if="documento.revisoes.length>0">
+					<md-expansion-panel  ng-repeat="rev in documento.revisoes" md-component-id="{{'histPanel_'+$index}}">
+						<md-expansion-panel-collapsed layout="column" class="md-padding">
+							<div layout="row" layout-align="space-between start">
+								<div>Revisão: {{rev.serial}}</div>
+								<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
+							</div>
+							
+							<div class="hbar">
+								<div ng-if="rev.progresso_validado>0"
+									class="prgValidado"
+									style="width: calc({{rev.progresso_validado}}% - 2px)">
+									{{rev.progresso_validado}}%
+								</div
+								><div ng-if="rev.progresso_a_validar>0"
+									class="prgAValidar"
+									style="width: calc({{rev.progresso_a_validar}}% - 2px)">
+									{{rev.progresso_a_validar}}%
+								</div>
+							</div>
+						</md-expansion-panel-collapsed>
+						<md-expansion-panel-expanded>
+							<md-expansion-panel-content layout="column">
+								<div layout="row" layout-align="space-between start">
+									<div>Revisão: {{rev.serial}}</div>
+									<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
+								</div>
+								
+								<div class="hbar">
+									<div ng-if="rev.progresso_validado>0"
+										class="prgValidado"
+										style="width: calc({{rev.progresso_validado}}% - 2px)">
+										{{rev.progresso_validado}}%
+									</div
+									><div ng-if="rev.progresso_a_validar>0"
+										class="prgAValidar"
+										style="width: calc({{rev.progresso_a_validar}}% - 2px)">
+										{{rev.progresso_a_validar}}%
+									</div>
+								</div>
+								<div ng-if="rev.pdas.length==0">Nenhum progresso anterior registrado.</div>
+								<div ng-if="rev.pdas.length>0">Progresso</div>
+								<div class="hbar" ng-repeat="pda in rev.pdas">
+									<div ng-if="pda.progresso_validado>0"
+										class="prgValidado"
+										style="width: calc({{pda.progresso_validado}}% - 2px)">
+										{{pda.progresso_validado}}%
+									</div
+									><div ng-if="pda.progresso_a_validar>0"
+										class="prgAValidar"
+										style="width: calc({{pda.progresso_a_validar}}% - 2px)">
+										{{pda.progresso_a_validar}}%
+									</div>
+								</div>
+								<div layout="row" layout-align="center center">
+									<md-button ng-click="collapseHistPanel($index)" class="md-icon-button" aria-label="Colapsar"><md-icon class="material-icons step" aria-label="Colapsar">keyboard_arrow_up</md-icon></md-button>
+								</div>
+							</md-expansion-panel-content>
+						</md-expansion-panel-expanded>
+					</md-expansion-panel>
+				</md-expansion-panel-group>
+			</md-content>
+		</md-tab>
+
+		<md-tab label="GRDs" ng-disabled="false">
+			<md-content class="md-padding">
+				<h1 class="md-display-2 md-primary">Atualizar Revisão</h1>
+				<!--
+				<div>
+					<h3>GRD's</h3>
+					<div ng-if="documento.grds.length==0">Nenhuma revisão deste documento consta em alguma GRD.</div>
+					<ul ng-if="documento.grds.length > 0">
+						<li ng-repeat="grd in documento.grds track by $index">{{grd}}</li>
+					</ul>
+				</div>
+				-->
+			</md-content>
+		</md-tab>
+		
+	</md-tabs>
+
+</md-content>

@@ -17,7 +17,7 @@
 			<img src="img/logo.png" alt="GDoks">
 			<form class="bloco_conteudo" ng-submit="getToken()">
 				<div>
-					<label for="cliente">Empresa</label>
+					<label for="cliente">Empresas</label>
 					<input type="text" name="empresa" id="empresa" value="" ng-model="empresa" focus />
 				</div>
 				<div>
