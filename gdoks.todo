@@ -4,6 +4,7 @@ GDoks:
     ☐ Fazer filtro de documentos funcionar
     ☐ Adicionar Campo para ordenar documentos
     ☐	Tela que lista documentos, mostrar busca avançada de maneira animada
+    ☐	Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento
 
     Documento para atualizar:@due(17-05-25 17:00)
     ✔ Desenhar tela no Fireworks @due(17-05-24 23:00) @done (17-05-25 14:35)

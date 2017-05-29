@@ -169,6 +169,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/documentos',{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getDocumento = function(id_documento){
+				return $http.get(API_ROOT+'/documentos/'+id_documento,{headers: {'Authorization': $cookies.getObject('user').token}});
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.downloadArquivo = function(idArquivo){
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");

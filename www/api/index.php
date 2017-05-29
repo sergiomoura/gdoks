@@ -1682,9 +1682,9 @@
 
 				if($ok == 1){
 					// Tudo ok! O documento a ser alterado é da mesma empresa do usuário
-					$sql = 'UPDATE gdoks_documentos SET nome=?,codigo=?,id_subarea=?,id_subdisciplina=?,data_limite=? WHERE id=?';
+					$sql = 'UPDATE gdoks_documentos SET nome=?,codigo=?,id_subarea=?,id_subdisciplina=? WHERE id=?';
 					try {
-						$db->query($sql,'ssiisi',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina,$documento->data_limite,$id_documento);
+						$db->query($sql,'ssiii',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina,$id_documento);
 						$response = new response(0,'Documento alterado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
@@ -1712,6 +1712,10 @@
 					foreach ($documento->hhs as $hh) {
 						$db->query($sql,'iii',$documento->id,$hh->id_cargo,$hh->hh);
 					}
+
+					// Atualizando a data limite da última revisão
+					$sql = "UPDATE gdoks_revisoes set data_limite=? WHERE id_documento=? and serial=?";
+					$db->query($sql,'sii',$documento->data_limite,$documento->id,$documento->rev_serial);
 
 					// removendo dependencias e hhs do objeto para salvar no log
 					unset($documento->dependencias);
@@ -1750,10 +1754,10 @@
 				$id_usuario = $rs['id_usuario'];
 				if($ok == 1){
 					// Tudo ok! A documento a ser adicionada é do mesmo cliente do usuário
-					$sql = 'INSERT INTO gdoks_documentos (nome,codigo,id_subarea,id_subdisciplina,data_limite) VALUES (?,?,?,?,?)';
+					$sql = 'INSERT INTO gdoks_documentos (nome,codigo,id_subarea,id_subdisciplina) VALUES (?,?,?,?)';
 					try {
 						// Salvando documento
-						$db->query($sql,'ssiis',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina,$documento->data_limite);
+						$db->query($sql,'ssii',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina);
 
 						// Salvando o novo id do documento recém adicionado
 						$newId = $db->insert_id;
@@ -1769,6 +1773,10 @@
 						foreach ($documento->hhs as $hh) {
 							$db->query($sql,'iii',$newId,$hh->id_cargo,$hh->hh);
 						}
+
+						// Criando a primeira revisão do documento
+						$sql = "insert into gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) values (1,?,?,0,0,null)";
+						$db->query($sql,'is',$newId,$documento->data_limite);
 
 						$response = new response(0,'Documento adicionado com sucesso.');
 						$response->newId = $newId;
@@ -1870,21 +1878,38 @@
 				// Segiundo em frente
 				if($ok){
 					// Carregando documentos da base
-					$sql = 'SELECT
-								a.id,
-								a.nome,
-								a.codigo,
-								a.data_limite,
-								b.id as id_subdisciplina,
-								d.id as id_subarea    
+					$sql = 'SELECT M.id,
+							       M.nome,
+							       M.codigo,
+							       M.id_subdisciplina,
+							       M.id_subarea,
+							       rev_serial,
+							       data_limite
 							FROM
-								gdoks_documentos a
-								INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
-								INNER JOIN gdoks_disciplinas c on b.id_disciplina=c.id
-								INNER JOIN gdoks_subareas d on a.id_subarea=d.id
-								INNER JOIN gdoks_areas e on d.id_area=e.id
-							WHERE
-								e.id_projeto=?';
+							  (SELECT a.id,
+							          a.nome,
+							          a.codigo,
+							          b.id AS id_subdisciplina,
+							          d.id AS id_subarea
+							   FROM gdoks_documentos a
+							   INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+							   INNER JOIN gdoks_disciplinas c ON b.id_disciplina=c.id
+							   INNER JOIN gdoks_subareas d ON a.id_subarea=d.id
+							   INNER JOIN gdoks_areas e ON d.id_area=e.id
+							   WHERE e.id_projeto=?) M
+							LEFT JOIN
+							  (SELECT X.id_documento,
+							          X.rev_serial,
+							          Y.data_limite
+							   FROM
+							     (SELECT id_documento,
+							             max(serial) AS rev_serial
+							      FROM gdoks_revisoes
+							      GROUP BY id_documento) X
+							   INNER JOIN
+							     (SELECT data_limite,id,id_documento,serial
+							      FROM gdoks_revisoes) Y ON X.id_documento=Y.id_documento
+							   AND X.rev_serial=Y.serial) N ON M.id=N.id_documento';
 					$documentos = array_map(
 						function($a){
 							$a = (object)$a;
@@ -2568,6 +2593,135 @@
 
 				}
 			});
+			
+			$app->get('/documentos/:id',function($id) use ($app,$db){
+				// Lendo o token
+				$token = $app->request->headers->get('Authorization');
+				$id_doc = 1*$id;
+
+				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
+				$sql = 'SELECT id
+						FROM gdoks_usuarios
+						WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				if(sizeof($rs) == 0){
+					// Respondendo para um token inválido
+					$app->response->setStatus(401);
+					$response = new response(1,'Refresh failed!');
+					$response->flush();
+					return;
+				} else {
+					// Escrevendo o id do usuário em idu
+					$idu = $rs[0]['id'];
+
+					// Levantando dados básicos do documento
+					$sql = 'SELECT
+								a.id,
+							    a.nome,
+							    a.codigo,
+							    idu_checkout,
+							    datahora_do_checkout,
+							    b.id as id_subdisciplina,
+							    b.nome as nome_subdisciplina,
+							    c.id as id_disciplina,
+							    c.nome as nome_disciplina,
+								d.id as id_subarea,
+							    d.nome as nome_subarea,
+							    e.id as id_area,
+							    e.nome as nome_area
+							FROM
+								gdoks_documentos a
+							    INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+							    INNER JOIN gdoks_disciplinas c ON b.id_disciplina=c.id
+							    INNER JOIN gdoks_subareas d ON a.id_subarea=d.id
+							    INNER JOIN gdoks_areas e ON d.id_area=e.id
+							WHERE
+								a.id=?';
+					try {
+						$rs = $db->query($sql,'i',$id_doc);	
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro ao tentar carregar documento: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+
+					// capturando o documento
+					$doc = array_map(function($a){return (object)$a;}, $rs)[0];
+
+					// verificando se o usuário é validador ou especialista da disciplina do documento
+					$sql = 'SELECT
+								!isnull(b.id_usuario) AS ehEspecialista,
+								!isnull(c.id_usuario) AS ehValidador
+							FROM gdoks_disciplinas a
+							LEFT JOIN gdoks_especialistas b ON a.id=b.id_disciplina
+							LEFT JOIN gdoks_validadores c ON c.id=b.id_disciplina
+							WHERE a.id=?
+							  AND (b.id_usuario=?
+							       OR b.id_usuario IS NULL)
+							  AND (c.id_usuario=?
+							       OR c.id_usuario IS NULL)';
+
+					try {
+						$rs = $db->query($sql,'iii',$doc->id_disciplina,$idu,$idu);
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro ao tentar carregar documento: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+
+					// Se não consulta não retornar nenhuma linha usuário não é nem especialista nem validador
+					if(sizeof($rs)==0){
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro ao tentar carregar documento: '.$e->getMessage());
+						$response->flush();
+						return;	
+					} else {
+						$doc->ehEspecialista = ($rs[0]['ehEspecialista']==1);
+						$doc->ehValidador = ($rs[0]['ehValidador']==1);
+					}
+
+					// Levantando revisões deste documento
+					$sql = 'SELECT
+								id,
+								serial,
+							    data_limite,
+							    progresso_validado,
+							    progresso_a_validar,
+							    ua
+							FROM gdoks_revisoes
+							WHERE id_documento=?
+							ORDER BY serial desc';
+					try {
+						$doc->revisoes = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_doc));
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Erro ao tentar carregar revisões documento: '.$e->getMessage());
+						$response->flush();
+						return;	
+					}
+					
+
+					// Levantando HHs
+					// ...
+
+					// Levantando pacotes de arquivos (pdas)
+					// ...
+
+
+					$response = new response(0,'ok');
+					$response->documento = $doc;
+					$response->flush();
+					return;
+
+				}
+			});
+
+
+
+
 
 		// FIM DE ROTAS DE DOCUMENTOS */
 

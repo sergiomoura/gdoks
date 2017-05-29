@@ -150,7 +150,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 				var achouSub,j,k;
 				for (var i = docs.length - 1; i >= 0; i--) {
 					// parsing data_limite
-					docs[i].data_limite = new Date(docs[i].data_limite);
+					docs[i].data_limite = new Date(docs[i].data_limite+'T00:00:00');
 
 					// Corrigindo fuso
 					docs[i].data_limite.setMinutes(docs[i].data_limite.getMinutes() + docs[i].data_limite.getTimezoneOffset());

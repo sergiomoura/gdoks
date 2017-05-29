@@ -257,6 +257,7 @@
 
 						// Atribuindo id ao novo documento
 						documento.id = response.newId;
+						documento.rev_serial = 1;
 
 						// Adicionando novo documento ao vetor de documentos do projeto
 						parentScope.projeto.documentos.push(documento)

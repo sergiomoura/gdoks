@@ -6,8 +6,13 @@
 	module.controller('DocumentoController',DocumentoController);
 
 	// Defininfo controller
-	function DocumentoController($scope,$mdExpansionPanel){
+	function DocumentoController($scope,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast){
 
+		// Pedindo para carregar documento
+		carregaDocumento($routeParams.id);
+
+		// Pedindo para que se carregue o documento
+		/*
 		$scope.documento = {
 			nome:"Documento A",
 			id: 48,
@@ -71,9 +76,44 @@
 			],
 			grds:[1,2,3,'adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd','adhjsdlkalkdjajsd']
 		}
+		*/
 
 		$scope.collapseHistPanel = function(index){
 			$mdExpansionPanel('histPanel_'+index).collapse();
+		}
+
+		// funções auxiliares
+		function carregaDocumento(id){
+			// Mostra o carregando
+			$scope.root.carregando = true;
+
+			// Faz a requisição a factory
+			GDoksFactory.getDocumento(id)
+			.success(function(response){
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Parsings...
+				var doc = response.documento;
+				
+				for (var i = doc.revisoes.length - 1; i >= 0; i--) {
+					doc.revisoes[i].data_limite = new Date(doc.revisoes[i].data_limite+'T00:00:00');
+					doc.revisoes[i].ua = new Date(doc.revisoes[i].ua);
+				}
+
+				// Carrega documento no scope
+				$scope.documento = doc;
+			})
+			.error(function(error){
+				$scope.root.carregando = false;
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Não foi possível carregar documento: ' + error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
 		}
 	}
 })();
