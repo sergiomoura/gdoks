@@ -210,7 +210,7 @@
 				</div>
 				
 				<md-expansion-panel-group md-component-id="panelGroup">
-					<md-expansion-panel  ng-repeat="doc in projeto.documentos | filter:q.nome as result" md-component-id="{{'panel_'+$index}}">
+					<md-expansion-panel  ng-repeat="doc in projeto.documentos | filter:q as result" md-component-id="{{'panel_'+$index}}">
 						<md-expansion-panel-collapsed layout="row" layout-align="start start">
 							<div class="md-expansion-panel-item" flex>
 								<div class="label">ID</div>
