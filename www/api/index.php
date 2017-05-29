@@ -2629,15 +2629,31 @@
 								d.id as id_subarea,
 							    d.nome as nome_subarea,
 							    e.id as id_area,
-							    e.nome as nome_area
+							    e.nome as nome_area,
+                                ifnull(sum(f.hh),0) as trabalho_estimado
 							FROM
 								gdoks_documentos a
 							    INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
 							    INNER JOIN gdoks_disciplinas c ON b.id_disciplina=c.id
 							    INNER JOIN gdoks_subareas d ON a.id_subarea=d.id
 							    INNER JOIN gdoks_areas e ON d.id_area=e.id
+                                LEFT JOIN gdoks_hhemdocs f ON f.id_doc=a.id
 							WHERE
-								a.id=?';
+								a.id=?
+							GROUP BY
+								a.id,
+							    a.nome,
+							    a.codigo,
+							    idu_checkout,
+							    datahora_do_checkout,
+							    b.id,
+							    b.nome,
+							    c.id,
+							    c.nome,
+								d.id,
+							    d.nome,
+							    e.id,
+							    e.nome';
 					try {
 						$rs = $db->query($sql,'i',$id_doc);	
 					} catch (Exception $e) {

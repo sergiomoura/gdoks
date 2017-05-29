@@ -4,7 +4,7 @@
 		<div layout="row" layout-align="end center">
 			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Baixar Para Revisão"><md-icon class="material-icons step" aria-label="Baixar para revisão">archive</md-icon>Baixar para Revisão</md-button>
 			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Baixar"><md-icon class="material-icons step" aria-label="Baixar">file_download</md-icon>Baixar</md-button>
-			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Validar Progresso"><md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso</md-button>
+			<md-button class="md-raised md-primary" ng-disabled="documento.revisoes[0].progresso_a_validar==0" aria-label="Validar Progresso"><md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso</md-button>
 		</div>
 	</div>
 	<table>
@@ -13,13 +13,10 @@
 				<label>Área</label> {{documento.nome_area}}
 			</td>
 			<td>
-				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
-			</td>
-			<td>
 				<label>Sub-área</label> {{documento.nome_subarea}}
 			</td>
 			<td>
-				<label>Trabalho Estimado</label> {{documento.trav}}hh
+				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
 			</td>
 		</tr>
 		<tr>
@@ -27,13 +24,33 @@
 				<label>Disciplina</label> {{documento.nome_disciplina}}
 			</td>
 			<td>
-				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
-			</td>
-			<td>
 				<label>Subdisciplina</label> {{documento.nome_subdisciplina}}
 			</td>
 			<td>
+				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label>Trabalho Estimado</label> {{documento.trabalho_estimado}} hh
+			</td>
+			<td>
 				<label>Última Atualização</label> {{documento.revisoes[0].ua|date:"dd/MM/yyyy à's' hh:mm"}}
+			</td>
+			<td>
+			<label style="display: inline-block; width: 75px;">Progresso</label>
+				<div class="hbar" style-"display: inline-block; width: calc(100% - 80px); vertical-align: top;">
+					<div ng-if="documento.revisoes[0].progresso_validado>0"
+						class="prgValidado"
+						style="width: calc({{documento.revisoes[0].progresso_validado}}% - 2px)">
+						{{documento.revisoes[0].progresso_validado}}%
+					</div
+					><div ng-if="documento.revisoes[0].progresso_a_validar>0"
+						class="prgAValidar"
+						style="width: calc({{documento.revisoes[0].progresso_a_validar}}% - 2px)">
+						{{documento.revisoes[0].progresso_a_validar}}%
+					</div>
+				</div>
 			</td>
 		</tr>
 	</table>
