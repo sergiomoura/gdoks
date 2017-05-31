@@ -2711,7 +2711,7 @@
 							WHERE id_documento=?
 							ORDER BY serial desc';
 					try {
-						$doc->revisoes = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_doc));
+						$revisoes = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_doc));
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
 						$response = new response(1,'Erro ao tentar carregar revisões documento: '.$e->getMessage());
@@ -2720,12 +2720,63 @@
 					}
 					
 
-					// Levantando HHs
-					// ...
-
 					// Levantando pacotes de arquivos (pdas)
-					// ...
+					$sql = 'SELECT
+								a.id,
+							    a.idu_validador,
+							    a.datahora_validacao,
+							    a.id_revisao
+							FROM
+								gdoks_pdas a
+							    INNER JOIN gdoks_revisoes b on a.id_revisao=b.id
+							WHERE b.id_documento=?
+							ORDER BY a.id DESC';
+					$pdas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_doc));
 
+					// Levantando arquivos do documento
+					$sql = 'SELECT
+								a.id,
+							    a.caminho,
+							    a.nome_cliente,
+							    a.datahora_upload,
+							    a.idu,
+							    a.tamanho,
+							    b.id_pda
+							FROM
+								gdoks_arquivos a
+							    INNER JOIN gdoks_pdas_x_arquivos b on b.id_arquivo=a.id
+							    INNER JOIN gdoks_pdas c on c.id=b.id_pda
+							    INNER JOIN gdoks_revisoes d on c.id_revisao=d.id
+							WHERE
+								d.id_documento=?';
+					$arquivos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_doc));
+
+					// Associando arquivos a PDAs
+					foreach ($arquivos as $arquivo) {
+						$id_pda = $arquivo->id_pda;
+						$pda = array_values(array_filter($pdas,function($e) use($id_pda){
+							return $e->id == $id_pda;
+						}))[0];
+						if(!isset($pda->arquivos)){
+							$pda->arquivos = Array();
+						}
+						array_push($pda->arquivos, $arquivo);
+					}
+
+					// Associando PDAs a revisões
+					foreach ($pdas as $pda) {
+						$id_revisao = $pda->id_revisao;
+						$revisao = array_values(array_filter($revisoes,function($e) use($id_revisao){
+							return $e->id == $id_revisao;
+						}))[0];
+						if(!isset($revisao->pdas)){
+							$revisao->pdas = Array();
+						}
+						array_push($revisao->pdas, $pda);
+					}
+
+					// Associando revisoes a documento
+					$doc->revisoes = $revisoes;
 
 					$response = new response(0,'ok');
 					$response->documento = $doc;
@@ -3303,6 +3354,25 @@
 				}
 			});
 		// FIM DE ROTAS DE SUBÁREAS
+
+		// ROTAS DE TAMANHOS DE PAPEL
+			$app->get('/tamanhosDePapel',function() use ($app,$db){
+				$token = $app->request->headers->get('Authorization');
+				$sql = 'SELECT x.id,
+						       x.nome,
+						       x.altura as a,
+						       x.largura as l
+						FROM gdoks_tamanhos_de_papel x
+						INNER JOIN
+						  (SELECT id_empresa
+						   FROM gdoks.gdoks_usuarios
+						   WHERE token=?) b ON x.id_empresa=b.id_empresa
+							ORDER by x.nome';
+				$response = new response(0,'ok');
+				$response->tamanhosDePapel = $db->query($sql,'s',$token);
+				$response->flush();
+			});
+		// FIM DE ROTAS DE TAMANHOS DE PAPEL
 	});
 
 

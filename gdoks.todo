@@ -6,16 +6,17 @@ GDoks:
     ☐	Tela que lista documentos, mostrar busca avançada de maneira animada
     ☐	Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento
 
-    Documento para atualizar:@due(17-05-25 17:00)
+    Documento para atualizar:@due(17-05-30 08:00)
     ✔ Desenhar tela no Fireworks @due(17-05-24 23:00) @done (17-05-25 14:35)
-    ☐	Implementar desenho em html/js/css com dados estáticos @due(17-05-25 01:00)
+    ✔	Implementar desenho em html/js/css com dados estáticos @due(17-05-25 01:00) @done (17-05-29 11:44)
     ☐	Linkar desenho a lógica do Sistema @due(17-05-25 17:00)
     Atentar para as funcionalidades -
-    	☐	Mostrar Dados do documento/revisão
+    	✔	Mostrar Dados do documento/revisão @done (17-05-29 11:44)
     	☐	Mostrar histórico de atualizações/revisões	
     	☐	Poder baixar os arquivos da revisão se for possível
     	☐	Poder upar os arquivos da revisão se for possível
     	☐	Somente atualizar revisão se (Revisão não tiver nenhum arquivo OU Arquivos da Revisão atual tenham sidos baixados com bloqueio)
+    	☐	Validar Progresso de documento.
  
     Atentar para campos para cada arquivo
       - Número de páginas

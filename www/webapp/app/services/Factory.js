@@ -238,6 +238,10 @@ WebGDoks.factory('GDoksFactory',
 			GDoksFactory.removerCargo = function(idCargo){
 				return $http.delete(API_ROOT+'/cargos/'+idCargo,{headers: {'Authorization': $cookies.getObject('user').token}});
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getTamanhosDePapel = function(){
+				return $http.get(API_ROOT+'/tamanhosDePapel',{headers: {'Authorization': $cookies.getObject('user').token}});	
+			}
 			return GDoksFactory;
 		}
 	]
