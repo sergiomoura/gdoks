@@ -1,5 +1,5 @@
 #documento_container {
-	table {
+	.header_table {
 		font-size: 14px;
 		width: 100%;
 		tr td {
@@ -11,6 +11,75 @@
 				content: ": ";
 			}
 		}
+	}
+	.files_table{
+		font-size: 14px;
+		width:100%;
+		border-collapse: collapse;
+		margin-top:20px;
+		td{
+			border-bottom:1px solid #e5e5e5;
+			padding:0 15px;
+			border-right:1px solid #e5e5e5;
+			
+		}
+
+		td:nth-child(1){
+			border-left:1px solid #e5e5e5;
+		}
+		td:nth-child(2){
+			width:25px;
+		}
+		td:nth-child(3){
+			width:50px;
+			padding:0;
+			input{
+				border:none;
+				background:none;
+				padding:10px;
+				height:100%;
+				text-align:center;
+				width: 100px;
+			}
+			input:focus{
+				outline:none;
+			}
+		}
+		td:nth-child(4){
+			width:95px;
+		}
+		td:nth-child(5){
+			width:200px;
+		}
+		td:nth-child(6){
+			width:50px;
+		}
+		md-select {
+			margin:0;
+		}
+		md-input-container {
+			margin:0;
+		}
+		md-input-container input{
+			margin: 25px 0 0 0;
+		}
+		tbody{
+			tr:nth-child(odd) td{
+				background-color:#FFF;
+			}
+			tr:nth-child(even) td{
+				
+			}
+		}
+		thead{
+			color:$azul;
+			td{
+				padding:10px 0 10px 10px !important;
+			}
+		}
+	}
+	.afterControls {
+		margin: 20px 0 0 0;
 	}
 	.hbar{
 		background-color: #DFDFDF;

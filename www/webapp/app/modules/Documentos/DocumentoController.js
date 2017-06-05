@@ -35,9 +35,9 @@
 			for (var i = $scope.updateFiles.length - 1; i >= 0; i--) {
 				if(ultimosArquivos.find(function(a){return a.nome_cliente==this},$scope.updateFiles[i].name) == undefined){
 					// Arquivo NOVO
-					item = {nome:$scope.updateFiles[i].name, nPaginas:1, tamanhoDoPapel:$scope.tamanhoPadrao.id, tipo:'novo'};
+					item = {nome:$scope.updateFiles[i].name, nPaginas:1, tamanhoDoPapel:$scope.tamanhoPadrao.id, tipo:'novo',acao:1};
 				} else {
-					item = {nome:$scope.updateFiles[i].name, nPaginas:1, tamanhoDoPapel:$scope.tamanhoPadrao.id, tipo:'antigoParaAtualizar'}
+					item = {nome:$scope.updateFiles[i].name, nPaginas:1, tamanhoDoPapel:$scope.tamanhoPadrao.id, tipo:'antigoParaAtualizar',acao:1}
 				}
 				$scope.formUploadItems.push(item);
 			}
@@ -45,7 +45,7 @@
 			// percorrendo o último pacote de arquivos procurando os arquivos que não constam no vetor de arquivos escolhidos
 			for (var i = ultimosArquivos.length - 1; i >= 0; i--) {
 				if($scope.updateFiles.find(function(a){return a.name == ultimosArquivos[i].nome_cliente}) == undefined){
-					item = {nome:ultimosArquivos[i].nome_cliente, nPaginas:1, tamanhoDoPapel:$scope.tamanhoPadrao.id, tipo:'antigoNaoAtualizar'}
+					item = {nome:ultimosArquivos[i].nome_cliente, nPaginas:1, tamanhoDoPapel:$scope.tamanhoPadrao.id, tipo:'antigoNaoAtualizar',acao:1}
 					$scope.formUploadItems.push(item);
 				}				
 			}
@@ -93,6 +93,12 @@
 				$scope.tamanhoPadrao = $scope.tamanhosDePapel.find(function(a){
 						return a.nome == "A4";
 					});
+
+				// Montando dicionário
+				$scope.dic_tamanhosDePapel = [];
+				for (var i = $scope.tamanhosDePapel.length - 1; i >= 0; i--) {
+					$scope.dic_tamanhosDePapel[$scope.tamanhosDePapel[i].id] = $scope.tamanhosDePapel[i].nome;
+				}
 			})
 			.error(function(error){
 				// Retornando Toast para o usuário
