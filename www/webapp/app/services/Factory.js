@@ -242,6 +242,56 @@ WebGDoks.factory('GDoksFactory',
 			GDoksFactory.getTamanhosDePapel = function(){
 				return $http.get(API_ROOT+'/tamanhosDePapel',{headers: {'Authorization': $cookies.getObject('user').token}});	
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.baixarPDA = function(id_pda){
+				// Criando um formulário para enviar a requisição pelo arquivo
+				var form = document.createElement("form");
+				form.setAttribute('action',API_ROOT+'/pdas/'+id_pda);
+				form.setAttribute('method','GET');
+				form.setAttribute('style','display:none');
+
+				// criando o campo para o token
+				var input = document.createElement('input');
+				input.setAttribute('name','token');
+				input.setAttribute('value',$cookies.getObject('user').token);
+
+				// adicionando input ao form
+				form.appendChild(input);
+
+				// adicionando form a dom
+				document.body.appendChild(form);
+
+				// submetendo o form
+				form.submit();
+
+				// removendo o form da dom
+				form.parentNode.removeChild(form);
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.baixarPDAParaRevisao = function(id_pda){
+				// Criando um formulário para enviar a requisição pelo arquivo
+				var form = document.createElement("form");
+				form.setAttribute('action',API_ROOT+'/pdas/checkout/'+id_pda);
+				form.setAttribute('method','GET');
+				form.setAttribute('style','display:none');
+
+				// criando o campo para o token
+				var input = document.createElement('input');
+				input.setAttribute('name','token');
+				input.setAttribute('value',$cookies.getObject('user').token);
+
+				// adicionando input ao form
+				form.appendChild(input);
+
+				// adicionando form a dom
+				document.body.appendChild(form);
+
+				// submetendo o form
+				form.submit();
+
+				// removendo o form da dom
+				form.parentNode.removeChild(form);
+			}
 			return GDoksFactory;
 		}
 	]

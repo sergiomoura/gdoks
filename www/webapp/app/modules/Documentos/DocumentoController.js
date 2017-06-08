@@ -6,7 +6,7 @@
 	module.controller('DocumentoController',DocumentoController);
 
 	// Defininfo controller
-	function DocumentoController($scope,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast){
+	function DocumentoController($scope,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies){
 
 		// Pedindo para carregar documento
 		carregaDocumento($routeParams.id);
@@ -15,6 +15,9 @@
 		$scope.tamanhosDePapel = [];
 		$scope.tamanhoPadrao = null;
 		carregaTamanhosDePapel();
+
+		// Determinando o odu do usuário logado
+		$scope.idu = $cookies.getObject('user').id;
 
 		// Definindo itens para o formUpload
 		$scope.formUploadItems = [];
@@ -26,8 +29,6 @@
 		$scope.onFilesChange = function(){
 			// Levantando qual foi o último pacote de arquivos
 			var ultimosArquivos = $scope.documento.revisoes[0].pdas[0].arquivos;
-			console.dir(ultimosArquivos);
-			console.dir($scope.updateFiles);
 			// Declarando item
 			var item;
 
@@ -49,6 +50,21 @@
 					$scope.formUploadItems.push(item);
 				}				
 			}
+		}
+
+		$scope.onDeleteClick = function(nome){
+			var index = $scope.formUploadItems.findIndex(function(a){return a.nome == this},nome);
+			$scope.formUploadItems.splice(index,1);
+		}
+
+		$scope.baixarParaRevisao = function(){
+			GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[0].pdas[0].id);
+		}
+
+		$scope.baixar = function(){
+			GDoksFactory.baixarPDA($scope.documento.revisoes[0].pdas[0].id);
+			$scope.documento.idu_checkout = $scope.idu;
+			$scope.documento.datahora_checkout = new Date();
 		}
 
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = =

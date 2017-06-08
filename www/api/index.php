@@ -8,7 +8,7 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
-	
+
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas
 
@@ -2785,11 +2785,6 @@
 
 				}
 			});
-
-
-
-
-
 		// FIM DE ROTAS DE DOCUMENTOS */
 
 		// ROTAS DE ARQUIVOS
@@ -3373,8 +3368,129 @@
 				$response->flush();
 			});
 		// FIM DE ROTAS DE TAMANHOS DE PAPEL
-	});
 
+		// ROTAS DE PDAS
+			$app->get('/pdas/:id',function($id) use ($app,$db){
+				// Lendo o token
+				$token = $_GET['token'];
+				$id_pda = 1*$id;
+
+				// verificando se o token é valido e lendo o idu do usuário
+				$sql = 'SELECT
+							id
+						FROM gdoks_usuarios
+						WHERE token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+
+				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
+				if(sizeof($rs) == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Token expirado');
+					$response->flush();
+					return;
+				} else {
+					// Levantando todos os documentos do pda
+					$sql = 'SELECT caminho,nome_cliente
+							FROM gdoks.gdoks_pdas_x_arquivos a
+							INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
+							WHERE a.id_pda=?';
+					$rs = $db->query($sql,'s',$id_pda);
+					$caminhos = $rs;
+
+					// Definindo nome do arquivo zip
+					$filename = UPLOAD_PATH.'pda_'.$id_pda.'.zip';
+
+					// Criando arquivo zip
+					$zip = new ZipArchive();
+					$zip->open($filename,ZipArchive::CREATE);
+
+					// Adicionando arquivos ao zip
+					foreach ($caminhos as $c) {
+						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+					}
+
+					// Fechando o arquivo zip
+					$zip->close();
+
+					// enviando para o cliente
+					header("Content-Type: application/zip");
+					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
+					header("Content-Length: " . filesize(realpath($filename))); 
+					header("Content-Transfer-Encoding: binary");
+					readfile($filename);
+					unlink($filename);
+					exit;
+				}
+			});
+
+			$app->get('/pdas/checkout/:id',function($id) use ($app,$db){
+
+				// Lendo o token
+				$token = $_GET['token'];
+				$id_pda = 1*$id;
+
+				// verificando se o token é valido e lendo o idu do usuário
+				$sql = 'SELECT
+							id
+						FROM gdoks_usuarios
+						WHERE token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+
+				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
+				if(sizeof($rs) == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Token expirado');
+					$response->flush();
+					return;
+				} else {
+					// Guardando o idu
+					$idu = $rs[0]['id'];
+
+					// Levantando todos os documentos do pda
+					$sql = 'SELECT caminho,nome_cliente
+							FROM gdoks.gdoks_pdas_x_arquivos a
+							INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
+							WHERE a.id_pda=?';
+					$rs = $db->query($sql,'s',$id_pda);
+					$caminhos = $rs;
+
+					// Definindo nome do arquivo zip
+					$filename = UPLOAD_PATH.'pda_'.$id_pda.'.zip';
+
+					// Criando arquivo zip
+					$zip = new ZipArchive();
+					$zip->open($filename,ZipArchive::CREATE);
+
+					// Adicionando arquivos ao zip
+					foreach ($caminhos as $c) {
+						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+					}
+
+					// Fechando o arquivo zip
+					$zip->close();
+
+					// enviando para o cliente
+					header("Content-Type: application/zip");
+					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
+					header("Content-Length: " . filesize(realpath($filename))); 
+					header("Content-Transfer-Encoding: binary");
+					readfile($filename);
+					unlink($filename);
+						
+					// Descobrindo qual o id_doc do pda
+					$sql = 'SELECT id_documento
+							FROM gdoks_pdas a
+							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
+							WHERE a.id=?';
+					$id_doc = $db->query($sql,'i',$id_pda)[0]['id_documento'];
+					
+					// Registrando o checkout
+					$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=NOW() WHERE id=?';
+					$db->query($sql,'ii',$idu,$id_doc);
+				}
+			});
+		// FIM DE ROTAS DE PDAS
+	});
 
 	// running the app
 	$app->run();

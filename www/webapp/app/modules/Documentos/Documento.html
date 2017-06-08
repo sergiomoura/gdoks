@@ -2,11 +2,31 @@
 	<div layout="row" layout-align="space-between center">
 		<h3>{{documento.nome}}</h3>
 		<div layout="row" layout-align="end center">
-			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Baixar Para Revisão"><md-icon class="material-icons step" aria-label="Baixar para revisão">archive</md-icon>Baixar para Revisão</md-button>
-			<md-button class="md-raised md-primary" ng-disabled="false" aria-label="Baixar"><md-icon class="material-icons step" aria-label="Baixar">file_download</md-icon>Baixar</md-button>
-			<md-button class="md-raised md-primary" ng-disabled="documento.revisoes[0].progresso_a_validar==0" aria-label="Validar Progresso"><md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso</md-button>
+			<md-button
+				class="md-raised md-primary"
+				ng-click="baixarParaRevisao()"
+				ng-disabled="!(documento.ehEspecialista && documento.idu_checkout==null && documento.revisoes[0].pdas!=undefined)"
+				aria-label="Baixar Para Revisão">
+					<md-icon class="material-icons step" aria-label="Baixar para revisão">archive</md-icon>Baixar para Revisão
+			</md-button>
+
+			<md-button
+				class="md-raised md-primary"
+				ng-click="baixar()"
+				ng-disabled="documento.revisoes[0].pdas==undefined"
+				aria-label="Baixar">
+					<md-icon class="material-icons step" aria-label="Baixar">file_download</md-icon>Baixar
+			</md-button>
+
+			<md-button
+				class="md-raised md-primary"
+				ng-disabled="documento.revisoes[0].progresso_a_validar==0"
+				aria-label="Validar Progresso">
+					<md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso
+			</md-button>
 		</div>
 	</div>
+	{{idu +' - '+documento.idu_checkout + ' - ' + documento.ehEspecialista}}
 	<table class="header_table">
 		<tr>
 			<td>
@@ -56,81 +76,6 @@
 	</table>
 
 	<md-tabs md-dynamic-height md-border-bottom md-whiteframe="1dp">
-		<md-tab label="Atualizar Revisão" ng-disabled="false">
-			<md-content class="md-padding" layout="column">
-				<h3>Atualizar Revisão</h3>
-				<div layout="row" layout-align="space-between center">
-					<md-button
-						class="md-raised md-primary"
-						ng-disabled="false"
-						aria-label="Selecionar Arquivos"
-						ng-model="updateFiles"
-						ngf-select
-						ngf-multiple="true"
-						ngf-change="onFilesChange()"
-						>
-							<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>Selecionar Arquivos
-					</md-button>
-						<md-button
-						class="md-raised md-primary"
-						ng-disabled="false"
-						aria-label="Enviar Arquivos"
-						ng-if="formUploadItems.length>0"
-						>
-							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Arquivos
-					</md-button>
-				</div>
-				
-				<table ng-if="formUploadItems.length>0" class="files_table">
-					<thead>
-						<tr>
-							<td>Nome</td>
-							<td></td>
-							<td>Nº de Páginas</td>
-							<td>Tam. do Papel</td>
-							<td>Tipo</td>
-							<td>Ação</td>
-						</tr>
-					</thead>
-					<tr ng-repeat="item in formUploadItems|orderBy:'nome'">
-						<td>{{item.nome}}</td>
-						<td><md-button class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
-						<td>
-							<input type="number" aria-label="Número de Páginas" min="1" ng-model="item.nPaginas">
-						</td>
-						<td>
-							<md-select md-selected-text="dic_tamanhosDePapel[item.tamanhoDoPapel]" ng-model="item.tamanhoDoPapel" aria-label="Tamanho do Papel" class="md-no-underline">
-								<md-option ng-value="opt.id" ng-repeat="opt in tamanhosDePapel">{{ opt.nome }} ({{opt.a}}mm x {{opt.l}}mm)</md-option>
-							</md-select>
-						</td>
-						<td>
-							{{item.tipo=='novo'?'Novo':''}}
-							{{item.tipo=='antigoParaAtualizar'?'Preexistente para Atualizar':''}}
-							{{item.tipo=='antigoNaoAtualizar'?'Preexistente':''}}
-						</td>
-						<td>
-							<md-select ng-model="item.acao" class="md-no-underline" ng-if="item.tipo=='antigoNaoAtualizar'" aria-label="Ação">
-							  <md-option ng-value="1">Manter</md-option>
-							  <md-option ng-value="0">Excluir</md-option>
-							</md-select>
-							<span ng-if="item.tipo!='antigoNaoAtualizar'">Enviar</span>
-						</td>
-					</tr>
-				</table>
-
-				<div layout="row" layout-align="end center"class="afterControls">
-					<md-button
-						class="md-raised md-primary"
-						ng-disabled="false"
-						aria-label="Enviar Arquivos"
-						ng-if="formUploadItems.length>0"
-						>
-							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Arquivos
-					</md-button>
-				</div>
-			</md-content>
-		</md-tab>
-
 		<md-tab label="Histórico">
 			<md-content layout-padding layout-wrap>
 			<h3>Histórico de Revisões</h3>
@@ -199,9 +144,84 @@
 			</md-content>
 		</md-tab>
 
+		<md-tab label="Atualizar Revisão" ng-disabled="documento.idu_checkout!=idu || documento.revisoes[0].pdas==undefined">
+			<md-content class="md-padding" layout="column">
+				<h3>Atualizar Revisão</h3>
+				<div layout="row" layout-align="space-between center">
+					<md-button
+						class="md-raised md-primary"
+						ng-disabled="false"
+						aria-label="Selecionar Arquivos"
+						ng-model="updateFiles"
+						ngf-select
+						ngf-multiple="true"
+						ngf-change="onFilesChange()"
+						>
+							<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>Selecionar Arquivos
+					</md-button>
+						<md-button
+						class="md-raised md-primary"
+						ng-disabled="false"
+						aria-label="Enviar Arquivos"
+						ng-if="formUploadItems.length>0"
+						>
+							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Arquivos
+					</md-button>
+				</div>
+				
+				<table ng-if="formUploadItems.length>0" class="files_table">
+					<thead>
+						<tr>
+							<td>Nome</td>
+							<td></td>
+							<td>Nº de Páginas</td>
+							<td>Tam. do Papel</td>
+							<td>Tipo</td>
+							<td>Ação</td>
+						</tr>
+					</thead>
+					<tr ng-repeat="item in formUploadItems|orderBy:'nome'">
+						<td>{{item.nome}}</td>
+						<td><md-button ng-click="onDeleteClick($index)" class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
+						<td>
+							<input type="number" aria-label="Número de Páginas" min="1" ng-model="item.nPaginas">
+						</td>
+						<td>
+							<md-select md-selected-text="dic_tamanhosDePapel[item.tamanhoDoPapel]" ng-model="item.tamanhoDoPapel" aria-label="Tamanho do Papel" class="md-no-underline">
+								<md-option ng-value="opt.id" ng-repeat="opt in tamanhosDePapel">{{ opt.nome }} ({{opt.a}}mm x {{opt.l}}mm)</md-option>
+							</md-select>
+						</td>
+						<td>
+							{{item.tipo=='novo'?'Novo':''}}
+							{{item.tipo=='antigoParaAtualizar'?'Preexistente para Atualizar':''}}
+							{{item.tipo=='antigoNaoAtualizar'?'Preexistente':''}}
+						</td>
+						<td>
+							<md-select ng-model="item.acao" class="md-no-underline" ng-if="item.tipo=='antigoNaoAtualizar'" aria-label="Ação">
+							  <md-option ng-value="1">Manter</md-option>
+							  <md-option ng-value="0">Excluir</md-option>
+							</md-select>
+							<span ng-if="item.tipo!='antigoNaoAtualizar'">Enviar</span>
+						</td>
+					</tr>
+				</table>
+
+				<div layout="row" layout-align="end center"class="afterControls">
+					<md-button
+						class="md-raised md-primary"
+						ng-disabled="false"
+						aria-label="Enviar Arquivos"
+						ng-if="formUploadItems.length>0"
+						>
+							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Arquivos
+					</md-button>
+				</div>
+			</md-content>
+		</md-tab>
+
 		<md-tab label="GRDs" ng-disabled="false">
 			<md-content class="md-padding">
-				<h1 class="md-display-2 md-primary">Atualizar Revisão</h1>
+				<h1 class="md-display-2 md-primary">GRDs...</h1>
 				<!--
 				<div>
 					<h3>GRD's</h3>
