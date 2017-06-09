@@ -3,13 +3,16 @@
 	var module = angular.module('Documentos');
 
 	// Atribuindo o controller
-	module.controller('DocumentoController',DocumentoController);
+	module.controller('DocumentoController', DocumentoController);
 
 	// Defininfo controller
-	function DocumentoController($scope,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies){
+	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies){
 
 		// Pedindo para carregar documento
 		carregaDocumento($routeParams.id);
+
+		// Alguns dados do possível update a ser realizado
+		$scope.update = {};
 
 		// Pedindo para carregar tamanhos de papel
 		$scope.tamanhosDePapel = [];
@@ -27,8 +30,14 @@
 		}
 
 		$scope.onFilesChange = function(){
+			
 			// Levantando qual foi o último pacote de arquivos
-			var ultimosArquivos = $scope.documento.revisoes[0].pdas[0].arquivos;
+			if($scope.documento.revisoes[0].pdas != undefined){
+				var ultimosArquivos = $scope.documento.revisoes[0].pdas[0].arquivos;
+			} else {
+				var ultimosArquivos = [];
+			}
+
 			// Declarando item
 			var item;
 
@@ -65,6 +74,55 @@
 			GDoksFactory.baixarPDA($scope.documento.revisoes[0].pdas[0].id);
 			$scope.documento.idu_checkout = $scope.idu;
 			$scope.documento.datahora_checkout = new Date();
+		}
+
+		$scope.enviarArquivos = function(){
+			// Mostrando o carregando
+			$scope.root.carregando = true;
+
+			if ($scope.updateFiles && $scope.updateFiles.length) {
+				// Criando pacote a enviar
+				var packToSend = [];
+				var index;
+				var item;
+				for (var i = $scope.formUploadItems.length - 1; i >= 0; i--) {
+					// Procurando o item no vetor updateFiles
+					item = $scope.formUploadItems[i];
+					index = $scope.updateFiles.findIndex(function(a){return a.name == this},item.nome);
+
+					// adicionando ao pacote a enviar
+					if(index > -1){
+						packToSend.push({file:$scope.updateFiles[index], dados:item});
+					} else {
+						packToSend.push({dados:item});
+					}
+				};
+				
+				// Enviando pacote
+				Upload.upload(
+					{
+	                	url: API_ROOT+'/documentos/'+$scope.documento.id+'/pdas',
+	                	data: {profiles: packToSend,update:$scope.update},
+	                	headers: {'Authorization':$cookies.getObject('user').token}
+	            	}
+	            ).then(
+	            	function (response){
+	            		$scope.root.carregando = false;
+	            		if(response.error == 1){
+	            			// Retornando Toast para o usuário
+	            			$mdToast.show(
+	            				$mdToast.simple()
+	            				.textContent('Ocorreu um erro ao enviar arquivos:' + response.msg)
+	            				.position('bottom left')
+	            				.hideDelay(5000)
+	            			);
+	            		} else {
+	            			// Recarregando documento da base
+	            			carregaDocumento($scope.documento.id);
+	            		}
+	            	}
+	            );
+	        }
 		}
 
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = =

@@ -2630,6 +2630,8 @@
 							    d.nome as nome_subarea,
 							    e.id as id_area,
 							    e.nome as nome_area,
+							    g.id as id_projeto,
+							    g.nome as nome_projeto,
                                 ifnull(sum(f.hh),0) as trabalho_estimado
 							FROM
 								gdoks_documentos a
@@ -2637,6 +2639,7 @@
 							    INNER JOIN gdoks_disciplinas c ON b.id_disciplina=c.id
 							    INNER JOIN gdoks_subareas d ON a.id_subarea=d.id
 							    INNER JOIN gdoks_areas e ON d.id_area=e.id
+							    INNER JOIN gdoks_projetos g ON g.id=e.id_projeto
                                 LEFT JOIN gdoks_hhemdocs f ON f.id_doc=a.id
 							WHERE
 								a.id=?
@@ -2784,6 +2787,144 @@
 					return;
 
 				}
+			});
+
+			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db) {
+				// Lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$id_doc = 1*$id_doc;
+				$itens = array_map(function($a){return (object)$a['dados'];}, $_POST['profiles']);
+				$progresso_total = $_POST['update']['progressoTotal'];
+				$obs = $_POST['update']['observacoes'];
+				
+				// Levantando o idu do token, se ele ainda for válido
+				$sql = 'SELECT id,id_empresa FROM gdoks_usuarios WHERE token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					// Token expirou
+					$app->response->setStatus(401);
+					$response = new response(1,'Token expirou.');	
+					$response->flush();
+					die();
+				} else {
+					$idu = 	$rs[0]['id'];
+					$id_empresa = 	$rs[0]['id_empresa'];
+				}
+				
+				// Verificando se quem fez o checkout foi o mesmo usuário que está tentando atualizar agora
+				$sql = "SELECT idu_checkout FROM gdoks_documentos WHERE id=?";
+				$rs = $db->query($sql,'i',$id_doc);
+				if($rs[0]['idu_checkout'] != $idu){
+					// Verificando se é o primeiro PDA do documento
+					$sql = 'SELECT count(*) AS nPdas
+							FROM gdoks_pdas a
+							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
+							WHERE id_documento=?';
+					$rs = $db->query($sql,'i',$id_doc);
+
+					if($rs[0]['nPdas'] != 0){
+						// Não é o primeiro pda e usuário não fez checkout do último pda
+						$app->response->setStatus(401);
+						$response = new response(1,'Usuário não realizou checkout.');	
+						$response->flush();
+						die();
+					}
+				}
+
+				// Determinando a revisão a ser atualizada (última), progresso validado e id do projeto
+				$sql = 'SELECT
+							a.id,
+							a.progresso_validado,
+							d.id_projeto
+						FROM
+							gdoks_revisoes a
+							inner join gdoks_documentos b on a.id_documento=b.id
+						    inner join gdoks_subareas c on c.id=b.id_subarea
+						    inner join gdoks_areas d on c.id_area=d.id
+						WHERE id_documento=?
+						ORDER BY id DESC LIMIT 1';
+				$rs = $db->query($sql,'i',$id_doc);
+				$id_revisao = $rs[0]['id'];
+				$progresso_validado = $rs[0]['progresso_validado'];
+				$id_projeto = $rs[0]['id_projeto'];
+				
+				// Criando pda e determinando seu id
+				$sql = "INSERT INTO gdoks_pdas (progresso_total,id_revisao,idu,datahora,obs) VALUES (?,?,?,NOW(),?)";
+				$db->query($sql,'iiis',$progresso_total,$id_revisao,$idu,$obs);
+				$id_pda = $db->insert_id;
+
+				// Tratando itens
+				foreach ($itens as $i => $item) {
+
+					// caso novo - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+					if($item->tipo == 'novo' || $item->tipo == 'antigoParaAtualizar'){ // mesmos passos do $item->tipo == 'antigoParaAtualizar'
+						// determinando o nome local
+						$filename = uniqid(true);
+						$caminho = $id_empresa.'/'.$id_projeto.'/';
+						$caminho_completo = $caminho.$filename;
+
+						// criando pasta caso ela não exista
+						@mkdir(UPLOAD_PATH.$caminho);
+
+						// salvando no fs
+						move_uploaded_file($_FILES['profiles']['tmp_name'][$i]['file'], UPLOAD_PATH.$caminho_completo);
+
+						// criando registro na gdoks_arquivos
+						$sql = "INSERT INTO gdoks_arquivos (caminho,nome_cliente,datahora_upload,idu,tamanho,tamanho_do_papel,nPaginas) VALUES (?,?,NOW(),?,?,?,?)";
+						$db->query($sql,'ssiiii',
+								$caminho_completo,
+								$item->nome,
+								$idu,
+								$_FILES['profiles']['size'][$i]['file'],
+								$item->tamanhoDoPapel,
+								$item->nPaginas
+							);
+						$id_arquivo = $db->insert_id;
+
+						// criando registro na gdoks_pdas_x_arquivos
+						$sql = 'INSERT INTO gdoks_pdas_x_arquivos (id_pda,id_arquivo) VALUES (?,?)';
+						$db->query($sql,'ii',$id_pda,$id_arquivo);
+					}
+
+					// caso antigo para manter no pacote
+					if($item->tipo == 'antigoNaoAtualizar' && $item->acao==1){
+						// determinando o id do arquivo (o mais atual com este nome para este documento)
+						$sql = "SELECT a.id FROM
+									gdoks_arquivos a
+								    inner join gdoks_pdas_x_arquivos b on a.id=b.id_arquivo
+								    inner join gdoks_pdas c on c.id=b.id_pda
+								    inner join gdoks_revisoes d on d.id=c.id_revisao
+								WHERE A.nome_cliente=? and d.id_documento=?
+								ORDER BY id_pda DESC
+								LIMIT 1";
+						$rs = $db->query($sql,'si',$item->nome,$id_doc);
+						$id_arquivo = $rs[0]['id'];
+
+						// criando registro na gdoks_pdas_x_arquivos
+						$sql = 'INSERT INTO gdoks_pdas_x_arquivos (id_pda,id_arquivo) VALUES (?,?)';
+						$db->query($sql,'ii',$id_pda,$id_arquivo);
+					}
+
+					// caso antigo para não manter no pacote
+					if($item->tipo == 'antigoNaoAtualizar' && $item->acao==0){
+						// Não fazer nada!
+					}
+				}
+
+				// Atualizando dados na tabela de revisoes (progresso a validar e ua)
+				$sql = 'UPDATE gdoks_revisoes SET progresso_a_validar= (? - progresso_validado), ua=NOW() WHERE id=?';
+				$db->query($sql,'ii',$progresso_total,$id_revisao);
+
+				// Setando como null idu_checkout e datahora_de_checkout
+				$sql = 'UPDATE gdoks_documentos SET idu_checkout=null,datahora_do_checkout=null WHERE id=?';
+				$db->query($sql,'i',$id_doc);
+
+				// registrando no log a ação
+				registrarAcao($db,$idu,ACAO_ATUALIZOU_REVISAO,$id_revisao.','.$id_pda);
+
+				// retornando mensagem para o usuário
+				$response = new response(0,'ok');
+				$response->flush();
 			});
 		// FIM DE ROTAS DE DOCUMENTOS */
 
@@ -3402,11 +3543,21 @@
 
 					// Criando arquivo zip
 					$zip = new ZipArchive();
-					$zip->open($filename,ZipArchive::CREATE);
+					$abriu_ok = $zip->open($filename,ZipArchive::CREATE);
+					if($abriu_ok !== true){
+						echo('Erro ao criar arquivo zip: '.$abriu_ok);
+						die();
+					}
+					
 
 					// Adicionando arquivos ao zip
+					$arquivosOk = true;
 					foreach ($caminhos as $c) {
-						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+						$arquivosOk = $arquivosOk && file_exists(UPLOAD_PATH.$c['caminho']) && $zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+					}
+					if(!$arquivosOk){
+						echo("Um ou mais arquivos não foram adicionados ao zip.");
+						die();
 					}
 
 					// Fechando o arquivo zip

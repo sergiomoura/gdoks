@@ -5,7 +5,7 @@
 			<md-button
 				class="md-raised md-primary"
 				ng-click="baixarParaRevisao()"
-				ng-disabled="!(documento.ehEspecialista && documento.idu_checkout==null && documento.revisoes[0].pdas!=undefined)"
+				ng-disabled="!(documento.ehEspecialista && documento.idu_checkout==null && documento.revisoes[0].pdas!=undefined && documento.revisoes[0].progresso_a_validar==0)"
 				aria-label="Baixar Para Revisão">
 					<md-icon class="material-icons step" aria-label="Baixar para revisão">archive</md-icon>Baixar para Revisão
 			</md-button>
@@ -26,17 +26,16 @@
 			</md-button>
 		</div>
 	</div>
-	{{idu +' - '+documento.idu_checkout + ' - ' + documento.ehEspecialista}}
 	<table class="header_table">
 		<tr>
+			<td>
+				<label>Projeto</label> {{documento.nome_projeto}}
+			</td>
 			<td>
 				<label>Área</label> {{documento.nome_area}}
 			</td>
 			<td>
 				<label>Sub-área</label> {{documento.nome_subarea}}
-			</td>
-			<td>
-				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
 			</td>
 		</tr>
 		<tr>
@@ -47,7 +46,7 @@
 				<label>Subdisciplina</label> {{documento.nome_subdisciplina}}
 			</td>
 			<td>
-				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
+				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
 			</td>
 		</tr>
 		<tr>
@@ -58,7 +57,12 @@
 				<label>Última Atualização</label> {{documento.revisoes[0].ua|date:"dd/MM/yyyy à's' hh:mm"}}
 			</td>
 			<td>
-			<label style="display: inline-block; width: 75px;">Progresso</label>
+				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<label style="display: inline-block; width: 75px;">Progresso</label>
 				<div class="hbar" style-"display: inline-block; width: calc(100% - 80px); vertical-align: top;">
 					<div ng-if="documento.revisoes[0].progresso_validado>0"
 						class="prgValidado"
@@ -74,7 +78,6 @@
 			</td>
 		</tr>
 	</table>
-
 	<md-tabs md-dynamic-height md-border-bottom md-whiteframe="1dp">
 		<md-tab label="Histórico">
 			<md-content layout-padding layout-wrap>
@@ -144,7 +147,7 @@
 			</md-content>
 		</md-tab>
 
-		<md-tab label="Atualizar Revisão" ng-disabled="documento.idu_checkout!=idu || documento.revisoes[0].pdas==undefined">
+		<md-tab label="Atualizar Revisão" ng-disabled="documento.idu_checkout!=idu && documento.revisoes[0].pdas!=undefined">
 			<md-content class="md-padding" layout="column">
 				<h3>Atualizar Revisão</h3>
 				<div layout="row" layout-align="space-between center">
@@ -159,16 +162,19 @@
 						>
 							<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>Selecionar Arquivos
 					</md-button>
-						<md-button
-						class="md-raised md-primary"
-						ng-disabled="false"
-						aria-label="Enviar Arquivos"
-						ng-if="formUploadItems.length>0"
-						>
-							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Arquivos
-					</md-button>
 				</div>
 				
+				<div layout="row" layout-align="space-between start" style="margin-top: 40px;">
+					<md-input-container ng-if="formUploadItems.length>0" flex="45">
+						<label>Progresso Total</label>
+						<input required type="number" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" min="{{documento.revisoes[0].progresso_validado}}" max="100">
+					</md-input-container>
+					
+					<md-input-container ng-if="formUploadItems.length>0" flex="45">
+						<label>Observações</label>
+						<input required type="text" placeholder="Escreva observações sobre esta atualização" ng-model="update.observacoes">
+					</md-input-container>
+				</div>
 				<table ng-if="formUploadItems.length>0" class="files_table">
 					<thead>
 						<tr>
@@ -182,7 +188,7 @@
 					</thead>
 					<tr ng-repeat="item in formUploadItems|orderBy:'nome'">
 						<td>{{item.nome}}</td>
-						<td><md-button ng-click="onDeleteClick($index)" class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
+						<td><md-button ng-click="onDeleteClick(item.nome)" class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
 						<td>
 							<input type="number" aria-label="Número de Páginas" min="1" ng-model="item.nPaginas">
 						</td>
@@ -205,17 +211,19 @@
 						</td>
 					</tr>
 				</table>
-
+				
 				<div layout="row" layout-align="end center"class="afterControls">
 					<md-button
 						class="md-raised md-primary"
-						ng-disabled="false"
+						ng-disabled="update.progressoTotal==undefined || update.observacoes=='' || update.observacoes==undefined"
 						aria-label="Enviar Arquivos"
 						ng-if="formUploadItems.length>0"
+						ng-click="enviarArquivos()"
 						>
-							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Arquivos
+							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Atualização
 					</md-button>
 				</div>
+				
 			</md-content>
 		</md-tab>
 
