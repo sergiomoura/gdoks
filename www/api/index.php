@@ -2675,7 +2675,7 @@
 								!isnull(c.id_usuario) AS ehValidador
 							FROM gdoks_disciplinas a
 							LEFT JOIN gdoks_especialistas b ON a.id=b.id_disciplina
-							LEFT JOIN gdoks_validadores c ON c.id=b.id_disciplina
+							LEFT JOIN gdoks_validadores c ON a.id=c.id_disciplina
 							WHERE a.id=?
 							  AND (b.id_usuario=?
 							       OR b.id_usuario IS NULL)
