@@ -41,5 +41,8 @@ server {
     location /api/{
         try_files $uri /api/index.php;
     }
+
+    # increase upload size limit
+    client_max_body_size 100M;
     
 }
