@@ -20,7 +20,7 @@
 
 			<md-button
 				class="md-raised md-primary"
-				ng-disabled="documento.revisoes[0].progresso_a_validar==0"
+				ng-disabled="!(documento.revisoes[0].progresso_a_validar>0 && documento.ehValidador)"
 				aria-label="Validar Progresso">
 					<md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso
 			</md-button>
