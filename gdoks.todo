@@ -44,7 +44,8 @@ GDoks:
 
       
   BUGS Avulsos:
-    ☐	As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
+    ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
+    ☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
     ☐ Cadastro de áreas e subáreas de projeto, botão salvar não pode estar discponível com form inválido
     ☐ Tela Cadastro de Formatos de Papel
     ☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
