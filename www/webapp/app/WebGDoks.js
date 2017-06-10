@@ -80,7 +80,7 @@ WebGDoks.config(
 			'/documentos',
 			{
 				controller: 'DocumentosController',
-				templateUrl: 'app/modules/Documentos/Documentos.html'
+				templateUrl: 'app/modules/Documentos/documentos.html'
 			}
 		)
 		.when(
