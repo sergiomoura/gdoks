@@ -3225,7 +3225,7 @@
 		// ROTAS DE PDAS
 			$app->get('/pdas/:id',function($id) use ($app,$db){
 				// Lendo o token
-				$token = $_GET['token'];
+				$token = $_POST['token'];
 				$id_pda = 1*$id;
 
 				// verificando se o token é valido e lendo o idu do usuário
@@ -3287,22 +3287,8 @@
 			});
 
 			$app->post('/pdas/checkout/:id',function($id) use ($app,$db){
-				echo('<pre>');
-				print_r($_GET);
-				echo('</pre>');
-				echo('<pre>');
-				print_r($_POST);
-				echo('</pre>');
-				echo('<pre>');
-				print_r($_REQUEST);
-				echo('</pre>');
-				echo('<pre>');
-				print_r($_SERVER);
-				echo('</pre>');
-				die();
-				die();
 				// Lendo o token
-				$token = $_GET['token'];
+				$token = $_POST['token'];
 				$id_pda = 1*$id;
 
 				// verificando se o token é valido e lendo o idu do usuário
