@@ -3287,7 +3287,10 @@
 			});
 
 			$app->get('/pdas/checkout/:id',function($id) use ($app,$db){
-
+				echo('<pre>');
+				print_r($_GET);
+				echo('</pre>');
+				die();
 				// Lendo o token
 				$token = $_GET['token'];
 				$id_pda = 1*$id;
