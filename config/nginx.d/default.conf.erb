@@ -15,7 +15,7 @@ server {
          fastcgi_pass   unix:<%= ENV['OPENSHIFT_PHP_DIR'] %>/run/php-fpm.sock;
          fastcgi_index  index.php;
          fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
-         fastcgi_param QUERY_STRING $query_string;
+         fastcgi_param  QUERY_STRING $query_string;
          include        fastcgi_params;
          include        openshift_params;
  
