@@ -272,7 +272,7 @@ WebGDoks.factory('GDoksFactory',
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");
 				form.setAttribute('action',API_ROOT+'/pdas/checkout/'+id_pda);
-				form.setAttribute('method','GET');
+				form.setAttribute('method','POST');
 				form.setAttribute('style','display:none');
 
 				// criando o campo para o token
