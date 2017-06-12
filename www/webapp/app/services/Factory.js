@@ -199,7 +199,7 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.validarProgresso = function(idDocumento,progresso){
-				return $http.put(API_ROOT+'/documentos/'+idDocumento+'/validarProgresso', progresso, {headers: {'Authorization': $cookies.getObject('user').token}});
+				return $http.post(API_ROOT+'/documentos/'+idDocumento+'/validacaoDeProgresso', progresso, {headers: {'Authorization': $cookies.getObject('user').token}});
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.lockDoc = function(idDoc){

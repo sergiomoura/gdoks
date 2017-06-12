@@ -6,7 +6,7 @@
 	module.controller('DocumentoController', DocumentoController);
 
 	// Defininfo controller
-	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies){
+	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies,$mdDialog){
 
 		// Pedindo para carregar documento
 		carregaDocumento($routeParams.id);
@@ -30,7 +30,9 @@
 		}
 
 		$scope.onFilesChange = function(){
-			
+			// limpando dados
+			$scope.formUploadItems = [];
+
 			// Levantando qual foi o último pacote de arquivos
 			if($scope.documento.revisoes[0].pdas != undefined){
 				var ultimosArquivos = $scope.documento.revisoes[0].pdas[0].arquivos;
@@ -68,12 +70,12 @@
 
 		$scope.baixarParaRevisao = function(){
 			GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[0].pdas[0].id);
+			$scope.documento.idu_checkout = $cookies.getObject('user').id;
+			$scope.documento.datahora_do_checkout = new Date();
 		}
 
 		$scope.baixar = function(){
 			GDoksFactory.baixarPDA($scope.documento.revisoes[0].pdas[0].id);
-			$scope.documento.idu_checkout = $scope.idu;
-			$scope.documento.datahora_checkout = new Date();
 		}
 
 		$scope.enviarArquivos = function(){
@@ -109,6 +111,7 @@
 	            	function (response){
 	            		$scope.root.carregando = false;
 	            		if(response.error == 1){
+
 	            			// Retornando Toast para o usuário
 	            			$mdToast.show(
 	            				$mdToast.simple()
@@ -117,6 +120,11 @@
 	            				.hideDelay(5000)
 	            			);
 	            		} else {
+	            			// limpando dados
+	            			$scope.updateFiles = [];
+	            			$scope.update = {};
+							$scope.formUploadItems = [];
+							
 	            			// Recarregando documento da base
 	            			carregaDocumento($scope.documento.id);
 	            		}
@@ -125,7 +133,53 @@
 	        }
 		}
 
+		$scope.openValidarProgressoDialog  = function(evt){
+			$mdDialog.show(
+				{
+					controller: ValidarProgressoDialogController,
+					locals:{
+						doc: angular.copy($scope.documento),
+						parentScope: $scope
+					},
+					templateUrl: './app/modules/Documentos/validarProgresso-dialog.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: evt,
+					clickOutsideToClose:true
+				}
+			)
+		}
+
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = =
+		function ValidarProgressoDialogController($scope,doc,parentScope){
+			$scope.doc = doc;
+
+			$scope.cancelar = function(){
+				$mdDialog.hide();
+			}
+
+			$scope.validar = function(){
+				GDoksFactory.validarProgresso($scope.doc.id,$scope.doc.revisoes[0].progresso_a_validar)
+				.success(function(response){
+					// Atualizando documento localmente
+					parentScope.documento.revisoes[0].pdas[0].progresso_total = $scope.doc.revisoes[0].progresso_a_validar + $scope.doc.revisoes[0].progresso_validado;
+					parentScope.documento.revisoes[0].progresso_validado = $scope.doc.revisoes[0].progresso_a_validar + $scope.doc.revisoes[0].progresso_validado;
+					parentScope.documento.revisoes[0].progresso_a_validar = 0;
+
+					// escondendo caixa de diálogo
+					$mdDialog.hide();
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Progresso validado')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				})
+				.error(function(error){})
+			}
+		}
+
 		function carregaDocumento(id){
 			// Mostra o carregando
 			$scope.root.carregando = true;

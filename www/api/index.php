@@ -1990,359 +1990,6 @@
 		// FIM DE ROTAS DE PROJETOS
 
 		// ROTAS DE DOCUMENTOS
-			$app->get('/documentos/paraValidar',function() use ($app,$db){
-				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
-
-				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
-				$sql = 'SELECT id
-						FROM gdoks_usuarios
-						WHERE token=? and validade_do_token>now()';
-				$rs = $db->query($sql,'s',$token);
-
-				if(sizeof($rs) == 0){
-					$app->response->setStatus(401);
-					$response = new response(1,'Refresh failed!');
-					$response->flush();
-					return;
-				} else {
-					$idu = $rs[0]['id'];
-					$sql = 'SELECT a.id,
-							       a.nome,
-							       a.data_limite,
-							       a.id_area,
-							       b.nome AS nome_area,
-							       b.codigo AS codigo_area,
-							       b.id_projeto,
-							       c.nome AS nome_projeto,
-							       a.id_subdisciplina,
-							       d.nome AS nome_subdisciplina,
-							       d.id_disciplina,
-							       e.nome AS nome_disciplina,
-								   a.id_progresso_a_validar
-							FROM gdoks_documentos a
-							INNER JOIN gdoks_areas b ON a.id_area=b.id
-							INNER JOIN gdoks_projetos c ON c.id=b.id_projeto
-							INNER JOIN gdoks_subdisciplinas d ON d.id=a.id_subdisciplina
-							INNER JOIN gdoks_disciplinas e ON d.id_disciplina=e.id
-							INNER JOIN gdoks_validadores f ON f.id_disciplina=e.id
-							WHERE f.id_usuario=? and a.id_progresso_a_validar is not null';
-					$documentos = $db->query($sql,'i',$idu);
-
-					// levantando arquivos deste documento
-					$sql = 'SELECT id,
-							       idu,
-							       datahora_upload as data,
-							       progresso_total
-							FROM gdoks_arquivos
-							WHERE id_documento=?
-							ORDER BY datahora_upload';
-					for ($i=0; $i < sizeof($documentos); $i++) { 
-						$documentos[$i] = (object)$documentos[$i];
-						$documentos[$i]->progressos = array_map( function($a){return (object)$a;}, $db->query($sql,'i',$documentos[$i]->id));
-					}					
-					$response = new response(0,'ok');
-					$response->documentos = $documentos;
-					$response->flush();
-				}
-			});
-
-			$app->put('/documentos/:id/validarProgresso',function($id) use ($app,$db){
-				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
-				$id_documento = 1*$id;
-				$progresso = 1*$app->request->getBody();
-				
-				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
-				$sql = 'SELECT id
-						FROM gdoks_usuarios
-						WHERE token=? and validade_do_token>now()';
-				$rs = $db->query($sql,'s',$token);
-
-				// Verificando se o token é válido
-				if(sizeof($rs) == 0){
-					// Token inválido...
-					$app->response->setStatus(401);
-					$response = new response(1,'Refresh failed!');
-					$response->flush();
-					return;
-				} else {
-					// Token é válido
-					// Verificando se o usuário logado é um validador deste documento
-					$idu = $rs[0]['id'];
-					$sql = 'SELECT count(*)=1 AS ok
-							FROM gdoks_documentos a
-							INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
-							INNER JOIN gdoks_validadores c ON c.id_disciplina=b.id_disciplina
-							WHERE c.id_usuario=?
-							  AND a.id=?';
-					$ok = $db->query($sql,'ii',$idu,$id_documento)['0']['ok'];
-
-					if($ok){
-						// Levantando o id do documento a ter o progresso validado
-						$sql = 'SELECT id_progresso_a_validar FROM gdoks_documentos WHERE id=?';
-						$rs = $db->query($sql,'i',$id_documento);
-						if(sizeof($rs)>0){
-							// atualizando dados na tabela de arquivos
-							$id_arquivo = $rs[0]['id_progresso_a_validar'];
-							$sql = 'UPDATE gdoks_arquivos SET progresso_total=?,idu_validador=?,datahora_validacao=now() WHERE id=?';
-							$db->query($sql,'iii',$progresso,$idu,$id_arquivo);
-
-							// atualizando dados na tabela de documentos
-							$sql = 'UPDATE gdoks_documentos SET id_progresso_a_validar=null WHERE id=?';
-							$db->query($sql,'i',$id_documento);
-
-							// registrando realização da ação.
-							registrarAcao($db,$idu,ACAO_VALIDOU_PROGRESSO,$progresso.','.$id_documento);
-
-							// retornando resultado
-							$response = new response(0,'ok');
-							$response->flush();
-							return;
-						} else {
-							$app->response->setStatus(401);
-							$response = new response(1,'Documento não está pendente de validação.');
-							$response->flush();
-							return;
-						}
-					} else {
-						// usuário não é validador da disciplina deste documento
-						$app->response->setStatus(401);
-						$response = new response(1,'Usuário não é validador da disciplina deste documento');
-						$response->flush();
-						return;
-					}
-				}
-			});
-
-			$app->get('/documentos/paraAtualizar',function() use ($app,$db){
-				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
-
-				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
-				$sql = 'SELECT id
-						FROM gdoks_usuarios
-						WHERE token=? and validade_do_token>now()';
-				$rs = $db->query($sql,'s',$token);
-
-				if(sizeof($rs) == 0){
-					$app->response->setStatus(401);
-					$response = new response(1,'Refresh failed!');
-					$response->flush();
-					return;
-				} else {
-					$idu = $rs[0]['id'];
-					$sql = 'SELECT a.id,
-							       a.nome,
-							       a.data_limite,
-							       a.id_area,
-							       b.nome AS nome_area,
-							       b.codigo AS codigo_area,
-							       b.id_projeto,
-							       c.nome AS nome_projeto,
-							       a.id_subdisciplina,
-							       d.nome AS nome_subdisciplina,
-							       d.id_disciplina,
-							       e.nome AS nome_disciplina,
-								   a.id_progresso_a_validar,
-								   a.datahora_do_checkout,
-								   a.idu_checkout
-							FROM gdoks_documentos a
-							INNER JOIN gdoks_areas b ON a.id_area=b.id
-							INNER JOIN gdoks_projetos c ON c.id=b.id_projeto
-							INNER JOIN gdoks_subdisciplinas d ON d.id=a.id_subdisciplina
-							INNER JOIN gdoks_disciplinas e ON d.id_disciplina=e.id
-							INNER JOIN gdoks_especialistas f ON f.id_disciplina=e.id
-							WHERE f.id_usuario=?';
-					$documentos = $db->query($sql,'i',$idu);
-
-					// levantando arquivos deste documento
-					$sql = 'SELECT id,
-							       idu,
-							       datahora_upload as data,
-							       progresso_total
-							FROM gdoks_arquivos
-							WHERE id_documento=?
-							ORDER BY datahora_upload';
-					for ($i=0; $i < sizeof($documentos); $i++) { 
-						$documentos[$i] = (object)$documentos[$i];
-						$documentos[$i]->progressos = array_map( function($a){return (object)$a;}, $db->query($sql,'i',$documentos[$i]->id));
-					}					
-					$response = new response(0,'ok');
-					$response->documentos = $documentos;
-					$response->flush();
-				}
-			});
-
-			$app->get('/documentos/:idDoc/lock',function($idDoc) use ($app,$db){
-				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
-
-				// Assegurando que $idDoc seja um inteiro
-				$idDoc = 1*$idDoc;
-
-				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
-				$sql = 'SELECT id
-						FROM gdoks_usuarios
-						WHERE token=? and validade_do_token>now()';
-				$rs = $db->query($sql,'s',$token);
-
-				if(sizeof($rs) == 0){
-					// Respondendo para um token inválido
-					$app->response->setStatus(401);
-					$response = new response(1,'Refresh failed!');
-					$response->flush();
-					return;
-				} else {
-					// Escrevendo o id do usuário em idu
-					$idu = $rs[0]['id'];
-
-					// Verificando se o usuário é validador ou especialista da disciplina do documento mm uestão
-					$sql = 'SELECT count(*)>0 AS ok
-							FROM gdoks_documentos a
-							INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
-							INNER JOIN gdoks_especialistas c ON c.id_disciplina=b.id_disciplina
-							INNER JOIN gdoks_validadores d ON d.id_disciplina=d.id_disciplina
-							WHERE a.id=?
-							  AND (c.id_usuario=?
-							       OR d.id_usuario=?)';
-					$ok = $db->query($sql,'iii',$idDoc,$idu,$idu)[0]['ok'];
-
-					if($ok){
-						// Documento pode ser alterado pelo usuário atual
-
-						// verificando se o documento está desbloqueado
-						$sql = 'SELECT idu_checkout, datahora_do_checkout from gdoks_documentos where id=?';
-						$doc = $db->query($sql,'i',$idDoc)[0];
-						if($doc['idu_checkout'] == null){
-							// documento desbloqueado! Bloqueando!
-							$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=now() WHERE id=?';
-							$db->query($sql,'ii',$idu,$idDoc);
-
-							// Respondendo
-							$response = new response(0,'ok');
-							$response->lockInfo = json_decode('{"idu_checkout":'.$idu.',"datahora_do_checkout":"'.date('Y-m-d H:i:s').'"}');
-							$response->flush();
-							
-							// Registrando Ação
-							registrarAcao($db,$idu,ACAO_BLOQUEOU_DOCUMENTO,''.$idDoc);
-						} else {
-							// Documento bloqueado
-
-							// Respondendo
-							$response = new response(2,'Documento bloqueado');
-							$response->lockInfo = (object)$doc;
-							$response->flush();
-						}
-
-					} else {
-						// Documento não pode ser alterado pelo usuário atual
-						$app->response->setStatus(401);
-						$response = new response(1,'Não autorizado a bloquear este documento.');
-						$response->flush();
-						return;
-					}
-				}
-			});
-
-			$app->get('/documentos/:idDoc/delock',function($idDoc) use ($app,$db){
-				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
-
-				// Assegurando que $idDoc seja um inteiro
-				$idDoc = 1*$idDoc;
-
-				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
-				$sql = 'SELECT id
-						FROM gdoks_usuarios
-						WHERE token=? and validade_do_token>now()';
-				$rs = $db->query($sql,'s',$token);
-
-				if(sizeof($rs) == 0){
-					// Respondendo para um token inválido
-					$app->response->setStatus(401);
-					$response = new response(1,'Refresh failed!');
-					$response->flush();
-					return;
-				} else {
-					// Escrevendo o id do usuário em idu
-					$idu = $rs[0]['id'];
-
-					// Verificando se o documento está realmente bloqueado
-					$sql = 'SELECT idu_checkout,datahora_do_checkout FROM gdoks_documentos a	WHERE a.id=?';
-					$idu_checkout = $db->query($sql,'i',$idDoc)[0]['idu_checkout'];
-					$datahora_checkout = $db->query($sql,'i',$idDoc)[0]['datahora_do_checkout'];
-
-					if($idu_checkout == null){
-						// Documento já está desbloqueado
-						$response = new response(2,'Documento já está desbloqueado.');
-						$response->flush();
-						return;
-					} else {
-						// Documento está bloqueado.
-
-						// Verificando se quem bloqueou o documento foi o usuário que agora quer desbloquear
-						if($idu_checkout == $idu){
-							// Sim. Desbloqueando
-							$sql = 'UPDATE gdoks_documentos SET idu_checkout=null, datahora_do_checkout=null WHERE id=?';
-							$db->query($sql,'i',$idDoc);
-
-							// Respondendo sucesso
-							$response = new response(0,'ok');
-							$response->flush();
-							return;
-
-							//Registrando Ação
-							registrarAcao($db,$idu,ACAO_DESBLOQUEOU_DOCUMENTO,''.$idDoc);
-						} else {
-							// Respondendo para tentativa de desbloqueio de outro usuário
-							$response = new response(3,'Não pode desbloquear documento bloqueado por outro usuário!');
-							$response->lockInfo = json_decode('{"idu_checkout":'.$idu_checkout.',"datahora_do_checkout":"'.$datahora_checkout.'"}');
-							$response->flush();
-							return;
-						}
-					}
-
-					// Verificando se o usuário foi quem bloqueou o documento
-					$sql = 'SELECT idu_checkout=? AS ok
-							FROM gdoks_documentos a	WHERE a.id=?';
-					$ok = $db->query($sql,'ii',$idu,$idDoc)[0]['ok'];
-
-					if($ok){
-						// Documento pode ser alterado pelo usuário atual
-
-						// verificando se o documento está desbloqueado
-						$sql = 'SELECT idu_checkout, datahora_do_checkout from gdoks_documentos where id=?';
-						$doc = $db->query($sql,'i',$idDoc)[0];
-						if($doc['idu_checkout'] == null){
-							// documento desbloqueado! Bloqueando!
-							$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=now() WHERE id=?';
-							$db->query($sql,'ii',$idu,$idDoc);
-
-							// Respondendo
-							$response = new response(0,'ok');
-							$response->flush();
-							
-							// Registrando Ação
-							registrarAcao($db,$idu,ACAO_BLOQUEOU_DOCUMENTO,''.$idDoc);
-						} else {
-							// Documento bloqueado
-
-							// Respondendo
-							$response = new response(1,'Documento bloqueado');
-							$response->lockInfo = $doc;
-							$response->flush();
-						}
-
-					} else {
-						// Documento não pode ser alterado pelo usuário atual
-						$app->response->setStatus(401);
-						$response = new response(1,'Não autorizado a desbloquear este documento.');
-						$response->flush();
-						return;
-					}
-				}
-			});
 
 			$app->post('/documentos/:idDoc/arquivos/',function($id_doc) use ($app,$db){
 				// lendo dados
@@ -2728,7 +2375,8 @@
 								a.id,
 							    a.idu_validador,
 							    a.datahora_validacao,
-							    a.id_revisao
+							    a.id_revisao,
+							    a.progresso_total
 							FROM
 								gdoks_pdas a
 							    INNER JOIN gdoks_revisoes b on a.id_revisao=b.id
@@ -2925,6 +2573,70 @@
 				// retornando mensagem para o usuário
 				$response = new response(0,'ok');
 				$response->flush();
+			});
+
+			$app->post('/documentos/:id_doc/validacaoDeProgresso',function($id_doc) use ($app,$db){
+				
+				// Lendo dados
+				$token = $app->request->headers->get('Authorization');
+				$id_doc = 1*$id_doc;
+				$progresso = 1*$app->request->getBody();
+
+				// verificando se o token é válido e descobrindo id do usuário
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Token expirou.');	
+					die();
+				} else {
+					$idu = $rs[0]['id'];
+				}
+
+				// verificando se o usuário é validador da disciplina do documento
+				$sql = 'SELECT count(*) ehValidador
+						FROM gdoks_documentos a
+						INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+						INNER JOIN gdoks_validadores c ON c.id_disciplina=b.id_disciplina
+						WHERE a.id=?
+						  AND c.id_usuario=?';
+				$rs = $db->query($sql,'ii',$id_doc,$idu);
+				if($rs[0]['ehValidador'] != 1){
+					$app->response->setStatus(401);
+					$response = new response(1,'Usuário não é um validador da disciplina deste documento.');	
+					die();
+				}
+
+				// determinando o id da última revisão e o id do último pda
+				$sql = 'SELECT a.id AS id_revisao,
+						       b.id AS id_pda
+						FROM gdoks_revisoes a
+						LEFT JOIN gdoks_pdas b ON a.id=b.id_revisao
+						AND a.id_documento=?
+						ORDER BY b.id DESC LIMIT 1';
+				$rs = $db->query($sql,'i',$id_doc);
+				$id_revisao = $rs[0]['id_revisao'];
+				$id_pda = $rs[0]['id_pda'];
+
+				// validando progresso 1: TABELA DE REVISÕES
+				$sql = 'UPDATE gdoks_revisoes SET progresso_validado = progresso_validado + ?,progresso_a_validar = 0 WHERE id=?';
+				$db->query($sql,'ii',$progresso,$id_revisao);
+
+				// levantando novo progresso total validado
+				$sql = 'SELECT progresso_validado,id
+						FROM gdoks_revisoes
+						WHERE id=?';
+				$rs = $db->query($sql,'i',$id_revisao);
+				$progresso_validado = $rs[0]['progresso_validado'];
+				$id_revisao = $rs[0]['id'];
+
+				// validando progresso 2: TABELA DE PDAS
+				$sql = 'UPDATE gdoks_pdas SET progresso_total=?,idu_validador=?,datahora_validacao=now() WHERE id=?';
+				$db->query($sql,'iii',$progresso_validado,$idu,$id_pda);
+
+				// registrando no log
+
+				// dando retorno para o cliente.
 			});
 		// FIM DE ROTAS DE DOCUMENTOS */
 

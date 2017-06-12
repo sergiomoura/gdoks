@@ -366,28 +366,33 @@
 		margin: 0 !important;
 	}
 
-	/*
-	.SelectDpsHeader {
+}
 
-		.demo-header-searchbox {
-			border: none;
-			outline: none;
-			height: 100%;
-			width: 100%;
-			padding: 0;
+.validarProgresso_dialog{
+	padding: 0px 20px 20px 20px;
+	width:350px;
+	md-dialog-content{
+		overflow: hidden;
+		padding: 16px 0 0 0;
+		form {
+			&>div:nth-child(2){
+				border-left: 1px solid #e0e0e0;
+				margin-left: 20px;
+				padding-left: 20px;
+				.section-title{
+					margin: 0 0 20px 0;
+					text-align:center;
+				}
+			}
 		}
-		.demo-select-header {
-			box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.12);
-			padding-left: 10.667px;
-			height: 48px;
-			cursor: pointer;
-			position: relative;
-			display: flex;
-			align-items: center;
-			width: auto;
-		}
-		md-content._md {
-			max-height: 240px;
-		}
-	}*/
+	}
+
+	md-dialog-actions{
+		padding: 0;
+	}
+
+	 md-dialog-actions button{
+		margin: 0 !important;
+	}
+
 }

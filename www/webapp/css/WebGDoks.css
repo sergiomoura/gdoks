@@ -666,31 +666,7 @@
 
 .doc_dialog {
   padding: 40px 20px 20px 20px;
-  width: 800px;
-  	/*
-  	.SelectDpsHeader {
-  
-  		.demo-header-searchbox {
-  			border: none;
-  			outline: none;
-  			height: 100%;
-  			width: 100%;
-  			padding: 0;
-  		}
-  		.demo-select-header {
-  			box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.12);
-  			padding-left: 10.667px;
-  			height: 48px;
-  			cursor: pointer;
-  			position: relative;
-  			display: flex;
-  			align-items: center;
-  			width: auto;
-  		}
-  		md-content._md {
-  			max-height: 240px;
-  		}
-  	}*/ }
+  width: 800px; }
   .doc_dialog md-dialog-content {
     overflow: hidden;
     padding: 16px 0 0 0; }
@@ -704,6 +680,24 @@
   .doc_dialog md-dialog-actions {
     padding: 0; }
   .doc_dialog md-dialog-actions button {
+    margin: 0 !important; }
+
+.validarProgresso_dialog {
+  padding: 0px 20px 20px 20px;
+  width: 350px; }
+  .validarProgresso_dialog md-dialog-content {
+    overflow: hidden;
+    padding: 16px 0 0 0; }
+    .validarProgresso_dialog md-dialog-content form > div:nth-child(2) {
+      border-left: 1px solid #e0e0e0;
+      margin-left: 20px;
+      padding-left: 20px; }
+      .validarProgresso_dialog md-dialog-content form > div:nth-child(2) .section-title {
+        margin: 0 0 20px 0;
+        text-align: center; }
+  .validarProgresso_dialog md-dialog-actions {
+    padding: 0; }
+  .validarProgresso_dialog md-dialog-actions button {
     margin: 0 !important; }
 
 #dpvs_container {

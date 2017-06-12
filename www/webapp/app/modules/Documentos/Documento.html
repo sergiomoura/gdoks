@@ -20,6 +20,7 @@
 
 			<md-button
 				class="md-raised md-primary"
+				ng-click="openValidarProgressoDialog($event)"
 				ng-disabled="!(documento.revisoes[0].progresso_a_validar>0 && documento.ehValidador)"
 				aria-label="Validar Progresso">
 					<md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso
@@ -126,15 +127,22 @@
 								<div ng-if="rev.pdas.length==0">Nenhum progresso anterior registrado.</div>
 								<div ng-if="rev.pdas.length>0">Progresso</div>
 								<div class="hbar" ng-repeat="pda in rev.pdas">
-									<div ng-if="pda.progresso_validado>0"
+									<!-- se for o primeiro pda -->
+									<div ng-if="$first && rev.progresso_validado>0"
 										class="prgValidado"
-										style="width: calc({{pda.progresso_validado}}% - 2px)">
-										{{pda.progresso_validado}}%
+										style="width: calc({{rev.progresso_validado}}% - 2px)">
+										{{rev.progresso_validado}}%
 									</div
-									><div ng-if="pda.progresso_a_validar>0"
+									><div ng-if="$first && rev.progresso_a_validar>0"
 										class="prgAValidar"
-										style="width: calc({{pda.progresso_a_validar}}% - 2px)">
-										{{pda.progresso_a_validar}}%
+										style="width: calc({{rev.progresso_a_validar}}% - 2px)">
+										{{rev.progresso_a_validar}}%
+									</div>
+									<!-- se NÃO for o primeiro pda -->
+									<div ng-if="!$first && pda.progresso_total>0"
+										class="prgValidado"
+										style="width: calc({{pda.progresso_total}}% - 2px)">
+										{{pda.progresso_total}}%
 									</div>
 								</div>
 								<div layout="row" layout-align="center center">
@@ -167,7 +175,7 @@
 				<div layout="row" layout-align="space-between start" style="margin-top: 40px;">
 					<md-input-container ng-if="formUploadItems.length>0" flex="45">
 						<label>Progresso Total</label>
-						<input required type="number" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" min="{{documento.revisoes[0].progresso_validado}}" max="100">
+						<input required type="number" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" ng-value="documento.revisoes[0].progresso_validado+1" min="{{documento.revisoes[0].progresso_validado+1}}" max="100">
 					</md-input-container>
 					
 					<md-input-container ng-if="formUploadItems.length>0" flex="45">
@@ -224,21 +232,6 @@
 					</md-button>
 				</div>
 				
-			</md-content>
-		</md-tab>
-
-		<md-tab label="GRDs" ng-disabled="false">
-			<md-content class="md-padding">
-				<h1 class="md-display-2 md-primary">GRDs...</h1>
-				<!--
-				<div>
-					<h3>GRD's</h3>
-					<div ng-if="documento.grds.length==0">Nenhuma revisão deste documento consta em alguma GRD.</div>
-					<ul ng-if="documento.grds.length > 0">
-						<li ng-repeat="grd in documento.grds track by $index">{{grd}}</li>
-					</ul>
-				</div>
-				-->
 			</md-content>
 		</md-tab>
 	</md-tabs>

@@ -1,0 +1,23 @@
+<md-dialog class="validarProgresso_dialog">
+	<md-dialog-content>
+		<form name="form" layout="column">
+			<md-input-container>
+				<label>Progresso a Validar (%)</label>
+				<input type="number" ng-model="doc.revisoes[0].progresso_a_validar" max="{{100 - doc.revisoes[0].progresso_validado}}" min="0" ng-value="doc.revisoes[0].progresso_a_validar">
+			</md-input-container>
+		</form>
+
+	</md-dialog-content>
+	<md-dialog-actions layout="row" layout-align="space-between center">
+		<md-button
+			ng-click="cancelar()"
+			class="md-raised md-accent"
+			aria-label="Cancelar">Cancelar
+		</md-button>
+		<md-button 
+			ng-click="validar()"
+			class="md-raised md-primary"
+			aria-label="Validar Progresso">Validar progresso total de {{doc.revisoes[0].progresso_a_validar + doc.revisoes[0].progresso_validado}}%
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>

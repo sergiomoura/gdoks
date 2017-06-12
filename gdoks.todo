@@ -1,19 +1,19 @@
 GDoks:
   Tela de Documento:
     ✔ Baixar PDA  @due(17-06-08 10:00) @done (17-06-08 14:28)
-    ☐ Baixar PDA para revisão @due(17-06-08 10:30)
+    ✔ Baixar PDA para revisão @due(17-06-08 10:30) @done (17-06-12 06:35)
     ✔ Fazer com que botão de "Baixar" fique habilitado quando tiver pelo menos um PDA @due(17-06-08 11:00) @done (17-06-08 14:29)
     ✔ Fazer com que "Baixar para Revisão" esteja havbilitado quando @due(17-06-08 11:00) @done (17-06-08 14:29)
-        - houver pelo menos um PDA
-        - o idu_checkout=null
-        - e usuário for especialista
-    ☐ Atualizar Revisão @due(17-06-08 17:00)
-        - Campos de Arquivo: número de páginas, tamanho do papel, ação...
-        - Campos de Revisão: percentual concluído, data limite, observações
-        - Aba de atualizar revisão fica disponível somente se idu_checkout=idu
-    ☐ Validar progresso @due(17-06-09 08:00)
-        - Botão somente estará disponível se usuário for validador da disciplina e houver progresso a validar
-    ☐ Mostrar Histórico de Revisões
+        ✔ houver pelo menos um PDA @done (17-06-12 06:35)
+        ✔ o idu_checkout=null @done (17-06-12 06:35)
+        ✔ e usuário for especialista @done (17-06-12 06:35)
+    ✔ Atualizar Revisão @due(17-06-08 17:00) @done (17-06-12 06:35)
+        ✔ Campos de Arquivo: número de páginas, tamanho do papel, ação... @done (17-06-12 06:36)
+        ✔ Campos de Revisão: percentual concluído, data limite, observações @done (17-06-12 06:36)
+        ✔ Aba de atualizar revisão fica disponível somente se idu_checkout=idu @done (17-06-12 06:36)
+    ✔ Validar progresso @due(17-06-09 08:00) @done (17-06-12 06:36)
+        ✔ Botão somente estará disponível se usuário for validador da disciplina e houver progresso a validar @done (17-06-12 06:36)
+    ✔ Mostrar Histórico de Revisões @done (17-06-12 06:54)
 
 
   Cadastro de Projeto 1 - Documentos:
