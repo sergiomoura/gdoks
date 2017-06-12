@@ -43,7 +43,7 @@ server {
     }
 
     location / {
-        try_files $uri $uri/ /index.php?$query_string;
+        try_files $uri $uri/ /index.php?$request_uri;
     }
 
     # increase upload size limit
