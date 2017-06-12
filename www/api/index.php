@@ -3286,7 +3286,7 @@
 				}
 			});
 
-			$app->get('/pdas/checkout/:id',function($id) use ($app,$db){
+			$app->post('/pdas/checkout/:id',function($id) use ($app,$db){
 				echo('<pre>');
 				print_r($_GET);
 				echo('</pre>');
