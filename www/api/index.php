@@ -3332,12 +3332,12 @@
 					echo('fechou o zip');
 
 					// enviando para o cliente
-					//header("Content-Type: application/zip");
-					//header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
-					//header("Content-Length: " . filesize(realpath($filename))); 
-					//header("Content-Transfer-Encoding: binary");
-					//readfile($filename);
-					//unlink($filename);
+					header("Content-Type: application/zip");
+					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
+					header("Content-Length: " . filesize(realpath($filename))); 
+					header("Content-Transfer-Encoding: binary");
+					readfile($filename);
+					unlink($filename);
 						
 					// Descobrindo qual o id_doc do pda
 					$sql = 'SELECT id_documento
