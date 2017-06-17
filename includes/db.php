@@ -1,21 +1,7 @@
 <?php 
-	if($_SERVER['SERVER_NAME'] == 'localhost'){
-		define("DB_HOST","localhost");
-		define("DB_USER","root");
-		define("DB_PASS","vaiplaneta");
-		define("DB_BASE","gdoks");
-		define("DB_PORT",3306);
-	} else {
-		define('DB_HOST', getenv('OPENSHIFT_MYSQL_DB_HOST'));
-		define('DB_USER', getenv('OPENSHIFT_MYSQL_DB_USERNAME'));
-		define('DB_PASS', getenv('OPENSHIFT_MYSQL_DB_PASSWORD'));
-		define('DB_BASE', getenv('OPENSHIFT_APP_NAME'));
-		define('DB_PORT', getenv('OPENSHIFT_MYSQL_DB_PORT'));
-	}
-	
 	class DB extends mysqli{
-		public function __construct(){
-			$this->connect(DB_HOST,DB_USER,DB_PASS,DB_BASE,DB_PORT);
+		public function __construct($dbkey){
+			$this->connect($dbkey->DB_HOST,$dbkey->DB_USER,$dbkey->DB_PASS,$dbkey->DB_BASE,$dbkey->DB_PORT);
 			$this->set_charset("utf8");
 		}
 
@@ -87,5 +73,4 @@
 		}
 	}
 
-	$db = new DB();
 ?>

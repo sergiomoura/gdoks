@@ -1,19 +1,9 @@
 GDoks:
-  Tela de Documento:
-    ✔ Baixar PDA  @due(17-06-08 10:00) @done (17-06-08 14:28)
-    ✔ Baixar PDA para revisão @due(17-06-08 10:30) @done (17-06-12 06:35)
-    ✔ Fazer com que botão de "Baixar" fique habilitado quando tiver pelo menos um PDA @due(17-06-08 11:00) @done (17-06-08 14:29)
-    ✔ Fazer com que "Baixar para Revisão" esteja havbilitado quando @due(17-06-08 11:00) @done (17-06-08 14:29)
-        ✔ houver pelo menos um PDA @done (17-06-12 06:35)
-        ✔ o idu_checkout=null @done (17-06-12 06:35)
-        ✔ e usuário for especialista @done (17-06-12 06:35)
-    ✔ Atualizar Revisão @due(17-06-08 17:00) @done (17-06-12 06:35)
-        ✔ Campos de Arquivo: número de páginas, tamanho do papel, ação... @done (17-06-12 06:36)
-        ✔ Campos de Revisão: percentual concluído, data limite, observações @done (17-06-12 06:36)
-        ✔ Aba de atualizar revisão fica disponível somente se idu_checkout=idu @done (17-06-12 06:36)
-    ✔ Validar progresso @due(17-06-09 08:00) @done (17-06-12 06:36)
-        ✔ Botão somente estará disponível se usuário for validador da disciplina e houver progresso a validar @done (17-06-12 06:36)
-    ✔ Mostrar Histórico de Revisões @done (17-06-12 06:54)
+  Multidatabase:
+    ☐ Alterar tela de login para dois passos
+    ☐ Alterar db para que opere em multidatabase
+    ☐ Alterar ações para que sejam multidatabase
+
 
 
   Cadastro de Projeto 1 - Documentos:
@@ -46,6 +36,7 @@ GDoks:
   BUGS Avulsos:
     ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
     ☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
+    ☐ Primeira subárea de um projeto não aparece assim que é criada
     ☐ Cadastro de áreas e subáreas de projeto, botão salvar não pode estar discponível com form inválido
     ☐ Tela Cadastro de Formatos de Papel
     ☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
@@ -66,6 +57,20 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Mostrar Histórico de Revisões @done (17-06-12 06:54) @project(GDoks / Tela de Documento)
+ ✔ Validar progresso @due(17-06-09 08:00) @done (17-06-12 06:36) @project(GDoks / Tela de Documento)
+ ✔ Campos de Revisão: percentual concluído, data limite, observações @done (17-06-12 06:36) @project(GDoks / Tela de Documento)
+ ✔ Campos de Arquivo: número de páginas, tamanho do papel, ação... @done (17-06-12 06:36) @project(GDoks / Tela de Documento)
+ ✔ Botão somente estará disponível se usuário for validador da disciplina e houver progresso a validar @done (17-06-12 06:36) @project(GDoks / Tela de Documento)
+ ✔ Aba de atualizar revisão fica disponível somente se idu_checkout=idu @done (17-06-12 06:36) @project(GDoks / Tela de Documento)
+ ✔ o idu_checkout=null @done (17-06-12 06:35) @project(GDoks / Tela de Documento)
+ ✔ houver pelo menos um PDA @done (17-06-12 06:35) @project(GDoks / Tela de Documento)
+ ✔ e usuário for especialista @done (17-06-12 06:35) @project(GDoks / Tela de Documento)
+ ✔ Baixar PDA para revisão @due(17-06-08 10:30) @done (17-06-12 06:35) @project(GDoks / Tela de Documento)
+ ✔ Atualizar Revisão @due(17-06-08 17:00) @done (17-06-12 06:35) @project(GDoks / Tela de Documento)
+ ✔ Fazer com que botão de "Baixar" fique habilitado quando tiver pelo menos um PDA @due(17-06-08 11:00) @done (17-06-08 14:29) @project(GDoks / Tela de Documento)
+ ✔ Fazer com que "Baixar para Revisão" esteja havbilitado quando @due(17-06-08 11:00) @done (17-06-08 14:29) @project(GDoks / Tela de Documento)
+ ✔ Baixar PDA  @due(17-06-08 10:00) @done (17-06-08 14:28) @project(GDoks / Tela de Documento)
  ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
   ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)

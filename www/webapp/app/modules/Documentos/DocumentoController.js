@@ -105,7 +105,7 @@
 					{
 	                	url: API_ROOT+'/documentos/'+$scope.documento.id+'/pdas',
 	                	data: {profiles: packToSend,update:$scope.update},
-	                	headers: {'Authorization':$cookies.getObject('user').token}
+	                	headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
 	            	}
 	            ).then(
 	            	function (response){

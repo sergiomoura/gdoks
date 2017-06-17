@@ -413,8 +413,9 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		GDoksFactory.refreshToken()
 		.success(
 			function(response){
-				$scope.root.user.token = response.token;
-				$cookies.putObject('user',$scope.root.user);
+				var user = $cookies.getObject('user');
+				user.token = response.token
+				$cookies.putObject('user',user,{path:'/'});
 			}
 		)
 		.error(
@@ -427,9 +428,6 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 	// Acionando timer que renova o token de tempo em tempo
 	$interval(refreshToken,TOKEN_REFRESH_IN);
 	
-	// definindo o objeto que guarda as info do usuário logado.
-	$scope.root.user = $cookies.getObject('user');
-
 	$scope.toggleMenu = function(){
 		$mdSidenav('menu_principal').toggle();
 	}

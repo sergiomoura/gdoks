@@ -11,6 +11,45 @@
 
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas
+	
+
+	// lendo informações no header
+	$headers = getallheaders();
+	if(isset($headers['Authorization'])){
+
+		// definindo iddb e token a partir do header
+		$empresa =  explode('-', $headers['Authorization'])[0];
+		$token = explode('-', $headers['Authorization'])[1];
+
+	} elseif (isset($_COOKIE['user'])) {
+
+		// se informação não está no header, talvez esteja no cookie para requisições de download
+		$user = json_decode($_COOKIE['user']);
+		$empresa = $user->empresa;
+		$token = $user->token;
+	}
+
+	// criando a conexão
+	if(isset($empresa) && file_exists('../../dbkeys/'.$empresa.'.php')){
+		// incluindo arquivo que define $dbkey
+		include('../../dbkeys/'.$empresa.'.php');
+
+		// Criando conexão
+		$db = new DB($dbkey);
+
+		// salvando o id_empresa
+		$id_empresa = $dbkey->ID_EMPRESA;
+
+		// Removendo conteúdos de $dbkey;
+		unset($dbkey);
+
+	} else {
+		// Arquivo não existe. Sem Autorização
+		sleep(1);
+		http_response_code(403);
+		$response = new response(1,'Sem autorização');
+		$response->flush();
+	}
 
 	// definindo função que realiza log
 	function registrarAcao($db,$idUsuario,$idAcao,$parametros = ''){
@@ -25,45 +64,45 @@
 
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
-	$db = new DB();
 
 	// defining api routes  V1 = = = = = = = = = = = = = = = =
-	$app->group('/v1',function() use($app,$db){
+	$app->group('/v1',function() use($app,$db,$id_empresa,$token,$empresa){
 
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
-		$app->post('/login',function() use ($app,$db){
+		$app->post('/login',function() use ($app,$db,$id_empresa,$empresa){
 			// lendo dados da requisição
 			$data = json_decode($app->request->getBody());
 
 			// Verificando se é usuário é válido e carregando suas informações se for o caso.
-			$sql = 'SELECT b.id,
-						   b.nome,
-						   b.login,
-						   b.email,
+			$sql = 'SELECT id,
+						   nome,
+						   login,
+						   email,
 					       count(*)=1 AS ok
-					FROM gdoks_empresas a
-					INNER JOIN gdoks_usuarios b ON a.id=b.id_empresa
+					FROM
+						gdoks_usuarios
 					WHERE login=?
 					  AND senha=PASSWORD(?)
-					  AND ucase(a.nome)=ucase(?)
+					  AND id_empresa=?
 					  AND ativo';
-			$result = $db->query($sql,'sss',$data->login,$data->senha,$data->empresa)[0];
-
+			$rs = $db->query($sql,'ssi',$data->login,$data->senha,$id_empresa)[0];
+						
 			// perguntando se usuário é válido
-			if($result['ok'] == 1){
+			if($rs['ok'] == 1){
 				// SIM, usuário é válido
 				// gerando novo token
 				$token = uniqid('',true);
 
 				// atualizando o token na base de dados
-				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$result['id']);
+				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$rs['id']);
 
 				// Arrumando dados do usuário
 				$user = new stdClass();
-				$user->id = $result['id'];
-				$user->nome = $result['nome'];
-				$user->email = $result['email'];
+				$user->id = $rs['id'];
+				$user->nome = $rs['nome'];
+				$user->email = $rs['email'];
 				$user->token = $token;
+				$user->empresa = $empresa;
 
 				// definindo resposta http como 200
 				$app->response->setStatus(200);
@@ -86,8 +125,7 @@
 		});
 
 		// LOGIN REFRESH ROUTE DEFINITION - - - - - - - - -
-		$app->get('/refresh',function() use ($app,$db){
-			$token = $app->request->headers->get('Authorization');
+		$app->get('/refresh',function() use ($app,$db,$token){
 			$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
 			if(sizeof($rs) == 0){
 				$app->response->setStatus(401);
@@ -112,9 +150,8 @@
 		});
 
 		// DEFINIÇÃO DE MUDA LOGIN/SENHA
-			$app->post('/mudaLoginSenha',function() use ($app,$db){
+			$app->post('/mudaLoginSenha',function() use ($app,$db,$token){
 				// lendo dados da requisição
-				$token = $app->request->headers->get('Authorization');
 				$data = json_decode($app->request->getBody());
 				
 				// Verificando se o token existe e se ele ainda é válido.
@@ -163,8 +200,7 @@
 			});
 		
 		// ROTAS DE USUÁRIOS - - - - - - - - - - - - - - - -
-			$app->get('/usuarios',function() use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/usuarios',function() use ($app,$db,$token){
 				$sql = 'SELECT a.id,
 						       a.login,
 						       a.nome,
@@ -181,9 +217,8 @@
 				$response->flush();
 			});
 
-			$app->put('/usuarios/:id',function($id) use ($app,$db){
+			$app->put('/usuarios/:id',function($id) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id = 1*$id;
 				$usuario = json_decode($app->request->getBody());
 
@@ -245,9 +280,8 @@
 				}
 			});
 
-			$app->post('/usuarios',function() use ($app,$db){
+			$app->post('/usuarios',function() use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$usuario = json_decode($app->request->getBody());
 
 				// Capturando o id e o id_empresa do usuário atual
@@ -280,9 +314,8 @@
 		// FIM DE ROTAS DE USUÁRIOS
 		
 		// ROTAS DE DISCIPLINAS - - - - - - - - - - - - - - -
-			$app->get('/disciplinas',function() use ($app,$db){
+			$app->get('/disciplinas',function() use ($app,$db,$token){
 				// lendo o token
-				$token = $app->request->headers->get('Authorization');
 
 				// carregando as disciplinas
 				$sql = 'SELECT a.id,
@@ -374,9 +407,8 @@
 				$response->flush();
 			});
 
-			$app->put('/disciplinas/:id',function($id) use ($app,$db){
+			$app->put('/disciplinas/:id',function($id) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id = 1*$id;
 				$disciplina = json_decode($app->request->getBody());
 
@@ -417,9 +449,8 @@
 				}
 			});
 
-			$app->post('/disciplinas',function() use ($app,$db){
+			$app->post('/disciplinas',function() use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$disciplina = json_decode($app->request->getBody());
 
 				// Capturando o id e o id_empresa do usuário atual
@@ -450,10 +481,9 @@
 				registrarAcao($db,$id,ACAO_CRIOU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa==true?1:0));
 			});
 
-			$app->get('/disciplinas/:id',function($id) use ($app,$db){
+			$app->get('/disciplinas/:id',function($id) use ($app,$db,$token){
 				
 				//levantando informações enviadas.
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id;
 
 				// verificando se a disciplina solicitada é do mesmo cliente do usuário
@@ -534,9 +564,8 @@
 				$response->flush();
 			});
 
-			$app->put('/disciplinas/:id_disciplina/subs/:id_sub',function($id_disciplina,$id_sub) use ($app,$db){
+			$app->put('/disciplinas/:id_disciplina/subs/:id_sub',function($id_disciplina,$id_sub) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$id_sub = 1*$id_sub;
 				$subdisciplina = json_decode($app->request->getBody());
@@ -587,9 +616,8 @@
 				}
 			});
 
-			$app->post('/disciplinas/:id_disciplina/subs/',function($id_disciplina) use ($app,$db){
+			$app->post('/disciplinas/:id_disciplina/subs/',function($id_disciplina) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$subdisciplina = json_decode($app->request->getBody());
 
@@ -630,9 +658,8 @@
 				}
 			});
 
-			$app->delete('/disciplinas/:id_disciplina/subs/:id_sub',function($id_disciplina,$id_sub) use ($app,$db){
+			$app->delete('/disciplinas/:id_disciplina/subs/:id_sub',function($id_disciplina,$id_sub) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$id_sub = 1*$id_sub;
 				
@@ -684,9 +711,8 @@
 				}
 			});
 
-			$app->put('/disciplinas/:id_disciplina/especialistas/',function($id_disciplina) use ($app,$db){
+			$app->put('/disciplinas/:id_disciplina/especialistas/',function($id_disciplina) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$ids_especialistas = json_decode($app->request->getBody());
 				
@@ -735,9 +761,8 @@
 				}
 			});
 
-			$app->post('/disciplinas/:id_disciplina/especialistas/',function($id_disciplina) use ($app,$db){
+			$app->post('/disciplinas/:id_disciplina/especialistas/',function($id_disciplina) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$id_especialista = 1*$app->request->getBody();
 
@@ -782,9 +807,8 @@
 				}
 			});
 			
-			$app->delete('/disciplinas/:id_disciplina/especialistas/:id_especialista',function($id_disciplina,$id_especialista) use ($app,$db){
+			$app->delete('/disciplinas/:id_disciplina/especialistas/:id_especialista',function($id_disciplina,$id_especialista) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$id_especialista = 1*$id_especialista;
 
@@ -829,9 +853,8 @@
 				}
 			});
 
-			$app->put('/disciplinas/:id_disciplina/validadores/',function($id_disciplina) use ($app,$db){
+			$app->put('/disciplinas/:id_disciplina/validadores/',function($id_disciplina) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$ids_validadores = json_decode($app->request->getBody());
 				
@@ -880,9 +903,8 @@
 				}
 			});
 			
-			$app->post('/disciplinas/:id_disciplina/validadores/',function($id_disciplina) use ($app,$db){
+			$app->post('/disciplinas/:id_disciplina/validadores/',function($id_disciplina) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$data = json_decode($app->request->getBody());
 				$id_validador = $data->idu;
@@ -928,9 +950,8 @@
 				}
 			});
 			
-			$app->delete('/disciplinas/:id_disciplina/validadores/:id_validador',function($id_disciplina,$id_validador) use ($app,$db){
+			$app->delete('/disciplinas/:id_disciplina/validadores/:id_validador',function($id_disciplina,$id_validador) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_disciplina = 1*$id_disciplina;
 				$id_validador = 1*$id_validador;
 
@@ -977,9 +998,8 @@
 		// FIM DE ROTAS DE DISCIPLINAS
 		
 		// ROTAS DE PROJETOS - - - - - - - - - - - - - - - - -
-			$app->get('/projetos',function() use ($app,$db){
+			$app->get('/projetos',function() use ($app,$db,$token){
 				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
 
 				// Levantando os projetos que este usuário possui pemissão
 				$sql = 'SELECT p.id,
@@ -995,9 +1015,8 @@
 				$response->flush();
 			});
 
-			$app->get('/projetos/:id',function($id) use ($app,$db){
+			$app->get('/projetos/:id',function($id) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id;
 				
 				// Verificando se projeto é do mesmo cliente do usuário atual
@@ -1057,10 +1076,9 @@
 				$response->flush();
 			});
 
-			$app->put('/projetos/:id',function($id) use ($app,$db){
+			$app->put('/projetos/:id',function($id) use ($app,$db,$token){
 				
 				// Lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$projeto = json_decode($app->request->getBody());
 				$projeto->data_final_p = $projeto->data_final_p==null?'null':substr($projeto->data_final_p,0,10);
 				$projeto->data_inicio_p = $projeto->data_inicio_p==null?'null':substr($projeto->data_inicio_p,0,10);
@@ -1133,10 +1151,9 @@
 				registrarAcao($db,$id_usuario,ACAO_ALTEROU_PROJETO,implode(',',(array)$projeto));
 			});
 
-			$app->post('/projetos',function() use ($app,$db){
+			$app->post('/projetos',function() use ($app,$db,$token){
 				
 				// Lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$projeto = json_decode($app->request->getBody());
 
 				// Determinando o id do usuário e o id da empresa a qual ele pertence
@@ -1192,9 +1209,8 @@
 				registrarAcao($db,$id_usuario,ACAO_ADICIONOU_PROJETO,implode(',',(array)$projeto));
 			});
 
-			$app->put('/projetos/:id_projeto/areas/:id_area',function($id_projeto,$id_area) use ($app,$db){
+			$app->put('/projetos/:id_projeto/areas/:id_area',function($id_projeto,$id_area) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$id_area = 1*$id_area;
 				$area = json_decode($app->request->getBody());
@@ -1245,9 +1261,8 @@
 				}
 			});
 
-			$app->post('/projetos/:id_projeto/areas/',function($id_projeto) use ($app,$db){
+			$app->post('/projetos/:id_projeto/areas/',function($id_projeto) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$area = json_decode($app->request->getBody());
 
@@ -1288,9 +1303,8 @@
 				}
 			});
 
-			$app->get('/projetos/:id_projeto/areas',function($id_projeto) use ($app,$db){
+			$app->get('/projetos/:id_projeto/areas',function($id_projeto) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 
 				// verificando se o usário enviado é do mesmo cliente da area atual
@@ -1327,9 +1341,8 @@
 				}
 			});
 
-			$app->get('/projetos/:id_projeto/areas/:id_area/subareas',function($id_projeto,$id_area) use ($app,$db){
+			$app->get('/projetos/:id_projeto/areas/:id_area/subareas',function($id_projeto,$id_area) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$id_area = 1*$id_area;
 
@@ -1367,9 +1380,8 @@
 				}
 			});
 
-			$app->delete('/projetos/:id_projeto/areas/:id_area',function($id_projeto,$id_area) use ($app,$db){
+			$app->delete('/projetos/:id_projeto/areas/:id_area',function($id_projeto,$id_area) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$id_area = 1*$id_area;
 				
@@ -1420,9 +1432,8 @@
 				}
 			});
 
-			$app->post('/projetos/:id_projeto/daos/',function($id_projeto) use ($app,$db){
+			$app->post('/projetos/:id_projeto/daos/',function($id_projeto) use ($app,$db,$token){
 				// lendo dados
-				$token = $app->request->headers->get('Authorization');
 
 				// Verificando se o projeto é da mesma empresa do usuário
 				$sql = 'SELECT
@@ -1568,9 +1579,8 @@
 				}
 			});
 
-			$app->delete('/projetos/:id_projeto/daos/:id_dao',function($id_projeto,$id_dao) use ($app,$db){
+			$app->delete('/projetos/:id_projeto/daos/:id_dao',function($id_projeto,$id_dao) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$id_dao = 1*$id_dao;
 				
@@ -1643,10 +1653,9 @@
 				}
 			});
 
-			$app->put('/projetos/:id_projeto/documentos/:id_documento',function($id_projeto,$id_documento) use ($app,$db){
+			$app->put('/projetos/:id_projeto/documentos/:id_documento',function($id_projeto,$id_documento) use ($app,$db,$token){
 				
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$id_documento = 1*$id_documento;
 				$documento = json_decode($app->request->getBody());
@@ -1729,10 +1738,9 @@
 				}
 			});
 
-			$app->post('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db){
+			$app->post('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db,$token){
 
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$documento = json_decode($app->request->getBody());
 				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
@@ -1800,9 +1808,8 @@
 				}
 			});
 
-			$app->delete('/projetos/:id_projeto/documentos/:id_documento',function($id_projeto,$id_documento) use ($app,$db){
+			$app->delete('/projetos/:id_projeto/documentos/:id_documento',function($id_projeto,$id_documento) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				$id_documento = 1*$id_documento;
 				
@@ -1855,9 +1862,8 @@
 				}
 			});
 
-			$app->get('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db){
+			$app->get('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_projeto = 1*$id_projeto;
 				
 				// Verificando se projeto é do mesmo cliente do usuário atual
@@ -1991,9 +1997,8 @@
 
 		// ROTAS DE DOCUMENTOS
 
-			$app->post('/documentos/:idDoc/arquivos/',function($id_doc) use ($app,$db){
+			$app->post('/documentos/:idDoc/arquivos/',function($id_doc) use ($app,$db,$token){
 				// lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$id_doc = 1*$id_doc; 
 
 				// Verificando se o documento é da mesma empresa do usuário
@@ -2125,9 +2130,8 @@
 				}
 			});
 			
-			$app->get('/documentos',function() use ($app,$db){
+			$app->get('/documentos',function() use ($app,$db,$token){
 				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
 
 				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
 				$sql = 'SELECT id
@@ -2241,9 +2245,8 @@
 				}
 			});
 			
-			$app->get('/documentos/:id',function($id) use ($app,$db){
+			$app->get('/documentos/:id',function($id) use ($app,$db,$token){
 				// Lendo o token
-				$token = $app->request->headers->get('Authorization');
 				$id_doc = 1*$id;
 
 				// Levantando o id do usuário caso ele esteja logado. caso contrário retorna 401
@@ -2437,9 +2440,8 @@
 				}
 			});
 
-			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db) {
+			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db,$token) {
 				// Lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$id_doc = 1*$id_doc;
 				$itens = array_map(function($a){return (object)$a['dados'];}, $_POST['profiles']);
 				$progresso_total = $_POST['update']['progressoTotal'];
@@ -2575,10 +2577,9 @@
 				$response->flush();
 			});
 
-			$app->post('/documentos/:id_doc/validacaoDeProgresso',function($id_doc) use ($app,$db){
+			$app->post('/documentos/:id_doc/validacaoDeProgresso',function($id_doc) use ($app,$db,$token){
 				
 				// Lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$id_doc = 1*$id_doc;
 				$progresso = 1*$app->request->getBody();
 
@@ -2641,7 +2642,7 @@
 		// FIM DE ROTAS DE DOCUMENTOS */
 
 		// ROTAS DE ARQUIVOS
-			$app->get('/arquivos/:id',function($id) use ($app,$db){
+			$app->get('/arquivos/:id',function($id) use ($app,$db,$token){
 				// Lendo o token
 				$token = $_GET['token'];
 
@@ -2692,8 +2693,7 @@
 		// FIM DE ROTAS DE ARQUIVOS
 		
 		// ROTAS DE CLIENTES
-			$app->get('/clientes',function() use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/clientes',function() use ($app,$db,$token){
 				$sql = 'SELECT a.id,
 						       a.nome,
 						       a.cnpj,
@@ -2709,8 +2709,7 @@
 				$response->flush();
 			});
 
-			$app->get('/clientes/:id',function($id) use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/clientes/:id',function($id) use ($app,$db,$token){
 				$sql = 'SELECT a.id,
 						       a.nome,
 						       a.nome_fantasia,
@@ -2731,9 +2730,8 @@
 				$response->flush();
 			});
 
-			$app->put('/clientes/:id',function($id) use ($app,$db){
+			$app->put('/clientes/:id',function($id) use ($app,$db,$token){
 				// Lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$cliente = json_decode($app->request->getBody());
 
 				// verifricando consistência de dados
@@ -2800,9 +2798,8 @@
 				registrarAcao($db,$id_usuario,ACAO_ALTEROU_CLIENTE,$cliente->id.','.$cliente->nome.','.$cliente->nome_fantasia);
 			});
 
-			$app->post('/clientes',function() use ($app,$db){
+			$app->post('/clientes',function() use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$cliente = json_decode($app->request->getBody());
 				
 				// Tornando consistente o cliente quanto a escolha
@@ -2842,8 +2839,7 @@
 		// FIM DE ROTAS DE CLIENTES
 		
 		// ROTAS DE AÇÕES
-			$app->get('/acoes',function() use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/acoes',function() use ($app,$db,$token){
 				$sql = 'SELECT id,
 						       nome,
 						       descricao
@@ -2855,8 +2851,7 @@
 		// FIM DE ROTAS DE AÇÕES
 
 		// ROTAS DE LOGS
-			$app->get('/logs/:uid/:aid/:de/:ate',function($uid,$aid,$de,$ate) use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/logs/:uid/:aid/:de/:ate',function($uid,$aid,$de,$ate) use ($app,$db,$token){
 				$uid = 1*$uid;
 				$aid = 1*$aid;
 				$de  = (DateTime::createFromFormat('Y-m-d', $de ))->format('Y-m-d').' 00:00:00';
@@ -2881,8 +2876,7 @@
 		// FIM DE ROTAS DE LOGS
 
 		// ROTAS DE CARGOS
-			$app->get('/cargos',function() use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/cargos',function() use ($app,$db,$token){
 				$sql = 'SELECT a.id,
 						       a.nome,
 						       a.valor_hh
@@ -2897,8 +2891,7 @@
 				$response->flush();
 			});
 
-			$app->get('/cargos/:id',function($id) use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/cargos/:id',function($id) use ($app,$db,$token){
 				$idCargo = 1*$id;
 				$sql = 'SELECT a.id,
 						       a.nome,
@@ -2914,9 +2907,8 @@
 				$response->flush();
 			});
 
-			$app->put('/cargos/:id',function($id) use ($app,$db){
+			$app->put('/cargos/:id',function($id) use ($app,$db,$token){
 				// Lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$cargo = json_decode($app->request->getBody());
 
 				// verifricando consistência de dados
@@ -2971,9 +2963,8 @@
 				registrarAcao($db,$id_usuario,ACAO_ALTEROU_CARGO,$cargo->id.','.$cargo->nome.','.$cargo->valor_hh);
 			});
 			
-			$app->post('/cargos',function() use ($app,$db){
+			$app->post('/cargos',function() use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$cargo = json_decode($app->request->getBody());
 
 				// Capturando o id e o id_empresa do usuário atual
@@ -3004,9 +2995,8 @@
 				registrarAcao($db,$id,ACAO_ADICIONOU_CARGO,$db->insert_id.','.$cargo->nome,$cargo->valor_hh);
 			});
 			
-			$app->delete('/cargos/:id',function($id) use ($app,$db){
+			$app->delete('/cargos/:id',function($id) use ($app,$db,$token){
 				// Lendo dados
-				$token = $app->request->headers->get('Authorization');
 				$idCargo = 1*$id;
 
 				// Verificando se o cargo é da mesma empresa do usuário
@@ -3052,9 +3042,8 @@
 		// FIM DE ROTAS DE CARGOS
 
 		// ROTAS DE SUBÁREAS
-			$app->put('/subareas/:id_subarea',function($id_subarea) use ($app,$db){
+			$app->put('/subareas/:id_subarea',function($id_subarea) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_subarea = 1*$id_subarea;
 				$subarea = json_decode($app->request->getBody());
 
@@ -3105,9 +3094,8 @@
 				}
 			});
 
-			$app->post('/subareas/',function() use ($app,$db){
+			$app->post('/subareas/',function() use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$subarea = json_decode($app->request->getBody());
 
 				// verificando se o usário enviado é do mesmo cliente da area atual
@@ -3149,9 +3137,8 @@
 				}
 			});
 
-			$app->delete('/subareas/:id_subarea',function($id_subarea) use ($app,$db){
+			$app->delete('/subareas/:id_subarea',function($id_subarea) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
-				$token = $app->request->headers->get('Authorization');
 				$id_subarea = 1*$id_subarea;
 				
 				// levantando area na base de dados
@@ -3204,8 +3191,7 @@
 		// FIM DE ROTAS DE SUBÁREAS
 
 		// ROTAS DE TAMANHOS DE PAPEL
-			$app->get('/tamanhosDePapel',function() use ($app,$db){
-				$token = $app->request->headers->get('Authorization');
+			$app->get('/tamanhosDePapel',function() use ($app,$db,$token){
 				$sql = 'SELECT x.id,
 						       x.nome,
 						       x.altura as a,
@@ -3223,9 +3209,8 @@
 		// FIM DE ROTAS DE TAMANHOS DE PAPEL
 
 		// ROTAS DE PDAS
-			$app->get('/pdas/:id',function($id) use ($app,$db){
+			$app->get('/pdas/:id',function($id) use ($app,$db,$token){
 				// Lendo o token
-				$token = $_POST['token'];
 				$id_pda = 1*$id;
 
 				// verificando se o token é valido e lendo o idu do usuário
@@ -3286,9 +3271,8 @@
 				}
 			});
 
-			$app->post('/pdas/checkout/:id',function($id) use ($app,$db){
+			$app->get('/pdas/checkout/:id',function($id) use ($app,$db,$token){
 				// Lendo o token
-				$token = $_POST['token'];
 				$id_pda = 1*$id;
 
 				// verificando se o token é valido e lendo o idu do usuário

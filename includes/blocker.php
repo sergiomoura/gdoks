@@ -13,6 +13,15 @@
 		header("Location: /webapp/login.php");
 	}
 
+	// incluindo arquivo dbkey
+	$dbkey_file = '../../dbkeys/'.$EU->empresa.'.php';
+	if(file_exists($dbkey_file)){
+		include($dbkey_file);
+	} else {
+		// redirecionando para página inicial.
+		header("Location: /webapp/login.php");	
+	}
+
 	// verificando se o token está setado no usuário
 	if(!isset($EU->token)){
 		// redirecionando para página inicial.
@@ -21,6 +30,9 @@
 
 	// Incluindo script de conexão com DB.
 	require('../../includes/db.php');
+
+	// Conectando a DB
+	$db = new DB($dbkey);
 
 	// verificando se o token existe e é válido.
 	$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? and validade_do_token>now()';

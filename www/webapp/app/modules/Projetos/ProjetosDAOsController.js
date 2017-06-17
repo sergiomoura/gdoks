@@ -37,7 +37,7 @@ function ProjetosDAOsController($scope,Upload,$cookies,GDoksFactory){
 				{
                 	url: API_ROOT+'/projetos/'+$scope.projeto.id+'/daos/',
                 	data: {profiles: packToSend},
-                	headers: {'Authorization':$cookies.getObject('user').token}
+                	headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
             	}
             ).then(
             	function (response){
