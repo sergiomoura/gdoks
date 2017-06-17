@@ -8,8 +8,7 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
-
-	die('ok');
+	echo(1);
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
 
@@ -28,6 +27,8 @@
 		$empresa = $user->empresa;
 		$token = $user->token;
 	}
+
+	die('ok');
 
 	// criando a conexão
 	if(isset($empresa) && file_exists('../../dbkeys/'.$empresa.'.php')){
