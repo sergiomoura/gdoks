@@ -8,22 +8,31 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
-	echo(1);
+	
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
 
+	// definindo função getallheaders caso ela não exista (caso NGINX)
+	if (!function_exists('getallheaders')){ 
+		function getallheaders(){ 
+			$headers = [];
+			foreach ($_SERVER as $name => $value){
+				if (substr($name, 0, 5) == 'HTTP_'){
+					$headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+				}
+			}
+			return $headers;
+		}
+	}
+
 	// lendo informações no header
-	echo('ok--\n');
 	$headers = getallheaders();
-	print_r($headers);
 	if(isset($headers['Authorization'])){
-		echo(2);
 		// definindo iddb e token a partir do header
 		$empresa =  explode('-', $headers['Authorization'])[0];
 		$token = explode('-', $headers['Authorization'])[1];
 
 	} elseif (isset($_COOKIE['user'])) {
-		echo(3);
 		// se informação não está no header, talvez esteja no cookie para requisições de download
 		$user = json_decode($_COOKIE['user']);
 		$empresa = $user->empresa;
