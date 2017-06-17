@@ -2554,7 +2554,7 @@
 								    inner join gdoks_pdas_x_arquivos b on a.id=b.id_arquivo
 								    inner join gdoks_pdas c on c.id=b.id_pda
 								    inner join gdoks_revisoes d on d.id=c.id_revisao
-								WHERE A.nome_cliente=? and d.id_documento=?
+								WHERE a.nome_cliente=? and d.id_documento=?
 								ORDER BY id_pda DESC
 								LIMIT 1";
 						$rs = $db->query($sql,'si',$item->nome,$id_doc);
