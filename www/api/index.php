@@ -3329,15 +3329,15 @@
 
 					// Fechando o arquivo zip
 					$zip->close();
-					die('fechou o zip');
-					
+					echo('fechou o zip');
+
 					// enviando para o cliente
-					header("Content-Type: application/zip");
-					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
-					header("Content-Length: " . filesize(realpath($filename))); 
-					header("Content-Transfer-Encoding: binary");
-					readfile($filename);
-					unlink($filename);
+					//header("Content-Type: application/zip");
+					//header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
+					//header("Content-Length: " . filesize(realpath($filename))); 
+					//header("Content-Transfer-Encoding: binary");
+					//readfile($filename);
+					//unlink($filename);
 						
 					// Descobrindo qual o id_doc do pda
 					$sql = 'SELECT id_documento
@@ -3349,6 +3349,7 @@
 					// Registrando o checkout
 					$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=NOW() WHERE id=?';
 					$db->query($sql,'ii',$idu,$id_doc);
+					echo('atualizou a base...');
 				}
 				echo(3);
 			});
