@@ -1,18 +1,21 @@
 <md-dialog class="cargo_dialog">
-	<md-dialog-content  layout="column">
-		<md-input-container>
-			<label>Nome do Cargo</label>
-			<input type="text" ng-model="cargo.nome">
-		</md-input-container>
+	<md-dialog-content>
+		<form ng-submit="salvar(cargo)" layout="column" name="cargoForm">
+			<md-input-container>
+				<label>Nome do Cargo</label>
+				<input type="text" ng-model="cargo.nome" required>
+			</md-input-container>
 
-		<md-input-container>
-			<label>Valor da HH</label>
-			<input type="number" step="0.01" ng-model="cargo.valor_hh">
-		</md-input-container>
+			<md-input-container>
+				<label>Valor da HH</label>
+				<input type="number" step="0.01" ng-model="cargo.valor_hh" required>
+			</md-input-container>
+			<button type="submit" style="display:none"></button>
+		</form>
 	</md-dialog-content>
 	<md-dialog-actions layout="row">
 		<md-button ng-click="cancelar(cargo)" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
 		<span flex></span>
-		<md-button ng-click="salvar(cargo)" class="md-raised md-primary" aria-label="Salvar Cargo">Salvar Cargo</md-button>
+		<md-button ng-click="salvar(cargo)" ng-disabled="!cargoForm.$valid" class="md-raised md-primary" aria-label="Salvar Cargo">Salvar Cargo</md-button>
 	</md-dialog-actions>
 </md-dialog>
