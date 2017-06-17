@@ -13,6 +13,7 @@
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
 
 	// lendo informações no header
+	echo('ok--\n');
 	$headers = getallheaders();
 	print_r($headers);
 	if(isset($headers['Authorization'])){
