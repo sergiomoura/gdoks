@@ -72,6 +72,10 @@
 		$app->post('/login',function() use ($app,$db,$id_empresa,$empresa){
 			// lendo dados da requisição
 			$data = json_decode($app->request->getBody());
+			echo('<pre>');
+			print_r($data);
+			echo('</pre>');
+			die();
 
 			// Verificando se é usuário é válido e carregando suas informações se for o caso.
 			$sql = 'SELECT id,
