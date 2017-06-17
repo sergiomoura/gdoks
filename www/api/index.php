@@ -3328,9 +3328,13 @@
 					echo('adicionou as coisas no zip');
 
 					// Fechando o arquivo zip
-					$zip->close();
-					echo('fechou o zip');
+					if($zip->close()){
+						echo('fechou o zip');
+					} else {
+						echo('deu pau ao fechar o zip');
+					}
 					die();
+
 					// Lendo o conteúdo do zip numa variável
 					$handle = fopen(realpath($filename), "r");
 					$contents = fread($handle, filesize($filename));
