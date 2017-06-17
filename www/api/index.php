@@ -3002,7 +3002,7 @@
 					return;
 				}
 				// Registrando a ação
-				registrarAcao($db,$id,ACAO_ADICIONOU_CARGO,$db->insert_id.','.$cargo->nome,$cargo->valor_hh);
+				registrarAcao($db,$id,ACAO_ADICIONOU_CARGO,$db->insert_id.','.$cargo->nome.','.$cargo->valor_hh);
 			});
 			
 			$app->delete('/cargos/:id',function($id) use ($app,$db,$token){
