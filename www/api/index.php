@@ -3293,6 +3293,7 @@
 						WHERE token=? AND validade_do_token>NOW()';
 				$rs = $db->query($sql,'s',$token);
 				echo(2);
+				die();
 				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
 				if(sizeof($rs) == 0){
 					$app->response->setStatus(401);
