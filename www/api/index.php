@@ -3313,14 +3313,14 @@
 					echo('<pre>');
 					print_r($caminhos);
 					echo('</pre>');
-					die();
+					
 					// Definindo nome do arquivo zip
 					$filename = UPLOAD_PATH.'pda_'.$id_pda.'.zip';
 
 					// Criando arquivo zip
 					$zip = new ZipArchive();
 					$zip->open($filename,ZipArchive::CREATE);
-
+					die('aqui');
 					// Adicionando arquivos ao zip
 					foreach ($caminhos as $c) {
 						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
