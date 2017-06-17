@@ -3336,7 +3336,8 @@
 					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
 					header("Content-Length: " . filesize(realpath($filename))); 
 					header("Content-Transfer-Encoding: binary");
-					readfile($filename);
+					echo('1010111101001010101101010110101');
+					//readfile($filename);
 					//unlink($filename);
 						
 					// Descobrindo qual o id_doc do pda
