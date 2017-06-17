@@ -3320,15 +3320,17 @@
 					// Criando arquivo zip
 					$zip = new ZipArchive();
 					$zip->open($filename,ZipArchive::CREATE);
-					die('aqui');
+					echo('aqui');
 					// Adicionando arquivos ao zip
 					foreach ($caminhos as $c) {
 						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
 					}
+					echo('adicionou as coisas no zip');
 
 					// Fechando o arquivo zip
 					$zip->close();
-
+					die('fechou o zip');
+					
 					// enviando para o cliente
 					header("Content-Type: application/zip");
 					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
