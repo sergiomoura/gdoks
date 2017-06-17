@@ -3282,7 +3282,7 @@
 			});
 
 			$app->get('/pdas/checkout/:id',function($id) use ($app,$db,$token){
-				echo(1);
+
 				// Lendo o token
 				$id_pda = 1*$id;
 
@@ -3292,7 +3292,7 @@
 						FROM gdoks_usuarios
 						WHERE token=? AND validade_do_token>NOW()';
 				$rs = $db->query($sql,'s',$token);
-				echo(2);
+				
 				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
 				if(sizeof($rs) == 0){
 					$app->response->setStatus(401);
@@ -3310,9 +3310,6 @@
 							WHERE a.id_pda=?';
 					$rs = $db->query($sql,'s',$id_pda);
 					$caminhos = $rs;
-					echo('<pre>');
-					print_r($caminhos);
-					echo('</pre>');
 					
 					// Definindo nome do arquivo zip
 					$filename = UPLOAD_PATH.'pda_'.$id_pda.'.zip';
@@ -3320,43 +3317,22 @@
 					// Criando arquivo zip
 					$zip = new ZipArchive();
 					$zip->open($filename,ZipArchive::CREATE);
-					echo('aqui');
+					
 					// Adicionando arquivos ao zip
 					foreach ($caminhos as $c) {
 						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
 					}
-					echo('adicionou as coisas no zip');
-
-					// Fechando o arquivo zip
-					if($zip->close()){
-						echo('fechou o zip');
-					} else {
-						echo('deu pau ao fechar o zip');
-					}
-					die();
-
-					// Lendo o conteúdo do zip numa variável
-					$handle = fopen(realpath($filename), "r");
-					$contents = fread($handle, filesize($filename));
-					fclose($handle);
-
-					// Verificando se leitura aconteceu ok
-					if($content === false){
-						unlink($filename);
-						die("Problema ao ler arquivo zip criado");
-					} else {
-						// enviando para o cliente
-						header("Content-Type: application/zip");
-						header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
-						header("Content-Length: " . filesize(realpath($filename))); 
-						header("Content-Transfer-Encoding: binary");
-						echo($content);
-						unlink($filename);
-					}
-
-
-					// readfile($filename);
 					
+					// Fechando o arquivo zip
+					$zip->close();
+					
+					// Enviando para o cliente
+					header("Content-Type: application/zip");
+					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
+					header("Content-Length: " . filesize(realpath($filename))); 
+					header("Content-Transfer-Encoding: binary");
+					readfile($filename);
+					unlink($filename);
 						
 					// Descobrindo qual o id_doc do pda
 					$sql = 'SELECT id_documento
@@ -3368,9 +3344,7 @@
 					// Registrando o checkout
 					$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=NOW() WHERE id=?';
 					$db->query($sql,'ii',$idu,$id_doc);
-					echo('atualizou a base...');
 				}
-				echo(3);
 			});
 		// FIM DE ROTAS DE PDAS
 	});
