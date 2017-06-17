@@ -83,8 +83,6 @@ function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast){
 						for (var i = $scope.disciplina.validadores.length - 1; i >= 0; i--) {
 							$scope.disciplina.validadores[i] = $scope.dicUsuarios[$scope.disciplina.validadores[i]];
 						};
-
-						console.dir($scope.disciplina);
 					})
 				}
 			}
