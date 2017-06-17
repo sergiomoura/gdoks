@@ -2330,20 +2330,20 @@
 					$doc = array_map(function($a){return (object)$a;}, $rs)[0];
 
 					// verificando se o usuário é validador ou especialista da disciplina do documento
-					$sql = 'SELECT
-								!isnull(b.id_usuario) AS ehEspecialista,
-								!isnull(c.id_usuario) AS ehValidador
-							FROM gdoks_disciplinas a
-							LEFT JOIN gdoks_especialistas b ON a.id=b.id_disciplina
-							LEFT JOIN gdoks_validadores c ON a.id=c.id_disciplina
-							WHERE a.id=?
-							  AND (b.id_usuario=?
-							       OR b.id_usuario IS NULL)
-							  AND (c.id_usuario=?
-							       OR c.id_usuario IS NULL)';
-
+					$sql = 'SELECT ehEspecialista,
+							       ehValidador
+							FROM
+							  (SELECT count(*) AS ehEspecialista
+							   FROM gdoks_especialistas
+							   WHERE id_usuario=?
+							     AND id_disciplina=?) a
+							INNER JOIN
+							  (SELECT count(*) AS ehValidador
+							   FROM gdoks_validadores
+							   WHERE id_usuario=?
+							     AND id_disciplina=?) b ON TRUE';
 					try {
-						$rs = $db->query($sql,'iii',$doc->id_disciplina,$idu,$idu);
+						$rs = $db->query($sql,'iiii',$idu,$doc->id_disciplina,$idu,$doc->id_disciplina);
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
 						$response = new response(1,'Erro ao ao executar consulta: '.$e->getMessage());
