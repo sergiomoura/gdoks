@@ -2346,7 +2346,7 @@
 						$rs = $db->query($sql,'iii',$doc->id_disciplina,$idu,$idu);
 					} catch (Exception $e) {
 						$app->response->setStatus(401);
-						$response = new response(1,'Erro ao tentar carregar documento: '.$e->getMessage());
+						$response = new response(1,'Erro ao ao executar consulta: '.$e->getMessage());
 						$response->flush();
 						return;
 					}
@@ -2354,7 +2354,7 @@
 					// Se não consulta não retornar nenhuma linha usuário não é nem especialista nem validador
 					if(sizeof($rs)==0){
 						$app->response->setStatus(401);
-						$response = new response(1,'Erro ao tentar carregar documento: '.$e->getMessage());
+						$response = new response(1,'Usuário não é validador ou especialista da disciplina do documento');
 						$response->flush();
 						return;	
 					} else {
@@ -3322,7 +3322,7 @@
 					foreach ($caminhos as $c) {
 						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
 					}
-					
+
 					// Fechando o arquivo zip
 					$zip->close();
 					
