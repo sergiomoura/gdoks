@@ -3293,10 +3293,6 @@
 						WHERE token=? AND validade_do_token>NOW()';
 				$rs = $db->query($sql,'s',$token);
 				echo(2);
-				echo('<pre>');
-				print_r($rs);
-				echo('</pre>');
-				die();
 				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
 				if(sizeof($rs) == 0){
 					$app->response->setStatus(401);
@@ -3314,7 +3310,10 @@
 							WHERE a.id_pda=?';
 					$rs = $db->query($sql,'s',$id_pda);
 					$caminhos = $rs;
-
+					echo('<pre>');
+					print_r($caminhos);
+					echo('</pre>');
+					die();
 					// Definindo nome do arquivo zip
 					$filename = UPLOAD_PATH.'pda_'.$id_pda.'.zip';
 
