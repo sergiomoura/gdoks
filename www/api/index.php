@@ -3337,7 +3337,7 @@
 					header("Content-Length: " . filesize(realpath($filename))); 
 					header("Content-Transfer-Encoding: binary");
 					readfile($filename);
-					unlink($filename);
+					//unlink($filename);
 						
 					// Descobrindo qual o id_doc do pda
 					$sql = 'SELECT id_documento
