@@ -3282,7 +3282,7 @@
 			});
 
 			$app->get('/pdas/checkout/:id',function($id) use ($app,$db,$token){
-				die("aqui");
+				echo(1);
 				// Lendo o token
 				$id_pda = 1*$id;
 
@@ -3292,7 +3292,7 @@
 						FROM gdoks_usuarios
 						WHERE token=? AND validade_do_token>NOW()';
 				$rs = $db->query($sql,'s',$token);
-
+				echo(2);
 				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
 				if(sizeof($rs) == 0){
 					$app->response->setStatus(401);
@@ -3345,6 +3345,7 @@
 					$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=NOW() WHERE id=?';
 					$db->query($sql,'ii',$idu,$id_doc);
 				}
+				echo(3);
 			});
 		// FIM DE ROTAS DE PDAS
 	});
