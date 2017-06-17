@@ -3332,7 +3332,7 @@
 					echo('fechou o zip');
 
 					// Lendo o conteúdo do zip numa variável
-					$handle = fopen($filename, "r");
+					$handle = fopen(realpath($filename), "r");
 					$contents = fread($handle, filesize($filename));
 					fclose($handle);
 
