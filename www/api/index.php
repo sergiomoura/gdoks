@@ -9,9 +9,9 @@
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 
+	die('ok');
 	// constants - - - - - - - - - - - - - - - - - - - - - -
-	define('TOKEN_DURARION', 3600); //in seconds: 6 horas
-	
+	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
 
 	// lendo informações no header
 	$headers = getallheaders();
@@ -72,10 +72,6 @@
 		$app->post('/login',function() use ($app,$db,$id_empresa,$empresa){
 			// lendo dados da requisição
 			$data = json_decode($app->request->getBody());
-			echo('<pre>');
-			print_r($data);
-			echo('</pre>');
-			die();
 
 			// Verificando se é usuário é válido e carregando suas informações se for o caso.
 			$sql = 'SELECT id,
