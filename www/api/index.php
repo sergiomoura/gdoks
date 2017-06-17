@@ -3331,14 +3331,28 @@
 					$zip->close();
 					echo('fechou o zip');
 
-					// enviando para o cliente
-					header("Content-Type: application/zip");
-					header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
-					header("Content-Length: " . filesize(realpath($filename))); 
-					header("Content-Transfer-Encoding: binary");
-					echo('1010111101001010101101010110101');
-					//readfile($filename);
-					//unlink($filename);
+					// Lendo o conteúdo do zip numa variável
+					$handle = fopen($filename, "r");
+					$contents = fread($handle, filesize($filename));
+					fclose($handle);
+
+					// Verificando se leitura aconteceu ok
+					if($content === false){
+						unlink($filename);
+						die("Problema ao ler arquivo zip criado");
+					} else {
+						// enviando para o cliente
+						header("Content-Type: application/zip");
+						header('Content-Disposition: attachment; filename=pda_'.$id_pda.'.zip');
+						header("Content-Length: " . filesize(realpath($filename))); 
+						header("Content-Transfer-Encoding: binary");
+						echo($content);
+						unlink($filename);
+					}
+
+
+					// readfile($filename);
+					
 						
 					// Descobrindo qual o id_doc do pda
 					$sql = 'SELECT id_documento
