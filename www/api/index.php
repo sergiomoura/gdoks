@@ -39,8 +39,6 @@
 		$token = $user->token;
 	}
 
-	die('ok');
-
 	// criando a conexão
 	if(isset($empresa) && file_exists('../../dbkeys/'.$empresa.'.php')){
 		// incluindo arquivo que define $dbkey
