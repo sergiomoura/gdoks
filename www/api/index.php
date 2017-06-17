@@ -14,14 +14,15 @@
 
 	// lendo informações no header
 	$headers = getallheaders();
+	print_r($headers);
 	if(isset($headers['Authorization'])){
-
+		echo(2);
 		// definindo iddb e token a partir do header
 		$empresa =  explode('-', $headers['Authorization'])[0];
 		$token = explode('-', $headers['Authorization'])[1];
 
 	} elseif (isset($_COOKIE['user'])) {
-
+		echo(3);
 		// se informação não está no header, talvez esteja no cookie para requisições de download
 		$user = json_decode($_COOKIE['user']);
 		$empresa = $user->empresa;
