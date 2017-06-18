@@ -9,7 +9,7 @@
 	</div>
 	
 	<div class="lista">
-		<a ng-repeat="c in clientes|filter:q.nome|orderBy:'nome'" href="#/clientes/{{c.id}}" class="bloco_conteudo cliente" md-whiteframe="1dp">
+		<a ng-repeat="c in clientes|filter:q|orderBy:'nome'" href="#/clientes/{{c.id}}" class="bloco_conteudo cliente" md-whiteframe="1dp">
 			<h2>{{c.nome}}</h2>
 			<h3>{{c.cnpj==null||c.cnpj==''?"CPF: "+c.cpf:"CNPJ: "+c.cnpj}}</h3>
 		</a>
