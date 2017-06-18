@@ -24,7 +24,7 @@ function DisciplinasController($scope,GDoksFactory){
 	}
 };
 
-function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast){
+function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast,$location){
 	// Lendo id da url
 	var id = $routeParams.id;
 
@@ -119,6 +119,10 @@ function DisciplinaController($scope,$routeParams,GDoksFactory,$mdToast){
 						.position('bottom left')
 						.hideDelay(5000)
 					);
+
+					// mudando url
+					$location.url('/disciplinas/'+response.newId);
+
 				}
 			)
 			.error(
