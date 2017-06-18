@@ -2,21 +2,21 @@
 	position: absolute;
 	left: 0;
 	top: 16px;
-}
+	.lista{
+	
+		position: relative;
+		top: 60px;
+		column-count:3;
+		column-gap:40px;
 
-.lista{
-	
-	position: relative;
-	top: 60px;
-	column-count:3;
-	column-gap:40px;
-	
-	.usuario{
-		display: inline-block;
-		width: calc(100% - 23px);
-		margin-bottom: 20px;
-		padding: 20px;
-		text-decoration: none;
-		margin-right:20px;
+		.usuario{
+			display: inline-block;
+			width: calc(100% - 23px);
+			margin-bottom: 20px;
+			padding: 20px;
+			text-decoration: none;
+			margin-right:20px;
+		}
 	}
 }
+

@@ -209,31 +209,17 @@
     .sub_dialog md-dialog-actions button {
       margin: 0 !important; }
 
-#disciplinas_container button {
-  position: absolute;
-  left: 0;
-  top: 16px; }
-
-#disciplinas_container .lista {
-  position: relative;
-  top: 60px;
-  column-count: 4;
-  column-gap: 40px; }
-  #disciplinas_container .lista .disciplina {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 20px;
-    text-decoration: none;
-    margin-right: 20px; }
-#disciplinas_container .aviso {
-  color: #FF5722; }
-#disciplinas_container .bt_salvar {
-  position: absolute;
-  right: 15px; }
-#disciplinas_container .bt_cancelar {
-  position: relative;
-  left: 15px; }
+#disciplinas_container md-input-container {
+  margin-top: 50px; }
+#disciplinas_container .lista .disciplina {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  text-decoration: none; }
+#disciplinas_container .lista .disciplina:nth-child(3n) {
+  margin-right: 0; }
 
 #lista_de_documentos_container .md-errors-spacer {
   display: none; }
@@ -1172,19 +1158,18 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   position: absolute;
   left: 0;
   top: 16px; }
-
-.lista {
-  position: relative;
-  top: 60px;
-  column-count: 3;
-  column-gap: 40px; }
-  .lista .usuario {
-    display: inline-block;
-    width: calc(100% - 23px);
-    margin-bottom: 20px;
-    padding: 20px;
-    text-decoration: none;
-    margin-right: 20px; }
+  #usuarios_container button .lista {
+    position: relative;
+    top: 60px;
+    column-count: 3;
+    column-gap: 40px; }
+    #usuarios_container button .lista .usuario {
+      display: inline-block;
+      width: calc(100% - 23px);
+      margin-bottom: 20px;
+      padding: 20px;
+      text-decoration: none;
+      margin-right: 20px; }
 
 #usuario_container .aviso {
   color: #FF5722; }

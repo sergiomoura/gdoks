@@ -35,6 +35,18 @@ GDoks:
       
   BUGS Avulsos:
     ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
+    ☐ Separador de decimal e de grupo de milhar estão trocados. estudar filto currency e locale para conserto
+    ☐ Tabelas a serem preenchidas na instalação
+      - Empresas
+      - Ações
+      - Cargos
+      - Disciplinas
+      - Subdisciplinas
+      - tamanhos de papel
+      - usuários (1)
+    ✔ Na tela de cadastro de cargo, dar enter deve salvar o cargo @done (17-06-17 19:03)
+    ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
+    ☐ Baixar para revisão deve registrar no log
     ☐ No download Resource interpreted as Document but transferred with MIME type application/zip
     ☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
     ☐ Primeira subárea de um projeto não aparece assim que é criada

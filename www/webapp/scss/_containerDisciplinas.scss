@@ -1,42 +1,22 @@
-#disciplinas_container button{
-	
-	position: absolute;
-	left: 0;
-	top: 16px;
-}
-
 #disciplinas_container {
 
-	.lista{
+	md-input-container {
+		margin-top: 50px;
+	}
 
-		position: relative;
-		top: 60px;
-		column-count: 4;
-		column-gap: 40px;
-		
+	.lista{
 		.disciplina{
 			display: inline-block;
-			width: 100%;
+			width: calc(33% - 50px);
 			margin-bottom: 20px;
+			margin-right: 20px;
 			padding: 20px;
 			text-decoration: none;
-			margin-right:20px;
 		}
 
-	}
-
-	.aviso{
-		color: #FF5722;
-	}
-
-	.bt_salvar{
-		position: absolute;
-		right: 15px;
-	}
-
-	.bt_cancelar{
-		position: relative;
-		left: 15px;
+		.disciplina:nth-child(3n){
+			margin-right: 0;
+		}
 	}
 }
 
