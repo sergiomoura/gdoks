@@ -5,17 +5,17 @@
 	}
 	
 	.lista{
-	
-		column-count:3;
-		column-gap:40px;
-
 		.usuario{
 			display: inline-block;
-			width: calc(100% - 23px);
+			width: calc(33% - 50px);
 			margin-bottom: 20px;
 			padding: 20px;
 			text-decoration: none;
 			margin-right:20px;
+		}
+
+		.usuario:nth-child(3n){
+			margin-right:0px;	
 		}
 	}
 }

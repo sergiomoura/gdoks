@@ -1156,16 +1156,15 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 
 #usuarios_container md-input-container {
   margin-top: 40px; }
-#usuarios_container .lista {
-  column-count: 3;
-  column-gap: 40px; }
-  #usuarios_container .lista .usuario {
-    display: inline-block;
-    width: calc(100% - 23px);
-    margin-bottom: 20px;
-    padding: 20px;
-    text-decoration: none;
-    margin-right: 20px; }
+#usuarios_container .lista .usuario {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  padding: 20px;
+  text-decoration: none;
+  margin-right: 20px; }
+#usuarios_container .lista .usuario:nth-child(3n) {
+  margin-right: 0px; }
 
 #usuario_container .aviso {
   color: #FF5722; }
