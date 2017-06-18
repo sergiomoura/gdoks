@@ -1167,7 +1167,8 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   margin-right: 0px; }
 
 #usuario_container .aviso {
-  color: #FF5722; }
+  color: #FF5722;
+  font-size: 14px; }
 #usuario_container .bt_salvar {
   position: absolute;
   right: 15px; }

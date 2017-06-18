@@ -22,7 +22,7 @@ function UsuariosController($scope,GDoksFactory){
 	}
 };
 
-function UsuarioController($scope,$routeParams,GDoksFactory){
+function UsuarioController($scope,$routeParams,GDoksFactory,$mdToast,$location){
 	// Capturando o id passado na url
 	var id = $routeParams.id;
 
@@ -53,19 +53,34 @@ function UsuarioController($scope,$routeParams,GDoksFactory){
 
 	// Definindo função que cancela as alterações
 	$scope.cancel = function(){
-		window.location = "WebGDoks.php#/usuarios";
-		$scope.root.itemSelecionadoDoMenu = 0;
+		$location.url("/usuarios");
 	}
 
 	$scope.salvarUsuario = function(){
+
+		// Mostra Carregando
+		$scope.root.carregando =true;
+		
 		if($scope.usuario.id == 0){
 			GDoksFactory.adicionarUsuario($scope.usuario)
 			.success(
 				function(response){
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+
+					// Esconde Carregando
+					$scope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Usuário criado com sucesso')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Aribuindo nova id para usuário recém criado
 					$scope.usuario.id = response.newId;
+
+					// Removendo informações que não serão gravadas na BD
 					delete($scope.usuario.senha1);
 					delete($scope.usuario.senha2);
 
@@ -75,35 +90,75 @@ function UsuarioController($scope,$routeParams,GDoksFactory){
 						var db = evt.target.result;
 						db.transaction('usuarios','readwrite').objectStore('usuarios').add($scope.usuario);
 					}
+
+					// Voltando para a tela de usuários depois de  4s
+					$location.url("/usuarios");
+
 				}
 			)
 			.error(
 				function(error){
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
-					$scope.msg = error.msg;
+					// Esconde Carregando
+					$scope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível adicionar usuário: ' + error.msg)
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Imprimindo erro no log
+					console.warn('Não foi possível alterar usuário: ' + response.msg);
 				}
 			);
 		} else {
 			GDoksFactory.atualizarUsuario($scope.usuario)
 			.success(
 				function(response){
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+					// Esconde Carregando
+					$scope.root.carregando = false;
 
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Dados do usuário alterados com sucesso')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Removendo informações que não serão gravadas na BD
+					delete($scope.usuario.senha1);
+					delete($scope.usuario.senha2);
+					
 					// Atualizando usuário na base
 					var openReq = indexedDB.open('gdoks');
 					openReq.onsuccess = function(evt){
 						var db = evt.target.result;
 						db.transaction('usuarios','readwrite').objectStore('usuarios').put($scope.usuario);
 					}
+
+					// Voltando para a tela de usuários depois de  4s
+					$location.url("/usuarios");
 				}
 			)
 			.error(
 				function(error){
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
+					// Esconde Carregando
+					$scope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível alterar dados do usuário.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// imprimindo erro detalhado no console
+					console.warn('' + error.msg);
+					
 					$scope.msg = error.msg;
 				}
 			);
