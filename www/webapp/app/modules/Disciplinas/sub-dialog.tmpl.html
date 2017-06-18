@@ -1,25 +1,28 @@
 <md-dialog class="sub_dialog">
-	<md-dialog-content  layout="column">
-		<md-input-container>
-			<label>Nome da Subdisciplina</label>
-			<input type="text" ng-model="sub.nome">
-		</md-input-container>
+	<md-dialog-content >
+		<form name="subForm" ng-submit="salvar(sub)" layout="column">
+			<md-input-container>
+				<label>Nome da Subdisciplina</label>
+				<input type="text" ng-model="sub.nome" required>
+			</md-input-container>
 
-		<md-input-container>
-			<label>Sigla da Subdisciplina</label>
-			<input type="text" ng-model="sub.sigla" maxlength="8">
-		</md-input-container>
+			<md-input-container>
+				<label>Sigla da Subdisciplina</label>
+				<input type="text" ng-model="sub.sigla" maxlength="8" required>
+			</md-input-container>
 		
-		<md-input-container>
-			<md-checkbox class="md-primary" ng-model="sub.ativa" aria-label="Subdisciplina Ativa">
-				Ativa
-			</md-checkbox>
-		</md-input-container>
+			<md-input-container>
+				<md-checkbox class="md-primary" ng-model="sub.ativa" aria-label="Subdisciplina Ativa">
+					Ativa
+				</md-checkbox>
+			</md-input-container>
+			<button type="submit" style="display: none"></button>
+		</form>
 		
 	</md-dialog-content>
 	<md-dialog-actions layout="row">
 		<md-button ng-click="cancelar()" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
 		<span flex></span>
-		<md-button ng-click="salvar(sub)" class="md-raised md-primary" aria-label="Salvar Cargo">Salvar</md-button>
+		<md-button ng-disabled="subForm.$pristine || !subForm.$valid" ng-click="salvar(sub)" class="md-raised md-primary" aria-label="Salvar Cargo">Salvar</md-button>
 	</md-dialog-actions>
 </md-dialog>
