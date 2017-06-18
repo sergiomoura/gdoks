@@ -1,14 +1,8 @@
 #clientes_container{
-    
-    button {
-        position: absolute;
-        left: 0;
-        top: 16px;
+    md-input-container {
+        margin-top: 50px;
     }
-
     .lista{
-        position: relative;
-        top: 60px;
         column-count:3;
         column-gap:40px;
 

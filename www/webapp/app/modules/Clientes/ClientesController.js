@@ -3,7 +3,7 @@ angular.module('Clientes',[])
 .controller('ClienteController',ClienteController);
 
 
-function ClientesController($scope,GDoksFactory){
+function ClientesController($scope,GDoksFactory,$location){
 	// levantando clientes na base de dados local
 	$scope.clientes = [];
 	indexedDB.open('gdoks').onsuccess = function(evt){
@@ -13,11 +13,11 @@ function ClientesController($scope,GDoksFactory){
 	}
 	// função que leva para a tela de adicionar disciplina
 	$scope.goToAddCliente = function(){
-		window.location = '#/clientes/0';
+		$location.url('/clientes/0');
 	}
 };
 
-function ClienteController($scope,$routeParams,GDoksFactory){
+function ClienteController($scope,$routeParams,GDoksFactory,$location){
 	// Capturando o id passado na url
 	var id = $routeParams.id;
 

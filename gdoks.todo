@@ -35,6 +35,7 @@ GDoks:
       
   BUGS Avulsos:
     ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
+    ☐ Ao clicar no sair tem que apagar o cookie. Testar digitando endereço de página interna.
     ☐ Separador de decimal e de grupo de milhar estão trocados. estudar filto currency e locale para conserto
     ☐ Tabelas a serem preenchidas na instalação
       - Empresas
@@ -61,8 +62,8 @@ GDoks:
       ☐ Inserir Projeto
       ☐ Atualizar Projeto
     ☐ Deixar com look & feel de Material Design
-      ☐ Lista de usuários
-      ☐	Cadastro do usuário
+      ✔ Lista de usuários @done (17-06-18 14:32)
+      ✔  Cadastro do usuário @done (17-06-18 14:32)
       ✔  Lista disciplinas @done (17-06-18 08:12)
       ☐	Lista clientes
       ☐	Cadastro de Clientes

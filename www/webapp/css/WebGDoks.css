@@ -137,13 +137,9 @@
 #cliente_container .bt_cancelar {
   margin-left: 15px; }
 
-#clientes_container button {
-  position: absolute;
-  left: 0;
-  top: 16px; }
+#clientes_container md-input-container {
+  margin-top: 50px; }
 #clientes_container .lista {
-  position: relative;
-  top: 60px;
   column-count: 3;
   column-gap: 40px; }
   #clientes_container .lista .cliente {
