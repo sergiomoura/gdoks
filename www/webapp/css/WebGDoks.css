@@ -138,17 +138,16 @@
   margin-left: 15px; }
 
 #clientes_container md-input-container {
-  margin-top: 50px; }
-#clientes_container .lista {
-  column-count: 3;
-  column-gap: 40px; }
-  #clientes_container .lista .cliente {
-    display: inline-block;
-    width: calc(100% - 23px);
-    margin-bottom: 20px;
-    padding: 20px;
-    text-decoration: none;
-    margin-right: 20px; }
+  margin-top: 40px; }
+#clientes_container .lista .cliente {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  padding: 20px;
+  text-decoration: none;
+  margin-right: 20px; }
+#clientes_container .lista .cliente:nth-child(3n) {
+  margin-right: 0px; }
 
 #subdisciplina_container .bt_adicionar {
   position: absolute;

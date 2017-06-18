@@ -1,46 +1,59 @@
-<div ng-class="{'avisa_resultado_50':true,'positivo':ok,'negativo':!ok}" ng-show="obteve_resposta">{{msg}}</div>
-<form name="form" novalidate="">
+<form name="form" ng-submit="salvarCliente()">
 	<div id="cliente_container" class="bloco_conteudo bloco_central_50" md-whiteframe="1dp">
-		<h1><img src="img/cliente.png">Dados de {{ cliente.id==0 ? 'Novo Cliente' : cliente.nome}}</h1>
-		<div>
-			<div class="item">
-				<label>Nome:</label>
-				<input type="text" placeholder="Digite o nome" ng-model="cliente.nome" required>
+		<h1>Dados de {{ cliente.id==0 ? 'Novo Cliente' : cliente.nome}}</h1>
+		<div class="md-padding" layout="column">
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="45">
+					<label>Nome</label>
+					<input type="text" ng-model="cliente.nome" required>
+				</md-input-container>
+				<md-input-container  flex="45">
+					<label>Nome Fantasia</label>
+					<input type="text" ng-model="cliente.nome_fantasia" required>
+				</md-input-container>
 			</div>
-			<div class="item">
-				<label>Nome Fantasia:</label>
-				<input type="text" placeholder="Digite o nome fantasia" ng-model="cliente.nome_fantasia" required>
+			
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="45">
+					<label>Tipo</label>
+					<md-select ng-model="cliente.tipo"  ng-change="onTipoChange()">
+					  <md-option ng-value="1">Pessoa Jurídica</md-option>
+					  <md-option ng-value="2">Pessoa Física</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container  flex="45" ng-if="cliente.tipo=='1'">
+					<label>CNPJ</label>
+					<input type="text" placeholder="" ng-model="cliente.cnpj" ui-mask="99.999.999/9999-99" ui-mask-placeholder-char="#" ng-required="cliente.tipo=='1'" model-view-value="true">
+				</md-input-container>
+				<md-input-container  flex="45" ng-if="cliente.tipo=='2'">
+					<label>CPF</label>
+					<input type="text" placeholder="" ng-model="cliente.cpf"  ui-mask="999.999.999-99" ui-mask-placeholder-char="#" ng-required="cliente.tipo=='2'" model-view-value="true">
+				</md-input-container>
 			</div>
-			<div class="item">
-				<label>Tipo:</label>
-				<select ng-model="cliente.tipo" ng-change="onTipoChange()">
-					<option value="1">Pessoa Jurídica</option>
-					<option value="2">Pessoa Pessoa Física</option>
-				</select>
+
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="45">
+					<label>Nome do Contato</label>
+					<input type="text" ng-model="cliente.contato_nome" required>
+				</md-input-container>
+				<md-input-container  flex="45">
+					<label>E-mail do Contato</label>
+					<input type="email" ng-model="cliente.contato_email" required>
+				</md-input-container>
 			</div>
-			<div class="item" ng-show="cliente.tipo=='1'">
-				<label>CNPJ:</label>
-				<input type="text" ng-model="cliente.cnpj" ui-mask-placeholder  ui-mask="99.999.999/9999-99" ui-mask-placeholder-char="_" ng-required="cliente.tipo=='1'" model-view-value="true">
+			
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="45">
+					<label>Telefone do Contato</label>
+					<input type="text" ng-model="cliente.contato_telefone" required>
+				</md-input-container>
 			</div>
-			<div class="item" ng-show="cliente.tipo=='2'">
-				<label>CPF:</label>
-				<input type="text" ng-model="cliente.cpf" ui-mask-placeholder  ui-mask="999.999.999-99" ui-mask-placeholder-char="_" ng-required="cliente.tipo=='2'" model-view-value="true">
-			</div>
-			<div class="item">
-				<label>Nome do Contato:</label>
-				<input type="text" ng-model="cliente.contato_nome" placeholder="Digite o nome do contato">
-			</div>
-			<div class="item">
-				<label>E-mail do Contato:</label>
-				<input type="email" ng-model="cliente.contato_email" placeholder="Digite o e-mail do contato">
-			</div>
-			<div class="item">
-				<label>Telefone do Contato:</label>
-				<input type="text" ng-model="cliente.contato_telefone" placeholder="Digite o telefone do contato">
+			
+			<div layout="row" layout-align="space-between start">
+				<md-button class="md-raised md-accent"  ng-click="cancel()" aria-label="Cancelar">Cancelar</md-button>
+				<md-button class="md-raised md-primary" ng-click="salvarCliente()" aria-label="Salvar" ng-disabled="form.$pristine || form.$invalid">Salvar</md-button>
 			</div>
 		</div>
-		<button class="bt_cancelar" ng-click="cancel()">Cancelar</button>
-		<button	class="bt_salvar" ng-click="salvarCliente()" ng-disabled="form.$invalid || cliente.senha1!=cliente.senha2">
-			{{cliente.senha1!=cliente.senha2?"Confirme a senha corretamente":"Salvar"}}</button>
 	</div>
+	<button type="submit" style="display: none"></button>
 </form>

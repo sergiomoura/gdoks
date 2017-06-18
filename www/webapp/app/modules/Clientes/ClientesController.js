@@ -17,7 +17,7 @@ function ClientesController($scope,GDoksFactory,$location){
 	}
 };
 
-function ClienteController($scope,$routeParams,GDoksFactory,$location){
+function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 	// Capturando o id passado na url
 	var id = $routeParams.id;
 
@@ -52,17 +52,22 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location){
 
 	// Definindo função que cancela as alterações
 	$scope.cancel = function(){
-		window.location = "WebGDoks.php#/clientes";
+		$location.url("/clientes");
 	}
 
 	$scope.salvarCliente = function(){
+		
+		// Mostra carregando
+		$scope.root.carregando = true;
+
 		if($scope.cliente.id == 0){
 			GDoksFactory.adicionarCliente($scope.cliente)
 			.success(
 				function(response){
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+					
+					// Atribuindo novo id para o cliente
 					$scope.cliente.id = response.newId;
 
 					// salvando cliente na base local
@@ -73,22 +78,50 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location){
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').add(cliente);
 					}
+					
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent(response.msg)
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Voltando para a tela de clientes
+					$location.url("/clientes");
 				}
 			)
 			.error(
 				function(error){
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
-					$scope.msg = error.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent(error.msg)
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Imprimindo erro no console
+					console.warn(error.msg);
 				}
 			);
 		} else {
 			GDoksFactory.atualizarCliente($scope.cliente)
 			.success(
 				function(response){
-					$scope.obteve_resposta = true;
-					$scope.ok = (response.error==0);
-					$scope.msg = response.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent(response.msg)
+						.position('bottom left')
+						.hideDelay(5000)
+					);					
 
 					// atualiznado cliente na base local
 					var cliente = angular.copy($scope.cliente);
@@ -98,13 +131,26 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location){
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').put(cliente);
 					}
+
+					// Voltando para a tela de clientes
+					$location.url("/clientes");
 				}
 			)
 			.error(
 				function(error){
-					$scope.obteve_resposta = true;
-					$scope.ok = (error.error==0);
-					$scope.msg = error.msg;
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent(error.msg)
+						.position('bottom left')
+						.hideDelay(5000)
+					);	
+
+					// Imprimindo erro no console
+					console.warn(error.msg);
 				}
 			);
 		}

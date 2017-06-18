@@ -2801,7 +2801,7 @@
 				}
 
 				// retornando
-				$response = new response(0,'Dados da empresa alterados com sucesso.');
+				$response = new response(0,'Dados do cliente alterados com sucesso.');
 				$response->flush();
 
 				// registrando alteração
@@ -2834,7 +2834,7 @@
 				$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em) VALUES (?,?,?,?,?,?,?,?,NOW())';
 				try {
 					$db->query($sql,'sssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa);
-					$response = new response(0,'Cliente criado com sucesso.');
+					$response = new response(0,'Cliente adicionado com sucesso.');
 					$response->newId = $db->insert_id;
 					$response->flush();
 				} catch (Exception $e) {
