@@ -1,7 +1,15 @@
 <div id="usuarios_container" class="container_80">
-	<button class="bt_salvar" ng-click="goToAddUsuario()">+ Adicionar Usuário</button>
+	<div class="controles" layout="row" layout-align="space-between center">
+		<md-button  ng-click="goToAddUsuario()" class="md-raised md-primary" aria-label="Adicionar Usuário">Adicionar Usuário</md-button>
+		<md-input-container>
+			<label>Buscar por Usuário</label>
+			<md-icon class="material-icons step" aria-label="Buscar Usuário">search</md-icon>
+			<input type="text" ng-model="q.nome" placeholder="Digite">
+		</md-input-container>
+	</div>
+	
 	<div class="lista">
-		<a ng-repeat="u in usuarios" href="#/usuarios/{{u.id}}" class="bloco_conteudo usuario" md-whiteframe="1dp">
+		<a ng-repeat="u in usuarios|filter:q.nome" href="#/usuarios/{{u.id}}" class="bloco_conteudo usuario" md-whiteframe="1dp">
 			<h2>{{u.nome}}</h2>
 			<h3>{{u.email}}</h3>
 		</a>

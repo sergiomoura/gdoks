@@ -1154,22 +1154,18 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 .subarea_dialog md-dialog-actions button {
   margin: 0 !important; }
 
-#usuarios_container button {
-  position: absolute;
-  left: 0;
-  top: 16px; }
-  #usuarios_container button .lista {
-    position: relative;
-    top: 60px;
-    column-count: 3;
-    column-gap: 40px; }
-    #usuarios_container button .lista .usuario {
-      display: inline-block;
-      width: calc(100% - 23px);
-      margin-bottom: 20px;
-      padding: 20px;
-      text-decoration: none;
-      margin-right: 20px; }
+#usuarios_container md-input-container {
+  margin-top: 40px; }
+#usuarios_container .lista {
+  column-count: 3;
+  column-gap: 40px; }
+  #usuarios_container .lista .usuario {
+    display: inline-block;
+    width: calc(100% - 23px);
+    margin-bottom: 20px;
+    padding: 20px;
+    text-decoration: none;
+    margin-right: 20px; }
 
 #usuario_container .aviso {
   color: #FF5722; }
