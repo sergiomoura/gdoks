@@ -1117,21 +1117,17 @@ md-expansion-panel-expanded .md-expansion-panel-item {
     height: 24px;
     line-height: 24px; }
 
-#projetos_container button {
-  position: absolute;
-  left: 0;
-  top: 16px; }
-#projetos_container .lista {
-  position: relative;
-  top: 57px;
-  column-count: 3;
-  column-gap: 40px; }
-  #projetos_container .lista .projeto {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 20px;
-    text-decoration: none; }
+#projetos_container md-input-container {
+  margin-top: 50px; }
+#projetos_container .lista .projeto {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  text-decoration: none; }
+#projetos_container .lista .projeto:nth-child(3n) {
+  margin-right: 0px; }
 
 #senha_container {
   padding: 20px; }

@@ -2,7 +2,7 @@ angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 .controller('ProjetosController',ProjetosController)
 .controller('ProjetoController',ProjetoController)
 
-function ProjetosController($scope,GDoksFactory){
+function ProjetosController($scope,GDoksFactory,$location){
 	// levantando projetos na base de dados local
 	$scope.projetos = [];
 	indexedDB.open('gdoks').onsuccess = function(evt){
@@ -13,12 +13,12 @@ function ProjetosController($scope,GDoksFactory){
 
 	// função que leva para a tela de adicionar disciplina
 	$scope.goToAddProjeto = function(){
-		window.location = '#/projetos/0';
+		$location.url('/projetos/0');
 	}
 }
 
 
-function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast){
+function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
 
 	// Variáveis de controle sobre o conteúdo de clientes e usuários (se info já foi carregada da base);
 	var clientesCarregados = false;
@@ -231,7 +231,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 						.hideDelay(5000)
 					);
 
-					$scope.projeto.id = response.newId;
+					$scope.projeto.id = 1*response.newId;
 					projeto.id = response.newId;
 
 					// Adicionando projeto na base local
@@ -247,6 +247,9 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 						reqAdd.onsuccess = function(evt){}
 						reqAdd.onerror = function(evt){}
 					}
+
+					// Alterando url para que fique condizente com o do id do projeto recém criado
+					$location.url('/projetos/'+$scope.projeto.id);
 				}
 			)
 			.error(

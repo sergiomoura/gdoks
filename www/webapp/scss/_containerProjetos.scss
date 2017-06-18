@@ -1,23 +1,21 @@
 #projetos_container{
 
-	button {
-		position: absolute;
-		left: 0;
-		top: 16px;
+	md-input-container{
+		margin-top: 50px;
 	}
 
 	.lista{
-		position: relative;
-		top: 57px;
-		column-count: 3;
-		column-gap: 40px;
-
 		.projeto{
 			display: inline-block;
-			width: 100%;
+			width: calc(33% - 50px);
 			margin-bottom: 20px;
+			margin-right: 20px;
 			padding: 20px;
 			text-decoration: none;
+		}
+
+		.projeto:nth-child(3n){
+			margin-right: 0px;
 		}
 	}
 }
