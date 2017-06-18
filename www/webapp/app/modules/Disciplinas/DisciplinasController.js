@@ -247,6 +247,9 @@ function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFac
 				)
 				.error(
 					function(error){
+						// Esconde Carregando
+						parentScope.root.carregando = false;
+
 						// Retornando toast para usuário
 						$mdToast.show(
 							$mdToast.simple()
@@ -258,8 +261,6 @@ function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFac
 						// Exibindo erro no console
 						console.warn(error);
 
-						// Esconde Carregando
-						parentScope.root.carregando = false;
 					}
 				);
 		} else {
@@ -268,6 +269,9 @@ function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFac
 					function(response){
 						// Escondendo o carregando
 						parentScope.root.carregando = false;
+
+						// Atribuindo id da sub recém inserida
+						sub.id = response.newId;
 
 						// Retornando toast para usuário
 						$mdToast.show(
@@ -282,12 +286,23 @@ function SubDialogController($scope,sub,parentSub,parentScope,$mdDialog,GDoksFac
 
 						// atualizar na base local
 						indexedDB.open('gdoks').onsuccess = function(evt){
-							evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put(parentScope.disciplina);
+							var putRequest = evt.target.result.transaction('disciplinas','readwrite').objectStore('disciplinas').put(parentScope.disciplina);
+							putRequest.onsuccess = function(evt){
+								console.log("atualizou disciplina na base local");
+								console.dir(evt);
+							}
+							putRequest.onerror = function(evt){
+								console.log("NÃO atualizou disciplina na base local");
+								console.dir(evt);
+							}
 						}
 					}
 				)
 				.error(
 					function(error){
+						// Escondendo o carregando
+						parentScope.root.carregando = false;
+
 						// Retornando toast para usuário
 						$mdToast.show(
 							$mdToast.simple()
