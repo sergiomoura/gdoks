@@ -5,7 +5,7 @@ angular.module('Disciplinas',[])
 .controller('EspecialistasController',EspecialistasController)
 .controller('ValidadoresController',ValidadoresController)
 
-function DisciplinasController($scope,GDoksFactory){
+function DisciplinasController($scope,GDoksFactory,$location){
 	// Definindo variável que carrega aa disciplinas
 	$scope.disciplinas = [];
 
@@ -20,7 +20,7 @@ function DisciplinasController($scope,GDoksFactory){
 
 	// função que leva para a tela de adicionar disciplina
 	$scope.goToAddDisciplina = function(){
-		window.location = '#/disciplinas/0';
+		$location.url('/disciplinas/0');
 	}
 };
 

@@ -2,7 +2,7 @@ angular.module('Usuarios',[])
 .controller('UsuariosController',UsuariosController)
 .controller('UsuarioController',UsuarioController);
 
-function UsuariosController($scope,GDoksFactory){
+function UsuariosController($scope,GDoksFactory,$location){
 
 	// Declarando vetor de usuários
 	$scope.usuarios = [];
@@ -18,7 +18,7 @@ function UsuariosController($scope,GDoksFactory){
 
 	// função que leva para a tela de adicionar usuário
 	$scope.goToAddUsuario = function(){
-		window.location = '#/usuarios/0';
+		$location.url('/usuarios/0');
 	}
 };
 

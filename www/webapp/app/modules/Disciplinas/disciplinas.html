@@ -9,7 +9,7 @@
 	</div>
 	
 	<div class="lista">
-		<a ng-repeat="d in disciplinas|filter:q.nome" href="#/disciplinas/{{d.id}}" class="bloco_conteudo disciplina" md-whiteframe="1dp">
+		<a ng-repeat="d in disciplinas|filter:q.nome|orderBy:'nome'" href="#/disciplinas/{{d.id}}" class="bloco_conteudo disciplina" md-whiteframe="1dp">
 			<h2>{{d.nome}}</h2>
 			<h3>{{d.sigla}}</h3>
 		</a>
