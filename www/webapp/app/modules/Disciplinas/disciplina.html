@@ -3,7 +3,7 @@
 		<md-tab label="Dados da Disciplina">
 			<md-content class="md-padding">
 				<h1 class="md-display-2">Dados da Disciplina</h1>
-				<form name="form_disciplinaInfo" novalidate>
+				<form name="form_disciplinaInfo" ng-submit="salvarDisciplina()">
 					<div layout="row" layout-align="space-between center">
 						<md-input-container flex="30">
 							<label>Nome</label>
@@ -25,6 +25,7 @@
 						<md-button class="md-raised md-accent" ng-click="cancel()">Cancelar</md-button>
 						<md-button class="md-raised md-primary" ng-click="salvarDisciplina()" ng-disabled="form_disciplinaInfo.$pristine || !form_disciplinaInfo.$valid">Salvar</md-button>
 					</div>
+					<button type="submit" style="display: none"></button>
 				</form>
 			</md-content>
 		</md-tab>
