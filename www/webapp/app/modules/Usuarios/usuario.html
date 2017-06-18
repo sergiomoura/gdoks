@@ -40,5 +40,5 @@
 			<md-button class="md-raised md-primary" aria-label="Salvar" ng-click="salvarUsuario()" ng-disabled="form.$pristine || form.$invalid || usuario.senha1!=usuario.senha2">{{usuario.senha1!=usuario.senha2?"Confirme a senha corretamente":"Salvar"}}</md-button>
 		</div>
 	</div>
-	<button type="submit" style="display: none"></button>
+	<button type="submit" style="display: none" ng-disabled="usuario.senha1!=usuario.senha2"></button>
 </form>
