@@ -16,6 +16,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'Configuracoes',
 								'Disciplinas',
 								'Documentos',
+								'Grds',
 								'Log',
 								'Nav',
 								'Opcoes',
@@ -42,13 +43,15 @@ WebGDoks.config(
 				controller: 'VisaoGeralController',
 				templateUrl: 'app/modules/VisaoGeral/visaogeral.html'
 			}
-		).when(
+		)
+		.when(
 			'/projetos',
 			{
 				controller: 'ProjetosController',
 				templateUrl: 'app/modules/Projetos/projetos.html'
 			}
-		).when(
+		)
+		.when(
 			'/projetos/:id',
 			{
 				controller: 'ProjetoController',
@@ -62,6 +65,7 @@ WebGDoks.config(
 				templateUrl: 'app/modules/Usuarios/usuarios.html'
 			}
 		)
+
 		.when(
 			'/usuarios/:id',
 			{
@@ -74,6 +78,20 @@ WebGDoks.config(
 			{
 				controller: 'CargosController',
 				templateUrl: 'app/modules/Cargos/cargos.html'
+			}
+		)
+		.when(
+			'/grds/:id',
+			{
+				controller: 'GrdController',
+				templateUrl: 'app/modules/grds/grd.html'
+			}
+		)
+		.when(
+			'/grds',
+			{
+				controller: 'GrdsController',
+				templateUrl: 'app/modules/Grds/grds.html'
 			}
 		)
 		.when(

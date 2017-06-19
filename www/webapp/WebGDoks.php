@@ -54,6 +54,7 @@
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/projetos"><md-icon class="material-icons step" aria-label="Projetos">group_work</md-icon>Projetos</md-sidemenu-button>
 					<md-sidemenu-button href="#/usuarios" ng-click="toggleMenu()"><md-icon class="material-icons step" aria-label="Usuários">face</md-icon>Usuários</md-sidemenu-button>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/documentos"><md-icon class="material-icons step" aria-label="Documentos">insert_drive_file</md-icon>Documentos</md-sidemenu-button>
+					<md-sidemenu-button ng-click="toggleMenu()" href="#/grds/0"><md-icon class="material-icons step" aria-label="GRDs">description</md-icon>GRDs</md-sidemenu-button>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/disciplinas"><md-icon class="material-icons step" aria-label="Disciplinas">account_balance</md-icon>Disciplinas</md-sidemenu-button>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/clientes"><md-icon class="material-icons step" aria-label="Clientes">record_voice_over</md-icon>Clientes</md-sidemenu-button>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/cargos"><md-icon class="material-icons step" aria-label="Cargos">work</md-icon>Cargos</md-sidemenu-button>
@@ -111,6 +112,7 @@
 	<script src="app/modules/Documentos/DocumentosController.js"></script>
 	<script src="app/modules/Documentos/DocumentoController.js"></script>
 	<script src="app/modules/Disciplinas/DisciplinasController.js"></script>
+	<script src="app/modules/Grds/GrdsController.js"></script>
 	<script src="app/modules/Nav/NavController.js"></script>
 	<script src="app/modules/Log/LogController.js"></script>
 	<script src="app/modules/Opcoes/OpcoesController.js"></script>
