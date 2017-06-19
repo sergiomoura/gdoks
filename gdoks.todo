@@ -1,11 +1,4 @@
 GDoks:
-  Multidatabase:
-    ✔ Alterar tela de login para dois passos @done (17-06-17 07:55)
-    ✔ Alterar db para que opere em multidatabase @done (17-06-17 07:55)
-    ✔ Alterar ações para que sejam multidatabase @done (17-06-17 07:56)
-
-
-
   Cadastro de Projeto 1 - Documentos:
     ☐ Adicionar Campo para ordenar documentos
     ☐	Tela que lista documentos, mostrar busca avançada de maneira animada
@@ -35,6 +28,8 @@ GDoks:
       
   BUGS Avulsos:
     ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
+    ☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
+    ☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
     ☐ Ao clicar no sair tem que apagar o cookie. Testar digitando endereço de página interna.
     ☐ Separador de decimal e de grupo de milhar estão trocados. estudar filto currency e locale para conserto
     ☐ Tabelas a serem preenchidas na instalação
@@ -45,32 +40,34 @@ GDoks:
       - Subdisciplinas
       - tamanhos de papel
       - usuários (1)
-    ✔ Na tela de cadastro de cargo, dar enter deve salvar o cargo @done (17-06-17 19:03)
     ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
     ☐ Baixar para revisão deve registrar no log
     ☐ No download Resource interpreted as Document but transferred with MIME type application/zip
     ☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
     ☐ Primeira subárea de um projeto não aparece assim que é criada
-    ☐ Cadastro de áreas e subáreas de projeto, botão salvar não pode estar discponível com form inválido
     ☐ Tela Cadastro de Formatos de Papel
     ☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
     Cannot read property 'find' of undefined at ProjetosController.js:159
-    ☐	melhorar look do helm (MD)
     ☐ Mostrar Carregando para ações
       ☐ Inserir Cargo
       ☐ Atualizar Cargo
       ☐ Inserir Projeto
       ☐ Atualizar Projeto
-    ☐ Deixar com look & feel de Material Design
-      ✔ Lista de usuários @done (17-06-18 14:32)
-      ✔  Cadastro do usuário @done (17-06-18 14:32)
-      ✔  Lista disciplinas @done (17-06-18 08:12)
-      ✔  Lista clientes @done (17-06-18 16:36)
-      ✔  Cadastro de Clientes @done (17-06-18 16:36)
-      ☐	Documento de Abertura de Operações
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Cadastro de áreas e subáreas de projeto, botão salvar não pode estar discponível com form inválido @done (17-06-19 04:38) @project(GDoks / BUGS Avulsos)
+ ✔ Deixar com look & feel de Material Design @done (17-06-19 04:37) @project(GDoks / BUGS Avulsos)
+ ✔  Documento de Abertura de Operações @done (17-06-19 04:37) @project(GDoks / BUGS Avulsos)
+ ✔  Lista clientes @done (17-06-18 16:36) @project(GDoks / BUGS Avulsos)
+ ✔  Cadastro de Clientes @done (17-06-18 16:36) @project(GDoks / BUGS Avulsos)
+ ✔ Lista de usuários @done (17-06-18 14:32) @project(GDoks / BUGS Avulsos)
+ ✔  Cadastro do usuário @done (17-06-18 14:32) @project(GDoks / BUGS Avulsos)
+ ✔  Lista disciplinas @done (17-06-18 08:12) @project(GDoks / BUGS Avulsos)
+ ✔ Na tela de cadastro de cargo, dar enter deve salvar o cargo @done (17-06-17 19:03) @project(GDoks / BUGS Avulsos)
+ ✔ Alterar ações para que sejam multidatabase @done (17-06-17 07:56) @project(GDoks / Multidatabase)
+ ✔ Alterar tela de login para dois passos @done (17-06-17 07:55) @project(GDoks / Multidatabase)
+ ✔ Alterar db para que opere em multidatabase @done (17-06-17 07:55) @project(GDoks / Multidatabase)
  ✔ Mostrar Histórico de Revisões @done (17-06-12 06:54) @project(GDoks / Tela de Documento)
  ✔ Validar progresso @due(17-06-09 08:00) @done (17-06-12 06:36) @project(GDoks / Tela de Documento)
  ✔ Campos de Revisão: percentual concluído, data limite, observações @done (17-06-12 06:36) @project(GDoks / Tela de Documento)
