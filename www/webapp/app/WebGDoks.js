@@ -438,6 +438,8 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		)
 		.error(
 			function(error){
+				$cookies.remove('user',{path:'/'});
+				indexedDB.deleteDatabase('gdoks');
 				window.location="/";
 			}
 		);

@@ -1,1 +1,63 @@
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, officia officiis explicabo iste sit inventore voluptatibus quis exercitationem dolorem, consequuntur obcaecati fuga placeat laudantium non, dolore doloribus facilis possimus neque?
+<div class="container_80" id="grd_container" layout="column">
+	<div class="controle_principal" layout="row" layout-align="end center">
+		<md-button class="md-raised md-primary" aria-label="Buscar GRD" ng-click="goToGrds()">
+			<md-icon class="material-icons step" aria-label="Buscar GRD">search</md-icon>
+			Buscar GRD
+		</md-button>
+	</div>
+	<md-tabs md-dynamic-height md-border-bottom md-whiteframe="1dp">
+		<md-tab label="Dados da GRD">
+			<md-content class="md-padding dados">
+				<div layout="row" layout-align="space-between start">
+					<md-input-container flex="25">
+						<label>Cliente</label>
+						<md-select ng-model="grd.cliente" ng-change="onClienteChange()">
+						  <md-select-label>Selecione um Cliente</md-select-label>
+						  <md-option ng-value="cliente" ng-repeat="cliente in clientes">{{ cliente.nome }}</md-option>
+						</md-select>
+					</md-input-container>
+					<md-input-container flex="25">
+						<label>Nome do Contato</label>
+						<input type="text" disabled="disabled" ng-model="grd.cliente.contato_nome">
+					</md-input-container>
+					<md-input-container flex="25">
+						<label>Telefone do Contato</label>
+						<input type="text" disabled="disabled" ng-model="grd.cliente.contato_telefone">
+					</md-input-container flex="25">
+					<md-input-container>
+						<label>Email do Contato</label>
+						<input type="text" disabled="disabled" ng-model="grd.cliente.contato_email">
+					</md-input-container>
+				</div>
+				
+				<div layout="row" layout-align="space-between start">
+					<md-input-container flex="25">
+						<label>Projeto</label>
+						<md-select ng-model="grd.projeto" required>
+						  <md-select-label>Selecione um Projeto do Cliente</md-select-label>
+						  <md-option ng-value="projeto" ng-repeat="projeto in projetos">{{ projeto.nome }}</md-option>
+						</md-select>
+					</md-input-container>
+
+					<md-input-container flex="25">
+						<label>Código da GRD</label>
+						<input type="text" ng-model="grd.codigo" required>
+					</md-input-container>
+					<md-input-container flex="50">
+						<label>Observações</label>
+						<input type="text" ng-model="grd.obs">
+					</md-input-container>
+				</div>
+
+				<div layout="row" layout-align="end center">
+					<md-button class="md-raised md-primary" aria-label="Salvar GRD">Salvar GRD</md-button>
+				</div>
+			</md-content>
+		</md-tab>
+		<md-tab label="Documentos">
+			<md-tab-body>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam exercitationem rerum magni ipsam, architecto! Minima eligendi dicta pariatur similique nesciunt beatae eaque vero, labore natus ad eius corporis autem quae.</p>
+			</md-tab-body>
+		</md-tab>
+	</md-tabs>
+</div>

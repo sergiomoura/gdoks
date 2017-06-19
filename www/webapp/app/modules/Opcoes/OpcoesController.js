@@ -4,8 +4,8 @@ angular.module('Opcoes',[])
 		$location.url("/senha");
 	}
 	$scope.logout = function(){
-		$cookies.remove('token');
 		$cookies.remove('user',{path:'/'});
+		indexedDB.deleteDatabase('gdoks');
 		window.location = '/';
 	}
 })

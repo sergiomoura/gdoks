@@ -72,9 +72,6 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 
 					// salvando cliente na base local
 					var cliente = angular.copy($scope.cliente);
-					delete(cliente.contato_telefone);
-					delete(cliente.contato_email);
-					delete(cliente.contato_nome);
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').add(cliente);
 					}
@@ -125,9 +122,6 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 
 					// atualiznado cliente na base local
 					var cliente = angular.copy($scope.cliente);
-					delete(cliente.contato_telefone);
-					delete(cliente.contato_email);
-					delete(cliente.contato_nome);
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').put(cliente);
 					}

@@ -237,7 +237,6 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					// Adicionando projeto na base local
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						// limpando dados para armazenamento na base local.
-						delete projeto.id_cliente;
 						delete projeto.id_responsavel;
 						delete projeto.data_inicio_p;
 						delete projeto.data_final_p;
@@ -287,7 +286,6 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					// Atualizando projeto na base local
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						// limpando dados para armazenamento.
-						delete projeto.id_cliente;
 						delete projeto.id_responsavel;
 						delete projeto.data_inicio_p;
 						delete projeto.data_final_p;

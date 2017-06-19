@@ -1015,7 +1015,8 @@
 				$sql = 'SELECT p.id,
 						       p.nome,
 						       p.codigo,
-						       p.ativo
+						       p.ativo,
+						       p.id_cliente
 						FROM gdoks_usuarios u
 						INNER JOIN gdoks_projetos p ON p.id_empresa=u.id_empresa
 						WHERE u.token=?';
@@ -2743,7 +2744,10 @@
 				$sql = 'SELECT a.id,
 						       a.nome,
 						       a.cnpj,
-						       a.cpf
+						       a.cpf,
+						       a.contato_nome,
+						       a.contato_email,
+						       a.contato_telefone
 						FROM gdoks_clientes a
 						INNER JOIN
 						  (SELECT id_empresa
