@@ -25,7 +25,6 @@ button {
 .bloco_conteudo .sub_bloco {
   border-top: 1px solid #2196F3;
   margin: 20px 0 0 0;
-  display: flex;
   background-color: #E8F4FE; }
 
 .bloco_conteudo .sub_bloco h3 {
@@ -304,31 +303,6 @@ help:hover > text {
   position: absolute;
   right: 10px;
   top: calc(50% - 6px); }
-
-.progress_bar {
-  background-color: #C1E3FF;
-  height: 27px; }
-
-.progress_bar > div {
-  background-color: #2196F3;
-  height: 100%;
-  border-radius: 5px 0 0 5px;
-  text-align: right;
-  color: #FFF;
-  font-size: 14px;
-  line-height: 27px;
-  transition: width ease-in-out 0.3s; }
-
-.progress_bar > span {
-  display: block;
-  width: 100px;
-  position: relative;
-  left: 50%;
-  margin-left: -50px;
-  text-align: center;
-  color: #FFF;
-  font-size: 12px;
-  top: -18px; }
 
 .aviso_inline {
   display: inline-block;

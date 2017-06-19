@@ -144,8 +144,8 @@
 		<md-tab label="Documentos de Abertura de Operações" ng-disabled="projeto.id==0">
 			<md-content class="md-padding" ng-controller="ProjetosDAOsController">
 				<h1 class="md-display-2">Documentos de Abertura de Operações</h1>
-				<form id="form_daos" name="form_daos" novalidate>
-					<button ngf-select ng-model="daoFiles" ngf-multiple="true" ng-model="daoFiles" class="bt_upload" ng-disabled="daoFiles.length>0">Selecione Documentos de Abertura de Operções ...</button>
+				<form id="form_daos" name="form_daos">
+					<md-button class="md-raised md-primary" ngf-multiple="true" ngf-select ng-model="daoFiles" ng-disabled="daoFiles.length>0" aria-label="Selecione Documentos de Abertura de Operções">Selecione Documentos de Abertura de Operções ...</md-button>
 					<table ng-if="daoFiles.length>0">
 						<thead>
 							<tr>
@@ -159,21 +159,22 @@
 							<tr ng-repeat="file in daoFiles" id="tr_{{file.name}}">
 								<td><input type="text" name="daoName_{{$index}}" ng-model="daoNames[$index]" required></td>
 								<td>{{file.name}}</td>
-								<td>{{errosNoUploadDeDaos[$index]}}</td>
-								<td><button class="bt_cancelar" ng-click="removerDaoFile($index)">Remover</button></td>
+								<td>{{errosNoUploadDeDaos[file.name]}}</td>
+								<td>
+									<md-button class="md-raised md-accent" aria-label="Remover" ng-click="removerDaoFile($index)">Remover</md-button>
+								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div ng-if="mostrarProgressoUploadDaos" class="progress_bar">
-						<div style="width:{{progress}}%">
-							<span>{{progress}}%</span>	
-						</div>
+					
+					<div layout="row" layout-align="end center">
+						<md-progress-circular ng-if="mostrarProgressoUploadDaos" md-mode="determinate" value="{{progress}}" md-diameter="20"></md-progress-circular>
+						<md-button class="md-raised md-primary" ng-click="uploadDaoFiles(daoFiles)" ng-if="daoFiles.length>0"  ng-disabled="daoFiles.length==0 || !form_daos.$valid" aria-label="Salvar Documentos de Abertura de Operações">Salvar Documentos de Abertura de Operações</md-button>
 					</div>
-					<button	class="bt_salvar" ng-click="uploadDaoFiles(daoFiles)" ng-if="daoFiles.length>0" ng-disabled="daoFiles.length==0 || !form_daos.$valid">Salvar Documentos de Abertura de Operações</button>
 				</form>
-				<div class="sub_bloco">
-					<h3>Já registrados</h3>
-					<table>
+				<div layout="row" class="sub_bloco" id="daosRegistradas_container" ng-if="projeto.daos.length>0">
+					<h3 flex="15">Já registrados</h3>
+					<table flex="85">
 						<thead>
 							<tr>
 								<td>Nome</td>
@@ -189,7 +190,10 @@
 								<td>{{dao.nome_cliente}}</td>
 								<td>{{dao.tipo}}</td>
 								<td>{{dao.tamanho}}</td>
-								<td><button class="bt_cancelar" ng-click="removerDAO(dao.id)">Remover</button></td>
+								<td>
+									<md-button ng-click="download(dao.id)" class="md-icon-button md-primary" aria-label="Baixar"><md-icon class="material-icons step" aria-label="Baixar">file_download</md-icon></md-button>
+									<md-button ng-click="openConfirmRemoveDAO(ev,dao.id)" class="md-icon-button md-primary" aria-label="Remover"><md-icon class="material-icons step" aria-label="Remover">delete</md-icon></md-button>
+								</td>
 							</tr>
 						</tbody>
 					</table>

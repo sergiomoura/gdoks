@@ -1444,6 +1444,7 @@
 
 			$app->post('/projetos/:id_projeto/daos/',function($id_projeto) use ($app,$db,$token){
 				// lendo dados
+				$id_projeto = 1*$id_projeto;
 
 				// Verificando se o projeto é da mesma empresa do usuário
 				$sql = 'SELECT
@@ -1484,7 +1485,7 @@
 							$nomeUnico = uniqid(true);
 							$nomeTemporario = $_FILES['profiles']['tmp_name'][$i]['file'];
 							$nomeCliente = $_FILES['profiles']['name'][$i]['file'];
-							$tipo = $_FILES['profiles']['type'][$i]['file'];
+							$tipo = substr($_FILES['profiles']['type'][$i]['file'],0,45);
 							$tamanho = $_FILES['profiles']['size'][$i]['file'];
 							$nomeDao = $_POST['profiles'][$i]['nome'];
 
@@ -1571,8 +1572,43 @@
 							// Registrando falha no upload no vetor de falhas.
 							$erro = new stdClass();
 							$erro->arquivo = $_FILES['profiles']['name'][$i]['file'];
-							$erro->msg = 'Upload falhou. Erro: '.$_FILES['profiles']['error'][$i]['file'];
 							$erro->codigo = -1;
+
+							// entrando no switch para retornar msg de erro adequada
+							switch ($_FILES['profiles']['error'][$i]['file']) {
+								case UPLOAD_ERR_INI_SIZE:
+									$msg = 'O arquivo enviado excede o limite definido ('.ini_get('upload_max_filesize') .')';
+									break;
+
+								case UPLOAD_ERR_FORM_SIZE:
+									$msg = 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
+									break;
+
+								case UPLOAD_ERR_PARTIAL:
+									$msg = 'O upload do arquivo foi feito parcialmente';
+									break;
+
+								case UPLOAD_ERR_NO_FILE:
+									$msg = 'Nenhum arquivo foi enviado';
+									break;
+
+								case UPLOAD_ERR_NO_TMP_DIR:
+									$msg = 'Pasta temporária ausente';
+									break;
+
+								case UPLOAD_ERR_CANT_WRITE:
+									$msg = 'Falha em escrever o arquivo em disco';
+									break;
+								
+								case UPLOAD_ERR_EXTENSION:
+									$msg = 'Uma extensão interrompeu o upload do arquivo';
+									break;
+
+								default:
+									$msg = 'Desconhecido (Cod '.$_FILES['profiles']['error'][$i]['file'].')';
+									break;
+							}
+							$erro->msg = 'Upload falhou. Erro: '.$msg;
 							array_push($erros, $erro);
 						}
 					}
