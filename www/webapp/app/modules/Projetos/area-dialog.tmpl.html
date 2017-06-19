@@ -1,6 +1,6 @@
 <md-dialog class="area_dialog">
-	<md-dialog-content  layout="column">
-		<form name="form">
+	<md-dialog-content >
+		<form ng-submit="salvar(area)" name="form" layout="column">
 			<md-input-container>
 				<label>Nome da Área</label>
 				<input type="text" ng-model="area.nome" required>
