@@ -30,7 +30,7 @@ GDoks:
     ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
     ☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
     ☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
-    ☐ Ao clicar no sair tem que apagar o cookie. Testar digitando endereço de página interna.
+    ✔ Ao clicar no sair tem que apagar o cookie. Testar digitando endereço de página interna. @done (17-06-19 09:34)
     ☐ Separador de decimal e de grupo de milhar estão trocados. estudar filto currency e locale para conserto
     ☐ Tabelas a serem preenchidas na instalação
       - Empresas

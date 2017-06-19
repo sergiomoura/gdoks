@@ -1,10 +1,11 @@
 angular.module('Opcoes',[])
 .controller('OpcoesController',function($scope,$cookies,$location){
 	$scope.onTrocarSenhaClick  = function(){
-		$location.path("/senha");
+		$location.url("/senha");
 	}
 	$scope.logout = function(){
-		$cookies.put('token',null);
+		$cookies.remove('token');
+		$cookies.remove('user',{path:'/'});
 		window.location = '/';
 	}
 })
