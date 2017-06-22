@@ -1,0 +1,39 @@
+<md-dialog class="grddoc_dialog">
+	<md-dialog-content>
+		<h3>{{doc.nome}}</h3>
+		<form name="grdDocForm" ng-submit="salvar()" layout="column">
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="45">
+					<label>Número de Vias</label>
+					<input type="number" min="1" ng-model="doc.nVias" required>
+				</md-input-container>
+
+				<md-input-container flex="45">
+					<label>Número de Folhas</label>
+					<input type="number" min="1" ng-model="doc.nFolhas" required>
+				</md-input-container>
+			</div>
+			
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="45">
+					<label>Tipo de Documento</label>
+					<md-select ng-model="doc.tipo">
+					  <md-option ng-value="opt" ng-repeat="opt in tiposDeDocumento">{{ opt.simbolo }} - {{opt.nome}}</md-option>
+					</md-select>
+				</md-input-container>
+
+				<md-input-container flex="45">
+					<label>Código EMI</label>
+					<md-select ng-model="doc.codEMI">
+					  <md-option ng-value="opt" ng-repeat="opt in codigosEmi">{{ opt.simbolo }} - {{opt.nome}}</md-option>
+					</md-select>
+				</md-input-container>
+			</div>
+			<button type="submit" style="display: none"></button>
+		</form>
+		<div layout="row" layout-align="space-between start">
+			<md-button ng-click="cancelar()" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
+			<md-button ng-disabled="grdDocForm.$pristine || !grdDocForm.$valid" ng-click="salvar()" class="md-raised md-primary" aria-label="Alterar">Alterar</md-button>
+		</div>
+	</md-dialog-content>
+</md-dialog>

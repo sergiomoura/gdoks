@@ -1937,7 +1937,10 @@
 							       M.id_subdisciplina,
 							       M.id_subarea,
 							       rev_serial,
-							       data_limite
+							       rev_id,
+							       progresso,
+							       data_limite,
+							       ultimo_pda
 							FROM
 							  (SELECT a.id,
 							          a.nome,
@@ -1953,16 +1956,24 @@
 							LEFT JOIN
 							  (SELECT X.id_documento,
 							          X.rev_serial,
-							          Y.data_limite
+							          Y.id as rev_id,
+							          Y.progresso,
+							          Y.data_limite,
+							          Z.ultimo_pda
 							   FROM
 							     (SELECT id_documento,
 							             max(serial) AS rev_serial
 							      FROM gdoks_revisoes
 							      GROUP BY id_documento) X
 							   INNER JOIN
-							     (SELECT data_limite,id,id_documento,serial
+							     (SELECT data_limite,id,id_documento,serial,progresso_validado AS progresso
 							      FROM gdoks_revisoes) Y ON X.id_documento=Y.id_documento
-							   AND X.rev_serial=Y.serial) N ON M.id=N.id_documento';
+							   AND X.rev_serial=Y.serial
+							   LEFT JOIN
+							     (SELECT id_revisao,
+							             max(id) AS ultimo_pda
+							      FROM gdoks_pdas
+							      GROUP BY id_revisao) Z ON Y.id=Z.id_revisao) N ON M.id=N.id_documento';
 					$documentos = array_map(
 						function($a){
 							$a = (object)$a;
@@ -3387,6 +3398,193 @@
 				}
 			});
 		// FIM DE ROTAS DE PDAS
+
+		// ROTAS DE GRDS
+			$app->post('/grds',function() use ($app,$db,$token){
+				// Lendo e saneando as informações da requisição
+				$grd = json_decode($app->request->getBody());
+
+				// Capturando o id e o id_empresa do usuário atual
+				$sql = 'SELECT
+							id,id_empresa
+						FROM 
+							gdoks_usuarios
+						WHERE
+							token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token)[0];
+				$id_empresa = $rs['id_empresa'];
+				$id = $rs['id'];
+
+				// Verificando se o projeto é da empresa atual
+				$sql = 'SELECT count(*) as ok FROM gdoks_projetos WHERE id=? AND id_empresa=?';
+				$rs = $db->query($sql,'ii',$grd->projeto->id,$id_empresa);
+				if($rs[0]['ok'] == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');
+					$response->flush();
+					return;
+				}
+
+				// atribuindo um string vazio para obs caso ela venha vazia
+				$grd->obs = (isset($grd->obs)?$grd->obs:'');
+				
+				// Inserindo nova grd.
+				$sql = 'INSERT INTO gdoks_grds (id_projeto,codigo,obs,datahora_registro) VALUES (?,?,?,NOW())';
+				try {
+					$db->query($sql,'iss',$grd->projeto->id,$grd->codigo,$grd->obs);
+					$response = new response(0,'GRD criada com sucesso.');
+					$response->newId = $db->insert_id;
+					$response->flush();
+				} catch (Exception $e) {
+					$app->response->setStatus(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					return;
+				}
+				// Registrando a ação
+				registrarAcao($db,$id,ACAO_CRIOU_GRD,$db->insert_id.','.$grd->codigo.','.$grd->projeto->id);
+			});
+
+			$app->get('/grds/:id',function($id_grd) use ($app,$db,$token){
+				// Lendo dados
+				$id_grd = 1*$id_grd;
+
+				// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
+				$sql = 'SELECT c.id,
+							   c.id_projeto,
+						       c.codigo,
+						       c.obs,
+						       c.datahora_registro,
+						       c.datahora_enviada,
+						       b.id_cliente
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+						WHERE token=?
+						  AND validade_do_token>now()
+						  AND c.id=?';
+				$rs = $db->query($sql,'si',$token,$id_grd);
+
+				if(sizeof($rs) > 0){
+					$response = new response(0,'ok');
+					$response->grd = $rs[0];
+					$response->flush();
+					return;
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'GRD inexistente ou token expirado.');
+					$response->flush();
+					return;
+				}
+			});
+
+			$app->post('/grds/documentos',function() use ($app,$db,$token){
+				// Lendo conteúdo da requisição
+				$grd = json_decode($app->request->getBody());
+
+				// verificando se a grd é da mesma empresa do usuário
+				$sql = 'SELECT a.id
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+						WHERE token=?
+						  AND validade_do_token>now()
+						  AND c.id=?';
+				$rs = $db->query($sql,'si',$token,$grd->id);
+				if(sizeof($rs) == 0){
+					// Retornando erro
+					$app->response->setStatus(401);
+					$response = new response(1,'GRD inexistente ou token expirado.');
+					$response->flush();
+					return;
+				} else {
+
+					// Salvando o id do usuário
+					$id_usuario = $rs[0]['id'];
+
+					// Verificando se a GRD já foi enviada
+					$sql = 'SELECT !isnull(datahora_enviada) as enviada FROM gdoks_grds WHERE id=?';
+					$enviada = ($db->query($sql,'i',$grd->id)[0]['enviada'] == 1);
+					if($enviada){
+						// GRD já foi enviada para o cliente. retorna erro e não faz mais nada
+						$app->response->setStatus(401);
+						$response = new response(1,'Impossível alterar GRD. Ela já foi enviada para o cliente.');
+						$response->flush();
+						return;
+					} else {
+						
+						// Removendo revisoes antigas da grd em questão
+						$sql = 'DELETE FROM gdoks_grds_x_revisoes WHERE id_grd=?';
+						$db->query($sql,'i',$grd->id);
+
+						// Anexando revisoes dos documentos à grd
+						$sql = 'INSERT INTO gdoks_grds_x_revisoes
+									(
+										id_grd,
+										id_revisao,
+										id_codEMI,
+										id_tipo,
+										nFolhas,
+										nVias
+									) VALUES (?,?,?,?,?,?)';
+						foreach ($grd->docs as $d) {
+							$db->query($sql,'iiiiii',$grd->id,$d->rev_id,$d->id_codEMI,$d->id_tipo,$d->nFolhas,$d->nVias);
+						}
+
+						// Retornando sucesso
+						$response = new response(0,'ok');
+						$response->flush();
+
+						// Registrando no log
+						registrarAcao($db,$id_usuario,ACAO_ANEXOU_DOC_A_GRD,$grd->id);
+					}
+				}
+			});
+		// FIM DE ROTAS PARA GRDS
+
+		// ROTAS DE CODIGOS EMI
+			$app->get('/emis',function() use ($app,$db,$token){
+				// retornando os codigos emis da empresa do usuário logado caso o token dele seja válido
+				$sql = 'SELECT b.id,
+						       b.simbolo,
+						       b.nome
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_codigos_emi b ON a.id_empresa=b.id_empresa
+						WHERE a.token=?';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) > 0){
+					$response = new response(0,'ok');
+					$response->codigosEmi = $rs;
+					$response->flush();
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,"Nenhum código cadastrado ou token expirado");
+					$response->flush();
+				}
+			});
+		// FIM DE ROTAS DE CODIGOS EMI
+
+		// ROTAS DE TIPOS DE DOCUMENTO
+			$app->get('/tiposDeDocumento',function() use ($app,$db,$token){
+				// retornando os tipos de documento da empresa do usuário logado caso o token dele seja válido
+				$sql = 'SELECT b.id,
+						       b.simbolo,
+						       b.nome
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_tipos_de_doc b ON a.id_empresa=b.id_empresa
+						WHERE a.token=?';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) > 0){
+					$response = new response(0,'ok');
+					$response->tiposDeDocumento = $rs;
+					$response->flush();
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,"Nenhum tipo de documento cadastrado ou token expirado");
+					$response->flush();
+				}
+			});
+		// FIM DE ROTAS DE TIPOS DE DOCUMENTO
 	});
 
 	// running the app
