@@ -3466,8 +3466,28 @@
 				$rs = $db->query($sql,'si',$token,$id_grd);
 
 				if(sizeof($rs) > 0){
+					// GRD existe e usuário está ok. Salvando grd em variável
+					$grd = (object)$rs[0];
+
+					// levantando as revisões que já estão anexadas a esta grd
+					$sql = 'SELECT id_revisao,
+							       id_codEMI,
+							       id_tipo,
+							       nFolhas,
+							       nVias
+							FROM gdoks_grds_x_revisoes
+							WHERE id_grd=?';
+					$rs = $db->query($sql,'i',$grd->id);
+					
+					// Atribuindo revisões a grd
+					$grd->docs = Array();
+					foreach ($rs as $rev) {
+						array_push($grd->docs, $rev);
+					}
+
+					// Enviando resposta para cliente
 					$response = new response(0,'ok');
-					$response->grd = $rs[0];
+					$response->grd = $grd;
 					$response->flush();
 					return;
 				} else {

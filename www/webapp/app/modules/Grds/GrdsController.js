@@ -11,86 +11,26 @@
 	var GrdController = function($scope,$location,GDoksFactory,$routeParams,$mdToast,$mdDialog){
 
 		// Lendo id da url
-		var id = $routeParams.id;
+		var id_grd = $routeParams.id;
 
 		// Definindo o tab selecionado
 		$scope.selectedTab = 0;
 
-		// Carregando códigos emis
+		// definindo flag que indica se os codigos emi e os tipos de documento foram carregados
+		var codigosEmiCarregados = false;
+		var tiposDeDocumentoCarregados = false;
+		var grdCarregada = false;
+
+		// Carregando grd
+		$scope.grd = null;
+
+		// Definindo códigos emis
 		$scope.codigosEmi = [];
 		loadCodigosEmi();
 
-		// Carregamdp tipos de documento
+		// Definindo tipos de documento
 		$scope.tiposDeDocumento = [];
 		loadTiposDeDocumento();
-		
-		// Definindo grd
-		if(id == 0){
-			$scope.grd = {};
-
-			// Definindo variável que controla se os documentos da grd foram salvos
-			$scope.grd.documentos_salvos = true;
-
-		} else {
-			// Mostra carregando
-			$scope.root.carregado = true;
-
-			// Carregando GRD do servidor
-			GDoksFactory.getGrd(id)
-			.success(function(response){
-
-				// Esconde carregando
-				$scope.root.carregando = false;
-
-				// Settando GRD no scope
-				$scope.grd = response.grd;
-
-				// Definindo variável que controla se os documentos da grd foram salvos
-				$scope.grd.documentos_salvos = true;
-
-				// Parsing GRD - - - -
-				// carregando o projeto da base local
-				indexedDB.open('gdoks').onsuccess = function(evt){
-					evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
-						// Levantando os projetos do cliente
-						$scope.projetos = evt.target.result.filter(function(a){return a.id_cliente==this},$scope.grd.id_cliente);
-
-						// atribuindo projeto a grd
-						$scope.grd.projeto = $scope.projetos.find(function(a){return a.id==this}, $scope.grd.id_projeto);
-						
-						// atribuindo o cliente
-						$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.projeto.id_cliente);
-
-						// carregando documentos de projeto
-						getDocumentosDeProjeto($scope.grd.projeto.id);
-
-						// datas de grd
-
-
-						// apagando propriedade id_projeto
-						delete $scope.grd.id_projeto;
-						delete $scope.grd.id_cliente;
-					}
-				}
-
-			})
-			.error(function(error){
-				// Esconde carregando
-				$scope.root.carregando = false;
-
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Falha ao tentar carregar GRD: '+error.msg)
-					.position('bottom left')
-					.hideDelay(5000)
-				);
-
-				// Imprimindo erro no console
-				console.warn(error);
-
-			});
-		}
 
 		// definindo projetos
 		$scope.projetos = [];
@@ -120,7 +60,7 @@
 
 		// Define função a ser executada quando o projeto muda
 		$scope.onProjetoChange = function(){
-			getDocumentosDeProjeto($scope.grd.projeto.id);
+			loadDocumentosDeProjeto($scope.grd.projeto.id);
 		}
 
 		// Função que leva para a busca de grds
@@ -182,24 +122,6 @@
 			}
 		}
 
-		// Função que carrega documentos de um projeto e põe no scope
-		function getDocumentosDeProjeto(id_projeto){
-			GDoksFactory.getDocumentosDoProjeto(id_projeto)
-			.success(function(response){
-				var documentos = response.documentos;
-				for (var i = documentos.length - 1; i >= 0; i--) {
-					documentos[i].added = false;
-					documentos[i].chk_esq = (documentos[i].progresso==100);
-					documentos[i].chk_dir = false;
-					documentos[i].nVias = 1;
-					documentos[i].nFolhas = 1;
-					documentos[i].tipo = $scope.tipoDeDocumentoPadrao;
-					documentos[i].codEMI = $scope.codigoEmiPadrao;
-				}
-				$scope.documentos = documentos;
-			})
-		}
-
 		// Função que remove todos os documentos da grd
 		$scope.selecionarTodosDir = function(){
 			for (var i = $scope.documentos.length - 1; i >= 0; i--) {
@@ -247,54 +169,6 @@
 			GDoksFactory.baixarPDA(id_pda);
 		}
 
-		// Função que carrega códigos EMI
-		function loadCodigosEmi(){
-			GDoksFactory.getCodigosEmi()
-			.success(function(response){
-				// Setando codigos emi no scope
-				$scope.codigosEmi = response.codigosEmi;
-
-				// Definindo código EMI padrão
-				$scope.codigoEmiPadrao = $scope.codigosEmi[1];
-			})
-			.error(function(error){
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Não foi possível carregar Códigos EMI.')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
-
-				// Imprimindo erro no console
-				console.warn(error);
-			});
-		}
-
-		// Função que carrega Tipos de Documento
-		function loadTiposDeDocumento(){
-			GDoksFactory.getTiposDeDocumento()
-			.success(function(response){
-				// Setando codigos emi no scope
-				$scope.tiposDeDocumento = response.tiposDeDocumento;
-
-				// Definindo código EMI padrão
-				$scope.tipoDeDocumentoPadrao = $scope.tiposDeDocumento[0];
-			})
-			.error(function(error){
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Não foi possível carregar tipos de documento.')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
-
-				// Imprimindo erro no console
-				console.warn(error);
-			});
-		}
-
 		// Função que abre diálogo para alterar oções de documento de grd
 		$scope.openOpcoesDeDocumentoDialog = function(evt,doc){
 			$mdDialog.show(
@@ -321,12 +195,10 @@
 		function opcoesDeDocumentoDialogController($scope,doc,parentDoc,parentScope){
 			
 			$scope.doc = doc;
-			
 			$scope.codigosEmi = parentScope.codigosEmi;
-			$scope.doc.codEMI = $scope.codigosEmi.find(function(a){return a.id==this},$scope.doc.codEMI.id);
-
 			$scope.tiposDeDocumento = parentScope.tiposDeDocumento;
-			$scope.doc.tipo = $scope.tiposDeDocumento.find(function(a){return a.id==this},$scope.doc.tipo.id);
+			$scope.doc.codEMI = $scope.codigosEmi.find(function(a){return 1*a.id==1*this}, doc.codEMI.id);
+			$scope.doc.tipo = $scope.tiposDeDocumento.find(function(a){return a.id==this}, doc.tipo.id);
 
 			$scope.cancelar = function(){
 				$mdDialog.hide();
@@ -337,15 +209,12 @@
 				parentDoc.tipo = $scope.doc.tipo;
 				parentDoc.nVias = $scope.doc.nVias;
 				parentDoc.nFolhas = $scope.doc.nFolhas;
-				$mdDialog.hide();
 
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Dados do documento ' + $scope.doc.nome + ' alterados')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
+				// salvando os documentos na base
+				parentScope.salvarDocumentos();
+
+				// Escondendo caixa de dialogo
+				$mdDialog.hide();
 			}
 		}
 
@@ -420,6 +289,172 @@
 
 			});
 		}
+
+		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+			// Função que carrega códigos EMI
+			function loadCodigosEmi(){
+				GDoksFactory.getCodigosEmi()
+				.success(function(response){
+					// Setando codigos emi no scope
+					$scope.codigosEmi = response.codigosEmi;
+
+					// Definindo código EMI padrão
+					$scope.codigoEmiPadrao = $scope.codigosEmi[1];
+
+					// Marcando como carregado
+					codigosEmiCarregados = true;
+
+					// tentando carregar grd
+					loadGrd(id_grd);
+				})
+				.error(function(error){
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível carregar Códigos EMI.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Imprimindo erro no console
+					console.warn(error);
+				});
+			}
+
+			// Função que carrega Tipos de Documento
+			function loadTiposDeDocumento(){
+				GDoksFactory.getTiposDeDocumento()
+				.success(function(response){
+					// Setando codigos emi no scope
+					$scope.tiposDeDocumento = response.tiposDeDocumento;
+
+					// Definindo código EMI padrão
+					$scope.tipoDeDocumentoPadrao = $scope.tiposDeDocumento[0];
+
+					// Marcando como carregado
+					tiposDeDocumentoCarregados = true;
+
+					// tentando carregar grd
+					loadGrd(id_grd);
+
+				})
+				.error(function(error){
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível carregar tipos de documento.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Imprimindo erro no console
+					console.warn(error);
+				});
+			}
+
+			// Função que carrega a GRD
+			function loadGrd(id){
+				if(id == 0){
+					$scope.grd = {
+						id: 0,
+						documentos_salvos: true
+					};
+				} else {
+					// verificando se tipos de documento e codigos emi estão carregados
+					if(codigosEmiCarregados && tiposDeDocumentoCarregados){
+
+						// Mostra carregando
+						$scope.root.carregado = true;
+
+						// Carregando GRD do servidor
+						GDoksFactory.getGrd(id)
+						.success(function(response){
+
+							// Esconde carregando
+							$scope.root.carregando = false;
+
+							// Settando GRD no scope
+							$scope.grd = response.grd;
+
+							// Carregando CodigosEMI, Tipos de documento e documentos do projeto desta grd
+							loadDocumentosDeProjeto($scope.grd.id_projeto);
+
+							// Definindo variável que controla se os documentos da grd foram salvos
+							$scope.grd.documentos_salvos = true;
+
+							// carregando o projeto da base local
+							indexedDB.open('gdoks').onsuccess = function(evt){
+								evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
+									// Levantando os projetos do cliente
+									$scope.projetos = evt.target.result.filter(function(a){return a.id_cliente==this},$scope.grd.id_cliente);
+
+									// atribuindo projeto a grd
+									$scope.grd.projeto = $scope.projetos.find(function(a){return a.id==this}, $scope.grd.id_projeto);
+									
+									// atribuindo o cliente
+									$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.projeto.id_cliente);
+
+									// apagando propriedade id_projeto
+									delete $scope.grd.id_projeto;
+									delete $scope.grd.id_cliente;
+								}
+							}
+						})
+						.error(function(error){
+							// Esconde carregando
+							$scope.root.carregando = false;
+
+							// Retornando Toast para o usuário
+							$mdToast.show(
+								$mdToast.simple()
+								.textContent('Falha ao tentar carregar GRD: '+error.msg)
+								.position('bottom left')
+								.hideDelay(5000)
+							);
+
+							// Imprimindo erro no console
+							console.warn(error);
+						});
+					}
+				}
+			}
+
+			// Função que carrega documentos de um projeto e põe no scope.
+			// Só funciona direitp se cpdogos emi e tipos de documento já tiverem sido carregados
+			function loadDocumentosDeProjeto(id_projeto){
+				GDoksFactory.getDocumentosDoProjeto(id_projeto)
+				.success(function(response){
+					var documentos = response.documentos;
+
+					// Parsing documentos
+					for (var i = documentos.length - 1; i >= 0; i--) {
+						documentos[i].chk_esq = false;
+						documentos[i].chk_dir = false;
+						//verificando se documento está adicionado a grd
+						var grdDoc = $scope.grd.docs.find(function(a){return a.id_revisao==this},documentos[i].rev_id);
+						if(grdDoc == undefined){
+							// Documento não foi adicionado a grd. Mantendo valores padrão
+							documentos[i].added = false;
+							documentos[i].nVias = 1;
+							documentos[i].nFolhas = 1;
+							documentos[i].tipo = $scope.tipoDeDocumentoPadrao;
+							documentos[i].codEMI = $scope.codigoEmiPadrao;
+						} else {
+							// Documento já foi adicionado a grd. Carregando os valores dele
+							documentos[i].added = true;
+							documentos[i].nVias = grdDoc.nVias;
+							documentos[i].nFolhas = grdDoc.nFolhas;
+							documentos[i].tipo = $scope.tiposDeDocumento.find(function(a){return a.id == this},grdDoc.id_tipo);
+							documentos[i].codEMI = $scope.codigosEmi.find(function(a){return a.id == this},grdDoc.id_codEMI);
+						}
+					}
+					$scope.documentos = documentos;
+				})
+			}
+
+		// FIM DE FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
 
 	}
 

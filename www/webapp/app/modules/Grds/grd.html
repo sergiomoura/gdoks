@@ -7,11 +7,15 @@
 			</md-button>
 		</div>
 		<div flex="50" layout="row" layout-align="end center">
-			<md-button class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="goToGrds()">
+			<md-button class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onVisualizarGrdClick()">
+				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">remove_red_eye</md-icon>
+				Visualizar GRD
+			</md-button>
+			<md-button class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onBaixarGrdEmZipClick()">
 				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">archive</md-icon>
 				Baixar GRD em ZIP
 			</md-button>
-			<md-button class="md-raised md-primary" aria-label="Enviar por E-mail" ng-click="goToGrds()">
+			<md-button class="md-raised md-primary" aria-label="Enviar por E-mail" ng-click="onEnviarGrdPorEmailClick()">
 				<md-icon class="material-icons step" aria-label="Enviar por E-mail">mail</md-icon>
 				Enviar por E-mail
 			</md-button>
@@ -149,13 +153,13 @@
 						</md-button>
 						<md-button ng-disabled="grd.documentos_salvos" class="md-fab md-primary" ng-click="salvarDocumentos()">
 							<md-icon class="material-icons step" aria-label="description">cloud_upload</md-icon>
-							<md-tooltip md-direction="bottom">Salvar Documentos</md-tooltip>
+							<md-tooltip class="my-diff-tooltip" md-direction="top" md-visible="!grd.documentos_salvos">Anexar Documentos a GRD</md-tooltip>
 						</md-button>
 					</div>
 					<div class="doc" layout="row" layout-align="start center" ng-repeat="doc in documentos|filter:{added:true,nome:qDir.nome}|orderBy:'nome'">
 						<md-checkbox  ng-model="doc.chk_dir" class="md-primary" flex aria-label="{{doc.nome}}">
-								{{doc.nome}}
-							</md-checkbox>
+							{{doc.nome}}
+						</md-checkbox>
 						<span class="controles_de_doc" flex="none">
 							<span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 								{{doc.nVias}} Via{{doc.nVias!=1?'s':''}}
@@ -178,5 +182,4 @@
 			</md-content>
 		</md-tab>
 	</md-tabs>
-	<pre>{{documentos|json}}</pre>
 </div>
