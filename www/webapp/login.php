@@ -55,8 +55,13 @@
 				$scope.loginData.senha = '';
 				$scope.loginData.empresa = '';
 
-				// dando foco no campo de empresas na TORA. focus directive não funciona com o ng-cloak
-				setTimeout(function(){document.getElementById("empresa").focus();},100);
+				// dando foco nos campos na tora.
+				// focus directive não funciona com o ng-cloak e para funcionar o posicionamento dos labels
+				setTimeout(function(){
+					document.getElementById("senha").focus();
+					document.getElementById("login").focus();
+					document.getElementById("empresa").focus();
+				},100);
 
 				// Determinando valores inciais
 				$scope.loginFail = false;
@@ -81,14 +86,14 @@
 
 							// Guardando os dados do usuário nos cookies
 							$cookies.putObject('user',response.data.user,{path:'/'});
-
+							
 							// Limpando base de dados.
 							var deleteRequest = indexedDB.deleteDatabase("gdoks");
 							deleteRequest.onsuccess = function(evt){
 								// indo para a página principal do aplicativo
 								window.location = "WebGDoks.php";
 							}
-
+							
 							deleteRequest.onerror = function(evt){
 								console.log("Erro ao tentar zerar base de dados.");
 								console.dir(evt);

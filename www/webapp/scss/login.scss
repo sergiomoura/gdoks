@@ -5,48 +5,39 @@
 	margin-left: -220px;
 	top: 50px;
 	font-size: 20px;
-}
 
-img {
-	height: 113px;
-	width: 420px;
-	margin-left: 10px;
-}
+	md-progress-linear{
+		position:absolute;
+		top:124px;
+		width:calc(100% + 1px);
+	}
 
-label{
-	display: block;
-	margin-bottom: 5px;
-}
+	.login{
+		background-color: #FFF;
+		padding: 40px 20px 20px 20px;
+		margin-top: 5px;
+		div{
+			margin-bottom: 10px;
+		}
+		button[type=submit]{
+			display: none;
+		}
+	}
 
-form{
-	padding: 40px 40px 115px 40px;
-margin-top: 5px;
-height: 285px;
-position: relative;
-}
+	img {
+		height: 113px;
+		width: 420px;
+		margin: 0 0 0px 15px;
+	}
 
-input{
-	width: 340px;
-	padding: 10px;
-	font-size: 20px;
-}
+	input:-webkit-autofill {
+		-webkit-box-shadow: 0 0 0 1000px white inset !important;
+		-webkit-text-fill-color: #CCC !important;
+	}
 
-form div{
-	margin-bottom: 10px;
-}
-
-form button{
-	position: absolute;
-	border: none;
-	padding: 10px;
-	width: 150px;
-	right: 38px;
-	font-size: 20px;
-	bottom: 20px;
-}
-
-.loginFail {
-	text-align: center;
-	margin-top: 5px;
-	font-size: 16px;
+	.loginFail {
+		text-align: center;
+		margin-top: 5px;
+		font-size: 16px;
+	}
 }
