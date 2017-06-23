@@ -39,10 +39,15 @@
 		$token = $user->token;
 	}
 
+	// Definindo os nomes dos arquivos do cliente;
+	$FILE_DBKEY = '../../client_data/'.$empresa.'/dbkey.php';
+	$FILE_GRD = '../../client_data/'.$empresa.'/grd.php';
+	$FILE_LOGO = '../../client_data/'.$empresa.'/logo.jpg';
+
 	// criando a conexão
-	if(isset($empresa) && file_exists('../../dbkeys/'.$empresa.'.php')){
+	if(isset($empresa) && file_exists($FILE_DBKEY)){
 		// incluindo arquivo que define $dbkey
-		include('../../dbkeys/'.$empresa.'.php');
+		include($FILE_DBKEY);
 
 		// Criando conexão
 		$db = new DB($dbkey);
@@ -59,6 +64,7 @@
 		http_response_code(403);
 		$response = new response(1,'Sem autorização');
 		$response->flush();
+		die();
 	}
 
 	// definindo função que realiza log
@@ -69,6 +75,81 @@
 		} else {
 			$sql = 'INSERT INTO gdoks_log (id_usuario,id_acao,data,parametros) values (?,?,now(),?)';
 			$result = $db->query($sql,'iis',$idUsuario,$idAcao,$parametros);
+		}
+	}
+
+	// função que mostra o PDF da grd
+	function mostraPdfDaGrd($id_grd,$db){
+		// Lendo informações do cookie;
+		$user = json_decode($_COOKIE['user']);
+		$token = $user->token;
+		$empresa = $user->empresa;
+
+		// Verificando se a grd é da empresa do usuário requisitante
+		$sql = 'SELECT count(*) as ok
+				FROM gdoks_usuarios a
+				INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+				INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+				WHERE token=?
+				  AND validade_do_token>now()
+				  AND c.id=?';
+		$ok = ($db->query($sql,'si',$token,$id_grd)[0]['ok'] == 1);
+
+		if($ok){
+			// Levantando dados de GRD
+			$sql = 'SELECT c.nome AS cliente_nome,
+					       b.nome AS projeto_nome,
+					       a.obs AS obs,
+					       c.contato_nome,
+					       now() AS DATA,
+					       a.codigo
+					FROM gdoks_grds a
+					INNER JOIN gdoks_projetos b ON a.id_projeto=b.id
+					INNER JOIN gdoks_clientes c ON b.id_cliente = c.id
+					WHERE a.id=?';
+			$grd = (object)$db->query($sql,'i',$id_grd)['0'];
+
+			// Levantando dados dos documentos desta grd
+			$sql = 'SELECT c.codigo AS doc_codigo,
+					       d.simbolo AS tipo,
+					       a.nVias,
+					       b.serial AS rev_serial,
+					       e.simbolo AS codEMI,
+					       a.nFolhas,
+					       c.nome AS doc_nome
+					FROM gdoks_grds_x_revisoes a
+					INNER JOIN gdoks_revisoes b ON b.id=a.id_revisao
+					INNER JOIN gdoks_documentos c ON c.id=b.id_documento
+					INNER JOIN gdoks_tipos_de_doc d ON d.id=a.id_tipo
+					INNER JOIN gdoks_codigos_emi e ON e.id=a.id_codEMI
+					WHERE a.id_grd=?';
+			$grd->docs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_grd));
+
+			// Inclui biblioteca que gera PDF
+			include('../../includes/FPDF/fpdf.php');
+			set_include_path('../../includes/FPDF/fonts/');
+
+			// Incluindo arquivo da classe
+			include($GLOBALS['FILE_GRD']);
+
+			// Instanciation of inherited class
+			$pdf = new PDFGrd($empresa,$grd,$user->nome);
+
+			// Enviando headers
+			header('HTTP/1.0 200 OK');
+			header('Cache-Control: public, must-revalidate, max-age=0');
+			header('Pragma: no-cache');
+			header('Content-type: application/pdf');
+			header('Content-Disposition: inline; filename="grd_'.$grd->codigo.'.pdf"');
+			header('Accept-Ranges: bytes');
+			header("Content-Transfer-Encoding: binary");
+
+			// output the file first clean mem
+			ob_clean();
+			$pdf->Output('I','Teste.pdf');
+			exit();
+		} else {
+			echo("Token expirado ou GRD inexistente.");
 		}
 	}
 
@@ -3449,52 +3530,57 @@
 				// Lendo dados
 				$id_grd = 1*$id_grd;
 
-				// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
-				$sql = 'SELECT c.id,
-							   c.id_projeto,
-						       c.codigo,
-						       c.obs,
-						       c.datahora_registro,
-						       c.datahora_enviada,
-						       b.id_cliente
-						FROM gdoks_usuarios a
-						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
-						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
-						WHERE token=?
-						  AND validade_do_token>now()
-						  AND c.id=?';
-				$rs = $db->query($sql,'si',$token,$id_grd);
-
-				if(sizeof($rs) > 0){
-					// GRD existe e usuário está ok. Salvando grd em variável
-					$grd = (object)$rs[0];
-
-					// levantando as revisões que já estão anexadas a esta grd
-					$sql = 'SELECT id_revisao,
-							       id_codEMI,
-							       id_tipo,
-							       nFolhas,
-							       nVias
-							FROM gdoks_grds_x_revisoes
-							WHERE id_grd=?';
-					$rs = $db->query($sql,'i',$grd->id);
-					
-					// Atribuindo revisões a grd
-					$grd->docs = Array();
-					foreach ($rs as $rev) {
-						array_push($grd->docs, $rev);
-					}
-
-					// Enviando resposta para cliente
-					$response = new response(0,'ok');
-					$response->grd = $grd;
-					$response->flush();
-					return;
+				// Vendo se é para mandar os dados ou o PDF
+				if(isset($_GET['view']) && $_GET['view']=='pdf'){
+					mostraPdfDaGrd($id_grd,$db);
 				} else {
-					$app->response->setStatus(401);
-					$response = new response(1,'GRD inexistente ou token expirado.');
-					$response->flush();
-					return;
+					// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
+					$sql = 'SELECT c.id,
+								   c.id_projeto,
+							       c.codigo,
+							       c.obs,
+							       c.datahora_registro,
+							       c.datahora_enviada,
+							       b.id_cliente
+							FROM gdoks_usuarios a
+							INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+							INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+							WHERE token=?
+							  AND validade_do_token>now()
+							  AND c.id=?';
+					$rs = $db->query($sql,'si',$token,$id_grd);
+
+					if(sizeof($rs) > 0){
+						// GRD existe e usuário está ok. Salvando grd em variável
+						$grd = (object)$rs[0];
+
+						// levantando as revisões que já estão anexadas a esta grd
+						$sql = 'SELECT id_revisao,
+								       id_codEMI,
+								       id_tipo,
+								       nFolhas,
+								       nVias
+								FROM gdoks_grds_x_revisoes
+								WHERE id_grd=?';
+						$rs = $db->query($sql,'i',$grd->id);
+						
+						// Atribuindo revisões a grd
+						$grd->docs = Array();
+						foreach ($rs as $rev) {
+							array_push($grd->docs, $rev);
+						}
+
+						// Enviando resposta para cliente
+						$response = new response(0,'ok');
+						$response->grd = $grd;
+						$response->flush();
+						return;
+					} else {
+						$app->response->setStatus(401);
+						$response = new response(1,'GRD inexistente ou token expirado.');
+						$response->flush();
+						return;
+					}	
 				}
 			});
 

@@ -14,7 +14,7 @@
 	}
 
 	// incluindo arquivo dbkey
-	$dbkey_file = '../../dbkeys/'.$EU->empresa.'.php';
+	$dbkey_file = '../../client_data/'.$EU->empresa.'/dbkey.php';
 	if(file_exists($dbkey_file)){
 		include($dbkey_file);
 	} else {

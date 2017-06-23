@@ -304,6 +304,31 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/grds/documentos',grd,httpOptions);		
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.viewGRD = function(id_grd){
+				// Criando um formulário para enviar a requisição pelo arquivo
+				var form = document.createElement("form");
+				form.setAttribute('action',API_ROOT + '/grds/' + id_grd + '?view=pdf');
+				form.setAttribute('method','GET');
+				form.setAttribute('style','display:none');
+				form.setAttribute('target','_blank');
+
+				// adicionando campo
+				var input = document.createElement('input');
+				input.setAttribute('name','view');
+				input.setAttribute('value','pdf');
+
+
+				// adicionando form a dom
+				document.body.appendChild(form);
+				form.appendChild(input);
+
+				// submetendo o form
+				form.submit();
+
+				// removendo o form da dom
+				form.parentNode.removeChild(form);
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

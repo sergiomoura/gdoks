@@ -7,15 +7,15 @@
 			</md-button>
 		</div>
 		<div flex="50" layout="row" layout-align="end center">
-			<md-button class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onVisualizarGrdClick()">
+			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onVisualizarGrdClick()">
 				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">remove_red_eye</md-icon>
 				Visualizar GRD
 			</md-button>
-			<md-button class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onBaixarGrdEmZipClick()">
+			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onBaixarGrdEmZipClick()">
 				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">archive</md-icon>
 				Baixar GRD em ZIP
 			</md-button>
-			<md-button class="md-raised md-primary" aria-label="Enviar por E-mail" ng-click="onEnviarGrdPorEmailClick()">
+			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Enviar por E-mail" ng-click="onEnviarGrdPorEmailClick()">
 				<md-icon class="material-icons step" aria-label="Enviar por E-mail">mail</md-icon>
 				Enviar por E-mail
 			</md-button>

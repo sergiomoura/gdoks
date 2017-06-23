@@ -290,6 +290,11 @@
 			});
 		}
 
+		// Função executada quando se clica no burão para visualizar o GRD
+		$scope.onVisualizarGrdClick = function(){
+			GDoksFactory.viewGRD($scope.grd.id);
+		}
+
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 			// Função que carrega códigos EMI
@@ -452,7 +457,6 @@
 					$scope.documentos = documentos;
 				})
 			}
-
 		// FIM DE FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 
