@@ -231,10 +231,8 @@
 		$app->get('/refresh',function() use ($app,$db,$token){
 			$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
 			if(sizeof($rs) == 0){
-				$sql = 'select token from gdoks_usuarios where id=?';
-				$token_da_base = $db->query($sql,'i',1)[0]['token'];
 				$app->response->setStatus(401);
-				$response = new response(1,'Não renovou token: '.$token.' x '.$token_da_base);
+				$response = new response(1,'Não renovou token: '.$token);
 				$response->flush();
 				return;
 			} else {

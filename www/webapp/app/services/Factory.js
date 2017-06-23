@@ -3,124 +3,128 @@ WebGDoks.factory('GDoksFactory',
 		'$http','$cookies',
 		function($http,$cookies){
 			var GDoksFactory = {};
-			var httpOptions = {headers: {'Authorization': $cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}};
+
+			// Função auxiliar que retorna headers baseada no cooke user = = = = = = = = = = = = = = = = = = = = = = = = =
+			var buildHeaders = function(){
+				return {headers: {'Authorization': $cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}};
+			}
 
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			// Faz requisição para mudar login e senha
 			GDoksFactory.mudaLoginSenha = function(novoLogin,novaSenha){
-				return $http.post(API_ROOT+'/mudaLoginSenha',{'novoLogin':novoLogin,'novaSenha':novaSenha},httpOptions);
+				return $http.post(API_ROOT+'/mudaLoginSenha',{'novoLogin':novoLogin,'novaSenha':novaSenha},buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.refreshToken = function(){
-				return $http.get(API_ROOT+'/refresh',httpOptions);
+				return $http.get(API_ROOT+'/refresh',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.loadUsuarios = function(){
-				return $http.get(API_ROOT+'/usuarios',httpOptions);
+				return $http.get(API_ROOT+'/usuarios',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			// Faz requisição para atualizar o usuario enviado
 			GDoksFactory.atualizarUsuario = function(usuario){
-				return $http.put(API_ROOT+'/usuarios/'+usuario.id,usuario,httpOptions);
+				return $http.put(API_ROOT+'/usuarios/'+usuario.id,usuario,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			// Faz requisição para adicionar novo usuario enviado
 			GDoksFactory.adicionarUsuario = function(usuario){
-				return $http.post(API_ROOT+'/usuarios',usuario,httpOptions);
+				return $http.post(API_ROOT+'/usuarios',usuario,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDisciplinas = function(){
-				return $http.get(API_ROOT+'/disciplinas',httpOptions);
+				return $http.get(API_ROOT+'/disciplinas',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDisciplina = function(id_disciplina){
-				return $http.get(API_ROOT+'/disciplinas/'+id_disciplina,httpOptions);
+				return $http.get(API_ROOT+'/disciplinas/'+id_disciplina,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			// Faz requisição para atualizar o usuario enviado
 			GDoksFactory.atualizarDisciplina = function(disciplina){
-				return $http.put(API_ROOT+'/disciplinas/'+disciplina.id,disciplina,httpOptions);
+				return $http.put(API_ROOT+'/disciplinas/'+disciplina.id,disciplina,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			// Faz requisição para adicionar nova disciplina
 			GDoksFactory.adicionarDisciplina = function(disciplina){
-				return $http.post(API_ROOT+'/disciplinas',disciplina,httpOptions);
+				return $http.post(API_ROOT+'/disciplinas',disciplina,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarSubdisciplina = function(subdisciplina){
-				return $http.put(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/'+subdisciplina.id,subdisciplina,httpOptions);
+				return $http.put(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/'+subdisciplina.id,subdisciplina,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarSubdisciplina = function(subdisciplina){
-				return $http.post(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/',subdisciplina,httpOptions);
+				return $http.post(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/',subdisciplina,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerSubdisciplina = function(subdisciplina){
-				return $http.delete(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/'+subdisciplina.id,httpOptions);
+				return $http.delete(API_ROOT+'/disciplinas/'+subdisciplina.id_disciplina+'/subs/'+subdisciplina.id,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.salvarEspecialistas = function(id_disciplina,ids_especialistas){
-				return $http.put(API_ROOT+'/disciplinas/'+id_disciplina+'/especialistas/',ids_especialistas,httpOptions);
+				return $http.put(API_ROOT+'/disciplinas/'+id_disciplina+'/especialistas/',ids_especialistas,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarValidador = function(id_disciplina,id_usuario,tipo){
-				return $http.post(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/',{"idu":id_usuario,"tipo":tipo},httpOptions);
+				return $http.post(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/',{"idu":id_usuario,"tipo":tipo},buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerValidador = function(id_disciplina,id_usuario){
-				return $http.delete(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/'+id_usuario,httpOptions);
+				return $http.delete(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/'+id_usuario,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.salvarValidadores = function(id_disciplina,ids_validadores){
-				return $http.put(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/',ids_validadores,httpOptions);
+				return $http.put(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/',ids_validadores,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjetos = function(){
-				return $http.get(API_ROOT+'/projetos',httpOptions);
+				return $http.get(API_ROOT+'/projetos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjeto = function(id){
-				return $http.get(API_ROOT+'/projetos/'+id,httpOptions);
+				return $http.get(API_ROOT+'/projetos/'+id,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarProjeto = function(projeto){
-				return $http.put(API_ROOT+'/projetos/'+projeto.id,projeto,httpOptions);
+				return $http.put(API_ROOT+'/projetos/'+projeto.id,projeto,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarProjeto = function(projeto){
-				return $http.post(API_ROOT+'/projetos',projeto,httpOptions);
+				return $http.post(API_ROOT+'/projetos',projeto,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarArea = function(area){
-				return $http.post(API_ROOT+'/projetos/'+area.id_projeto+'/areas/',area,httpOptions);
+				return $http.post(API_ROOT+'/projetos/'+area.id_projeto+'/areas/',area,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarArea = function(area){
-				return $http.put(API_ROOT+'/projetos/'+area.id_projeto+'/areas/'+area.id,area,httpOptions);
+				return $http.put(API_ROOT+'/projetos/'+area.id_projeto+'/areas/'+area.id,area,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerArea = function(area){
-				return $http.delete(API_ROOT+'/projetos/'+area.id_projeto+'/areas/'+area.id,httpOptions);
+				return $http.delete(API_ROOT+'/projetos/'+area.id_projeto+'/areas/'+area.id,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getAreas = function(id_projeto){
-				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/areas',httpOptions);
+				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/areas',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarSubarea = function(subarea){
-				return $http.post(API_ROOT+'/subareas/',subarea,httpOptions);
+				return $http.post(API_ROOT+'/subareas/',subarea,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarSubarea = function(subarea){
-				return $http.put(API_ROOT+'/subareas/'+subarea.id,subarea,httpOptions);
+				return $http.put(API_ROOT+'/subareas/'+subarea.id,subarea,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerSubarea = function(subarea){
-				return $http.delete(API_ROOT+'/subareas/'+subarea.id,httpOptions);
+				return $http.delete(API_ROOT+'/subareas/'+subarea.id,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getSubareas = function(id_projeto,id_area){
-				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/areas/'+id_area+'/subareas',httpOptions);
+				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/areas/'+id_area+'/subareas',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.salvarDAOs = function(){
@@ -128,51 +132,51 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerDAO = function(dao){
-				return $http.delete(API_ROOT+'/projetos/'+dao.id_projeto+'/daos/'+dao.id,httpOptions);
+				return $http.delete(API_ROOT+'/projetos/'+dao.id_projeto+'/daos/'+dao.id,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.alterarDocumento = function(documento){
-				return $http.put(API_ROOT+'/projetos/'+documento.id_projeto+'/documentos/'+documento.id,documento,httpOptions);
+				return $http.put(API_ROOT+'/projetos/'+documento.id_projeto+'/documentos/'+documento.id,documento,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarDocumento = function(documento){
-				return $http.post(API_ROOT+'/projetos/'+documento.id_projeto+'/documentos/',documento,httpOptions);
+				return $http.post(API_ROOT+'/projetos/'+documento.id_projeto+'/documentos/',documento,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerDocumento = function(documento){
-				return $http.delete(API_ROOT+'/projetos/'+documento.id_projeto+'/documentos/'+documento.id,httpOptions);
+				return $http.delete(API_ROOT+'/projetos/'+documento.id_projeto+'/documentos/'+documento.id,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getClientes = function(){
-				return $http.get(API_ROOT+'/clientes',httpOptions);
+				return $http.get(API_ROOT+'/clientes',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getCliente = function(id){
-				return $http.get(API_ROOT+'/clientes/'+id,httpOptions);
+				return $http.get(API_ROOT+'/clientes/'+id,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarCliente = function(cliente){
-				return $http.put(API_ROOT+'/clientes/'+cliente.id,cliente,httpOptions);
+				return $http.put(API_ROOT+'/clientes/'+cliente.id,cliente,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarCliente = function(cliente){
-				return $http.post(API_ROOT+'/clientes',cliente,httpOptions);
+				return $http.post(API_ROOT+'/clientes',cliente,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDocumentosParaValidar = function(){
-				return $http.get(API_ROOT+'/documentos/paraValidar',httpOptions);
+				return $http.get(API_ROOT+'/documentos/paraValidar',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDocumentosDoProjeto = function(id_projeto){
-				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/documentos/',httpOptions);
+				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/documentos/',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDocumentos = function(id_projeto){
-				return $http.get(API_ROOT+'/documentos',httpOptions);
+				return $http.get(API_ROOT+'/documentos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDocumento = function(id_documento){
-				return $http.get(API_ROOT+'/documentos/'+id_documento,httpOptions);
+				return $http.get(API_ROOT+'/documentos/'+id_documento,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.downloadArquivo = function(idArquivo){
@@ -201,19 +205,19 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.validarProgresso = function(idDocumento,progresso){
-				return $http.post(API_ROOT+'/documentos/'+idDocumento+'/validacaoDeProgresso', progresso,httpOptions);
+				return $http.post(API_ROOT+'/documentos/'+idDocumento+'/validacaoDeProgresso', progresso,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.lockDoc = function(idDoc){
-				return $http.get(API_ROOT+'/documentos/'+idDoc+'/lock',httpOptions);	
+				return $http.get(API_ROOT+'/documentos/'+idDoc+'/lock',buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.delockDoc = function(idDoc){
-				return $http.get(API_ROOT+'/documentos/'+idDoc+'/delock',httpOptions);	
+				return $http.get(API_ROOT+'/documentos/'+idDoc+'/delock',buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getAcoes = function(){
-				return $http.get(API_ROOT+'/acoes',httpOptions);		
+				return $http.get(API_ROOT+'/acoes',buildHeaders());		
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getLogs = function(q){
@@ -222,27 +226,27 @@ WebGDoks.factory('GDoksFactory',
 				if(!isNaN(q.aid)){query.push(q.aid)};
 				query.push(q.de.toJSON().substr(0,10));
 				query.push(q.ate.toJSON().substr(0,10));
-				return $http.get(API_ROOT+'/logs/'+query.join('/'),httpOptions);		
+				return $http.get(API_ROOT+'/logs/'+query.join('/'),buildHeaders());		
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getCargos = function(){
-				return $http.get(API_ROOT+'/cargos',httpOptions);
+				return $http.get(API_ROOT+'/cargos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarCargo = function(cargo){
-				return $http.put(API_ROOT+'/cargos/'+cargo.id,cargo,httpOptions);
+				return $http.put(API_ROOT+'/cargos/'+cargo.id,cargo,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.inserirCargo = function(cargo){
-				return $http.post(API_ROOT+'/cargos',cargo,httpOptions);
+				return $http.post(API_ROOT+'/cargos',cargo,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.removerCargo = function(idCargo){
-				return $http.delete(API_ROOT+'/cargos/'+idCargo,httpOptions);
+				return $http.delete(API_ROOT+'/cargos/'+idCargo,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getTamanhosDePapel = function(){
-				return $http.get(API_ROOT+'/tamanhosDePapel',httpOptions);	
+				return $http.get(API_ROOT+'/tamanhosDePapel',buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.baixarPDA = function(id_pda){
@@ -280,7 +284,7 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarGrd = function(grd){
-				return $http.post(API_ROOT+'/grds', grd,httpOptions);
+				return $http.post(API_ROOT+'/grds', grd,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarGrd = function(grd){
@@ -289,19 +293,19 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getGrd = function(id_grd){
-				return $http.get(API_ROOT+'/grds/'+id_grd,httpOptions);
+				return $http.get(API_ROOT+'/grds/'+id_grd,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getCodigosEmi = function(){
-				return $http.get(API_ROOT+'/emis',httpOptions);
+				return $http.get(API_ROOT+'/emis',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getTiposDeDocumento = function(){
-				return $http.get(API_ROOT+'/tiposDeDocumento',httpOptions);	
+				return $http.get(API_ROOT+'/tiposDeDocumento',buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.postGrdDocs = function(grd){
-				return $http.post(API_ROOT+'/grds/documentos',grd,httpOptions);		
+				return $http.post(API_ROOT+'/grds/documentos',grd,buildHeaders());		
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.viewGRD = function(id_grd){

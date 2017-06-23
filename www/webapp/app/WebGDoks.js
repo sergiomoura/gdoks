@@ -431,31 +431,24 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		GDoksFactory.refreshToken()
 		.success(
 			function(response){
-				console.warn("Response do refresh token");
 				var user = $cookies.getObject('user');
 				user.token = response.token;
 				$cookies.putObject('user',user,{path:'/'});
-				
-				console.warn(response);
-				console.warn(user);
-				console.warn($cookies.getObject('user'));
-
 			}
 		)
 		.error(
 			function(error){
-				console.warn('Não renovou o token');
+				console.warn('Token não foi renovado!');
 				console.warn(error);
-				$interval.cancel(idInterval);
-				//$cookies.remove('user',{path:'/'});
-				//indexedDB.deleteDatabase('gdoks');
-				//window.location="/";
+				$cookies.remove('user',{path:'/'});
+				indexedDB.deleteDatabase('gdoks');
+				window.location="/";
 			}
 		);
 	}
 
 	// Acionando timer que renova o token de tempo em tempo
-	var idInterval = $interval(refreshToken,TOKEN_REFRESH_IN);
+	$interval(refreshToken,TOKEN_REFRESH_IN);
 	
 	$scope.toggleMenu = function(){
 		$mdSidenav('menu_principal').toggle();
