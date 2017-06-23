@@ -738,6 +738,51 @@
   width: 600px;
   padding: 20px; }
 
+#grds_container {
+  position: relative; }
+  #grds_container .controles {
+    width: 400px;
+    padding: 10px;
+    position: fixed; }
+    #grds_container .controles .hint {
+      color: #CCC;
+      font-size: 12px;
+      position: absolute;
+      top: 33px;
+      left: 4px; }
+    #grds_container .controles md-datepicker .md-datepicker-input {
+      width: 180px; }
+    #grds_container .controles md-input-container .md-errors-spacer {
+      min-height: 0 !important; }
+    #grds_container .controles .paginacao .md-button {
+      width: 12%;
+      min-width: 0px; }
+    #grds_container .controles .input-container-documento {
+      position: relative;
+      top: -10px; }
+  #grds_container .resultados_container {
+    margin: 40px 0 0 410px;
+    width: calc(100% - 400px); }
+    #grds_container .resultados_container .resultado {
+      cursor: pointer;
+      padding: 12px;
+      margin: 10px 0;
+      width: 100%; }
+      #grds_container .resultados_container .resultado > div:first-child {
+        margin-bottom: 10px; }
+    #grds_container .resultados_container .resultado_item {
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 10px; }
+      #grds_container .resultados_container .resultado_item label {
+        display: block;
+        font-size: 10px;
+        color: #DDD; }
+      #grds_container .resultados_container .resultado_item span {
+        font-size: 12px; }
+    #grds_container .resultados_container .resultado_item:last-child {
+      margin-right: 0; }
+
 #logs_container {
   padding-top: 20px;
   position: relative; }

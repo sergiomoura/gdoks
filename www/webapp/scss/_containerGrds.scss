@@ -1,0 +1,63 @@
+#grds_container {
+	$leftWidth:400px;
+	position: relative;
+	.controles {
+		width: $leftWidth;
+		padding: 10px;
+		position: fixed;
+		.hint{
+			color:#CCC;
+			font-size: 12px;
+			position: absolute;
+			top: 33px;
+			left: 4px;
+		}
+		md-datepicker {
+			.md-datepicker-input{
+				width: 180px;
+			}			
+		}
+		md-input-container .md-errors-spacer {
+			min-height: 0 !important;
+		}
+		.paginacao{
+			.md-button{
+				width: 12%;
+				min-width: 0px;
+			}
+		}
+		.input-container-documento{
+			position: relative;
+			top: -10px;
+		}
+	}
+	.resultados_container{
+		margin: 40px 0 0 ($leftWidth + 10px);
+		width: calc(100% - 400px);
+		.resultado{
+			cursor: pointer;
+			padding: 12px;
+			margin: 10px 0;
+			&>div:first-child{
+				margin-bottom: 10px;
+			}
+			width: 100%;
+		}
+		.resultado_item{
+			display: inline-block;
+			vertical-align: top;
+			margin-right: 10px;
+			label {
+				display: block;
+				font-size: 10px;
+				color: #DDD;
+			}
+			span{
+				font-size: 12px;
+			}
+		}
+		.resultado_item:last-child{
+			margin-right: 0;
+		}
+	}
+}

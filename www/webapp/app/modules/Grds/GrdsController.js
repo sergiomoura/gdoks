@@ -4,7 +4,97 @@
 
 	// Criando função controller de Grds
 	var GrdsController = function($scope){
-		console.log('Módulo Grds carregado...');
+
+		// Iniciando as variáveis
+		$scope.clientes = [];
+		$scope.projetosListados = [];
+		var projetos = [];
+		$scope.nPaginas = 10;
+		$scope.q = {
+			id_cliente:0,
+			id_projeto:0,
+			enviada:2,
+			pagAtual:4
+		}
+
+		// Carregando dados
+		loadClientes();
+		loadProjetos();
+
+		// FUNÇÕES DE COMUNICAÇÃO COM O SERVIDOR = = = = = = = = = = = = = = = = = = = = = = = =
+		function buscar(){
+			console.warn('buscando...');
+			console.dir($scope.q);
+		}
+
+		// FUNÇÕES DE RESPOSTA A INTERFACE = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		$scope.onClienteChange = function(){
+			$scope.projetosListados = projetos.filter(
+				function(a){
+					return (this==0?true:a.id_cliente == this);
+				},$scope.q.id_cliente
+			);
+		}
+
+		$scope.onFormSubmit = function(){
+			buscar();
+		}
+
+		$scope.onBuscarClick = function(){
+			buscar();
+		}
+
+		$scope.onPreviousPageClick = function(){
+			if($scope.q.pagAtual > 1){
+				$scope.q.pagAtual--;
+				buscar();
+			}
+		}
+
+		$scope.onNextPageClick = function(){
+			if($scope.q.pagAtual < $scope.nPaginas){
+				$scope.q.pagAtual++;
+				buscar();
+			}
+		}
+
+		$scope.onFirstPageClick = function(){
+			if($scope.q.pagAtual > 1){
+				$scope.q.pagAtual=1;
+				buscar();
+			}	
+		}
+
+		$scope.onLastPageClick = function(){
+			if($scope.q.pagAtual < $scope.nPaginas){
+				$scope.q.pagAtual=$scope.nPaginas;
+				buscar();
+			}	
+		}
+
+		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		// função que carrega clientes da base local
+		function loadClientes(){
+			indexedDB.open('gdoks').onsuccess= function(evt){
+				evt.target.result.transaction('clientes').objectStore('clientes').getAll().onsuccess = function(evt){
+					$scope.clientes = evt.target.result;
+				}
+			}
+		}
+
+		// função que carrega projetos da base local
+		function loadProjetos(){
+			indexedDB.open('gdoks').onsuccess= function(evt){
+				evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
+					projetos = evt.target.result;
+					$scope.projetosListados = projetos;
+					$scope.onClienteChange();
+					$scope.$apply();
+				}
+			}
+		}
+
+		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 	}
 
 	// Criando função controller de Grds
@@ -458,8 +548,6 @@
 				})
 			}
 		// FIM DE FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-
-
 	}
 
 	// Atribuindo função controller ao módulo
