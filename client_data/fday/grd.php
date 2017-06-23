@@ -1,11 +1,13 @@
 <?php
 	class PDFGrd extends FPDF {
 		// Construtor
-		function __construct($empresa,$grd,$resp_envio){
+		function __construct($empresa,$grd,$resp_envio,$codigosEmi,$tiposDeDocumento){
 			parent::__construct();
 			$this->grd = $grd;
 			$this->empresa = $empresa;
 			$this->resp_envio = $resp_envio;
+			$this->codigosEmi = $codigosEmi;
+			$this->tiposDeDocumento = $tiposDeDocumento;
 			$this->titles = json_decode('[
 				{"titulo":"Item","width":15},
 				{"titulo":"Nº Documento","width":50},
@@ -85,42 +87,29 @@
 		    // Define fonte
 		    $this->SetFont('Helvetica','',8);
 
+		    // Unindo os vetores para o loop
+		    $footerData = array_merge($this->codigosEmi,$this->tiposDeDocumento);
+
+		    // Definindo parâmetros para a tabela do rodape
+		    $nColunas = 4;
+		    $wColuna = 45;
+		    $hColuna = 5;
+		    $xMargin = 12;
+		    $hLn = 4;
+
 		    // Começa a escrever no rodapé
 		    $this->SetXY(12,-56);
 		    $this->SetFont('Helvetica','',8);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Ln(4);
-		    $this->SetX(12);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Ln(4);
-		    $this->SetX(12);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Ln(4);
-		    $this->SetX(12);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Ln(4);
-		    $this->SetX(12);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
-		    $this->Cell(37,5,utf8_decode("AP=Para Aprovação"),0);
+
+		    // O loop
+		    foreach ($footerData as $i => $data) {
+		    	$this->Cell($wColuna,$hColuna,utf8_decode($data->simbolo.'='.$data->nome),0);
+		    	if( ($i+1) % $nColunas == 0){
+		    		$this->Ln($hLn);
+		    		$this->SetX($xMargin);
+		    	}
+		    }
+		    
 		    $this->SetXY(10,-20);
 		    $this->Cell(0,5,utf8_decode("Recebi os documentos relacionados:  ______________________________________________  Data :____/____/____"),0,0,'C');
 		    $this->SetFont('Helvetica','',6);

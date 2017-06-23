@@ -86,16 +86,20 @@
 		$empresa = $user->empresa;
 
 		// Verificando se a grd é da empresa do usuário requisitante
-		$sql = 'SELECT count(*) as ok
+		$sql = 'SELECT a.id_empresa
 				FROM gdoks_usuarios a
 				INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
 				INNER JOIN gdoks_grds c ON c.id_projeto=b.id
 				WHERE token=?
 				  AND validade_do_token>now()
 				  AND c.id=?';
-		$ok = ($db->query($sql,'si',$token,$id_grd)[0]['ok'] == 1);
+		$rs = $db->query($sql,'si',$token,$id_grd);
+		$ok = (sizeof($rs) == 1);
 
 		if($ok){
+			// Guardando o id da empresa
+			$id_empresa = $rs[0]['id_empresa'];
+
 			// Levantando dados de GRD
 			$sql = 'SELECT c.nome AS cliente_nome,
 					       b.nome AS projeto_nome,
@@ -125,6 +129,14 @@
 					WHERE a.id_grd=?';
 			$grd->docs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_grd));
 
+			// Levantando códigos EMI para compor o rodapé da GRD
+			$sql = 'SELECT simbolo,nome FROM gdoks_codigos_emi WHERE id_empresa=?';
+			$codigosEmi = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$id_empresa));
+
+			// Levantando tipos de documento para compor o rodapé da GRD
+			$sql = 'SELECT simbolo,nome FROM gdoks_tipos_de_doc WHERE id_empresa=?';
+			$tiposDeDocumento = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$id_empresa));
+
 			// Inclui biblioteca que gera PDF
 			include('../../includes/FPDF/fpdf.php');
 			set_include_path('../../includes/FPDF/fonts/');
@@ -133,7 +145,7 @@
 			include($GLOBALS['FILE_GRD']);
 
 			// Instanciation of inherited class
-			$pdf = new PDFGrd($empresa,$grd,$user->nome);
+			$pdf = new PDFGrd($empresa,$grd,$user->nome,$codigosEmi,$tiposDeDocumento);
 
 			// Enviando headers
 			header('HTTP/1.0 200 OK');
