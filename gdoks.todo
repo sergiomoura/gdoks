@@ -2,9 +2,8 @@ GDoks:
   Para Hoje:
     ✔ Terminar Rodapé da GRD @done (17-06-23 07:44)
     ✔ Recuperar aparência da tela de entrada @done (17-06-23 08:22)
-    ☐ Resolver problema do Token expiando....
+    ✔ Resolver problema do Token expiando.... @done (17-06-23 11:35)
     ☐ Limitar campo de nome de documento para que fique condizente com o limite estabgelecido pela BD
-    ☐ Recuperar aparência da tela de entrada
     ☐ Quebra de linha no PDF para dados longos
     ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
     ☐ Baixar para revisão deve registrar no log
