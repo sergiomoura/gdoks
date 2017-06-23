@@ -3,7 +3,7 @@
 	position: relative;
 	.controles {
 		width: $leftWidth;
-		padding: 10px;
+		padding: 30px 5px 0 0;
 		position: fixed;
 		.hint{
 			color:#CCC;
@@ -20,12 +20,7 @@
 		md-input-container .md-errors-spacer {
 			min-height: 0 !important;
 		}
-		.paginacao{
-			.md-button{
-				width: 12%;
-				min-width: 0px;
-			}
-		}
+		
 		.input-container-documento{
 			position: relative;
 			top: -10px;
@@ -58,6 +53,16 @@
 		}
 		.resultado_item:last-child{
 			margin-right: 0;
+		}
+		.paginacao{
+			width: 400px;
+			position: relative;
+			left: 50%;
+			margin-left: -200px;
+			.md-button{
+				width: 12%;
+				min-width: 0px;
+			}
 		}
 	}
 }

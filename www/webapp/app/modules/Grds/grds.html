@@ -57,95 +57,69 @@
 				</md-input-container>
 			</div>
 			<md-button ng-click="onBuscarClick()" class="md-raised md-primary" aria-label="Buscar"><md-icon class="material-icons step" aria-label="Buscar">search</md-icon>Buscar</md-button>
-			<div class="paginacao" layout="row">
-				
-				<md-button
-					class="md-icon md-mini"
-					ng-disabled="q.pagAtual==1"
-					ng-click="onFirstPageClick()">
-					<md-icon class="material-icons step" aria-label="">skip_previous</md-icon>
-				</md-button>
-				
-				<md-button
-					class="md-icon md-mini"
-					class="material-icons step"
-					aria-label=""
-					ng-disabled="q.pagAtual==1"
-					ng-click="onPreviousPageClick()">
-						<md-icon>fast_rewind</md-icon>
-				</md-button>
-				
-				<md-button
-					class="md-icon md-mini"
-					ng-disabled="true"><md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
-				</md-button>
-
-				<md-button
-					class="md-icon md-mini"
-					ng-disabled="q.pagAtual==1"
-					ng-click="onPreviousPageClick()">{{q.pagAtual==1?'':q.pagAtual-1}}
-				</md-button>
-
-				<md-button
-					class="md-icon md-mini selected"
-					ng-disabled="true">{{q.pagAtual}}
-				</md-button>
-
-				<md-button
-					class="md-icon md-mini"
-					ng-disabled="q.pagAtual==nPaginas"
-					ng-click="onNextPageClick()">{{q.pagAtual==nPaginas?'':q.pagAtual+1}}
-				</md-button>
-				
-				<md-button
-					class="md-icon md-mini"
-					ng-disabled="true">
-						<md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
-				</md-button>
-
-				<md-button
-					class="md-icon md-mini"
-					ng-disabled="q.pagAtual==nPaginas"
-					ng-click="onNextPageClick()">
-						<md-icon class="material-icons step" aria-label="">fast_forward</md-icon>
-				</md-button>
-
-				<md-button
-					class="md-icon md-mini"
-					ng-disabled="q.pagAtual==nPaginas"
-					ng-click="onLastPageClick()">
-						<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
-				</md-button>
-			</div>
 		</div>
 		<button type="submit" style="display: none"></button>
 	</form>
 	<div class="resultados_container" layout="column">
-		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
+		<div class="paginacao" layout="row" flex="none">
+				
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==1"
+				ng-click="onFirstPageClick()">
+				<md-icon class="material-icons step" aria-label="">skip_previous</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				class="material-icons step"
+				aria-label=""
+				ng-disabled="q.pagAtual==1"
+				ng-click="onPreviousPageClick()">
+					<md-icon>fast_rewind</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true"><md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==1"
+				ng-click="onPreviousPageClick()">{{q.pagAtual==1?'':q.pagAtual-1}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini selected"
+				ng-disabled="true">{{q.pagAtual}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==nPaginas"
+				ng-click="onNextPageClick()">{{q.pagAtual==nPaginas?'':q.pagAtual+1}}
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true">
+					<md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==nPaginas"
+				ng-click="onNextPageClick()">
+					<md-icon class="material-icons step" aria-label="">fast_forward</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==nPaginas"
+				ng-click="onLastPageClick()">
+					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
+			</md-button>
 		</div>
 		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
 			<div layout="row" layout-align="space-between start">
@@ -199,161 +173,65 @@
 				</div>
 			</div>
 		</div>
-		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
-		</div>
-		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
-		</div>
-		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
-		</div>
-		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
-		</div>
-		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
-		</div>
-		<div class="resultado bloco_conteudo" md-whiteframe="1dp" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
+		<div class="paginacao" layout="row" flex="none">
+				
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==1"
+				ng-click="onFirstPageClick()">
+				<md-icon class="material-icons step" aria-label="">skip_previous</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				class="material-icons step"
+				aria-label=""
+				ng-disabled="q.pagAtual==1"
+				ng-click="onPreviousPageClick()">
+					<md-icon>fast_rewind</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true"><md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==1"
+				ng-click="onPreviousPageClick()">{{q.pagAtual==1?'':q.pagAtual-1}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini selected"
+				ng-disabled="true">{{q.pagAtual}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==nPaginas"
+				ng-click="onNextPageClick()">{{q.pagAtual==nPaginas?'':q.pagAtual+1}}
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true">
+					<md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==nPaginas"
+				ng-click="onNextPageClick()">
+					<md-icon class="material-icons step" aria-label="">fast_forward</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="q.pagAtual==nPaginas"
+				ng-click="onLastPageClick()">
+					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
+			</md-button>
 		</div>
 	</div>
 </div>
