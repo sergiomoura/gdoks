@@ -2,6 +2,7 @@ GDoks:
   Para Hoje:
     ✔ Terminar Rodapé da GRD @done (17-06-23 07:44)
     ☐ Recuperar aparência da tela de entrada
+    ☐ Resolver problema do Token expiando....
     ☐ Limitar campo de nome de documento para que fique condizente com o limite estabgelecido pela BD
     ☐ Recuperar aparência da tela de entrada
     ☐ Quebra de linha no PDF para dados longos

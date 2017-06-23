@@ -67,13 +67,13 @@
 			$alturaDaLinha = 5;
 			foreach ($this->grd->docs as $i => $doc) {
 				$this->Cell($this->titles[0]->width,$alturaDaLinha,($i+1)			,1,0,'C');
-				$this->Cell($this->titles[1]->width,$alturaDaLinha,$doc->doc_codigo	,1,0,'C');
-				$this->Cell($this->titles[2]->width,$alturaDaLinha,$doc->tipo		,1,0,'C');
-				$this->Cell($this->titles[3]->width,$alturaDaLinha,$doc->nVias 		,1,0,'C');
-				$this->Cell($this->titles[4]->width,$alturaDaLinha,$doc->rev_serial	,1,0,'C');
-				$this->Cell($this->titles[5]->width,$alturaDaLinha,$doc->codEMI		,1,0,'C');
-				$this->Cell($this->titles[6]->width,$alturaDaLinha,$doc->nFolhas 	,1,0,'C');
-				$this->Cell($this->titles[7]->width,$alturaDaLinha,$doc->doc_nome	,1,0,'C');
+				$this->Cell($this->titles[1]->width,$alturaDaLinha,utf8_decode($doc->doc_codigo	),1,0,'C');
+				$this->Cell($this->titles[2]->width,$alturaDaLinha,utf8_decode($doc->tipo		),1,0,'C');
+				$this->Cell($this->titles[3]->width,$alturaDaLinha,utf8_decode($doc->nVias 		),1,0,'C');
+				$this->Cell($this->titles[4]->width,$alturaDaLinha,utf8_decode($doc->rev_serial	),1,0,'C');
+				$this->Cell($this->titles[5]->width,$alturaDaLinha,utf8_decode($doc->codEMI		),1,0,'C');
+				$this->Cell($this->titles[6]->width,$alturaDaLinha,utf8_decode($doc->nFolhas 	),1,0,'C');
+				$this->Cell($this->titles[7]->width,$alturaDaLinha,utf8_decode($doc->doc_nome	),1,0,'C');
 				$this->Ln();
 			}
 		}
