@@ -84,7 +84,7 @@ WebGDoks.config(
 			'/grds/:id',
 			{
 				controller: 'GrdController',
-				templateUrl: 'app/modules/grds/grd.html'
+				templateUrl: 'app/modules/Grds/grd.html'
 			}
 		)
 		.when(
