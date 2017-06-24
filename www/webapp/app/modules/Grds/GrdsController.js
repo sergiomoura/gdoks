@@ -22,9 +22,9 @@
 		loadProjetos();
 
 		// FUNÇÕES DE COMUNICAÇÃO COM O SERVIDOR = = = = = = = = = = = = = = = = = = = = = = = =
-		function buscar(){
+		function buscar(q){
 			console.warn('buscando...');
-			console.dir($scope.q);
+			console.dir(q);
 		}
 
 		// FUNÇÕES DE RESPOSTA A INTERFACE = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -37,11 +37,11 @@
 		}
 
 		$scope.onFormSubmit = function(){
-			buscar();
+			buscar($scope.q);
 		}
 
 		$scope.onBuscarClick = function(){
-			buscar();
+			buscar($scope.q);
 		}
 
 		$scope.onPreviousPageClick = function(){

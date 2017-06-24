@@ -1,9 +1,10 @@
 GDoks:
   Para Hoje:
-    ✔ Terminar Rodapé da GRD @done (17-06-23 07:44)
-    ✔ Recuperar aparência da tela de entrada @done (17-06-23 08:22)
-    ✔ Resolver problema do Token expiando.... @done (17-06-23 11:35)
-    ✔ Limitar campo de nome de documento para que fique condizente com o limite estabgelecido pela BD @done (17-06-23 11:44)
+    ☐ Criar script sql que limpa a base de dados
+    ☐ Criar scripts de bumb data e de disciplinas
+    ☐ Fazer busca de GRDs funcionar
+    ☐ Otimizar página de documentos para grande volume de dados
+    ☐ Otimizar página de projetos para grande volume de dados
     ☐ Quebra de linha no PDF para dados longos
     ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
     ☐ Baixar para revisão deve registrar no log
@@ -20,9 +21,7 @@ GDoks:
     ☐ Listar GRDs
       ☐ Fazer desenho de tela html
       ☐ Dar funcionalidade a tela
-    ✔ Gerar GRDs @done (17-06-23 06:39)
-    ✔ Alterar GRD @done (17-06-23 06:40)
-    ☐ Submeter GRD
+    ✔ Submeter GRD @done (17-06-24 07:10)
     ☐ Buscar GRDs
     ☐ Registrar Retorno de GRD
       ☐ Desenhar tela de registro de retorno de GRD
@@ -70,6 +69,12 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Limitar campo de nome de documento para que fique condizente com o limite estabgelecido pela BD @done (17-06-23 11:44) @project(GDoks / Para Hoje)
+ ✔ Resolver problema do Token expiando.... @done (17-06-23 11:35) @project(GDoks / Para Hoje)
+ ✔ Recuperar aparência da tela de entrada @done (17-06-23 08:22) @project(GDoks / Para Hoje)
+ ✔ Terminar Rodapé da GRD @done (17-06-23 07:44) @project(GDoks / Para Hoje)
+ ✔ Alterar GRD @done (17-06-23 06:40) @project(GDoks / Gerenciamento de GRDs)
+ ✔ Gerar GRDs @done (17-06-23 06:39) @project(GDoks / Gerenciamento de GRDs)
  ✔ Ao clicar no sair tem que apagar o cookie. Testar digitando endereço de página interna. @done (17-06-19 09:34) @project(GDoks / BUGS Avulsos)
  ✔ Cadastro de áreas e subáreas de projeto, botão salvar não pode estar discponível com form inválido @done (17-06-19 04:38) @project(GDoks / BUGS Avulsos)
  ✔ Deixar com look & feel de Material Design @done (17-06-19 04:37) @project(GDoks / BUGS Avulsos)

@@ -742,8 +742,10 @@
   position: relative; }
   #grds_container .controles {
     width: 400px;
-    padding: 30px 5px 0 0;
-    position: fixed; }
+    margin-top: 30px;
+    padding: 15px;
+    position: fixed;
+    background-color: #FFF; }
     #grds_container .controles .hint {
       color: #CCC;
       font-size: 12px;
@@ -762,11 +764,16 @@
     width: calc(100% - 400px); }
     #grds_container .resultados_container .resultado {
       cursor: pointer;
-      padding: 12px;
-      margin: 10px 0;
+      padding: 20px;
+      margin: 0px 0;
+      border-top: 1px solid #DDD;
       width: 100%; }
       #grds_container .resultados_container .resultado > div:first-child {
         margin-bottom: 10px; }
+    #grds_container .resultados_container .resultado:nth-child(2) {
+      border-top: none; }
+    #grds_container .resultados_container .resultado:hover {
+      background-color: #FFF; }
     #grds_container .resultados_container .resultado_item {
       display: inline-block;
       vertical-align: top;

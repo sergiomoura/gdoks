@@ -3,8 +3,10 @@
 	position: relative;
 	.controles {
 		width: $leftWidth;
-		padding: 30px 5px 0 0;
+		margin-top: 30px;
+		padding: 15px;
 		position: fixed;
+		background-color: #FFF;
 		.hint{
 			color:#CCC;
 			font-size: 12px;
@@ -31,12 +33,19 @@
 		width: calc(100% - 400px);
 		.resultado{
 			cursor: pointer;
-			padding: 12px;
-			margin: 10px 0;
+			padding: 20px;
+			margin: 0px 0;
+			border-top: 1px solid #DDD;
 			&>div:first-child{
 				margin-bottom: 10px;
 			}
 			width: 100%;
+		}
+		.resultado:nth-child(2){
+			border-top:none;
+		}
+		.resultado:hover{
+			background-color: #FFF;
 		}
 		.resultado_item{
 			display: inline-block;
