@@ -312,7 +312,7 @@
 						FROM gdoks_usuarios a
 						INNER JOIN
 						  (SELECT id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 							ORDER by a.nome';
 				$response = new response(0,'ok');
@@ -331,12 +331,12 @@
 						FROM (
 							SELECT
 								id,id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 							SELECT
 								id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
@@ -428,7 +428,7 @@
 						FROM gdoks_disciplinas a
 						INNER JOIN
 						  (SELECT id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 							ORDER by a.nome';
 				$disciplinas = array_map(function($a){return (object)$a;}, $db->query($sql,'s',$token));
@@ -521,12 +521,12 @@
 						FROM
 						  ( SELECT id,
 						           id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
 						  ( SELECT id_empresa
-						   FROM gdoks.gdoks_disciplinas
+						   FROM gdoks_disciplinas
 						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
@@ -595,12 +595,12 @@
 						FROM
 						  ( SELECT id,
 						           id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
 						  ( SELECT id_empresa
-						   FROM gdoks.gdoks_disciplinas
+						   FROM gdoks_disciplinas
 						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
 				
 				$rs = $db->query($sql,'si',$token,$id)[0];
@@ -687,7 +687,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -730,7 +730,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -782,7 +782,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -825,7 +825,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -875,7 +875,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -921,7 +921,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -967,7 +967,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1018,7 +1018,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1064,7 +1064,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1129,12 +1129,12 @@
 						FROM
 						  ( SELECT id,
 						           id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
 						  ( SELECT id_empresa
-						   FROM gdoks.gdoks_projetos
+						   FROM gdoks_projetos
 						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
 			
 				$rs = $db->query($sql,'si',$token,$id)[0];
@@ -1200,12 +1200,12 @@
 						FROM (
 							SELECT
 								id,id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 							SELECT
 								id_empresa
-							FROM gdoks.gdoks_projetos
+							FROM gdoks_projetos
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
@@ -1263,7 +1263,7 @@
 				// Determinando o id do usuário e o id da empresa a qual ele pertence
 				$sql = 'SELECT id,
 						       id_empresa
-						FROM gdoks.gdoks_usuarios
+						FROM gdoks_usuarios
 						WHERE token=?
 						  AND validade_do_token>now()';
 				$query = $db->query($sql,'s',$token);
@@ -1333,7 +1333,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1376,7 +1376,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1417,7 +1417,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1456,7 +1456,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1504,7 +1504,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1546,12 +1546,12 @@
 						FROM (
 							SELECT
 								id,id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 							SELECT
 								id_empresa
-							FROM gdoks.gdoks_projetos
+							FROM gdoks_projetos
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id_projeto)[0];
 				$ok = $rs['ok'];
@@ -1739,7 +1739,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1815,7 +1815,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1891,7 +1891,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -1968,7 +1968,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -2011,12 +2011,12 @@
 						FROM
 						  ( SELECT id,
 						           id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
 						  ( SELECT id_empresa
-						   FROM gdoks.gdoks_projetos
+						   FROM gdoks_projetos
 						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
 			
 				$ok = $db->query($sql,'si',$token,$id_projeto)[0]['ok'];
@@ -2158,7 +2158,7 @@
 						FROM (
 							SELECT
 								id,id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 									SELECT c.id_empresa
@@ -2855,7 +2855,7 @@
 						FROM gdoks_clientes a
 						INNER JOIN
 						  (SELECT id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 							ORDER by a.nome';
 				$response = new response(0,'ok');
@@ -2875,7 +2875,7 @@
 						FROM gdoks_clientes a
 						INNER JOIN
 						  (SELECT id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 						WHERE a.id=?
 							ORDER by a.nome';
@@ -2908,12 +2908,12 @@
 						FROM (
 							SELECT
 								id,id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 							SELECT
 								id_empresa
-							FROM gdoks.gdoks_clientes
+							FROM gdoks_clientes
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
@@ -3037,7 +3037,7 @@
 						FROM gdoks_cargos a
 						INNER JOIN
 						  (SELECT id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 							ORDER by a.nome';
 				$response = new response(0,'ok');
@@ -3053,7 +3053,7 @@
 						FROM gdoks_cargos a
 						INNER JOIN
 						  (SELECT id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?) b ON a.id_empresa=b.id_empresa
 						WHERE a.id=?';
 				$response = new response(0,'ok');
@@ -3078,12 +3078,12 @@
 						FROM (
 							SELECT
 								id,id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 							SELECT
 								id_empresa
-							FROM gdoks.gdoks_cargos
+							FROM gdoks_cargos
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
@@ -3159,12 +3159,12 @@
 						FROM (
 							SELECT
 								id,id_empresa
-							FROM gdoks.gdoks_usuarios
+							FROM gdoks_usuarios
 							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
 								(
 							SELECT
 								id_empresa
-							FROM gdoks.gdoks_cargos
+							FROM gdoks_cargos
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
@@ -3215,7 +3215,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -3258,7 +3258,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -3310,7 +3310,7 @@
 						FROM
 						  (SELECT id,
 						          id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?
 						     AND validade_do_token>now()) A
 						INNER JOIN
@@ -3353,7 +3353,7 @@
 						FROM gdoks_tamanhos_de_papel x
 						INNER JOIN
 						  (SELECT id_empresa
-						   FROM gdoks.gdoks_usuarios
+						   FROM gdoks_usuarios
 						   WHERE token=?) b ON x.id_empresa=b.id_empresa
 							ORDER by x.nome';
 				$response = new response(0,'ok');
@@ -3383,7 +3383,7 @@
 				} else {
 					// Levantando todos os documentos do pda
 					$sql = 'SELECT caminho,nome_cliente
-							FROM gdoks.gdoks_pdas_x_arquivos a
+							FROM gdoks_pdas_x_arquivos a
 							INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
 							WHERE a.id_pda=?';
 					$rs = $db->query($sql,'s',$id_pda);
@@ -3449,7 +3449,7 @@
 
 					// Levantando todos os documentos do pda
 					$sql = 'SELECT caminho,nome_cliente
-							FROM gdoks.gdoks_pdas_x_arquivos a
+							FROM gdoks_pdas_x_arquivos a
 							INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
 							WHERE a.id_pda=?';
 					$rs = $db->query($sql,'s',$id_pda);
