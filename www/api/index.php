@@ -57,7 +57,6 @@
 
 		// Removendo conteúdos de $dbkey;
 		unset($dbkey);
-
 	} else {
 		// Arquivo não existe. Sem Autorização
 		sleep(1);
@@ -3657,6 +3656,137 @@
 						registrarAcao($db,$id_usuario,ACAO_ANEXOU_DOC_A_GRD,$grd->id);
 					}
 				}
+			});
+
+			$app->get('/grds/search/',function() use ($app,$db,$token){
+
+				// Defiinindo tamanho da página
+				$npp = 5;
+
+				// Determinando a página
+				$pag = isset($_GET['pagAtual'])?(1*$_GET['pagAtual']):1;
+
+				// Determinando condição id_cliente
+				if(isset($_GET['id_cliente']) && $_GET['id_cliente']!=0 ){
+					$id_cliente = 1*$_GET['id_cliente'];
+					$condicao_cliente = 'f.id=?';
+				} else {
+					$id_cliente = 0;
+					$condicao_cliente = 'trueFromInt(?)';
+				}
+
+				// Determinando condição de id_projeto
+				if(isset($_GET['id_projeto']) && $_GET['id_projeto']!=0){
+					$id_projeto = 1*$_GET['id_projeto'];
+					$condicao_projeto = 'e.id=?';
+					$condicao_cliente = 'trueFromInt(?)';
+				} else {
+					$id_projeto = 0;
+					$condicao_projeto = 'trueFromInt(?)';
+				}
+
+				// Determinando condição de codigo
+				if(isset($_GET['codigo']) && $_GET['codigo']!=''){
+					$codGrd = '%'.$_GET['codigo'].'%';
+					$condicao_codGrd = 'a.codigo LIKE ?';
+				} else {
+					$codGrd = 0;
+					$condicao_codGrd = 'trueFromStr(?)';
+				}
+				
+				// Determinando a condicao sobre documento
+				if(isset($_GET['doc']) && $_GET['doc']!=''){
+					$doc = '%'.$_GET['doc'].'%';
+					$condicao_doc = '(d.nome LIKE ? OR d.codigo LIKE ?)';
+				} else {
+					$doc = 0;
+					$condicao_doc = 'trueFromStr(?) AND trueFromStr(?)';
+				}
+
+				// Determinando a condicao sobre regDe
+				if(isset($_GET['regDe']) && $_GET['regDe']!=''){
+					$regDe = $_GET['regDe'];
+					$condicao_regDe = 'a.datahora_registro >= ?';
+				} else {
+					$regDe = 0;
+					$condicao_regDe = 'trueFromStr(?)';
+				}
+
+				// Determinando a condicao sobre regAte
+				if(isset($_GET['regAte']) && $_GET['regAte']!=''){
+					$regAte = $_GET['regAte'];
+					$condicao_regAte = 'a.datahora_registro <= ?';
+				} else {
+					$regAte = 0;
+					$condicao_regAte = 'trueFromStr(?)';
+				}
+
+				// Determinando a condicao sobre regDe
+				if(isset($_GET['envDe']) && $_GET['envDe']!=''){
+					$envDe = $_GET['envDe'];
+					$condicao_envDe = 'a.datahora_enviada >= ?';
+				} else {
+					$envDe = 0;
+					$condicao_envDe = 'trueFromStr(?)';
+				}
+
+				// Determinando a condicao sobre envAte
+				if(isset($_GET['envAte']) && $_GET['envAte']!=''){
+					$envAte = $_GET['envAte'];
+					$condicao_envAte = 'a.datahora_enviada <= ?';
+				} else {
+					$envAte = 0;
+					$condicao_envAte = 'trueFromStr(?)';
+				}
+				
+				// Definindo colunas que serão selecionadas
+				$colunas = 'a.id AS id_grd,
+							a.codigo AS codigo_grd,
+							f.nome AS nome_cliente,
+							e.nome AS nome_projeto,
+							a.datahora_registro,
+							a.datahora_enviada';
+
+				// Definindo tabelas a consultar
+				$tabelas = 'gdoks_grds a
+							INNER JOIN gdoks_grds_x_revisoes b ON a.id=b.id_grd
+							INNER JOIN gdoks_revisoes c ON c.id=b.id_revisao
+							INNER JOIN gdoks_documentos d ON d.id=c.id_documento
+							INNER JOIN gdoks_projetos e ON a.id_projeto=e.id
+							INNER JOIN gdoks_clientes f ON e.id_cliente=f.id';
+
+				// Definindo condições
+				$condicoes = $condicao_cliente.'
+							  AND '.$condicao_projeto.'
+							  AND '.$condicao_codGrd.'
+							  AND '.$condicao_doc.'
+							  AND '.$condicao_regDe.'
+							  AND '.$condicao_regAte.'
+							  AND '.$condicao_envDe.'
+							  AND '.$condicao_envAte;
+				
+
+				// Preparando a string sql
+				$sql = 'SELECT DISTINCT '.$colunas.'
+						FROM '.$tabelas.'
+						WHERE '.$condicoes.'
+						ORDER BY a.datahora_registro DESC LIMIT ?,?';
+
+				// Realizando a consulta
+				$result = $db->query($sql,'iisssssssii',$id_cliente,$id_projeto,$codGrd,$doc,$doc,$regDe,$regAte,$envDe,$envAte,(($pag-1)*$npp),$npp);
+				
+				// Determinando o total de GRDs que foram encontrados
+				$sql = 'SELECT COUNT(DISTINCT a.id) as n FROM '.$tabelas.' WHERE '.$condicoes;
+				$n = $db->query($sql,'iisssssss',$id_cliente,$id_projeto,$codGrd,$doc,$doc,$regDe,$regAte,$envDe,$envAte)[0]['n'];
+
+				// Calculando o número de páginas
+				$nPaginas = ceil($n/$npp);
+
+				// Preparando response
+				$response = new response(0,'ok');
+				$response->result = $result;
+				$response->nPaginas = $nPaginas;
+				$response->flush();
 			});
 		// FIM DE ROTAS PARA GRDS
 

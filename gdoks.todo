@@ -1,7 +1,5 @@
 GDoks:
   Para Hoje:
-    ☐ Criar script sql que limpa a base de dados
-    ☐ Criar scripts de bumb data e de disciplinas
     ☐ Fazer busca de GRDs funcionar
     ☐ Otimizar página de documentos para grande volume de dados
     ☐ Otimizar página de projetos para grande volume de dados
@@ -21,7 +19,6 @@ GDoks:
     ☐ Listar GRDs
       ☐ Fazer desenho de tela html
       ☐ Dar funcionalidade a tela
-    ✔ Submeter GRD @done (17-06-24 07:10)
     ☐ Buscar GRDs
     ☐ Registrar Retorno de GRD
       ☐ Desenhar tela de registro de retorno de GRD
@@ -69,6 +66,9 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Criar scripts de bumb data e de disciplinas @done (17-06-25 09:44) @project(GDoks / Para Hoje)
+ ✔ Criar script sql que limpa a base de dados @done (17-06-25 09:44) @project(GDoks / Para Hoje)
+ ✔ Submeter GRD @done (17-06-24 07:10) @project(GDoks / Gerenciamento de GRDs)
  ✔ Limitar campo de nome de documento para que fique condizente com o limite estabgelecido pela BD @done (17-06-23 11:44) @project(GDoks / Para Hoje)
  ✔ Resolver problema do Token expiando.... @done (17-06-23 11:35) @project(GDoks / Para Hoje)
  ✔ Recuperar aparência da tela de entrada @done (17-06-23 08:22) @project(GDoks / Para Hoje)

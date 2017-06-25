@@ -3,18 +3,18 @@
 	var GrdsModule = angular.module('Grds',[]);
 
 	// Criando função controller de Grds
-	var GrdsController = function($scope){
+	var GrdsController = function($scope, GDoksFactory){
 
 		// Iniciando as variáveis
 		$scope.clientes = [];
 		$scope.projetosListados = [];
 		var projetos = [];
-		$scope.nPaginas = 10;
+		$scope.nPaginas = 0;
 		$scope.q = {
 			id_cliente:0,
 			id_projeto:0,
 			enviada:2,
-			pagAtual:4
+			pagAtual:1
 		}
 
 		// Carregando dados
@@ -23,8 +23,7 @@
 
 		// FUNÇÕES DE COMUNICAÇÃO COM O SERVIDOR = = = = = = = = = = = = = = = = = = = = = = = =
 		function buscar(q){
-			console.warn('buscando...');
-			console.dir(q);
+			GDoksFactory.buscarGrd(q);
 		}
 
 		// FUNÇÕES DE RESPOSTA A INTERFACE = = = = = = = = = = = = = = = = = = = = = = = = = = =

@@ -333,6 +333,33 @@ WebGDoks.factory('GDoksFactory',
 				form.parentNode.removeChild(form);
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.buscarGrd = function(query){
+				
+				// Montando a query string com base no objeto query
+				var queryString = '';
+				for(var i in query){
+
+					// Verificando se é do tipo Date
+					if(query[i] instanceof Date){
+						
+						// Propriedade é do tipo data. Transformando em string
+						queryString += i+'='+(query[i].toJSON().substr(0,10))+'&';
+					
+					} else {
+
+						// Propriedade não é Date. emendando na string
+						queryString += i+'='+query[i]+'&';
+					}
+					
+				}
+
+				// removendo o derradeiro &;
+				queryString = queryString.substr(0,queryString.length-1);
+
+				// Retornando promise da requisição de busca
+				return $http.get(API_ROOT+'/grds/search/?'+queryString,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]
