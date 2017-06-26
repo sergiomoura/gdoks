@@ -19,7 +19,7 @@
 				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">archive</md-icon>
 				Baixar GRD em ZIP
 			</md-button>
-			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Enviar por E-mail" ng-click="onEnviarGrdPorEmailClick()">
+			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Enviar por E-mail" ng-click="openDialogDeEnviarEmail($event)">
 				<md-icon class="material-icons step" aria-label="Enviar por E-mail">mail</md-icon>
 				Enviar por E-mail
 			</md-button>

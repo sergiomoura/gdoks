@@ -429,8 +429,27 @@
 			GDoksFactory.downloadGRD($scope.grd.id);
 		}
 
-		$scope.onEnviarGrdPorEmailClick = function(){
-			GDoksFactory.mailGRD($scope.grd.id);
+		$scope.openDialogDeEnviarEmail = function(evt){
+			$mdDialog.show(
+				{
+					controller: enviarEmailDialogController,
+					locals:{
+						parentScope:$scope,
+					},
+					templateUrl: './app/modules/Grds/enviarEmail.dialog.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: evt,
+					clickOutsideToClose:true
+				})
+				.then(function(answer) {
+				$scope.status = 'You said the information was "' + answer + '".';
+				}, function() {
+				$scope.status = 'You cancelled the dialog.';
+				});
+		}
+
+		function enviarEmailDialogController($scope,parentScope){
+
 		}
 
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
