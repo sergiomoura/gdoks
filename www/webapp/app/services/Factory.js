@@ -304,7 +304,7 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.postGrdDocs = function(grd){
-				return $http.post(API_ROOT+'/grds/documentos',grd,buildHeaders());		
+				return $http.post(API_ROOT+'/grds/documentos',grd,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.viewGRD = function(id_grd){
@@ -356,7 +356,7 @@ WebGDoks.factory('GDoksFactory',
 				form.parentNode.removeChild(form);
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.buscarGrd = function(query){
+			GDoksFactory.buscarGRG = function(query){
 				
 				// Montando a query string com base no objeto query
 				var queryString = '';
@@ -383,8 +383,8 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/grds/search/q?'+queryString,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.mailGRD = function(id){
-				console.warn("Mailing GRD!");
+			GDoksFactory.mailGRD = function(id_grd,mail){
+				return $http.post(API_ROOT+'/grds/'+id_grd+'/mail',mail,buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;

@@ -93,3 +93,15 @@
 	width: 600px;
 	padding: 20px;
 }
+
+.enviarEmail_dialog{
+	padding: 20px;
+	width: 400px;
+	.container_assunto_msg{
+		width: 98%;
+	}
+
+	.md-errors-spacer{
+		min-height: 5px;
+	}
+}

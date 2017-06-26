@@ -1,5 +1,59 @@
 <md-dialog class="enviarEmail_dialog">
 	<md-dialog-content>
-		...
+		<form name="form" layout="column">
+			<div class="destinatarios" layout="column">
+				<div class="destinatario" layout="row" ng-repeat="dest in mail.destinatarios">
+					<md-input-container>
+						<label>E-mail{{mail.destinatarios.length==1?'':' '+ ($index+1)}}</label>
+						<input type="email" ng-model="dest.email" required>
+					</md-input-container>
+					<md-input-container>
+						<label>Nome{{mail.destinatarios.length==1?'':' '+ ($index+1)}}</label>
+						<input type="text" ng-model="dest.nome">
+					</md-input-container>
+					<md-button
+						class="md-icon-button"
+						ng-if="!$last"
+						ng-click="removeDestinatario($index)">
+							<md-icon
+								class="material-icons step"
+								aria-label="Adicionar Destinatário">remove_circle_outline</md-icon>
+							<md-tooltip md-direction="top" md-autohide="true">
+							  Remover Destinatário
+							</md-tooltip>
+					</md-button>
+					<md-button
+						class="md-icon-button"
+						ng-if="$last"
+						ng-disabled="$index==2"
+						ng-click="addDestinatario()">
+							<md-icon
+								class="material-icons step"
+								aria-label="Adicionar Destinatário">add</md-icon>
+							<md-tooltip md-direction="top" md-autohide="true">
+							  Adicionar Destinatário
+							</md-tooltip>
+					</md-button>
+				</div>
+			</div>
+			<div layout="column" class="container_assunto_msg">
+				<md-input-container>
+					<label>Assunto</label>
+					<input type="text" ng-model="mail.assunto">
+				</md-input-container>
+				<md-input-container>
+					<label>Mensagem</label>
+					<textarea ng-model="mail.msg"></textarea>
+				</md-input-container>
+			</div>
+		</form>
+		<div class="controles" layout="row" layout-align="space-between center">
+			<md-button class="md-raised md-accent" aria-label="Cancelar" ng-click="cancelar()">Cancelar</md-button>
+			<md-button
+				class="md-raised md-primary"
+				aria-label="Enviar"
+				ng-click="enviar()"
+				ng-disabled="mail.destinatarios.length == 0 || mail.assunto=='' || form.$invalid">Enviar</md-button>
+		</div>
 	</md-dialog-content>
 </md-dialog>

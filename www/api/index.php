@@ -3919,6 +3919,47 @@
 				$response->nPaginas = $nPaginas;
 				$response->flush();
 			});
+			
+			$app->post('/grds/:id_grd/mail',function($id_grd) use ($app,$db,$token){
+				// Lendo conteúdo da requisição
+				$mail = json_decode($app->request->getBody());
+				$id_grd = 1*$id_grd;
+
+				// verificando se a grd é da mesma empresa do usuário
+				$sql = 'SELECT a.id
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+						WHERE token=?
+						  AND validade_do_token>now()
+						  AND c.id=?';
+				$rs = $db->query($sql,'si',$token,$id_grd);
+				if(sizeof($rs) == 0){
+					// Retornando erro
+					$app->response->setStatus(401);
+					$response = new response(1,'GRD inexistente ou token expirado.');
+					$response->flush();
+					return;
+				} else {
+
+					// Salvando o id do usuário
+					$id_usuario = $rs[0]['id'];
+
+					// Criando objeto da grd
+					$grd = getGrd($id_grd,$db);
+
+					// Criando o zip da Grd
+					$caminhoDoZip = gerarZipDaGrd($grd,$db);
+
+					// Retornando sucesso
+					$response = new response(0,'ok');
+					$response->flush();
+
+					// Registrando no log
+					// registrarAcao($db,$id_usuario,ACAO_ANEXOU_DOC_A_GRD,$grd->id);
+				}
+			});
+
 		// FIM DE ROTAS PARA GRDS
 
 		// ROTAS DE CODIGOS EMI
