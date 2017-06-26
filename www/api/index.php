@@ -4,6 +4,7 @@
 
 	// Required files - - - - - - - - - - - - - - - - - - -
 	require('../../includes/Slim/vendor/autoload.php');
+	require('../../includes/vendor/autoload.php');
 	require('../../includes/constantes.php');
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
@@ -3951,9 +3952,25 @@
 					// Criando o zip da Grd
 					$caminhoDoZip = gerarZipDaGrd($grd,$db);
 
-					// Retornando sucesso
-					$response = new response(0,'ok');
-					$response->flush();
+					// Criando email
+					$mail = new PHPMailer;
+					$mail->setFrom('teste@gmail.com', 'Sérgio Moura');
+					$mail->addAddress('smouracalmon@gmail.com', 'SM');
+					$mail->Subject  = 'First PHPMailer Message';
+					$mail->Body     = 'Hi! This is my first e-mail sent through PHPMailer.';
+					if(!$mail->send()) {
+						$app->response->setStatus(401);
+						$response = new response(1,'Falha no envio: '.$mail->ErrorInfo);
+						$response->flush();
+						die();
+					} else {
+						// Retornando sucesso
+						$response = new response(0,'ok');
+						$response->flush();
+					}
+
+
+					
 
 					// Registrando no log
 					// registrarAcao($db,$id_usuario,ACAO_ANEXOU_DOC_A_GRD,$grd->id);

@@ -1,0 +1,14 @@
+{
+    "name": "GDoks",
+    "description": "Gestor de documentos WEB",
+    "authors": [
+        {
+            "name": "Sérgio Moura",
+            "email": "smouracalmon@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "phpmailer/phpmailer": "~5.2"
+    }
+}
