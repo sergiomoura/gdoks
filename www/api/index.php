@@ -3737,7 +3737,7 @@
 			});
 
 			$app->get('/grds/search/q',function() use ($app,$db,$token){
-				die("aqui");
+				
 				// Defiinindo tamanho da página
 				$npp = 5;
 
