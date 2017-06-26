@@ -1,15 +1,12 @@
 GDoks:
   Para Hoje:
+    ☐ Enviar GRD por email
     ☐ Otimizar página de documentos para grande volume de dados
     ☐ Otimizar página de projetos para grande volume de dados
     ☐ Quebra de linha no PDF para dados longos
     ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
     ☐ Baixar para revisão deve registrar no log
     ☐ No download Resource interpreted as Document but transferred with MIME type application/zip
-    
-  Cadastro de Projeto 1 - Documentos:
-    ☐ Adicionar Campo para ordenar documentos
-    ☐	Tela que lista documentos, mostrar busca avançada de maneira animada
 
   Gerenciamento de Documentos:
   	☐	Melhorar a forma com que os documentos atrasados são destacados
@@ -57,6 +54,7 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Adicionar Campo para ordenar documentos @done (17-06-26 17:05) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔ Listar GRDs @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
  ✔ Fazer desenho de tela html @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
  ✔ Dar funcionalidade a tela @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)

@@ -228,10 +228,28 @@
 					// Esconde carregando
 					$scope.root.carregando = false;
 
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('GRD atualizada com sucesso!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
 				})
 				.error(function(error){
 					// Esconde carregando
 					$scope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha ao alterar GRD')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// imprimindo mensagem no console
+					console.warn(error);
 				});
 			}
 		}
@@ -408,7 +426,11 @@
 		}
 
 		$scope.onBaixarGrdEmZipClick = function(){
-			GDoksFactory.downloadGRD($scope.grd.id);	
+			GDoksFactory.downloadGRD($scope.grd.id);
+		}
+
+		$scope.onEnviarGrdPorEmailClick = function(){
+			GDoksFactory.mailGRD($scope.grd.id);
 		}
 
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =

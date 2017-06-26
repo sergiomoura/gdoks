@@ -288,8 +288,7 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.atualizarGrd = function(grd){
-				console.log("atualizando grd");
-				console.dir(grd);
+				return $http.put(API_ROOT+'/grds/'+grd.id, grd,buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getGrd = function(id_grd){
@@ -382,6 +381,10 @@ WebGDoks.factory('GDoksFactory',
 
 				// Retornando promise da requisição de busca
 				return $http.get(API_ROOT+'/grds/search/q?'+queryString,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.mailGRD = function(id){
+				console.warn("Mailing GRD!");
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;

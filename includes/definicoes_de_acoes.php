@@ -40,4 +40,5 @@
 	define('ACAO_ATUALIZOU_REVISAO',39);
 	define('ACAO_CRIOU_GRD',40);
 	define('ACAO_ANEXOU_DOC_A_GRD',41);
+	define('ACAO_ATUALIZOU_GRD',42);
 ?>

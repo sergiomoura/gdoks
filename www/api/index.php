@@ -3610,6 +3610,59 @@
 				registrarAcao($db,$id,ACAO_CRIOU_GRD,$db->insert_id.','.$grd->codigo.','.$grd->projeto->id);
 			});
 
+			$app->put('/grds/:id',function($id) use ($app,$db,$token){
+				// Lendo e saneando as informações da requisição
+				$grd = json_decode($app->request->getBody());
+
+				// verificando se os dados da requisição são consistentes
+				if($grd->id != $id){
+					$app->response->setStatus(401);
+					$response = new response(1,'Dados da requisição são inconsistentes');
+					$response->flush();
+					return;
+				}
+
+				// Capturando o id e o id_empresa do usuário atual
+				$sql = 'SELECT
+							id,id_empresa
+						FROM 
+							gdoks_usuarios
+						WHERE
+							token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token)[0];
+				$id_empresa = $rs['id_empresa'];
+				$id = $rs['id'];
+
+				// Verificando se o projeto é da empresa atual
+				$sql = 'SELECT count(*) as ok FROM gdoks_projetos WHERE id=? AND id_empresa=?';
+				$rs = $db->query($sql,'ii',$grd->projeto->id,$id_empresa);
+				if($rs[0]['ok'] == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Não altera dados de outra empresa.');
+					$response->flush();
+					return;
+				}
+
+				// atribuindo um string vazio para obs caso ela venha vazia
+				$grd->obs = (isset($grd->obs)?$grd->obs:'');
+				
+				// Inserindo nova grd.
+				$sql = 'UPDATE gdoks_grds SET id_projeto=?,codigo=?,obs=?,datahora_registro=now() WHERE id=?';
+				try {
+					$db->query($sql,'issi',$grd->projeto->id,$grd->codigo,$grd->obs,$grd->id);
+					$response = new response(0,'GRD atualizada com sucesso.');
+					$response->newId = $db->insert_id;
+					$response->flush();
+				} catch (Exception $e) {
+					$app->response->setStatus(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					return;
+				}
+				// Registrando a ação
+				registrarAcao($db,$id,ACAO_ATUALIZOU_GRD,$grd->id.','.$grd->codigo.','.$grd->projeto->id);
+			});
+
 			$app->get('/grds/:id',function($id_grd) use ($app,$db,$token){
 				// Lendo dados
 				$id_grd = 1*$id_grd;
