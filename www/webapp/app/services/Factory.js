@@ -381,7 +381,7 @@ WebGDoks.factory('GDoksFactory',
 				queryString = queryString.substr(0,queryString.length-1);
 
 				// Retornando promise da requisição de busca
-				return $http.get(API_ROOT+'/grds/search/?'+queryString,buildHeaders());
+				return $http.get(API_ROOT+'/grds/search/q?'+queryString,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
