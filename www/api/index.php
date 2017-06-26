@@ -77,91 +77,164 @@
 		}
 	}
 
-	// função que mostra o PDF da grd
-	function mostraPdfDaGrd($id_grd,$db){
+	// função que cria objeto GRD
+	function getGrd($id,$db){
+		// Levantando dados de GRD
+		$sql = 'SELECT c.nome AS cliente_nome,
+				       b.nome AS projeto_nome,
+				       a.obs AS obs,
+				       c.contato_nome,
+				       now() AS DATA,
+				       a.codigo,
+				       c.id_empresa
+				FROM gdoks_grds a
+				INNER JOIN gdoks_projetos b ON a.id_projeto=b.id
+				INNER JOIN gdoks_clientes c ON b.id_cliente = c.id
+				WHERE a.id=?';
+		$grd = (object)$db->query($sql,'i',$id)['0'];
+		$grd->id = $id;
+
+		// Levantando dados dos documentos desta grd
+		$sql = 'SELECT c.codigo AS doc_codigo,
+				       d.simbolo AS tipo,
+				       a.nVias,
+				       b.serial AS rev_serial,
+				       e.simbolo AS codEMI,
+				       a.nFolhas,
+				       c.nome AS doc_nome
+				FROM gdoks_grds_x_revisoes a
+				INNER JOIN gdoks_revisoes b ON b.id=a.id_revisao
+				INNER JOIN gdoks_documentos c ON c.id=b.id_documento
+				INNER JOIN gdoks_tipos_de_doc d ON d.id=a.id_tipo
+				INNER JOIN gdoks_codigos_emi e ON e.id=a.id_codEMI
+				WHERE a.id_grd=?';
+		$grd->docs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id));
+
+		// Retornando resultado
+		return $grd;
+	}
+
+	// função cria o objeto PDF da grd
+	function gerarPdfDaGrd($grd,$db){
+		
+		// Levantando códigos EMI para compor o rodapé da GRD
+		$sql = 'SELECT simbolo,nome FROM gdoks_codigos_emi WHERE id_empresa=?';
+		$codigosEmi = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$grd->id_empresa));
+
+		// Levantando tipos de documento para compor o rodapé da GRD
+		$sql = 'SELECT simbolo,nome FROM gdoks_tipos_de_doc WHERE id_empresa=?';
+		$tiposDeDocumento = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$grd->id_empresa));
+
 		// Lendo informações do cookie;
 		$user = json_decode($_COOKIE['user']);
 		$token = $user->token;
 		$empresa = $user->empresa;
 
-		// Verificando se a grd é da empresa do usuário requisitante
-		$sql = 'SELECT a.id_empresa
-				FROM gdoks_usuarios a
-				INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
-				INNER JOIN gdoks_grds c ON c.id_projeto=b.id
-				WHERE token=?
-				  AND validade_do_token>now()
-				  AND c.id=?';
-		$rs = $db->query($sql,'si',$token,$id_grd);
-		$ok = (sizeof($rs) == 1);
+		// Inclui biblioteca que gera PDF
+		include('../../includes/FPDF/fpdf.php');
+		set_include_path('../../includes/FPDF/fonts/');
 
-		if($ok){
-			// Guardando o id da empresa
-			$id_empresa = $rs[0]['id_empresa'];
+		// Incluindo arquivo da classe
+		include($GLOBALS['FILE_GRD']);
 
-			// Levantando dados de GRD
-			$sql = 'SELECT c.nome AS cliente_nome,
-					       b.nome AS projeto_nome,
-					       a.obs AS obs,
-					       c.contato_nome,
-					       now() AS DATA,
-					       a.codigo
-					FROM gdoks_grds a
-					INNER JOIN gdoks_projetos b ON a.id_projeto=b.id
-					INNER JOIN gdoks_clientes c ON b.id_cliente = c.id
-					WHERE a.id=?';
-			$grd = (object)$db->query($sql,'i',$id_grd)['0'];
 
-			// Levantando dados dos documentos desta grd
-			$sql = 'SELECT c.codigo AS doc_codigo,
-					       d.simbolo AS tipo,
-					       a.nVias,
-					       b.serial AS rev_serial,
-					       e.simbolo AS codEMI,
-					       a.nFolhas,
-					       c.nome AS doc_nome
-					FROM gdoks_grds_x_revisoes a
-					INNER JOIN gdoks_revisoes b ON b.id=a.id_revisao
-					INNER JOIN gdoks_documentos c ON c.id=b.id_documento
-					INNER JOIN gdoks_tipos_de_doc d ON d.id=a.id_tipo
-					INNER JOIN gdoks_codigos_emi e ON e.id=a.id_codEMI
-					WHERE a.id_grd=?';
-			$grd->docs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_grd));
+		// Instanciation of inherited class
+		$pdf = new PDFGrd($empresa,$grd,$user->nome,$codigosEmi,$tiposDeDocumento);
 
-			// Levantando códigos EMI para compor o rodapé da GRD
-			$sql = 'SELECT simbolo,nome FROM gdoks_codigos_emi WHERE id_empresa=?';
-			$codigosEmi = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$id_empresa));
+		// retornando o objeto pdf;
+		return $pdf;
+	}
 
-			// Levantando tipos de documento para compor o rodapé da GRD
-			$sql = 'SELECT simbolo,nome FROM gdoks_tipos_de_doc WHERE id_empresa=?';
-			$tiposDeDocumento = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$id_empresa));
+	// função que mostra o PDF da grd
+	function mostraPdfDaGrd($grd,$db){
 
-			// Inclui biblioteca que gera PDF
-			include('../../includes/FPDF/fpdf.php');
-			set_include_path('../../includes/FPDF/fonts/');
+		// Gerando o pdf
+		$pdf = gerarPdfDaGrd($grd,$db);		
 
-			// Incluindo arquivo da classe
-			include($GLOBALS['FILE_GRD']);
+		// Enviando headers
+		header('HTTP/1.0 200 OK');
+		header('Cache-Control: public, must-revalidate, max-age=0');
+		header('Pragma: no-cache');
+		header('Content-type: application/pdf');
+		header('Content-Disposition: inline; filename="grd_'.$grd->codigo.'.pdf"');
+		header('Accept-Ranges: bytes');
+		header("Content-Transfer-Encoding: binary");
 
-			// Instanciation of inherited class
-			$pdf = new PDFGrd($empresa,$grd,$user->nome,$codigosEmi,$tiposDeDocumento);
+		// output the file first clean mem
+		ob_clean();
+		$pdf->Output('I','Teste.pdf');
+		exit();
+	}
 
-			// Enviando headers
-			header('HTTP/1.0 200 OK');
-			header('Cache-Control: public, must-revalidate, max-age=0');
-			header('Pragma: no-cache');
-			header('Content-type: application/pdf');
-			header('Content-Disposition: inline; filename="grd_'.$grd->codigo.'.pdf"');
-			header('Accept-Ranges: bytes');
-			header("Content-Transfer-Encoding: binary");
+	// Função que mostra o pdf da grd
+	function mandaZipDaGrd($grd,$db){
+		// Gerando o zip
+		$caminhoDoZip = gerarZipDaGrd($grd,$db);
 
-			// output the file first clean mem
-			ob_clean();
-			$pdf->Output('I','Teste.pdf');
-			exit();
-		} else {
-			echo("Token expirado ou GRD inexistente.");
+		// Enviando headers
+		header('HTTP/1.0 200 OK');
+		header('Cache-Control: public, must-revalidate, max-age=0');
+		header('Pragma: no-cache');
+		header('Content-type: application/octet-stream');
+		header('Content-Disposition: attachment; filename="'.$grd->codigo.'.zip"');
+		header('Accept-Ranges: bytes');
+		header("Content-Transfer-Encoding: binary");
+
+		// output the file first clean mem
+		ob_clean();
+		readfile($caminhoDoZip);
+	}
+
+	// Função que gera o zip de uma grd
+	function gerarZipDaGrd($grd,$db){
+		
+		// Gerando pdf da grd
+		$pdf = gerarPdfDaGrd($grd,$db);
+		
+		// salvando pdf na pasta da empresa
+		$caminhoPdf = UPLOAD_PATH.$grd->id_empresa.'/'.$grd->codigo.'.pdf';
+		$pdf->Output('F',$caminhoPdf);
+
+		// listando arquivos mais recentes da grd
+		$sql = 'SELECT caminho,
+				       nome_cliente
+				FROM gdoks_pdas_x_arquivos a
+				INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
+				INNER JOIN
+				  (SELECT max(pdas.id) AS id_pda
+				   FROM
+				     (SELECT max(id_revisao) AS id
+				      FROM gdoks_grds_x_revisoes
+				      WHERE id_grd=?) R
+				   INNER JOIN gdoks_pdas pdas ON pdas.id_revisao=R.id) c ON c.id_pda=a.id_pda';
+		$arquivos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$grd->id));
+
+		// Criando o arquivo zip na pasta raíz da empresa
+		$zip = new ZipArchive();
+		$caminhoZip = UPLOAD_PATH.$grd->id_empresa.'/'.$grd->codigo.'.zip';
+		$zip->open($caminhoZip,ZipArchive::CREATE);
+
+		// Adicionando o pdf ao zip;
+		try {
+			$zip->addFile($caminhoPdf,$grd->codigo.'.pdf');
+		} catch (Exception $e) {
+			echo($e->getMessage());
+			die();
 		}
+		
+
+		// Adicionando os arquivos da GRD
+		foreach ($arquivos as $f) {
+			$zip->addFile(UPLOAD_PATH.$f->caminho,$f->nome_cliente);
+		}
+
+		// Fechando o zip
+		$zip->close();
+
+		// apagando o pdf
+		unlink($caminhoPdf);
+
+		return $caminhoZip;
 	}
 
 	// defining api - - - - - - - - - - - - - - - - - - - -
@@ -3541,9 +3614,14 @@
 				// Lendo dados
 				$id_grd = 1*$id_grd;
 
+				// Carregando a grd
+				$grd = getGrd($id_grd,$db);
+
 				// Vendo se é para mandar os dados ou o PDF
 				if(isset($_GET['view']) && $_GET['view']=='pdf'){
-					mostraPdfDaGrd($id_grd,$db);
+					mostraPdfDaGrd($grd,$db);
+				} elseif (isset($_GET['view']) && $_GET['view']=='zip'){
+					mandaZipDaGrd($grd,$db);
 				} else {
 					// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
 					$sql = 'SELECT c.id,

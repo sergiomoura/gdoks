@@ -1,6 +1,10 @@
 #grd_container{
 	.controle_principal{
 		padding: 20px 0;
+
+		div:first-child{
+			width: 160px;
+		}
 	}
 
 	.dados{

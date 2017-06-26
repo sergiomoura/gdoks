@@ -1,6 +1,6 @@
 <div class="container_80" id="grds_container" layout="row">
 	<form name="form" ng-submit="onFormSubmit()">
-		<div class="controles" md-whiteframe="1dp" flex="none" layout="column">
+		<div class="controles" md-whiteframe="2dp" flex="none" layout="column">
 			<md-input-container>
 				<label>Código da GRD</label>
 				<input type="text" ng-model="q.codigo">
@@ -60,8 +60,8 @@
 		</div>
 		<button type="submit" style="display: none"></button>
 	</form>
-	<div class="resultados_container" layout="column">
-		<div class="paginacao" layout="row" flex="none">
+	<div class="resultados_container" layout="column" ng-show="resultados != undefined">
+		<div ng-if="nPaginas>1" class="paginacao" layout="row" flex="none">
 				
 			<md-button
 				class="md-icon md-mini"
@@ -121,85 +121,46 @@
 					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
 			</md-button>
 		</div>
-		<div class="resultado" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
+		
+		<div
+			ng-if="resultados.length>0"
+			class="resultado"
+			layout="column"
+			ng-repeat="grd in resultados"
+			 md-whiteframe="2dp"
+			ng-click="onResultadoClick(grd.id_grd)">
+				<div layout="row" layout-align="space-between start">
+					<div class="resultado_item">
+						<label>Código da GRD</label>
+						<span>{{grd.codigo_grd}}</span>
+					</div>
+					<div class="resultado_item">
+						<label>Cliente</label>
+						<span>{{grd.nome_cliente}}</span>
+					</div>
+					<div class="resultado_item">
+						<label>Projeto</label>
+						<span>{{grd.nome_projeto}}</span>
+					</div>
 				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
+				<div layout="row"  layout-align="space-between start">
+					<div class="resultado_item">
+						<label>Registrada em</label>
+						<span>{{grd.datahora_registro|date:"dd/MM/yyyy à's' HH:mm:ss"}}</span>
+					</div>
+					<div class="resultado_item">
+						<label>Enviada em</label>
+						<span ng-if="grd.datahora_enviada!=null">{{grd.datahora_enviada|date:"dd/MM/yyyy à's' HH:mm:ss"}}</span>
+						<span ng-if="grd.datahora_enviada==null">(NÃO ENVIADA)</span>
+					</div>
 				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
 		</div>
-		<div class="resultado" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
+		
+		<div class="instrucoes" ng-if="resultados.length == 0">
+		Sua busca não retornou nenhum resultado.
 		</div>
-		<div class="resultado" layout="column">
-			<div layout="row" layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Código da GRD</label>
-					<span>OOAIJSDOIASKDK</span>
-				</div>
-				<div class="resultado_item">
-					<label>Cliente</label>
-					<span>André Ferreira Gonçalves LTDA</span>
-				</div>
-				<div class="resultado_item">
-					<label>Projeto</label>
-					<span>Aratuba dos Prazeres</span>
-				</div>
-			</div>
-			<div layout="row"  layout-align="space-between start">
-				<div class="resultado_item">
-					<label>Registrada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-				<div class="resultado_item">
-					<label>Enviada em</label>
-					<span>24/10/2017 às 15:30:24 por Sérgio Moura</span>
-				</div>
-			</div>
-		</div>
-		<div class="paginacao" layout="row" flex="none">
+
+		<div ng-if="nPaginas>1" class="paginacao" layout="row" flex="none">
 				
 			<md-button
 				class="md-icon md-mini"
@@ -258,6 +219,14 @@
 				ng-click="onLastPageClick()">
 					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
 			</md-button>
+		</div>
+		
+	</div>
+	<div class="resultados_container" ng-show="resultados == undefined">
+		<div class=" instrucoes">
+		Preencha os campos a esquerda de acordo com o que você sabe sobre as GRDs procuradas.
+		Depois clique em "Buscar".<br>
+		Para obter mais resultados seja menos específico na sua busca.
 		</div>
 	</div>
 </div>

@@ -3,7 +3,7 @@
 	var GrdsModule = angular.module('Grds',[]);
 
 	// Criando função controller de Grds
-	var GrdsController = function($scope, GDoksFactory){
+	var GrdsController = function($scope, $location,GDoksFactory){
 
 		// Iniciando as variáveis
 		$scope.clientes = [];
@@ -23,7 +23,24 @@
 
 		// FUNÇÕES DE COMUNICAÇÃO COM O SERVIDOR = = = = = = = = = = = = = = = = = = = = = = = =
 		function buscar(q){
-			GDoksFactory.buscarGrd(q);
+			$scope.root.carregando = true;
+			GDoksFactory.buscarGrd(q).success(function(response){
+				$scope.root.carregando = false;
+				$scope.resultados = response.result;
+				$scope.nPaginas = response.nPaginas;
+
+				// Parsing datas
+				var r;
+				for (var i = $scope.resultados.length - 1; i >= 0; i--) {
+					r = $scope.resultados[i];
+					r.datahora_registro = new Date(r.datahora_registro);
+					r.datahora_enviada = r.datahora_enviada==null?null:new Date(r.datahora_enviada);
+				}
+			})
+		}
+
+		function goToGrd(id){
+			$location.url('/grds/'+id);
 		}
 
 		// FUNÇÕES DE RESPOSTA A INTERFACE = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -36,39 +53,45 @@
 		}
 
 		$scope.onFormSubmit = function(){
+			$scope.q.pagAtual = 1;
 			buscar($scope.q);
 		}
 
 		$scope.onBuscarClick = function(){
+			$scope.q.pagAtual = 1;
 			buscar($scope.q);
 		}
 
 		$scope.onPreviousPageClick = function(){
 			if($scope.q.pagAtual > 1){
 				$scope.q.pagAtual--;
-				buscar();
+				buscar($scope.q);
 			}
 		}
 
 		$scope.onNextPageClick = function(){
 			if($scope.q.pagAtual < $scope.nPaginas){
 				$scope.q.pagAtual++;
-				buscar();
+				buscar($scope.q);
 			}
 		}
 
 		$scope.onFirstPageClick = function(){
 			if($scope.q.pagAtual > 1){
 				$scope.q.pagAtual=1;
-				buscar();
+				buscar($scope.q);
 			}	
 		}
 
 		$scope.onLastPageClick = function(){
 			if($scope.q.pagAtual < $scope.nPaginas){
 				$scope.q.pagAtual=$scope.nPaginas;
-				buscar();
+				buscar($scope.q);
 			}	
+		}
+
+		$scope.onResultadoClick = function(id){
+			goToGrd(id);
 		}
 
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -92,6 +115,8 @@
 				}
 			}
 		}
+
+
 
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 	}
@@ -323,8 +348,6 @@
 
 		// Função que salva os documentos na GRD
 		$scope.salvarDocumentos = function(){
-
-
 			// criando objeto grd a ser enviado
 			var grd = {};
 			grd.id = $scope.grd.id;
@@ -382,6 +405,10 @@
 		// Função executada quando se clica no burão para visualizar o GRD
 		$scope.onVisualizarGrdClick = function(){
 			GDoksFactory.viewGRD($scope.grd.id);
+		}
+
+		$scope.onBaixarGrdEmZipClick = function(){
+			GDoksFactory.downloadGRD($scope.grd.id);	
 		}
 
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -476,6 +503,11 @@
 
 							// Definindo variável que controla se os documentos da grd foram salvos
 							$scope.grd.documentos_salvos = true;
+
+							// parsing datas
+							$scope.grd.enviada = ($scope.grd.datahora_enviada != null);
+							$scope.grd.datahora_enviada = $scope.grd.enviada?new Date($scope.grd.datahora_enviada):null;
+							$scope.grd.datahora_registro = new Date($scope.grd.datahora_registro);
 
 							// carregando o projeto da base local
 							indexedDB.open('gdoks').onsuccess = function(evt){

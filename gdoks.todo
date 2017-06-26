@@ -1,6 +1,5 @@
 GDoks:
   Para Hoje:
-    ☐ Fazer busca de GRDs funcionar
     ☐ Otimizar página de documentos para grande volume de dados
     ☐ Otimizar página de projetos para grande volume de dados
     ☐ Quebra de linha no PDF para dados longos
@@ -16,10 +15,6 @@ GDoks:
   	☐	Melhorar a forma com que os documentos atrasados são destacados
 
   Gerenciamento de GRDs: @due(17-05-29 23:59)
-    ☐ Listar GRDs
-      ☐ Fazer desenho de tela html
-      ☐ Dar funcionalidade a tela
-    ☐ Buscar GRDs
     ☐ Registrar Retorno de GRD
       ☐ Desenhar tela de registro de retorno de GRD
       ☐ Registrar Observações sobre arquivos que compões a GRD
@@ -34,8 +29,6 @@ GDoks:
       
   BUGS Avulsos:
     ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
-    ☐ 
-    ☐ .
     ☐ Fazer mudar para tab de documentos depois de salvar GRD
     ☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
     ☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
@@ -50,9 +43,7 @@ GDoks:
       - usuários (1)
       - Codigos EMI
       - tipos de docs
-    ☐ 
-    ☐ 
-    ☐ 
+
     ☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
     ☐ Primeira subárea de um projeto não aparece assim que é criada
     ☐ Tela Cadastro de Formatos de Papel
@@ -66,6 +57,11 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Listar GRDs @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
+ ✔ Fazer desenho de tela html @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
+ ✔ Dar funcionalidade a tela @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
+ ✔ Buscar GRDs @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
+ ✔ Fazer busca de GRDs funcionar @done (17-06-25 19:19) @project(GDoks / Para Hoje)
  ✔ Criar scripts de bumb data e de disciplinas @done (17-06-25 09:44) @project(GDoks / Para Hoje)
  ✔ Criar script sql que limpa a base de dados @done (17-06-25 09:44) @project(GDoks / Para Hoje)
  ✔ Submeter GRD @done (17-06-24 07:10) @project(GDoks / Gerenciamento de GRDs)
