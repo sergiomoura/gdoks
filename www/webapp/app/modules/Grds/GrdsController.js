@@ -496,7 +496,7 @@
 					);
 
 					// Escondendo dialogo
-					//$mdDialog.hide();
+					$mdDialog.hide();
 				})
 				.error(function(error){
 					// Esconde carregando
