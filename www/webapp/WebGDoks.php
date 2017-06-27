@@ -13,7 +13,7 @@
 		<link rel="shortcut icon" href="/favicon.ico" />
 
 		<link rel="stylesheet" href="css/normalizer.css">
-		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 		<link rel="stylesheet" href="css/md-expansion-panel.min.css">
 		<link rel="stylesheet" href="css/angular-material-sidemenu.css">
 		<link rel="stylesheet" href="css/geral.css">
@@ -81,9 +81,9 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-cookies.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-resource.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
 	<!-- fim carregamento do angular via CDN -->
 	<!-- fim de carregamento do angular local -->
 	<!-- carregamento do angular 1.6.3 via CDN --
@@ -95,7 +95,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-aria.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-messages.min.js"></script>
 	<!-- fim carregamento do angular via CDN -->
-	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 	<script src="js/angular/ng-currency.min.js"></script>
 	<script src="js/angular/angular-ui-mask.min.js"></script>
 	<script src="js/angular/ng-file-upload.min.js"></script>

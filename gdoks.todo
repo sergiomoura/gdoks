@@ -1,8 +1,12 @@
 GDoks:
   Para Hoje:
-    ☐ Enviar GRD por email
     ☐ Otimizar página de documentos para grande volume de dados
+    ☐ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD
+    ☐ Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca
+    ☐ Mostrar nome do cliente no bloco de documento
+    ☐ Campo de CLiente para Busca
     ☐ Otimizar página de projetos para grande volume de dados
+    ☐ Mostrar Campo de Cliente na busca por projetos
     ☐ Quebra de linha no PDF para dados longos
     ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
     ☐ Baixar para revisão deve registrar no log
@@ -54,6 +58,7 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Enviar GRD por email @done (17-06-27 10:31) @project(GDoks / Para Hoje)
  ✔ Adicionar Campo para ordenar documentos @done (17-06-26 17:05) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔ Listar GRDs @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
  ✔ Fazer desenho de tela html @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)
