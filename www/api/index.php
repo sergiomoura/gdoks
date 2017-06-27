@@ -3969,6 +3969,9 @@
 					// Settando conteúdo
 					$sgMail->setHtml($mail->msg);
 
+					// Anexando arquivo da GRD
+					$sgMail->setAttachment(realpath($caminhoDoZip));
+
 					// Enviando o email
 					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
 					$response = $sendgrid->send($sgMail);
