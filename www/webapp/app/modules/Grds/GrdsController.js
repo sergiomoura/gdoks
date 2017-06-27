@@ -439,7 +439,7 @@
 					templateUrl: './app/modules/Grds/enviarEmail.dialog.tmpl.html',
 					parent: angular.element(document.body),
 					targetEvent: evt,
-					clickOutsideToClose:true
+					clickOutsideToClose:false
 				})
 				.then(function(answer) {
 				$scope.status = 'You said the information was "' + answer + '".';
