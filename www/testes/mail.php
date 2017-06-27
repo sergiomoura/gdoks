@@ -21,6 +21,7 @@
 	$email    = new SendGrid\Email();
 
 	$email->addTo("Sérgio <smouracalmon@gmail.com>")
+	->addTo("Moura <sergio.moura@twtec.com.br>")
 	->setFrom("GDóks <postmaster@gdoks.com.br>")
 	->setSubject("Sending with SendGrid is Fun")
 	->setHtml("and easy to do anywhere, even with PHP");
