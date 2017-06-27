@@ -356,7 +356,7 @@ WebGDoks.factory('GDoksFactory',
 				form.parentNode.removeChild(form);
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.buscarGRG = function(query){
+			GDoksFactory.buscarGRD = function(query){
 				
 				// Montando a query string com base no objeto query
 				var queryString = '';
