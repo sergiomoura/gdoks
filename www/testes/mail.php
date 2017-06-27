@@ -1,8 +1,9 @@
 <?php 
 
 	require '../../includes/vendor/autoload.php';
-	use Mailgun\Mailgun;
 	
+	/* MAILGUN TEST *
+	use Mailgun\Mailgun;	
 	// First, instantiate the SDK with your API credentials
 	$mg = Mailgun::create('key-07bd64f71c14bf52a76c3e5e6d20d6da');
 
@@ -13,4 +14,16 @@
 		'subject' => 'The PHP SDK is awesome!', 
 		'text'    => 'It is so simple to send a message.'
 	]);
+	*/
+
+	/* SEND GRID TEST */
+	$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
+	$email    = new SendGrid\Email();
+
+	$email->addTo("smouracalmon@gmail.com")
+	->setFrom("postmaster@gdoks.com.br")
+	->setSubject("Sending with SendGrid is Fun")
+	->setHtml("and easy to do anywhere, even with PHP");
+
+	$sendgrid->send($email);
  ?>
