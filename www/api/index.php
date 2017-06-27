@@ -3957,10 +3957,11 @@
 
 					// adicionando o from
 					$sgMail->setFrom(SENDGRID_DEFAULT_FROM);
+					$sgMail->setFromName(SENDGRID_DEFAULT_FROM_NAME);
 
 					// Adicionando os Tos
 					foreach ($mail->destinatarios as $d) {
-						$sgMail->addTo($d->email);
+						$sgMail->addTo($d->email,$d->nome);
 					}
 
 					// Settando o assunto
