@@ -98,6 +98,17 @@ class ComposerStaticInit5e7f24154bf0f9e9c22fca889a94233a
     );
 
     public static $prefixesPsr0 = array (
+        'S' => 
+        array (
+            'Smtpapi' => 
+            array (
+                0 => __DIR__ . '/..' . '/sendgrid/smtpapi/lib',
+            ),
+            'SendGrid' => 
+            array (
+                0 => __DIR__ . '/..' . '/sendgrid/sendgrid/lib',
+            ),
+        ),
         'M' => 
         array (
             'Mailgun' => 
