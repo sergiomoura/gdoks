@@ -3965,8 +3965,7 @@
 					// Criando o contaudo do email
 					$content = new SendGrid\Content("text/plain", $mail->msg);
 
-
-					$sgMail = new SendGrid\Mail($from, $mail->assunto, $tos, $content);
+					$sgMail = new SendGrid\Mail($from, $mail->assunto, 'smouracalmon@gmail.com', $content);
 
 					$sg = new \SendGrid(SENDGRID_KEY);
 
