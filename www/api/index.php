@@ -3952,27 +3952,30 @@
 					// Criando o zip da Grd
 					$caminhoDoZip = gerarZipDaGrd($grd,$db);
 
-					// Definindo o From
-					$from = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME, SENDGRID_DEFAULT_FROM);
+					// Definindo o email
+					$sgMail = new SendGrid\Email();
 
-					// Definindo os to's
-					$tos = Array();
+					// adicionando o from
+					$sgMail->setFrom(SENDGRID_DEFAULT_FROM);
+
+					// Adicionando os Tos
 					foreach ($mail->destinatarios as $d) {
-						$to = new SendGrid\Email($d->nome, $d->email);
-						array_push($tos, $to);
+						$sgMail->addTo($d->email);
 					}
 
-					// Criando o contaudo do email
-					$content = new SendGrid\Content("text/plain", $mail->msg);
+					// Settando o assunto
+					$sgMail->setSubject($mail->assunto);
 
-					$sgMail = new SendGrid\Mail($from, $mail->assunto, 'smouracalmon@gmail.com', $content);
+					// Settando conteúdo
+					$sgMail->setHtml($mail->msg);
 
-					$sg = new \SendGrid(SENDGRID_KEY);
+					// Enviando o email
+					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
+					$response = $sendgrid->send($sgMail);
 
-					$response = $sg->client->mail()->send()->post($sgMail);
-					echo $response->statusCode();
-					print_r($response->headers());
-					echo $response->body();
+					print_r($response);
+
+					
 					/*
 					if(!$mail->send()) {
 						$app->response->setStatus(401);
