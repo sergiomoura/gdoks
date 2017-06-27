@@ -8,8 +8,8 @@
 
 	# Now, compose and send your message.
 	$mg->messages()->send('gdoks.com.br', [
-		'from'    => 'postmaster@gdoks.com.br', 
-		'to'      => 'smouracalmon@gmail.com', 
+		'from'    => 'GDoks <postmaster@gdoks.com.br>', 
+		'to'      => 'Sérgio <smouracalmon@gmail.com>', 
 		'subject' => 'The PHP SDK is awesome!', 
 		'text'    => 'It is so simple to send a message.'
 	]);
