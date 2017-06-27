@@ -20,8 +20,8 @@
 	$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
 	$email    = new SendGrid\Email();
 
-	$email->addTo("smouracalmon@gmail.com")
-	->setFrom("postmaster@gdoks.com.br")
+	$email->addTo("Sérgio <smouracalmon@gmail.com>")
+	->setFrom("GDóks <postmaster@gdoks.com.br>")
 	->setSubject("Sending with SendGrid is Fun")
 	->setHtml("and easy to do anywhere, even with PHP");
 
