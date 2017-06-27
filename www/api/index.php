@@ -9,7 +9,7 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
-	
+
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
 
@@ -3952,12 +3952,29 @@
 					// Criando o zip da Grd
 					$caminhoDoZip = gerarZipDaGrd($grd,$db);
 
-					// Criando email
-					$mail = new PHPMailer;
-					$mail->setFrom('teste@gmail.com', 'Sérgio Moura');
-					$mail->addAddress('smouracalmon@gmail.com', 'SM');
-					$mail->Subject  = 'First PHPMailer Message';
-					$mail->Body     = 'Hi! This is my first e-mail sent through PHPMailer.';
+					// Definindo o From
+					$from = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME, SENDGRID_DEFAULT_FROM);
+
+					// Definindo os to's
+					$tos = Array();
+					foreach ($mail->destinatarios as $d) {
+						$to = new SendGrid\Email($d->nome, $d->email);
+						array_push($tos, $to);
+					}
+
+					// Criando o contaudo do email
+					$content = new SendGrid\Content("text/plain", $mail->msg);
+
+
+					$sgMail = new SendGrid\Mail($from, $mail->assunto, $tos, $content);
+
+					$sg = new \SendGrid(SENDGRID_KEY);
+
+					$response = $sg->client->mail()->send()->post($sgMail);
+					echo $response->statusCode();
+					print_r($response->headers());
+					echo $response->body();
+					/*
 					if(!$mail->send()) {
 						$app->response->setStatus(401);
 						$response = new response(1,'Falha no envio: '.$mail->ErrorInfo);
@@ -3967,7 +3984,7 @@
 						// Retornando sucesso
 						$response = new response(0,'ok');
 						$response->flush();
-					}
+					}*/
 
 
 					
