@@ -1,5 +1,5 @@
 <?php 
-	require 'vendor/autoload.php';
+	require '../../includes/vendor/autoload.php';
 	use Mailgun\Mailgun;
 
 	// First, instantiate the SDK with your API credentials
