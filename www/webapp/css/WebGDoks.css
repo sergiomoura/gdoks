@@ -998,11 +998,23 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 #usuario_container .aviso {
   color: #FF5722;
   font-size: 14px; }
-#usuario_container .bt_salvar {
-  position: absolute;
-  right: 15px; }
-#usuario_container .bt_cancelar {
-  position: relative;
-  left: 15px; }
+#usuario_container .permissoes_container > div {
+  border-top: 1px solid #DDD; }
+  #usuario_container .permissoes_container > div .telas_container {
+    height: 350px;
+    overflow-y: auto;
+    border-right: 1px solid #DDD; }
+    #usuario_container .permissoes_container > div .telas_container .tela {
+      border-bottom: 1px solid #DDD;
+      padding: 10px 20px 0 20px;
+      width: 100%; }
+      #usuario_container .permissoes_container > div .telas_container .tela md-checkbox {
+        width: calc(100% - 50px); }
+      #usuario_container .permissoes_container > div .telas_container .tela button {
+        width: 32px; }
+    #usuario_container .permissoes_container > div .telas_container .tela:hover {
+      background-color: #e3f2fd; }
+  #usuario_container .permissoes_container > div .opcoesDeTela_container .opcao {
+    padding: 16px 20px 0 20px; }
 
 /*# sourceMappingURL=WebGDoks.css.map */

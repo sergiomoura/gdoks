@@ -4,13 +4,33 @@
 		font-size: 14px;
 	}
 
-	.bt_salvar{
-		position: absolute;
-		right: 15px;
-	}
-
-	.bt_cancelar{
-		position: relative;
-		left: 15px;
+	.permissoes_container{
+		&>div{
+			border-top:1px solid #DDD;
+			.telas_container{
+				height:350px;
+				overflow-y:auto;
+				border-right: 1px solid #DDD;
+				.tela{
+					border-bottom:1px solid #DDD;
+					padding:10px 20px 0 20px;
+					width:100%;
+					md-checkbox{
+						width:calc(100% - 50px);
+					}
+					button{
+						width:32px;
+					}
+				}
+				.tela:hover{
+					background-color:$azulClaro;
+				}
+			}
+			.opcoesDeTela_container{
+				.opcao{
+					padding:16px 20px 0 20px;
+				}
+			}
+		}
 	}
 }

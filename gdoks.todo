@@ -1,8 +1,19 @@
 GDoks:
   Para Hoje:
+    Fazer permissões de acesso a tela por usuário funcionar:
+     ✔ Alterar tela de cadastro de usuário para tabs @done (17-06-28 15:56)
+     ☐ Criar tabela de telas e preenche-las
+     ☐ Criar tabela de permissões usuarios_x_telas
+     ☐ Criar tabela de opções de tela
+     ☐ fazer a tela de permissões gravar informações nesta tabela
+     ☐ Fazer com que menu carregue de acordo com essas permissões
+     ☐ Bloquear o acesso a tela de acordo com esseas permissões
+
+
     ☐ Otimizar página de documentos para grande volume de dados
     ☐ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD
     ☐ Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca
+    ☐ Marcar GRD como enviada quando por email.
     ☐ Mostrar nome do cliente no bloco de documento
     ☐ Campo de CLiente para Busca
     ☐ Otimizar página de projetos para grande volume de dados
