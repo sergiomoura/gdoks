@@ -407,6 +407,40 @@
 				$response->flush();
 			});
 
+			$app->get('/usuarios/:id_usuario/telas',function($id_usuario) use ($app,$db,$token){
+				// Verificando se o usuário logado e o usuário em questão são da mesma empresa
+				$sql = 'SELECT count(*) AS ok
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_usuarios b ON a.token=?
+						AND b.id=?
+						AND a.id_empresa=b.id_empresa';
+				$ok = $db->query($sql,'si',$token,$id_usuario)[0]['ok']==1;
+
+				if($ok){
+					// levantando telas do usuário
+					$sql = 'SELECT id_tela AS id
+							FROM gdoks_usuarios_x_telas
+							WHERE id_usuario=?';
+					$telas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_usuario));
+
+					// levantando opções de tela do usuário
+					$sql = 'SELECT id_opcao as id,valor FROM gdoks_usuarios_x_opcoes_de_tela WHERE id_usuario=? AND id_tela=?';
+					foreach ($telas as $tela) {
+						$tela->opcoes = $db->query($sql,'ii',$id_usuario,$tela->id);
+					}
+					
+					// retornando as telas
+					$response = new response(0,'ok');
+					$response->telas = $telas;
+					$response->flush();
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não pode acessar os dados de outras empresas.');
+					$response->flush();
+					return;
+				}
+			});
+
 			$app->put('/usuarios/:id',function($id) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
 				$id = 1*$id;
@@ -4077,8 +4111,7 @@
 						FROM gdoks_opcoes_de_telas
 						WHERE id_tela=?';
 				foreach ($telas as $tela) {
-					$tela->opcoes = Array();
-					array_push($tela->opcoes, $db->query($sql,'i',$tela->id));
+					$tela->opcoes = $db->query($sql,'i',$tela->id);
 				}
 
 				$response = new response(0,'ok');

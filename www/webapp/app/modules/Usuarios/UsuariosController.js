@@ -175,20 +175,103 @@
 	};
 
 	// Definindo controller para permissões
-	function PermissoesController($scope,GDoksFactory,$mdToast){
+	function PermissoesController($scope,$cookies,GDoksFactory,$mdToast,$routeParams){
+		// Lendo id do usuário na url
+		// Capturando o id passado na url
+		var id_usuario = $routeParams.id;
+
+		// Definindo flags de carregamento
+		var telasDoUsuarioCarregadas = false;
+		var telasCarregadas = false;
 
 		// Definindo vetor de telas
 		$scope.telas = [];
 		loadTelas();
 		
-		// Funções de carga de dados
-		function loadTelas() {
+		// Carregando as telas atualmente disponíveis para o usuário
+		telasDoUsuario = [];
+		loadTelasDoUsuario();
+
+
+		// Definindo variável de controle para uma tela selecionada na interface
+		$scope.telaSelecionada = null;
+		
+		// FUNÇÕES ON = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+		// Executada quando clica em um checkbox - - - - - - - - - -
+		$scope.onTelaCheckChange = function(evt,tela){
+			if(tela.autorizada){
+				$scope.telaSelecionada = tela;
+			} else {
+				$scope.telaSelecionada = null;
+			}
+		}
+
+		$scope.onOpcoesClick = function(evt,tela){
+			$scope.telaSelecionada = tela;
+		}
+
+		$scope.onRestaurarClick = function(){
+			marcarTelasAutorizadas();
+		}
+
+		$scope.onSalvarClick = function(){
+
+		}
+
+		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = = = = = =
+		function marcarTelasAutorizadas(){
+			// definindo algumas variáveis antes dos loops
+			var opcoes;
+			var opcoesDeUsuario;
+			var telaDeUsuario;
+			var opcao;
+
+			// Parsing telas. Marcando como autorizadas ou não, de acordo com as permissoes do usuário
+			for (var i = $scope.telas.length - 1; i >= 0; i--) {
+				telaDeUsuario = telasDoUsuario.find(function(a){
+					return a.id==this;
+				},$scope.telas[i].id);
+				$scope.telas[i].autorizada = (telaDeUsuario != undefined);
+				if($scope.telas[i].autorizada){
+					opcoes = $scope.telas[i].opcoes;
+					for (var j = opcoes.length - 1; j >= 0; j--) {
+						opcao = telaDeUsuario.opcoes.find(function(a){return a.id==this;},opcoes[j].id);
+						opcoes[j].autorizada = (opcao!=undefined && opcao.valor==1);
+					}
+				}
+			}
+		}
+
+		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = =
+		function loadTelas(){
 			indexedDB.open('gdoks').onsuccess = function(evt){
 				var db = evt.target.result;
 				db.transaction('telas').objectStore('telas').getAll().onsuccess = function(evt){
-					$scope.telas = evt.target.result;	
+
+					// Colocando telas no scope
+					$scope.telas = evt.target.result;
+					telasCarregadas = true;
+					marcarTelasAutorizadas();			
 				}
 			}
+		}
+
+		function loadTelasDoUsuario(){
+			// Mostra carregando
+			$scope.root.carregando = true;
+
+			// Fazendo requisição ao servidor
+			GDoksFactory.getTelasDeUsuario(id_usuario)
+			.success(function(response){
+
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				telasDoUsuario = response.telas;
+				telasDoUsuarioCarregadas = true;
+				marcarTelasAutorizadas();
+			});
 		}
 	}
 

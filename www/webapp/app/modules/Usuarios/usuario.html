@@ -43,45 +43,41 @@
 			</form>			
 		</md-tab>
 		<md-tab label="Permissões" ng-disabled="usuario.id==0">
-			<div class="permissoes_container" md-whiteframe="1dp" ng-controller="PermissoesController">
+			<div class="permissoes_container" ng-controller="PermissoesController">
 				<h1>Permissões de {{usuario.nome}}</h1>
 				<div layout="row">
 					<div class="telas_container" layout="column" flex="30" layout-align="space-between center">
 						<div class="tela" ng-repeat="tela in telas|orderBy:'titulo'">
-							<md-checkbox class="md-primary">
+							<md-checkbox aria-label="Tela" class="md-primary" ng-model="tela.autorizada" ng-change="onTelaCheckChange($event,tela)">
 								{{tela.titulo}}
 							</md-checkbox>
-							<md-button class="md-icon-button" aria-label="Opções de tela" flex="none">
-								<md-icon class="material-icons step" aria-label="Opções de tela">settings</md-icon>
-								<md-tooltip md-direction="top" md-autohide="true">
-									Opções da Tela {{tela.titulo}}
-								</md-tooltip>
+							<md-button
+								ng-if="tela.autorizada"
+								class="md-icon-button"
+								aria-label="Opções de tela"
+								ng-click="onOpcoesClick($event,tela)">
+									<md-icon
+										class="material-icons step"
+										aria-label="Opções de tela">settings</md-icon>
+									<md-tooltip md-direction="top" md-autohide="true">
+										Opções da tela {{tela.titulo}}
+									</md-tooltip>
 							</md-button>
 						</div>
 					</div>
-					<div class="opcoesDeTela_container" layout="column" flex="70">
-						<h1>Opções para a tela Nome da tela</h1>
-						<div class="opcao">
-							<md-checkbox class="md-primary">
-								nome da opção
+					<div ng-if="telaSelecionada!=null" class="opcoesDeTela_container" layout="column" flex="70">
+						<h1>Opções para a tela {{telaSelecionada.titulo}}</h1>
+						<div class="opcao" ng-repeat="opcao in telaSelecionada.opcoes">
+							<md-checkbox class="md-primary" aria-label="Opção de tela" ng-model="opcao.autorizada">
+								{{opcao.descricao}}
 							</md-checkbox>
 						</div>
-						<div class="opcao">
-							<md-checkbox class="md-primary">
-								nome da opção
-							</md-checkbox>
-						</div>
-						<div class="opcao">
-							<md-checkbox class="md-primary">
-								nome da opção
-							</md-checkbox>
-						</div>
-						<div class="opcao">
-							<md-checkbox class="md-primary">
-								nome da opção
-							</md-checkbox>
-						</div>
+						<div class="opcao" ng-if="telaSelecionada.opcoes.length==0">Esta tela {{telaSelecionada.titulo}} não possui opções.</div>
 					</div>
+				</div>
+				<div class="controles" layout="row" layout-align="space-between center">
+					<md-button ng-click="onRestaurarClick()" class="md-raised md-accent" aria-label="Cancelar Alterações">Restaurar valores iniciais</md-button>
+					<md-button ng-click="onSalvarClick()" class="md-raised md-primary" aria-label="Salvar Telas">Salvar</md-button>
 				</div>
 			</div>
 		</md-tab>

@@ -33,6 +33,11 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/usuarios',usuario,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			// Faz requisição para adicionar novo usuario enviado
+			GDoksFactory.getTelasDeUsuario = function(id_usuario){
+				return $http.get(API_ROOT+'/usuarios/'+id_usuario+'/telas',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDisciplinas = function(){
 				return $http.get(API_ROOT+'/disciplinas',buildHeaders());
 			}

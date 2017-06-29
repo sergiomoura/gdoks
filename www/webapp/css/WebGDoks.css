@@ -1001,8 +1001,8 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 #usuario_container .permissoes_container > div {
   border-top: 1px solid #DDD; }
   #usuario_container .permissoes_container > div .telas_container {
-    height: 350px;
-    overflow-y: auto;
+    height: 299px;
+    overflow-y: hidden;
     border-right: 1px solid #DDD; }
     #usuario_container .permissoes_container > div .telas_container .tela {
       border-bottom: 1px solid #DDD;
@@ -1014,7 +1014,11 @@ md-expansion-panel-expanded .md-expansion-panel-item {
         width: 32px; }
     #usuario_container .permissoes_container > div .telas_container .tela:hover {
       background-color: #e3f2fd; }
+  #usuario_container .permissoes_container > div .telas_container:hover {
+    overflow-y: auto; }
   #usuario_container .permissoes_container > div .opcoesDeTela_container .opcao {
     padding: 16px 20px 0 20px; }
+#usuario_container .permissoes_container .controles {
+  padding: 15px 10px 0 10px; }
 
 /*# sourceMappingURL=WebGDoks.css.map */

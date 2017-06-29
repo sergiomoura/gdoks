@@ -8,8 +8,8 @@
 		&>div{
 			border-top:1px solid #DDD;
 			.telas_container{
-				height:350px;
-				overflow-y:auto;
+				height:299px;
+				overflow-y:hidden;
 				border-right: 1px solid #DDD;
 				.tela{
 					border-bottom:1px solid #DDD;
@@ -26,11 +26,17 @@
 					background-color:$azulClaro;
 				}
 			}
+			.telas_container:hover{
+				overflow-y:auto;
+			}
 			.opcoesDeTela_container{
 				.opcao{
 					padding:16px 20px 0 20px;
 				}
 			}
+		}
+		.controles {
+			padding:15px 10px 0 10px;
 		}
 	}
 }
