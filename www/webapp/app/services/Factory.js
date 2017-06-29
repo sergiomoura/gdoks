@@ -220,6 +220,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/acoes',buildHeaders());		
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getTelas = function(){
+				return $http.get(API_ROOT+'/telas',buildHeaders());		
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getLogs = function(q){
 				var query = [];
 				if(!isNaN(q.uid)){query.push(q.uid)};

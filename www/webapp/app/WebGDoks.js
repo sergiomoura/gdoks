@@ -380,6 +380,22 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		);
 	}
 
+	// Definindo função que carrega telas do servidor
+	$scope.root.loadTelas = function(){
+		GDoksFactory.getTelas()
+		.success(function(response){
+			// abrindo db local
+			indexedDB.open('gdoks').onsuccess = function(evt){
+
+				// Pondo telas na tabela
+				var telas = response.telas;
+				for (var i = telas.length - 1; i >= 0; i--) {
+					evt.target.result.transaction('telas','readwrite').objectStore('telas').add(telas[i]);
+				}				
+			}
+		})
+	}
+
 	// Criando base de dados.
 	var reqOpen = indexedDB.open("gdoks");
 	
@@ -423,6 +439,13 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		os_clientes.createIndex("idx_nome","nome",{'sigla':true});
 		os_clientes.transaction.addEventListener('complete',function(){
 			$scope.root.loadClientes();
+		})
+
+		// Criando ObjectStore de telas
+		var os_telas = db.createObjectStore("telas",{keyPath: "id"});
+		os_clientes.createIndex("idx_titulo","titulo");
+		os_clientes.transaction.addEventListener('complete',function(){
+			$scope.root.loadTelas();
 		})
 	}
 
