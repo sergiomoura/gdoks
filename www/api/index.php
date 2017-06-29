@@ -280,12 +280,26 @@
 				$user->token = $token;
 				$user->empresa = $empresa;
 
+				// levantando telas permitidas e suas opções
+				$sql = 'SELECT id_tela as id FROM gdoks_usuarios_x_telas WHERE id_usuario=?';
+				$telas = array_map(function($t){return (object)$t;}, $db->query($sql,'i',$user->id));
+
+				// Levantando as opções de cada tela
+				$sql = 'SELECT id_opcao as id,valor FROM gdoks_usuarios_x_opcoes_de_tela WHERE id_usuario=? AND id_tela=?';
+				foreach ($telas as $t) {
+					$t->opcoes = $db->query($sql,'ii',$user->id,$t->id);
+				}
+
+				// atribuindo $telas ao objeto user
+				$user->telas = $telas;
+
 				// definindo resposta http como 200
 				$app->response->setStatus(200);
 				$response = new response(0,'ok');
 
 				// Adicionando as informações do usuário no response
 				$response->user = $user;
+
 				
 				// registrando a ação no log
 				registrarAcao($db,$user->id,ACAO_LOGOU);
@@ -4045,6 +4059,34 @@
 				}
 			});
 		// FIM DE ROTAS DE TIPOS DE DOCUMENTO
+
+		// ROTAS DE TELAS
+			$app->get('/telas',function() use ($app,$db,$token){
+				// carregando telas
+				$sql = 'SELECT id,
+						       titulo,
+						       descricao,
+						       endereco
+						FROM gdoks_telas';
+				$telas = array_map(function($a){return (object)$a;}, $db->query($sql));
+
+				// Carregando as opções das telas
+				$sql = 'SELECT id,
+						       descricao,
+						       valor_padrao
+						FROM gdoks_opcoes_de_telas
+						WHERE id_tela=?';
+				foreach ($telas as $tela) {
+					$tela->opcoes = Array();
+					array_push($tela->opcoes, $db->query($sql,'i',$tela->id));
+				}
+
+				$response = new response(0,'ok');
+				$response->telas = $telas;
+				$response->flush();
+
+			});
+		// FIM DE ROTAS DE TELAS
 	});
 
 	// running the app
