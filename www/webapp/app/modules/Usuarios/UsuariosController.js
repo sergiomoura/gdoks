@@ -177,8 +177,10 @@
 	// Definindo controller para permissões
 	function PermissoesController($scope,$cookies,GDoksFactory,$mdToast,$routeParams){
 		// Lendo id do usuário na url
-		// Capturando o id passado na url
 		var id_usuario = $routeParams.id;
+
+		// Definindo variaveis de controle de interfase
+		$scope.restaurarDisponivel = false;
 
 		// Definindo flags de carregamento
 		var telasDoUsuarioCarregadas = false;
@@ -205,6 +207,9 @@
 			} else {
 				$scope.telaSelecionada = null;
 			}
+
+			// Habilita o restaurar
+			$scope.restaurarDisponivel = true;
 		}
 
 		$scope.onOpcoesClick = function(evt,tela){
@@ -216,7 +221,10 @@
 		}
 
 		$scope.onSalvarClick = function(){
-
+			salvar();
+		}
+		$scope.onOpcoesChange = function(){
+			$scope.restaurarDisponivel = true;
 		}
 
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = = = = = =
@@ -241,6 +249,59 @@
 					}
 				}
 			}
+		}
+
+		function salvar(){
+			// Selecionando somente telas salvas
+			var telas = $scope.telas.filter(function(a){return a.autorizada});
+
+			// Mapeando vetor de telas com uma função que remove informações desnecessárias
+			telas = telas.map(function(tela){
+				var b = {};
+				b.id = tela.id;
+				b.opcoes = tela.opcoes.filter(function(o){return o.autorizada});
+				b.opcoes = b.opcoes.map(function(o){return {id:o.id,valor:1};});
+				return b;
+			})
+
+			// Mostra carregando
+			$scope.root.carregando = true;
+
+			// Enviando para o servidor
+			GDoksFactory.salvarTelasDeUsuario(id_usuario,telas)
+			.success(function(response){
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Permissões de usuário salvas com sucesso!')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Alterando valor local
+				telasDoUsuario = telas;
+
+				// Desabilita o restaurar
+				$scope.restaurarDisponivel = false;
+			})
+			.error(function(error){
+				// Esconde carregando
+				$scope.root.carregando = false;
+				
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar alterar permissões de usuário.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			});
 		}
 
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = =

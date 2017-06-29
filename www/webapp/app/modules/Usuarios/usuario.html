@@ -68,7 +68,7 @@
 					<div ng-if="telaSelecionada!=null" class="opcoesDeTela_container" layout="column" flex="70">
 						<h1>Opções para a tela {{telaSelecionada.titulo}}</h1>
 						<div class="opcao" ng-repeat="opcao in telaSelecionada.opcoes">
-							<md-checkbox class="md-primary" aria-label="Opção de tela" ng-model="opcao.autorizada">
+							<md-checkbox class="md-primary" aria-label="Opção de tela" ng-change="onOpcoesChange()" ng-model="opcao.autorizada">
 								{{opcao.descricao}}
 							</md-checkbox>
 						</div>
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 				<div class="controles" layout="row" layout-align="space-between center">
-					<md-button ng-click="onRestaurarClick()" class="md-raised md-accent" aria-label="Cancelar Alterações">Restaurar valores iniciais</md-button>
+					<md-button ng-click="onRestaurarClick()" ng-disabled="!restaurarDisponivel" class="md-raised md-accent" aria-label="Cancelar Alterações">Restaurar valores iniciais</md-button>
 					<md-button ng-click="onSalvarClick()" class="md-raised md-primary" aria-label="Salvar Telas">Salvar</md-button>
 				</div>
 			</div>

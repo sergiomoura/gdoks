@@ -441,6 +441,46 @@
 				}
 			});
 
+			$app->put('/usuarios/:id_usuario/telas',function($id_usuario) use ($app,$db,$token){
+				// Lendo body
+				$telas = json_decode($app->request->getBody());
+				
+				// Verificando se o usuário logado e o usuário em questão são da mesma empresa
+				$sql = 'SELECT count(*) AS ok
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_usuarios b ON a.token=?
+						AND b.id=?
+						AND a.id_empresa=b.id_empresa';
+				$ok = $db->query($sql,'si',$token,$id_usuario)[0]['ok']==1;
+
+				if($ok){
+					// Removendo telas antigas do usuário
+					$sql = 'DELETE from gdoks_usuarios_x_telas WHERE id_usuario=?';
+					$db->query($sql,'i',$id_usuario);
+					
+					// Inserindo novas telas para o usuário
+					$sql_1 = 'INSERT INTO gdoks_usuarios_x_telas (id_tela,id_usuario) VALUES (?,?)';
+					foreach ($telas as $tela) {
+						$db->query($sql_1,'ii',$tela->id,$id_usuario);
+						
+						// Inserindo as opcoes de tela
+						$sql_2 = 'INSERT INTO gdoks_usuarios_x_opcoes_de_tela (id_tela,id_usuario,id_opcao,valor) VALUES (?,?,?,?)';
+						foreach ($tela->opcoes as $opcao) {
+							$db->query($sql_2,'iiii',$tela->id,$id_usuario,$opcao->id,$opcao->valor);
+						}
+					}
+
+					// retornando as telas
+					$response = new response(0,'ok');
+					$response->flush();
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Não pode acessar os dados de outras empresas.');
+					$response->flush();
+					return;
+				}
+			});
+
 			$app->put('/usuarios/:id',function($id) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
 				$id = 1*$id;
