@@ -1,6 +1,24 @@
 <?php
 	// Incluindo bloqueador de acesso externo a página.
 	require('../../includes/blocker.php');
+
+	// Carregando informações do cookie
+	$user = json_decode($_COOKIE['user']);
+
+	// Carregando dbkey
+	include('../../client_data/'.$user->empresa.'/dbkey.php');
+
+	// Criando conexaão com base de dados
+	$db = new DB($dbkey);
+	unset($dbkey);
+
+	// Levantando telas permitidas a este usuário
+	$sql = 'SELECT id_tela FROM gdoks_usuarios_x_telas WHERE id_usuario=?';
+	$idsDeTelas = array_map(function($a){return $a['id_tela'];}, $db->query($sql,'i',$user->id));
+	
+	// Criando vetor de telas
+	require('../../includes/GDoks/Tela.php');
+	$telas = array_map(function($id){return Tela::CreateById($id,$GLOBALS['user']->id,$GLOBALS['db']);}, $idsDeTelas);
 ?>
 <!DOCTYPE html>
 	<html lang="pt-br" ng-app="WebGDoks">
@@ -51,15 +69,11 @@
 			<md-sidenav layout="column" md-is-locked-open="root.mostrandoMenu" md-whiteframe="1dp" md-component-id="menu_principal">
 				<md-sidemenu>
 					<md-sidemenu-button ng-click="toggleMenu()" href="#/dashboard"><md-icon class="material-icons step" aria-label="home">home</md-icon>Home</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/projetos"><md-icon class="material-icons step" aria-label="Projetos">group_work</md-icon>Projetos</md-sidemenu-button>
-					<md-sidemenu-button href="#/usuarios" ng-click="toggleMenu()"><md-icon class="material-icons step" aria-label="Usuários">face</md-icon>Usuários</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/documentos"><md-icon class="material-icons step" aria-label="Documentos">insert_drive_file</md-icon>Documentos</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/grds/0"><md-icon class="material-icons step" aria-label="GRDs">description</md-icon>GRDs</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/disciplinas"><md-icon class="material-icons step" aria-label="Disciplinas">account_balance</md-icon>Disciplinas</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/clientes"><md-icon class="material-icons step" aria-label="Clientes">record_voice_over</md-icon>Clientes</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/cargos"><md-icon class="material-icons step" aria-label="Cargos">work</md-icon>Cargos</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/log"><md-icon class="material-icons step" aria-label="Log">history</md-icon>Log</md-sidemenu-button>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/configuracoes"><md-icon class="material-icons step" aria-label="Configurações">build</md-icon>Configurações</md-sidemenu-button>
+					<?php 
+					foreach ($telas as $tela) {
+						echo('<md-sidemenu-button ng-click="toggleMenu()" href="'.$tela->getHref().'"><md-icon class="material-icons step" aria-label="'.$tela->getTitulo().'">'.$tela->getIcone().'</md-icon>'.$tela->getTitulo().'</md-sidemenu-button>'."\n");
+					}
+					?>
 				</md-sidemenu>
 			</md-sidenav>
 			<md-content flex>

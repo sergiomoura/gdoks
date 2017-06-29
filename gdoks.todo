@@ -1,15 +1,8 @@
 GDoks:
   Para Hoje:
-    Fazer permissões de acesso a tela por usuário funcionar:
-     ✔ Alterar tela de cadastro de usuário para tabs @done (17-06-28 15:56)
-     ✔ Criar tabela de telas e preenche-las @done (17-06-28 16:49)
-     ✔ Criar tabela de permissões usuarios_x_telas @done (17-06-28 17:12)
-     ✔ Criar tabela de opções de tela @done (17-06-28 16:49)
      Fazer a tela functionar:
-       ☐ Carregar telas do gdoks com suas opções
+       ✔ Carregar telas do gdoks com suas opções @done (17-06-29 15:31)
        ☐ Carregar telas permitidas aos usuarios com os valores de suas opções
-       ☐ Fazer interface funcionar de acordo
-       ☐ Salvar alterações na base e no cookie
      ☐ Fazer com que menu carregue de acordo com essas permissões
      ☐ Bloquear o acesso a tela de acordo com esseas permissões
 
@@ -73,6 +66,12 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Salvar alterações na base e no cookie @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
+ ✔ Fazer interface funcionar de acordo @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
+ ✔ Criar tabela de permissões usuarios_x_telas @done (17-06-28 17:12) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar)
+ ✔ Criar tabela de telas e preenche-las @done (17-06-28 16:49) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar)
+ ✔ Criar tabela de opções de tela @done (17-06-28 16:49) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar)
+ ✔ Alterar tela de cadastro de usuário para tabs @done (17-06-28 15:56) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar)
  ✔ Enviar GRD por email @done (17-06-27 10:31) @project(GDoks / Para Hoje)
  ✔ Adicionar Campo para ordenar documentos @done (17-06-26 17:05) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔ Listar GRDs @done (17-06-26 06:36) @project(GDoks / Gerenciamento de GRDs)

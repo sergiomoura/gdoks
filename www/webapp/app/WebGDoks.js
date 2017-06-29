@@ -29,6 +29,7 @@ var WebGDoks = angular.module('WebGDoks',
 // Definindo Rotas
 WebGDoks.config(
 	function ($routeProvider){
+		
 		$routeProvider
 		.when(
 			'/senha',
@@ -202,6 +203,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 
 	// definindo o objeto root.
 	$scope.root = {};
+
+	// atribuindo telas
+	$scope.root.telasDoUsuario = $cookies.getObject('user').telas;
+
 
 	// Flag para mostrar se está carregando ou não
 	$scope.root.carregando = false;
@@ -386,14 +391,15 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		.success(function(response){
 			// abrindo db local
 			indexedDB.open('gdoks').onsuccess = function(evt){
-
 				// Pondo telas na tabela
 				var telas = response.telas;
 				for (var i = telas.length - 1; i >= 0; i--) {
 					evt.target.result.transaction('telas','readwrite').objectStore('telas').add(telas[i]);
 				}				
 			}
-		})
+
+			// atribuindo telas no scope.root também
+			$scope.root.telas = response.telas;		})
 	}
 
 	// Criando base de dados.
