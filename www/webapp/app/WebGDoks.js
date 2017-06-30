@@ -49,7 +49,7 @@ WebGDoks.config(
 			'/projetos',
 			{
 				controller: 'ProjetosController',
-				templateUrl: 'app/modules/Projetos/projetos.html'
+				templateUrl: 'app/modules/Projetos/projetos.php'
 			}
 		)
 		.when(

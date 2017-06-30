@@ -36,10 +36,44 @@
 				$instance->_endereco = $rs['endereco'];
 				$instance->_href = $rs['href'];
 				$instance->_id_usuario = $id_usuario;
-				$instance->_id = $rs['id'];
 
 				// retornando instancia
 				return $instance;
+			}
+		}
+
+		public static function CreateByUrl(string $url_tela,int $id_usuario, mysqli $db){
+
+			// verificando se usuário tem acesso a tela
+			$sql = 'SELECT
+						a.id,
+						a.titulo,
+						a.descricao,
+						a.icone,
+						a.endereco,
+						a.href
+					FROM gdoks_telas a
+					INNER JOIN gdoks_usuarios_x_telas b ON a.id=b.id_tela
+					AND b.id_usuario=?
+					WHERE a.endereco=?';
+			$rs = $db->query($sql,'is',$id_usuario,$url_tela);
+
+			if(sizeof($rs)==1){
+				// Usuário tem acesso a tela
+				// populando atributos locais
+				$instance = new self($db);
+				$instance->_id = $rs[0]['id'];
+				$instance->_titulo = $rs[0]['titulo'];
+				$instance->_descricao = $rs[0]['descricao'];
+				$instance->_icone = $rs[0]['icone'];
+				$instance->_endereco = $rs[0]['endereco'];
+				$instance->_href = $rs[0]['href'];
+				$instance->_id_usuario = $id_usuario;
+
+				// retornando instancia
+				return $instance;
+			} else {
+				throw new Exception("Erro: Tela inexistente ou acesso bloqueado a usuário", 1);
 			}
 		}
 
@@ -61,5 +95,26 @@
 
 		public function getHref(){
 			return $this->_href;
+		}
+
+		public function getOpcoes(){
+			$sql = 'SELECT abreviacao,
+					       ifnull(valor,0) as valor
+					FROM
+					  (SELECT id,
+					          abreviacao
+					   FROM gdoks_opcoes_de_telas
+					   WHERE id_tela=?) X
+					LEFT JOIN
+					  (SELECT id_opcao,
+					          valor
+					   FROM gdoks_usuarios_x_opcoes_de_tela
+					   WHERE id_usuario=?) Y ON X.id=Y.id_opcao';
+			$rs = $this->db->query($sql,'ii',$this->_id,$this->_id_usuario);
+			$result = Array();
+			foreach ($rs as $opcao) {
+				$result[$opcao['abreviacao']]=$opcao['valor'];
+			}
+			return $result;
 		}
 	}

@@ -280,26 +280,12 @@
 				$user->token = $token;
 				$user->empresa = $empresa;
 
-				// levantando telas permitidas e suas opções
-				$sql = 'SELECT id_tela as id FROM gdoks_usuarios_x_telas WHERE id_usuario=?';
-				$telas = array_map(function($t){return (object)$t;}, $db->query($sql,'i',$user->id));
-
-				// Levantando as opções de cada tela
-				$sql = 'SELECT id_opcao as id,valor FROM gdoks_usuarios_x_opcoes_de_tela WHERE id_usuario=? AND id_tela=?';
-				foreach ($telas as $t) {
-					$t->opcoes = $db->query($sql,'ii',$user->id,$t->id);
-				}
-
-				// atribuindo $telas ao objeto user
-				$user->telas = $telas;
-
 				// definindo resposta http como 200
 				$app->response->setStatus(200);
 				$response = new response(0,'ok');
 
 				// Adicionando as informações do usuário no response
 				$response->user = $user;
-
 				
 				// registrando a ação no log
 				registrarAcao($db,$user->id,ACAO_LOGOU);
