@@ -28,7 +28,7 @@ CREATE TABLE `gdoks_acoes` (
   `descricao` tinytext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome_UNIQUE` (`nome`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `gdoks_areas` (
   PRIMARY KEY (`id`),
   KEY `FK_areas_x_projetos_idx` (`id_projeto`),
   CONSTRAINT `FK_areas_x_projetos` FOREIGN KEY (`id_projeto`) REFERENCES `gdoks_projetos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=181 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `gdoks_arquivos` (
   PRIMARY KEY (`id`),
   KEY `FK_idu_x_usuarios_idx` (`idu`),
   CONSTRAINT `FK_idu_x_usuarios` FOREIGN KEY (`idu`) REFERENCES `gdoks_usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,7 +196,7 @@ CREATE TABLE `gdoks_documentos` (
   CONSTRAINT `FK_doc_id_subarea_x_subareas` FOREIGN KEY (`id_subarea`) REFERENCES `gdoks_subareas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_id_subdisciplina` FOREIGN KEY (`id_subdisciplina`) REFERENCES `gdoks_subdisciplinas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_idu_checkout_x_usuarios` FOREIGN KEY (`idu_checkout`) REFERENCES `gdoks_usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=601 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=602 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +270,7 @@ CREATE TABLE `gdoks_grds` (
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   KEY `FK_grd_x_id_projeto_idx` (`id_projeto`),
   CONSTRAINT `FK_grd_x_id_projeto` FOREIGN KEY (`id_projeto`) REFERENCES `gdoks_projetos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,7 +298,7 @@ CREATE TABLE `gdoks_grds_x_revisoes` (
   CONSTRAINT `FK_grd_revisoes_x_id_revisoes` FOREIGN KEY (`id_revisao`) REFERENCES `gdoks_revisoes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_grd_x_rev_id_codEMI` FOREIGN KEY (`id_codEMI`) REFERENCES `gdoks_codigos_emi` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_grd_x_rev_id_tipo` FOREIGN KEY (`id_tipo`) REFERENCES `gdoks_tipos_de_doc` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -319,7 +319,7 @@ CREATE TABLE `gdoks_hhemdocs` (
   KEY `fk_id_documento_x_documentos_idx` (`id_doc`),
   CONSTRAINT `fk_hhemdocs_x_documentos` FOREIGN KEY (`id_doc`) REFERENCES `gdoks_documentos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_id_cargo_x_cargos` FOREIGN KEY (`id_cargo`) REFERENCES `gdoks_cargos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -340,7 +340,28 @@ CREATE TABLE `gdoks_log` (
   KEY `FK_id_acao_idx` (`id_acao`),
   CONSTRAINT `FK_id_acao` FOREIGN KEY (`id_acao`) REFERENCES `gdoks_acoes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `gdoks_usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gdoks_opcoes_de_telas`
+--
+
+DROP TABLE IF EXISTS `gdoks_opcoes_de_telas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gdoks_opcoes_de_telas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(60) NOT NULL,
+  `valor_padrao` tinyint(4) NOT NULL DEFAULT '1',
+  `abreviacao` varchar(20) NOT NULL,
+  `id_tela` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UQ_id_opcao_de_tela_x_id_tela` (`id`,`id_tela`),
+  UNIQUE KEY `abreviacao_UNIQUE` (`abreviacao`),
+  KEY `FK_id_opcoes_de_tela_x_tela_idx` (`id_tela`),
+  CONSTRAINT `FK_id_opcoes_de_tela_x_tela` FOREIGN KEY (`id_tela`) REFERENCES `gdoks_telas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -364,7 +385,7 @@ CREATE TABLE `gdoks_pdas` (
   KEY `FK_pda_idu_x_usuarios_idx` (`idu`),
   CONSTRAINT `FK_pda_id_revisão_x_revisão` FOREIGN KEY (`id_revisao`) REFERENCES `gdoks_revisoes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_pda_idu_x_usuarios` FOREIGN KEY (`idu`) REFERENCES `gdoks_usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,7 +405,7 @@ CREATE TABLE `gdoks_pdas_x_arquivos` (
   KEY `FK_id_arquivo_x_arquivos_idx` (`id_arquivo`),
   CONSTRAINT `FK_id_arquivo_x_arquivos` FOREIGN KEY (`id_arquivo`) REFERENCES `gdoks_arquivos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_id_pda_x_pdas` FOREIGN KEY (`id_pda`) REFERENCES `gdoks_pdas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1265 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1270 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -411,7 +432,7 @@ CREATE TABLE `gdoks_projetos` (
   CONSTRAINT `FK_projetos_x_clientes` FOREIGN KEY (`id_cliente`) REFERENCES `gdoks_clientes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_projetos_x_empresas` FOREIGN KEY (`id_empresa`) REFERENCES `gdoks_empresas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_projetos_x_responsaveis` FOREIGN KEY (`id_responsavel`) REFERENCES `gdoks_usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -433,7 +454,7 @@ CREATE TABLE `gdoks_revisoes` (
   UNIQUE KEY `UQ_serial__x_doxumento` (`serial`,`id_documento`),
   KEY `FK_id_documento_x_documentos_id_idx` (`id_documento`),
   CONSTRAINT `FK_id_documento_x_documentos_id` FOREIGN KEY (`id_documento`) REFERENCES `gdoks_documentos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=601 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=602 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -453,7 +474,7 @@ CREATE TABLE `gdoks_subareas` (
   UNIQUE KEY `UQ_codigo` (`codigo`,`id_area`),
   KEY `FK_id_area_x_subarea_idx` (`id_area`),
   CONSTRAINT `FK_id_area_x_subarea` FOREIGN KEY (`id_area`) REFERENCES `gdoks_areas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=361 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=362 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -492,6 +513,25 @@ CREATE TABLE `gdoks_tamanhos_de_papel` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome_UNIQUE` (`nome`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gdoks_telas`
+--
+
+DROP TABLE IF EXISTS `gdoks_telas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gdoks_telas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(45) DEFAULT NULL,
+  `descricao` text,
+  `endereco` varchar(200) DEFAULT NULL,
+  `href` varchar(45) DEFAULT NULL,
+  `icone` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `titulo_UNIQUE` (`titulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -537,6 +577,47 @@ CREATE TABLE `gdoks_usuarios` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `gdoks_usuarios_x_opcoes_de_tela`
+--
+
+DROP TABLE IF EXISTS `gdoks_usuarios_x_opcoes_de_tela`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gdoks_usuarios_x_opcoes_de_tela` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(11) NOT NULL,
+  `id_tela` int(11) NOT NULL,
+  `id_opcao` int(11) NOT NULL,
+  `valor` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_permissao_x_opcoes_de_tela_idx` (`id_usuario`,`id_tela`),
+  KEY `FK_id_opcao_x_id_tela_id_opcao_id_tela_idx` (`id_tela`,`id_opcao`),
+  CONSTRAINT `FK_id_opcao_x_id_tela_id_opcao_id_tela` FOREIGN KEY (`id_tela`, `id_opcao`) REFERENCES `gdoks_opcoes_de_telas` (`id_tela`, `id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_id_usuario_x_id_tela_id_usuario_id_tela` FOREIGN KEY (`id_usuario`, `id_tela`) REFERENCES `gdoks_usuarios_x_telas` (`id_usuario`, `id_tela`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `gdoks_usuarios_x_telas`
+--
+
+DROP TABLE IF EXISTS `gdoks_usuarios_x_telas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gdoks_usuarios_x_telas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(11) NOT NULL,
+  `id_tela` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UQ_id_usuario_x_id_tela` (`id_usuario`,`id_tela`),
+  KEY `FK_id_usuario_x_tela_x_usuario_idx` (`id_usuario`),
+  KEY `FK_id_usuario_x_tela_x_tela_idx` (`id_tela`),
+  CONSTRAINT `FK_id_usuario_x_tela_x_tela` FOREIGN KEY (`id_tela`) REFERENCES `gdoks_telas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_id_usuario_x_tela_x_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `gdoks_usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `gdoks_validadores`
 --
 
@@ -552,7 +633,7 @@ CREATE TABLE `gdoks_validadores` (
   KEY `FK_validadores_x_disciplinas_idx` (`id_disciplina`),
   CONSTRAINT `FK_validadores_x_disciplinas` FOREIGN KEY (`id_disciplina`) REFERENCES `gdoks_disciplinas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_validadores_x_usuarios` FOREIGN KEY (`id_usuario`) REFERENCES `gdoks_usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -612,4 +693,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-26 12:51:13
+-- Dump completed on 2017-06-30  9:41:34
