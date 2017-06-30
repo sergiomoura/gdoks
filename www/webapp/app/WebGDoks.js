@@ -29,7 +29,6 @@ var WebGDoks = angular.module('WebGDoks',
 // Definindo Rotas
 WebGDoks.config(
 	function ($routeProvider){
-		
 		$routeProvider
 		.when(
 			'/senha',
