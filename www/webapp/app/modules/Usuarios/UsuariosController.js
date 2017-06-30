@@ -337,7 +337,7 @@
 				telasDoUsuarioCarregadas = true;
 				marcarTelasAutorizadas();
 			})
-			.error(function(error)){
+			.error(function(error){
 				// esconde carregando
 				$scope.root.carregando = false;
 
@@ -351,7 +351,7 @@
 
 				// imprimindo erro no console
 				console.warn(error);
-			}
+			});
 		}
 	}
 
