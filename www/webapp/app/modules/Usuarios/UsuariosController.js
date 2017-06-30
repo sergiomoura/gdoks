@@ -192,7 +192,11 @@
 		
 		// Carregando as telas atualmente disponíveis para o usuário
 		telasDoUsuario = [];
-		loadTelasDoUsuario();
+		if(id_usuario != 0){
+			loadTelasDoUsuario();
+		} else {
+			telasDoUsuarioCarregadas = true;
+		}
 
 
 		// Definindo variável de controle para uma tela selecionada na interface
@@ -332,7 +336,22 @@
 				telasDoUsuario = response.telas;
 				telasDoUsuarioCarregadas = true;
 				marcarTelasAutorizadas();
-			});
+			})
+			.error(function(error)){
+				// esconde carregando
+				$scope.root.carregando = false;
+
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao carregar telas do usuário.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// imprimindo erro no console
+				console.warn(error);
+			}
 		}
 	}
 
