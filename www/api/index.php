@@ -546,7 +546,7 @@
 				$id = $rs['id'];
 
 				// Inserindo novo usuário.
-				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_empresa,ativo) VALUES (?,?,?,?,?,?)';
+				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_empresa,ativo) VALUES (?,?,?,PASSWORD(?),?,?)';
 				try {
 					$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$id_empresa,$usuario->ativo);
 					$response = new response(0,'Usuário criado com sucesso.');

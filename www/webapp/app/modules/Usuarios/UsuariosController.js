@@ -80,9 +80,12 @@
 						// Retornando Toast para o usuário
 						$mdToast.show(
 							$mdToast.simple()
+							.action('FECHAR')
 							.textContent('Usuário criado com sucesso. Agora, adicione permissões!')
 							.position('bottom left')
 							.hideDelay(0)
+							.highlightAction(true)
+      						.highlightClass('md-accent')
 						);
 
 						// Aribuindo nova id para usuário recém criado
@@ -98,6 +101,9 @@
 							var db = evt.target.result;
 							db.transaction('usuarios','readwrite').objectStore('usuarios').add($scope.usuario);
 						}
+
+						// mudando a url para que se fique de acordo
+						$location.url('/usuarios/'+$scope.usuario.id);
 
 					}
 				)
