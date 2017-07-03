@@ -1978,9 +1978,9 @@
 
 				if($ok == 1){
 					// Tudo ok! O documento a ser alterado é da mesma empresa do usuário
-					$sql = 'UPDATE gdoks_documentos SET nome=?,codigo=?,id_subarea=?,id_subdisciplina=? WHERE id=?';
+					$sql = 'UPDATE gdoks_documentos SET nome=?,codigo=?,codigo_cliente=?,codigo_alternativo=?,id_subarea=?,id_subdisciplina=? WHERE id=?';
 					try {
-						$db->query($sql,'ssiii',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina,$id_documento);
+						$db->query($sql,'ssssiii',$documento->nome,$documento->codigo,$documento->codigo_cliente,$documento->codigo_alternativo,$documento->id_subarea,$documento->id_subdisciplina,$id_documento);
 						$response = new response(0,'Documento alterado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
@@ -2049,10 +2049,10 @@
 				$id_usuario = $rs['id_usuario'];
 				if($ok == 1){
 					// Tudo ok! A documento a ser adicionada é do mesmo cliente do usuário
-					$sql = 'INSERT INTO gdoks_documentos (nome,codigo,id_subarea,id_subdisciplina) VALUES (?,?,?,?)';
+					$sql = 'INSERT INTO gdoks_documentos (nome,codigo,codigo_cliente,codigo_alternativo,id_subarea,id_subdisciplina) VALUES (?,?,?,?,?,?)';
 					try {
 						// Salvando documento
-						$db->query($sql,'ssii',$documento->nome,$documento->codigo,$documento->id_subarea,$documento->id_subdisciplina);
+						$db->query($sql,'ssssii',$documento->nome,$documento->codigo,$documento->codigo_cliente,$documento->codigo_alternativo,$documento->id_subarea,$documento->id_subdisciplina);
 
 						// Salvando o novo id do documento recém adicionado
 						$newId = $db->insert_id;
@@ -2174,6 +2174,8 @@
 					$sql = 'SELECT M.id,
 							       M.nome,
 							       M.codigo,
+							       M.codigo_cliente,
+							       M.codigo_alternativo,
 							       M.id_subdisciplina,
 							       M.id_subarea,
 							       rev_serial,
@@ -2185,6 +2187,8 @@
 							  (SELECT a.id,
 							          a.nome,
 							          a.codigo,
+							          a.codigo_cliente,
+							          a.codigo_alternativo,
 							          b.id AS id_subdisciplina,
 							          d.id AS id_subarea
 							   FROM gdoks_documentos a

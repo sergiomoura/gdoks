@@ -1,16 +1,25 @@
 <md-dialog class="doc_dialog">
 	<md-dialog-content>
 		<form name="formdoc" layout="row" novalidate>
-			<div layout="column">
+			<div layout="column" flex="50">
 				<div layout="row">
-					<md-input-container flex="50">
-						<label>Nome do Documento</label>
-						<input md-maxlength="100" maxlength="100" type="text" ng-model="doc.nome" required>
-					</md-input-container>
-
 					<md-input-container flex="50">
 						<label>Código do Documento</label>
 						<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo" required>
+					</md-input-container>
+					<md-input-container flex="50">
+						<label>Código Cliente</label>
+						<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_cliente">
+					</md-input-container>
+				</div>
+				<div layout="row">
+					<md-input-container flex="50">
+						<label>Código Alternativo</label>
+						<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_alternativo">
+					</md-input-container>
+					<md-input-container flex="50">
+						<label>Título do Documento</label>
+						<input md-maxlength="100" maxlength="100" type="text" ng-model="doc.nome" required>
 					</md-input-container>
 				</div>
 				<div layout="row">
@@ -41,6 +50,8 @@
 						</md-select>
 					</md-input-container>
 				</div>
+			</div>
+			<div layout="column" flex="50">
 				<md-input-container>
 					<label>Data Limite</label>
 					<md-datepicker
@@ -49,8 +60,6 @@
 							md-hide-icons="calendar"
 							required></md-datepicker>
 				</md-input-container>
-			</div>
-			<div layout="column">
 				<md-input-container>
 					<label>Dependências</label>
 					<md-select

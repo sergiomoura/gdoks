@@ -1,10 +1,15 @@
 GDoks:
-  Para Hoje:
-     Fazer a tela functionar:
-       ✔ Carregar telas do gdoks com suas opções @done (17-06-29 15:31)
-       ☐ Carregar telas permitidas aos usuarios com os valores de suas opções
-     ☐ Fazer com que menu carregue de acordo com essas permissões
-     ☐ Bloquear o acesso a tela de acordo com esseas permissões
+  ☐ Bloquear o acesso direto a tela de acordo com as permissões de telas do usuárrio
+    ✔ projetos @done (17-06-30 12:17)
+    ☐ usuários
+    ☐ documentos
+    ☐ GRDs
+    ☐ Disciplinas
+    ☐ Clientes
+    ☐ Cargos
+    ☐ Log
+    ☐ Configurações
+
 
 
     ☐ Otimizar página de documentos para grande volume de dados
@@ -23,7 +28,27 @@ GDoks:
   Gerenciamento de Documentos:
   	☐	Melhorar a forma com que os documentos atrasados são destacados
 
-  Gerenciamento de GRDs: @due(17-05-29 23:59)
+  Alterações Urgentes:
+	✔	TROCAR NOME DE DOCUMENTO PARA TÍTULO @done (17-07-03 15:07)
+	✔	Trocar Código do documento para número do documento @done (17-07-03 15:07)
+	✔	Ordem: Codigo do Cliente, Codigo interno,  depois nome do documento @done (17-07-03 15:07)
+	✔	No cadastro do por o código do cliente @done (17-07-03 15:08)
+	☐	visualizar o documento de outras disciplinas
+	☐	Melhorar caixa de diálogo para cadastrar um documento
+	☐	Quando for baixar um documento só, baixar sem zipar
+	☐	tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB.
+	☐	Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD
+	☐	Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente
+	☐	No cadastro do cliente: Por endereço e dados FTP
+	☐	Cadastrar documentos lendo lista de CSV
+	☐	Lista de documento com percentual e datas
+	☐	Código de GRD deve ser preenchido automaticamente.. ano-contador
+	☐	Cadastrar usuário com sigla
+	☐	Registrar Endereço físico do documento no cadastro do documento na grd.
+	☐	Número de revisões a serem guardadas é limitado e configurável
+	☐	Tela e-mails enviados
+
+  Gerenciamento de GRDs: 
     ☐ Registrar Retorno de GRD
       ☐ Desenhar tela de registro de retorno de GRD
       ☐ Registrar Observações sobre arquivos que compões a GRD
@@ -66,8 +91,10 @@ GDoks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Fazer com que menu carregue de acordo com essas permissões @done (17-06-30 11:48) @project(GDoks / Para Hoje)
  ✔ Salvar alterações na base e no cookie @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
  ✔ Fazer interface funcionar de acordo @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
+ ✔ Carregar telas do gdoks com suas opções @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer a tela functionar)
  ✔ Criar tabela de permissões usuarios_x_telas @done (17-06-28 17:12) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar)
  ✔ Criar tabela de telas e preenche-las @done (17-06-28 16:49) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar)
  ✔ Criar tabela de opções de tela @done (17-06-28 16:49) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar)
