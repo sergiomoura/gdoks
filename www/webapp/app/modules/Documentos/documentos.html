@@ -16,7 +16,7 @@
 				<label>Projeto</label>
 				<md-select ng-model="busca.id_projeto" ng-change="onProjetoChange()">
 				  <md-option ng-value="undefined">Todos os Projetos</md-option>
-				  <md-option ng-value="p.id" ng-repeat="p in projetos">{{ p.nome }}</md-option>
+				  <md-option ng-value="p.id" ng-repeat="p in projetos|orderBy:'nome'">{{ p.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
