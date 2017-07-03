@@ -1,57 +1,49 @@
 <md-dialog class="doc_dialog">
 	<md-dialog-content>
 		<form name="formdoc" layout="row" novalidate>
-			<div layout="column" flex="50">
-				<div layout="row">
-					<md-input-container flex="50">
-						<label>Código do Documento</label>
-						<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo" required>
-					</md-input-container>
-					<md-input-container flex="50">
-						<label>Código Cliente</label>
-						<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_cliente">
-					</md-input-container>
-				</div>
-				<div layout="row">
-					<md-input-container flex="50">
-						<label>Código Alternativo</label>
-						<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_alternativo">
-					</md-input-container>
-					<md-input-container flex="50">
-						<label>Título do Documento</label>
-						<input md-maxlength="100" maxlength="100" type="text" ng-model="doc.nome" required>
-					</md-input-container>
-				</div>
-				<div layout="row">
-					<md-input-container flex="50">
-						<label>Disciplina</label>
-						<md-select ng-model="disciplinaSelecionada" required>
-						  <md-option ng-value="opt" ng-repeat="opt in disciplinas">{{ opt.nome }}</md-option>
-						</md-select>
-					</md-input-container>
-					<md-input-container flex="50">
-						<label>Subdisciplina</label>
-						<md-select ng-model="doc.subdisciplina" required>
-						  <md-option ng-value="opt" ng-repeat="opt in disciplinaSelecionada.subs">{{ opt.nome }}</md-option>
-						</md-select>
-					</md-input-container>
-				</div>
-				<div layout="row">
-					<md-input-container flex="50">
-						<label>Área</label>
-						<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()" required>
-						  <md-option ng-value="opt" ng-repeat="opt in areas">{{ opt.nome }}</md-option>
-						</md-select>
-					</md-input-container>
-					<md-input-container flex="50">
-						<label>Subárea</label>
-						<md-select ng-model="doc.subarea" required>
-							<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{ opt.nome }}</md-option>
-						</md-select>
-					</md-input-container>
-				</div>
+			<div layout="column" flex="33">
+				<md-input-container>
+					<label>Código do Documento</label>
+					<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo" required>
+				</md-input-container>
+				<md-input-container>
+					<label>Código Cliente</label>
+					<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_cliente">
+				</md-input-container>
+				<md-input-container>
+					<label>Código Alternativo</label>
+					<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_alternativo">
+				</md-input-container>
+				<md-input-container>
+					<label>Título do Documento</label>
+					<input md-maxlength="100" maxlength="100" type="text" ng-model="doc.nome" required>
+				</md-input-container>
 			</div>
-			<div layout="column" flex="50">
+			<div layout="column" flex="33">
+				<md-input-container>
+					<label>Disciplina</label>
+					<md-select ng-model="disciplinaSelecionada" required>
+					  <md-option ng-value="opt" ng-repeat="opt in disciplinas">{{ opt.nome }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container>
+					<label>Subdisciplina</label>
+					<md-select ng-model="doc.subdisciplina" required>
+					  <md-option ng-value="opt" ng-repeat="opt in disciplinaSelecionada.subs">{{ opt.nome }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container>
+					<label>Área</label>
+					<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()" required>
+					  <md-option ng-value="opt" ng-repeat="opt in areas">{{ opt.nome }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container>
+					<label>Subárea</label>
+					<md-select ng-model="doc.subarea" required>
+						<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{ opt.nome }}</md-option>
+					</md-select>
+				</md-input-container>
 				<md-input-container>
 					<label>Data Limite</label>
 					<md-datepicker
@@ -60,6 +52,8 @@
 							md-hide-icons="calendar"
 							required></md-datepicker>
 				</md-input-container>
+			</div>
+			<div layout="column" flex="33">
 				<md-input-container>
 					<label>Dependências</label>
 					<md-select
