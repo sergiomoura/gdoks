@@ -216,15 +216,11 @@
 				<md-expansion-panel-group md-component-id="panelGroup">
 					<md-expansion-panel  ng-repeat="doc in projeto.documentos | filter:q as result" md-component-id="{{'panel_'+$index}}">
 						<md-expansion-panel-collapsed layout="row" layout-align="start start">
-							<div class="md-expansion-panel-item" flex>
-								<div class="label">ID</div>
-								<div class="value">{{doc.id}}</div>
-							</div>
-							<div class="md-expansion-panel-item" flex>
+							<div class="md-expansion-panel-item" style="width: 150px">
 								<div class="label">Código</div>
 								<div class="value">{{doc.codigo}}</div>
 							</div>
-							<div class="md-expansion-panel-item" flex>
+							<div class="md-expansion-panel-item" style="width: 150px">
 								<div class="label">Título</div>
 								<div class="value">{{doc.nome}}</div>
 							</div>
@@ -232,55 +228,47 @@
 								<div class="label">Subdisciplina</div>
 								<div class="value">{{doc.subdisciplina.nome}}</div>
 							</div>
-							<div class="md-expansion-panel-item" flex>
-								<div class="label">Disciplina</div>
-								<div class="value">{{doc.subdisciplina.disciplina.nome}}</div>
-							</div>
-							<div class="md-expansion-panel-item" flex>
-								<div class="label">Área</div>
-								<div class="value">{{doc.subarea.area.nome}}</div>
-							</div>
-							<div class="md-expansion-panel-item" flex>
+							<div class="md-expansion-panel-item"  style="width: 200px">
 								<div class="label">Sub-área</div>
 								<div class="value">{{doc.subarea.nome}}</div>
 							</div>
-							<div class="md-expansion-panel-item" flex>
+							<div class="md-expansion-panel-item"  style="width: 85px">
 								<div class="label">Data Limite</div>
 								<div class="value">{{doc.data_limite|date:'dd/MM/yyyy'}}</div>
 							</div>
 						</md-expansion-panel-collapsed>
 						<md-expansion-panel-expanded>
 							<md-expansion-panel-content layout="column">
-								<div layout="row">
-									<div class="md-expansion-panel-item" flex>
+								<div>
+									<div class="md-expansion-panel-item">
 										<div class="label">ID</div>
 										<div class="value">{{doc.id}}</div>
 									</div>
-									</div>
-									<div class="md-expansion-panel-item" flex>
+									<div class="md-expansion-panel-item">
 										<div class="label">Código</div>
 										<div class="value">{{doc.codigo}}</div>
 									</div>
-									<div class="md-expansion-panel-item" flex>
+									<div class="md-expansion-panel-item">
 										<div class="label">Título</div>
 										<div class="value">{{doc.nome}}</div>
-									<div class="md-expansion-panel-item" flex>
+									</div>
+									<div class="md-expansion-panel-item">
 										<div class="label">Subdisciplina</div>
 										<div class="value">{{doc.subdisciplina.nome}}</div>
 									</div>
-									<div class="md-expansion-panel-item" flex>
+									<div class="md-expansion-panel-item">
 										<div class="label">Disciplina</div>
 										<div class="value">{{doc.subdisciplina.disciplina.nome}}</div>
 									</div>
-									<div class="md-expansion-panel-item" flex>
+									<div class="md-expansion-panel-item">
 										<div class="label">Área</div>
 										<div class="value">{{doc.subarea.area.nome}}</div>
 									</div>
-									<div class="md-expansion-panel-item" flex>
+									<div class="md-expansion-panel-item">
 										<div class="label">Sub-área</div>
 										<div class="value">{{doc.subarea.nome}}</div>
 									</div>
-									<div class="md-expansion-panel-item" flex>
+									<div class="md-expansion-panel-item">
 										<div class="label">Data Limite</div>
 										<div class="value">{{doc.data_limite|date:'dd/MM/yyyy'}}</div>
 									</div>
