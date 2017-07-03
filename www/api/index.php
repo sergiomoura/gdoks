@@ -222,11 +222,14 @@
 			echo($e->getMessage());
 			die();
 		}
-		
 
+		// Criando pasta para por os arquivos da GRD
+		$pastaDeArquivos = 'arquivos';
+		$zip->addEmptyDir($pastaDeArquivos);
+		
 		// Adicionando os arquivos da GRD
 		foreach ($arquivos as $f) {
-			$zip->addFile(UPLOAD_PATH.$f->caminho,$f->nome_cliente);
+			$zip->addFile(UPLOAD_PATH.$f->caminho,$pastaDeArquivos.'/'.$f->nome_cliente);
 		}
 
 		// Fechando o zip
