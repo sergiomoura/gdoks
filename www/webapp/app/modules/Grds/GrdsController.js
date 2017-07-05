@@ -563,8 +563,93 @@
 			);
 		}
 
-		function uploadGrdViaFTP(){
+		$scope.openDialogDeEnviarLinkPorEmail = function(evt){
+			$mdDialog.show(
+				{
+					controller: enviarLinkViaEmailDialogController,
+					locals:{
+						parentScope:$scope,
+					},
+					templateUrl: './app/modules/Grds/enviarLinkViaEmail.dialog.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: evt,
+					clickOutsideToClose:false
+				});
+		}
 
+		function enviarLinkViaEmailDialogController($scope,parentScope,GDoksFactory){
+			// Amarrando a grd deste scope com o parentScope
+			$scope.grd = parentScope.grd;
+
+			// Definindo mensagem
+			$scope.mail = {
+				destinatarios:[
+					{
+						nome:$scope.grd.cliente.contato_nome,
+						email:$scope.grd.cliente.contato_email
+					}
+				],
+				assunto:'Link para '+$scope.grd.codigo,
+				msg:'Faça o download da [link]'+$scope.grd.codigo+'[/link]'
+			}
+
+			// Definindo função que adiciona um destinatário
+			$scope.addDestinatario = function(){
+				$scope.mail.destinatarios.push({nome:'','email':''});
+			}
+
+			$scope.removeDestinatario = function(index){
+				$scope.mail.destinatarios.splice(index,1);	
+			}
+
+			// Função que fecha caixa de diálogo.
+			$scope.cancelar = function(){
+				$mdDialog.hide();
+			}
+
+			$scope.enviar = function(){
+				
+				// mostra carregando
+				parentScope.root.carregando == true;
+
+				GDoksFactory.mailLinkGRD($scope.grd.id,$scope.mail)
+				.success(function(response){
+					// Esconde carregando
+					parentScope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('GRD enviada com successo!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Escondendo dialogo
+					$mdDialog.hide();
+				})
+				.error(function(error){
+					// Esconde carregando
+					parentScope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha no envio da GRD')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// imprimindo erro no console
+					console.warn(error);
+				});
+			}
+
+			// Verificando se a mensagem tem a pseudotag link
+			$scope.msgTemLink = function(){
+				var re = /\[link\].+\[\/link\]/;
+				return $scope.mail.msg.match(re)!=null;
+			}
 		}
 
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =

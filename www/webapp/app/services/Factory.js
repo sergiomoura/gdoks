@@ -399,6 +399,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/grds/'+id_grd+'/mail',mail,buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.mailLinkGRD = function(id_grd,mail){
+				return $http.post(API_ROOT+'/grds/'+id_grd+'/link',mail,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.ftpGRD = function(id_grd){
 				return $http.post(API_ROOT+'/grds/'+id_grd+'/ftp',null,buildHeaders());	
 			}

@@ -4128,6 +4128,96 @@
 				}
 			});
 
+			$app->post('/grds/:id_grd/link',function($id_grd) use ($app,$db,$token){
+				echo('<pre>');
+				print_r($_SERVER);
+				echo('</pre>');
+				die();
+				// Lendo conteúdo da requisição
+				$mail = json_decode($app->request->getBody());
+				$id_grd = 1*$id_grd;
+
+				// verificando se mail->msg possui link
+				if(@preg_match('/\[link\].+\[\/link\]/', $mail->msg)!=1){
+					$app->response->setStatus(401);
+					$response = new response(1,'Texto da mensagem sem link para download.');
+					$response->flush();
+					return;
+				}
+
+				// verificando se a grd é da mesma empresa do usuário
+				$sql = 'SELECT a.id
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+						WHERE token=?
+						  AND validade_do_token>now()
+						  AND c.id=?';
+				$rs = $db->query($sql,'si',$token,$id_grd);
+				if(sizeof($rs) == 0){
+					// Retornando erro
+					$app->response->setStatus(401);
+					$response = new response(1,'GRD inexistente ou token expirado.');
+					$response->flush();
+					return;
+				} else {
+
+					// Salvando o id do usuário
+					$id_usuario = $rs[0]['id'];
+
+					// Criando objeto da grd
+					$grd = getGrd($id_grd,$db);
+
+					// Gerando unique_link
+					$unique_link = uniqid(true);
+
+					// Settando o unique link da grd na base
+					$sql = 'UPDATE gdoks_grds SET unique_link=? WHERE id=?';
+					$db->query($sql,'si',$unique_link,$grd->id);
+
+					// Definindo o email
+					$sgMail = new SendGrid\Email();
+
+					// adicionando o from
+					$sgMail->setFrom(SENDGRID_DEFAULT_FROM);
+					$sgMail->setFromName(SENDGRID_DEFAULT_FROM_NAME);
+
+					// Adicionando os Tos
+					foreach ($mail->destinatarios as $d) {
+						$sgMail->addTo($d->email,$d->nome);
+					}
+
+					// Settando o assunto
+					$sgMail->setSubject($mail->assunto);
+
+					// Parsing msg para por o link
+					//$msg = str_replace('[link]', '<a href="">', subject)
+
+					// Settando conteúdo
+					$sgMail->setHtml($mail->msg);
+
+					// Enviando o email
+					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
+					$response = $sendgrid->send($sgMail);
+
+					if($response->message == 'success'){
+						// Retornando sucesso
+						$response = new response(0,'ok');
+						$response->flush();
+
+						// Registrando no log
+						registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
+					} else {
+
+						// Retornando erro
+						$app->response->setStatus(401);
+						$response = new response(1,'Falha no envio: '.$response->message);
+						$response->flush();
+						die();
+					}
+				}
+			});
+
 			$app->post('/grds/:id_grd/ftp',function($id_grd) use ($app,$db,$token){
 				// Lendo conteúdo da requisição
 				$id_grd = 1*$id_grd;
