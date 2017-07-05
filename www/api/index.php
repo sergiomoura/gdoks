@@ -4189,7 +4189,7 @@
 					$sgMail->setSubject($mail->assunto);
 
 					// Parsing msg para por o link
-					$url = $_SERVER['HTTP_ORIGIN'].'/api/grds/'.$empresa.'-'.$unique_link;
+					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.$empresa.'-'.$unique_link;
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
 
@@ -4376,8 +4376,6 @@
 			});
 		// FIM DE ROTAS DE TELAS
 	});
-
-	// Definindo rota para baixar GRD direto do cliente
 
 	// running the app
 	$app->run();
