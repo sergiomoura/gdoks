@@ -4189,8 +4189,8 @@
 
 					// Parsing msg para por o link
 					$url = $_SERVER['HTTP_ORIGIN'].'/api/grds/'.$unique_link;
-					$msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
-					$msg = str_replace('[/link]', '</a>', $mail->msg);
+					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
+					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
 
 					// Settando conteúdo
 					$sgMail->setHtml($mail->msg);
