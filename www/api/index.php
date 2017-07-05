@@ -4133,7 +4133,7 @@
 				// Lendo conteúdo da requisição
 				$mail = json_decode($app->request->getBody());
 				$id_grd = 1*$id_grd;
-				$empresa = split('-', getallheaders()['Authorization'])[0];
+				$empresa = explode('-', getallheaders()['Authorization'])[0];
 
 				// verificando se mail->msg possui link
 				if(@preg_match('/\[link\].+\[\/link\]/', $mail->msg)!=1){
@@ -4206,7 +4206,7 @@
 						$response->flush();
 
 						// Registrando no log
-						registrarAcao($db,$id_usuario,ACAO_ENVIOU_LINK_DE_GRD_VIA_EMAIL,$grd->id.',['.implode(',', array_map(function($a){return $a->email;}, $mail->destinatarios)).']');
+						registrarAcao($db,$id_usuario,ACAO_ENVIOU_LINK_DE_GRD_VIA_EMAIL,$grd->id);
 					} else {
 
 						// Retornando erro
