@@ -42,4 +42,5 @@
 	define('ACAO_ANEXOU_DOC_A_GRD',41);
 	define('ACAO_ATUALIZOU_GRD',42);
 	define('ACAO_ENVIOU_GRD_VIA_FTP',43);
+	define('ACAO_ENVIOU_GRD_VIA_EMAIL',44);
 ?>

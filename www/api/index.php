@@ -4125,11 +4125,8 @@
 						$response->flush();
 					}*/
 
-
-					
-
 					// Registrando no log
-					// registrarAcao($db,$id_usuario,ACAO_ANEXOU_DOC_A_GRD,$grd->id);
+					registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
 				}
 			});
 
