@@ -4129,10 +4129,7 @@
 			});
 
 			$app->post('/grds/:id_grd/link',function($id_grd) use ($app,$db,$token){
-				echo('<pre>');
-				print_r($_SERVER);
-				echo('</pre>');
-				die();
+				
 				// Lendo conteúdo da requisição
 				$mail = json_decode($app->request->getBody());
 				$id_grd = 1*$id_grd;
@@ -4191,7 +4188,9 @@
 					$sgMail->setSubject($mail->assunto);
 
 					// Parsing msg para por o link
-					//$msg = str_replace('[link]', '<a href="">', subject)
+					$url = $_SERVER['HTTP_ORIGIN'].'/api/grds/'.$unique_link;
+					$msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
+					$msg = str_replace('[/link]', '</a>', $mail->msg);
 
 					// Settando conteúdo
 					$sgMail->setHtml($mail->msg);
