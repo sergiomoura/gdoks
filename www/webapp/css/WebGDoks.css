@@ -690,9 +690,16 @@
     margin: 0 !important; }
 
 #grd_container .controle_principal {
-  padding: 20px 0; }
+  padding: 20px 0px 20px 0; }
   #grd_container .controle_principal div:first-child {
     width: 160px; }
+  #grd_container .controle_principal md-fab-speed-dial {
+    position: absolute;
+    top: 65px;
+    right: 86px;
+    width: 50px; }
+  #grd_container .controle_principal md-fab-speed-dial md-fab-actions {
+    width: 58px; }
 #grd_container .dados {
   padding-top: 50px; }
 #grd_container .documentos {

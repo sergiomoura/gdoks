@@ -81,7 +81,8 @@
 	// função que cria objeto GRD
 	function getGrd($id,$db){
 		// Levantando dados de GRD
-		$sql = 'SELECT c.nome AS cliente_nome,
+		$sql = 'SELECT c.id AS cliente_id,
+					   c.nome AS cliente_nome,
 				       b.nome AS projeto_nome,
 				       a.obs AS obs,
 				       c.contato_nome,
@@ -3005,7 +3006,8 @@
 						       a.cpf,
 						       a.contato_nome,
 						       a.contato_email,
-						       a.contato_telefone
+						       a.contato_telefone,
+                               (!isnull(ftp_host) and !isnull(ftp_usuario) and !isnull(ftp_senha)) as ftp_configurado
 						FROM gdoks_clientes a
 						INNER JOIN
 						  (SELECT id_empresa
@@ -4131,6 +4133,91 @@
 				}
 			});
 
+			$app->post('/grds/:id_grd/ftp',function($id_grd) use ($app,$db,$token){
+				// Lendo conteúdo da requisição
+				$id_grd = 1*$id_grd;
+
+				// verificando se a grd é da mesma empresa do usuário
+				$sql = 'SELECT a.id
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+						WHERE token=?
+						  AND validade_do_token>now()
+						  AND c.id=?';
+				$rs = $db->query($sql,'si',$token,$id_grd);
+				if(sizeof($rs) == 0){
+					// Retornando erro
+					$app->response->setStatus(401);
+					$response = new response(1,'GRD inexistente ou token expirado.');
+					$response->flush();
+					return;
+				} else {
+
+					// Salvando o id do usuário
+					$id_usuario = $rs[0]['id'];
+
+					// Criando objeto da grd
+					$grd = getGrd($id_grd,$db);
+					
+					// levantando informações de ftp do cliente
+					$sql = 'SELECT ftp_host as host,
+							       ftp_usuario as login,
+							       cast(aes_decrypt(ftp_senha,unhex(sha2(?,512))) AS char(50)) AS senha,
+							       (!isnull(ftp_host)
+							        AND !isnull(ftp_usuario)
+							        AND !isnull(ftp_senha)) AS ftp_configurado
+							FROM gdoks_clientes
+							WHERE id=?';
+					$ftp_keys = $db->query($sql,'si',AES_KEY,$grd->cliente_id)[0];
+
+					// Verificando se ftp está configurado
+					if($ftp_keys['ftp_configurado']==1){
+						
+						// Servidor configurado. Abrindo conexão;
+						$ftp = @ftp_connect($ftp_keys['host']);
+						if($ftp === false){
+							$app->response->setStatus(401);
+							$response = new response(1,'Não foi possível conectar ao servidor');
+							$response->flush();
+							return;
+						}
+
+						// Efetuando login
+						if(!@ftp_login($ftp, $ftp_keys['login'], $ftp_keys['senha'])){
+							$app->response->setStatus(401);
+							$response = new response(1,'Não foi possível efetuar login no servidor do cliente');
+							$response->flush();
+							return;
+						}
+
+						// Criando o zip da Grd
+						$caminhoDoZip = gerarZipDaGrd($grd,$db);
+
+						// Fazendo upload
+						if(!@ftp_put($ftp, basename($caminhoDoZip), $caminhoDoZip, FTP_BINARY)){
+							$app->response->setStatus(401);
+							$response = new response(1,'Não foi possível fazer upload no servidor do cliente');
+							$response->flush();
+							return;	
+						} else {
+							$response = new response(0,'Arquivo enviado com sucesso!');
+							$response->flush();
+
+							// Registrando no log
+							registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_FTP,$grd->id);
+						}
+
+						// removendo arquivo zip criado
+						unlink($caminhoDoZip);
+					} else {
+						$app->response->setStatus(401);
+						$response = new response(1,'Servidor FTP não configurado para este cliente.');
+						$response->flush();
+						return;
+					}
+				}
+			});
 		// FIM DE ROTAS PARA GRDS
 
 		// ROTAS DE CODIGOS EMI

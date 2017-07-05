@@ -516,6 +516,57 @@
 			}
 		}
 
+		$scope.confirmFtpUploadController = function(evt){
+			var confirm = $mdDialog.confirm()
+				.title('Enviar GRD via FTP')
+				.textContent('Deseja enviar a GRD e seus arquivos para o servidor FTP do cliente?')
+				.ariaLabel('Enviar via FTP')
+				.targetEvent(evt)
+				.ok('Sim')
+				.cancel('Não');
+			$mdDialog.show(confirm)
+			.then(
+				function() {
+					// Mostra carregando
+					$scope.root.carregando = true;
+
+					// Fazendo requisição de envio
+					GDoksFactory.ftpGRD($scope.grd.id)
+					.success(function(response){
+						// Esconde carregando
+						$scope.root.carregando = false;
+
+						// Marcando a grd como enviada
+						// 0000
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent(response.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					})
+					.error(function(error){
+						// Esconde carregando
+						$scope.root.carregando = false;
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent(error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);	
+					})
+				}
+			);
+		}
+
+		function uploadGrdViaFTP(){
+
+		}
+
 		// FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 			// Função que carrega códigos EMI
@@ -663,21 +714,23 @@
 						documentos[i].chk_esq = false;
 						documentos[i].chk_dir = false;
 						//verificando se documento está adicionado a grd
-						var grdDoc = $scope.grd.docs.find(function(a){return a.id_revisao==this},documentos[i].rev_id);
-						if(grdDoc == undefined){
-							// Documento não foi adicionado a grd. Mantendo valores padrão
-							documentos[i].added = false;
-							documentos[i].nVias = 1;
-							documentos[i].nFolhas = 1;
-							documentos[i].tipo = $scope.tipoDeDocumentoPadrao;
-							documentos[i].codEMI = $scope.codigoEmiPadrao;
-						} else {
-							// Documento já foi adicionado a grd. Carregando os valores dele
-							documentos[i].added = true;
-							documentos[i].nVias = grdDoc.nVias;
-							documentos[i].nFolhas = grdDoc.nFolhas;
-							documentos[i].tipo = $scope.tiposDeDocumento.find(function(a){return a.id == this},grdDoc.id_tipo);
-							documentos[i].codEMI = $scope.codigosEmi.find(function(a){return a.id == this},grdDoc.id_codEMI);
+						if($scope.grd.docs != undefined){
+							var grdDoc = $scope.grd.docs.find(function(a){return a.id_revisao==this},documentos[i].rev_id);
+							if(grdDoc == undefined){
+								// Documento não foi adicionado a grd. Mantendo valores padrão
+								documentos[i].added = false;
+								documentos[i].nVias = 1;
+								documentos[i].nFolhas = 1;
+								documentos[i].tipo = $scope.tipoDeDocumentoPadrao;
+								documentos[i].codEMI = $scope.codigoEmiPadrao;
+							} else {
+								// Documento já foi adicionado a grd. Carregando os valores dele
+								documentos[i].added = true;
+								documentos[i].nVias = grdDoc.nVias;
+								documentos[i].nFolhas = grdDoc.nFolhas;
+								documentos[i].tipo = $scope.tiposDeDocumento.find(function(a){return a.id == this},grdDoc.id_tipo);
+								documentos[i].codEMI = $scope.codigosEmi.find(function(a){return a.id == this},grdDoc.id_codEMI);
+							}
 						}
 					}
 					$scope.documentos = documentos;

@@ -19,10 +19,37 @@
 				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">archive</md-icon>
 				Baixar GRD em ZIP
 			</md-button>
-			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Enviar por E-mail" ng-click="openDialogDeEnviarEmail($event)">
-				<md-icon class="material-icons step" aria-label="Enviar por E-mail">mail</md-icon>
-				Enviar por E-mail
-			</md-button>
+			<md-fab-speed-dial md-open="false" md-direction="left" class="md-scale">
+				<md-fab-trigger>
+					<md-button class="md-fab md-accent" ng-disabled="grd.docs.length == 0 || grd.docs==undefined">
+						<md-icon class="material-icons step" aria-label="Enviar">send</md-icon>
+						<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+							Enviar...
+						</md-tooltip>
+					</md-button>
+				</md-fab-trigger>
+
+				<md-fab-actions>
+					<md-button class="md-fab md-mini" ng-click="openDialogDeEnviarEmail($event)">
+						<md-icon class="material-icons step" aria-label="Enviar PDF por email">mail</md-icon>
+						<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+							... PDF por email
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-fab md-mini">
+						<md-icon class="material-icons step" aria-label="Enviar link por email">link</md-icon>
+						<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+							... LINK por email
+						</md-tooltip>
+					</md-button>
+					<md-button class="md-fab md-mini" ng-disabled="!grd.cliente.ftp_configurado" ng-click="confirmFtpUploadController($event)">
+						<md-icon class="material-icons step" aria-label="Fazer upload para FTP">unarchive</md-icon>
+						<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+							... para FTP do cliente
+						</md-tooltip>
+					</md-button>
+				</md-fab-actions>
+			</md-fab-speed-dial>
 		</div>
 	</div>
 	
