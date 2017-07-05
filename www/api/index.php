@@ -4166,7 +4166,7 @@
 					$grd = getGrd($id_grd,$db);
 
 					// Gerando unique_link
-					$unique_link = uniqid(true);
+					$unique_link = md5(uniqid(rand(), true));
 
 					// Settando o unique link da grd na base
 					$sql = 'UPDATE gdoks_grds SET unique_link=? WHERE id=?';
