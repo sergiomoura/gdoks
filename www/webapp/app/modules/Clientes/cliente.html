@@ -32,20 +32,33 @@
 			</div>
 
 			<div layout="row" layout-align="space-between start">
-				<md-input-container flex="45">
+				<md-input-container flex="30">
 					<label>Nome do Contato</label>
 					<input type="text" ng-model="cliente.contato_nome" required>
 				</md-input-container>
-				<md-input-container  flex="45">
+				<md-input-container  flex="30">
 					<label>E-mail do Contato</label>
 					<input type="email" ng-model="cliente.contato_email" required>
 				</md-input-container>
-			</div>
-			
-			<div layout="row" layout-align="space-between start">
-				<md-input-container flex="45">
+				<md-input-container flex="30">
 					<label>Telefone do Contato</label>
 					<input type="text" ng-model="cliente.contato_telefone" required>
+				</md-input-container>
+			</div>
+
+
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="30">
+					<label>Endereço FTP</label>
+					<input type="text" ng-model="cliente.ftp_host">
+				</md-input-container>
+				<md-input-container  flex="30">
+					<label>Usuário do FTP</label>
+					<input type="text" ng-model="cliente.ftp_usuario">
+				</md-input-container>
+				<md-input-container flex="30">
+					<label>Senha do FTP</label>
+					<input type="password" ng-model="cliente.ftp_senha">
 				</md-input-container>
 			</div>
 			

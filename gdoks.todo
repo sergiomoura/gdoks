@@ -33,20 +33,22 @@ GDoks:
 	✔	Trocar Código do documento para número do documento @done (17-07-03 15:07)
 	✔	Ordem: Codigo do Cliente, Codigo interno,  depois nome do documento @done (17-07-03 15:07)
 	✔	No cadastro do por o código do cliente @done (17-07-03 15:08)
-	☐	visualizar o documento de outras disciplinas
-	☐	Melhorar caixa de diálogo para cadastrar um documento
-	☐	Quando for baixar um documento só, baixar sem zipar
-	☐	tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB.
-	☐	Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD
+	✔	Melhorar caixa de diálogo para cadastrar um documento @done (17-07-03 16:48)
+	✔	Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD @done (17-07-03 17:12)
+	✔	tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB. @done (17-07-04 01:49)
+	✔	No cadastro do cliente: Por endereço e dados FTP @done (17-07-05 03:43)
 	☐	Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente
-	☐	No cadastro do cliente: Por endereço e dados FTP
 	☐	Cadastrar documentos lendo lista de CSV
+	☐	visualizar o documento de outras disciplinas
+	☐	Quando for baixar um documento só, baixar sem zipar
 	☐	Lista de documento com percentual e datas
 	☐	Código de GRD deve ser preenchido automaticamente.. ano-contador
 	☐	Cadastrar usuário com sigla
 	☐	Registrar Endereço físico do documento no cadastro do documento na grd.
 	☐	Número de revisões a serem guardadas é limitado e configurável
 	☐	Tela e-mails enviados
+
+
 
   Gerenciamento de GRDs: 
     ☐ Registrar Retorno de GRD

@@ -34,6 +34,9 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 		$scope.cliente.contato_nome = '';
 		$scope.cliente.contato_email = '';
 		$scope.cliente.contato_telefone = '';
+		$scope.cliente.ftp_host = '';
+		$scope.cliente.ftp_usuario = '';
+		$scope.cliente.ftp_senha = '';
 	} else {
 		// Carregando informações do cliente a partir da base
 		GDoksFactory.getCliente(id)
@@ -72,6 +75,9 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 
 					// salvando cliente na base local
 					var cliente = angular.copy($scope.cliente);
+					delete cliente.ftp_host;
+					delete cliente.ftp_usuario;
+					delete cliente.ftp_senha;
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').add(cliente);
 					}
@@ -122,6 +128,9 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 
 					// atualiznado cliente na base local
 					var cliente = angular.copy($scope.cliente);
+					delete cliente.ftp_host;
+					delete cliente.ftp_usuario;
+					delete cliente.ftp_senha;
 					indexedDB.open('gdoks').onsuccess = function(evt){
 						evt.target.result.transaction('clientes','readwrite').objectStore('clientes').put(cliente);
 					}

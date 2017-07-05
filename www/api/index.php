@@ -3025,7 +3025,9 @@
 						       a.cpf,
 						       a.contato_nome,
 						       a.contato_email,
-						       a.contato_telefone
+						       a.contato_telefone,
+						       a.ftp_host,
+						       a.ftp_usuario
 						FROM gdoks_clientes a
 						INNER JOIN
 						  (SELECT id_empresa
@@ -3075,23 +3077,53 @@
 
 				// Indo adiante
 				if($ok == 1) {
-					$sql = "UPDATE gdoks_clientes
-							SET	
-								nome=?,
-         						nome_fantasia=?,
-		                       	cpf=?,
-								cnpj=?,
-                                contato_nome=?,
-                                contato_email=?,
-                                contato_telefone=?
-                            WHERE id=?";
-                    try {
-                    	$db->query($sql,'sssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id);
-                    } catch (Exception $e) {
-                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
-						$response->flush();
-						die();
-                    }
+
+					// Verificando se o cliente está com a senha do ftp setada
+					if(empty($cliente->ftp_senha) || is_null($cliente->ftp_senha) || $cliente->ftp_senha==''){
+
+						// Fazendo alteração sem alteração de senha FTP
+						$sql = "UPDATE gdoks_clientes
+								SET	
+									nome=?,
+	         						nome_fantasia=?,
+			                       	cpf=?,
+									cnpj=?,
+	                                contato_nome=?,
+	                                contato_email=?,
+	                                contato_telefone=?,
+	                                ftp_host=?,
+	                                ftp_usuario=?
+	                            WHERE id=?";
+	                    try {
+	                    	$db->query($sql,'sssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->ftp_host,$cliente->ftp_usuario,$id);
+	                    } catch (Exception $e) {
+	                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+							$response->flush();
+							die();
+						}
+					} else {
+						// Fazendo alteração da senha FTP inclusive
+						$sql = "UPDATE gdoks_clientes
+								SET	
+									nome=?,
+	         						nome_fantasia=?,
+			                       	cpf=?,
+									cnpj=?,
+	                                contato_nome=?,
+	                                contato_email=?,
+	                                contato_telefone=?,
+	                                ftp_host=?,
+	                                ftp_usuario=?,
+	                                ftp_senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512)))
+	                            WHERE id=?";
+	                    try {
+	                    	$db->query($sql,'sssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY,$id);
+	                    } catch (Exception $e) {
+	                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+							$response->flush();
+							die();
+						}
+					}
 				} else {
 					$app->response->setStatus(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
@@ -3128,18 +3160,36 @@
 				$id_empresa = $rs['id_empresa'];
 				$id = $rs['id'];
 
-				// Inserindo novo cliente.
-				$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em) VALUES (?,?,?,?,?,?,?,?,NOW())';
-				try {
-					$db->query($sql,'sssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa);
-					$response = new response(0,'Cliente adicionado com sucesso.');
-					$response->newId = $db->insert_id;
-					$response->flush();
-				} catch (Exception $e) {
-					$app->response->setStatus(401);
-					$response = new response(1,$e->getMessage());
-					$response->flush();
-					return;
+				// Verificando se a senha do FTP foi preenchida
+				if(empty($cliente->ftp_senha) || is_null($cliente->ftp_senha) || $cliente->ftp_senha==''){
+
+					// Inserindo novo cliente sem senha ftp.
+					$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em,ftp_host,ftp_usuario) VALUES (?,?,?,?,?,?,?,?,NOW(),?,?)';
+					try {
+						$db->query($sql,'sssssssiss',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa,$cliente->ftp_host,$cliente->ftp_usuario);
+						$response = new response(0,'Cliente adicionado com sucesso.');
+						$response->newId = $db->insert_id;
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+				} else {
+					// Inserindo novo cliente com senha ftp.
+					$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em,ftp_host,ftp_usuario,ftp_senha) VALUES (?,?,?,?,?,?,?,?,NOW(),?,?,AES_ENCRYPT(?,UNHEX(SHA2(?,512))))';
+					try {
+						$db->query($sql,'sssssssissss',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY);
+						$response = new response(0,'Cliente adicionado com sucesso.');
+						$response->newId = $db->insert_id;
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
 				}
 				// Registrando a ação
 				registrarAcao($db,$id,ACAO_ADICIONOU_CLIENTE,$db->insert_id.','.$cliente->nome);
