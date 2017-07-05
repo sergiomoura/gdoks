@@ -4133,6 +4133,7 @@
 				// Lendo conteúdo da requisição
 				$mail = json_decode($app->request->getBody());
 				$id_grd = 1*$id_grd;
+				$empresa = split('-', getallheaders()['Authorization'])[0];
 
 				// verificando se mail->msg possui link
 				if(@preg_match('/\[link\].+\[\/link\]/', $mail->msg)!=1){
@@ -4188,7 +4189,7 @@
 					$sgMail->setSubject($mail->assunto);
 
 					// Parsing msg para por o link
-					$url = $_SERVER['HTTP_ORIGIN'].'/api/grds/'.$unique_link;
+					$url = $_SERVER['HTTP_ORIGIN'].'/api/grds/'.$empresa.'-'.$unique_link;
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
 
@@ -4375,6 +4376,8 @@
 			});
 		// FIM DE ROTAS DE TELAS
 	});
+
+	// Definindo rota para baixar GRD direto do cliente
 
 	// running the app
 	$app->run();
