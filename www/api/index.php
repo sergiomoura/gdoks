@@ -4205,7 +4205,7 @@
 						$response->flush();
 
 						// Registrando no log
-						registrarAcao($db,$id_usuario,ACAO_ENVIOU_LINK_DE_GRD_VIA_EMAIL,$grd->id,'['.implode(',', array_map(function($a){return $a->email;}, $mail->destinatarios)).']');
+						registrarAcao($db,$id_usuario,ACAO_ENVIOU_LINK_DE_GRD_VIA_EMAIL,$grd->id.',['.implode(',', array_map(function($a){return $a->email;}, $mail->destinatarios)).']');
 					} else {
 
 						// Retornando erro
