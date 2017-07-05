@@ -4110,23 +4110,21 @@
 					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
 					$response = $sendgrid->send($sgMail);
 
-					print_r($response);
-
-					
-					/*
-					if(!$mail->send()) {
-						$app->response->setStatus(401);
-						$response = new response(1,'Falha no envio: '.$mail->ErrorInfo);
-						$response->flush();
-						die();
-					} else {
+					if($response->message == 'success'){
 						// Retornando sucesso
 						$response = new response(0,'ok');
 						$response->flush();
-					}*/
 
-					// Registrando no log
-					registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
+						// Registrando no log
+						registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
+					} else {
+
+						// Retornando erro
+						$app->response->setStatus(401);
+						$response = new response(1,'Falha no envio: '.$response->message);
+						$response->flush();
+						die();
+					}
 				}
 			});
 
