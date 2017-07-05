@@ -18,6 +18,8 @@
 					id:0,
 					nome:null,
 					codigo:null,
+					codigo_cliente:null,
+					codigo_alternativo:null,
 					dependencias:[],
 					hhs: [],
 					subdisciplina:null,
