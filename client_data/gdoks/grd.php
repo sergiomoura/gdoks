@@ -43,7 +43,7 @@
 		    $this->Cell(95,5,utf8_decode('Data: '.date('d/M/Y')),0);
 		    $this->Ln(5);
 		    $this->Cell(95,5,utf8_decode('Projeto: '.$this->grd->projeto_nome),0);
-		    $this->Cell(95,5,utf8_decode('Destinatário: '.$this->grd->contato_nome),0);
+		    $this->Cell(95,5,utf8_decode('Destinatário: '.$this->grd->cliente_contato_nome),0);
 		    $this->Ln(5);
 		    $this->Cell(0,5,utf8_decode('Endereço: _______________________________________'),0);$this->Ln();
 		    $this->Cell(0,5,utf8_decode('Observações: '.$this->grd->obs),0);$this->Ln();
@@ -65,7 +65,7 @@
 
 			// Corpo da tabela
 			$alturaDaLinha = 5;
-			foreach ($this->grd->docs as $i => $doc) {
+			foreach ($this->grd->documentos as $i => $doc) {
 				$this->Cell($this->titles[0]->width,$alturaDaLinha,($i+1)			,1,0,'C');
 				$this->Cell($this->titles[1]->width,$alturaDaLinha,utf8_decode($doc->doc_codigo	),1,0,'C');
 				$this->Cell($this->titles[2]->width,$alturaDaLinha,utf8_decode($doc->tipo		),1,0,'C');

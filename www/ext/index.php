@@ -11,6 +11,7 @@
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 
+	include('../../includes/GDoks/Grd.php');
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
 
@@ -53,7 +54,12 @@
 
 		// Salvando id da grd
 		$id_grd = $rs[0]['id'];
-		echo($id_grd);
+
+		// Criando objeto GRD
+		$grd = getGrd($id_grd,$db);
+
+		// Mandando zip da grd
+		mandaZipDaGrd($grd,$db);
 
 	});
 

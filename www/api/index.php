@@ -1,4 +1,5 @@
 <?php
+
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
@@ -9,6 +10,7 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
+	require('../../includes/Gdoks/Grd.php');
 
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
@@ -32,7 +34,6 @@
 		// definindo iddb e token a partir do header
 		$empresa =  explode('-', $headers['Authorization'])[0];
 		$token = explode('-', $headers['Authorization'])[1];
-
 	} elseif (isset($_COOKIE['user'])) {
 		// se informação não está no header, talvez esteja no cookie para requisições de download
 		$user = json_decode($_COOKIE['user']);
@@ -78,170 +79,6 @@
 		}
 	}
 
-	// função que cria objeto GRD
-	function getGrd($id,$db){
-		// Levantando dados de GRD
-		$sql = 'SELECT c.id AS cliente_id,
-					   c.nome AS cliente_nome,
-				       b.nome AS projeto_nome,
-				       a.obs AS obs,
-				       c.contato_nome,
-				       now() AS DATA,
-				       a.codigo,
-				       c.id_empresa
-				FROM gdoks_grds a
-				INNER JOIN gdoks_projetos b ON a.id_projeto=b.id
-				INNER JOIN gdoks_clientes c ON b.id_cliente = c.id
-				WHERE a.id=?';
-		$grd = (object)$db->query($sql,'i',$id)['0'];
-		$grd->id = $id;
-
-		// Levantando dados dos documentos desta grd
-		$sql = 'SELECT c.codigo AS doc_codigo,
-				       d.simbolo AS tipo,
-				       a.nVias,
-				       b.serial AS rev_serial,
-				       e.simbolo AS codEMI,
-				       a.nFolhas,
-				       c.nome AS doc_nome
-				FROM gdoks_grds_x_revisoes a
-				INNER JOIN gdoks_revisoes b ON b.id=a.id_revisao
-				INNER JOIN gdoks_documentos c ON c.id=b.id_documento
-				INNER JOIN gdoks_tipos_de_doc d ON d.id=a.id_tipo
-				INNER JOIN gdoks_codigos_emi e ON e.id=a.id_codEMI
-				WHERE a.id_grd=?';
-		$grd->docs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id));
-
-		// Retornando resultado
-		return $grd;
-	}
-
-	// função cria o objeto PDF da grd
-	function gerarPdfDaGrd($grd,$db){
-		
-		// Levantando códigos EMI para compor o rodapé da GRD
-		$sql = 'SELECT simbolo,nome FROM gdoks_codigos_emi WHERE id_empresa=?';
-		$codigosEmi = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$grd->id_empresa));
-
-		// Levantando tipos de documento para compor o rodapé da GRD
-		$sql = 'SELECT simbolo,nome FROM gdoks_tipos_de_doc WHERE id_empresa=?';
-		$tiposDeDocumento = array_map(function($a){return (object)($a);}, $db->query($sql,'i',$grd->id_empresa));
-
-		// Lendo informações do cookie;
-		$user = json_decode($_COOKIE['user']);
-		$token = $user->token;
-		$empresa = $user->empresa;
-
-		// Inclui biblioteca que gera PDF
-		include('../../includes/FPDF/fpdf.php');
-		set_include_path('../../includes/FPDF/fonts/');
-
-		// Incluindo arquivo da classe
-		include($GLOBALS['FILE_GRD']);
-
-
-		// Instanciation of inherited class
-		$pdf = new PDFGrd($empresa,$grd,$user->nome,$codigosEmi,$tiposDeDocumento);
-
-		// retornando o objeto pdf;
-		return $pdf;
-	}
-
-	// função que mostra o PDF da grd
-	function mostraPdfDaGrd($grd,$db){
-
-		// Gerando o pdf
-		$pdf = gerarPdfDaGrd($grd,$db);		
-
-		// Enviando headers
-		header('HTTP/1.0 200 OK');
-		header('Cache-Control: public, must-revalidate, max-age=0');
-		header('Pragma: no-cache');
-		header('Content-type: application/pdf');
-		header('Content-Disposition: inline; filename="grd_'.$grd->codigo.'.pdf"');
-		header('Accept-Ranges: bytes');
-		header("Content-Transfer-Encoding: binary");
-
-		// output the file first clean mem
-		ob_clean();
-		$pdf->Output('I','Teste.pdf');
-		exit();
-	}
-
-	// Função que mostra o pdf da grd
-	function mandaZipDaGrd($grd,$db){
-		// Gerando o zip
-		$caminhoDoZip = gerarZipDaGrd($grd,$db);
-
-		// Enviando headers
-		header('HTTP/1.0 200 OK');
-		header('Cache-Control: public, must-revalidate, max-age=0');
-		header('Pragma: no-cache');
-		header('Content-type: application/octet-stream');
-		header('Content-Disposition: attachment; filename="'.$grd->codigo.'.zip"');
-		header('Accept-Ranges: bytes');
-		header("Content-Transfer-Encoding: binary");
-
-		// output the file first clean mem
-		ob_clean();
-		readfile($caminhoDoZip);
-	}
-
-	// Função que gera o zip de uma grd
-	function gerarZipDaGrd($grd,$db){
-		
-		// Gerando pdf da grd
-		$pdf = gerarPdfDaGrd($grd,$db);
-		
-		// salvando pdf na pasta da empresa
-		$caminhoPdf = UPLOAD_PATH.$grd->id_empresa.'/'.$grd->codigo.'.pdf';
-		$pdf->Output('F',$caminhoPdf);
-
-		// listando arquivos mais recentes da grd
-		$sql = 'SELECT caminho,
-				       nome_cliente
-				FROM gdoks_pdas_x_arquivos a
-				INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
-				INNER JOIN
-				  (SELECT max(pdas.id) AS id_pda
-				   FROM
-				     (SELECT max(id_revisao) AS id
-				      FROM gdoks_grds_x_revisoes
-				      WHERE id_grd=?) R
-				   INNER JOIN gdoks_pdas pdas ON pdas.id_revisao=R.id) c ON c.id_pda=a.id_pda';
-		$arquivos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$grd->id));
-
-		// Criando o arquivo zip na pasta raíz da empresa
-		$zip = new ZipArchive();
-		$caminhoZip = UPLOAD_PATH.$grd->id_empresa.'/'.$grd->codigo.'.zip';
-		$zip->open($caminhoZip,ZipArchive::CREATE);
-
-		// Adicionando o pdf ao zip;
-		try {
-			$zip->addFile($caminhoPdf,$grd->codigo.'.pdf');
-		} catch (Exception $e) {
-			echo($e->getMessage());
-			die();
-		}
-
-		// Criando pasta para por os arquivos da GRD
-		$pastaDeArquivos = 'arquivos';
-		$zip->addEmptyDir($pastaDeArquivos);
-		
-		// Adicionando os arquivos da GRD
-		foreach ($arquivos as $f) {
-			$zip->addFile(UPLOAD_PATH.$f->caminho,$pastaDeArquivos.'/'.$f->nome_cliente);
-		}
-
-		// Fechando o zip
-		$zip->close();
-
-		// apagando o pdf
-		unlink($caminhoPdf);
-
-		return $caminhoZip;
-	}
-
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
 
@@ -250,6 +87,7 @@
 
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
 		$app->post('/login',function() use ($app,$db,$id_empresa,$empresa){
+			
 			// lendo dados da requisição
 			$data = json_decode($app->request->getBody());
 
@@ -3801,14 +3639,18 @@
 				// Lendo dados
 				$id_grd = 1*$id_grd;
 
+				// Lendo dados do cookie! :(
+				$user = json_decode($_COOKIE['user']);
+
 				// Carregando a grd
-				$grd = getGrd($id_grd,$db);
+				$grd = Grd::CreateById($id_grd,$user->empresa);
 
 				// Vendo se é para mandar os dados ou o PDF
 				if(isset($_GET['view']) && $_GET['view']=='pdf'){
-					mostraPdfDaGrd($grd,$db);
+					// Enviando GRD
+					$grd->sendPdf($user->nome);
 				} elseif (isset($_GET['view']) && $_GET['view']=='zip'){
-					mandaZipDaGrd($grd,$db);
+					$grd->sendZip($user->nome);
 				} else {
 					// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
 					$sql = 'SELECT c.id,
@@ -4060,7 +3902,9 @@
 				$id_grd = 1*$id_grd;
 
 				// verificando se a grd é da mesma empresa do usuário
-				$sql = 'SELECT a.id
+				$sql = 'SELECT
+							a.id,
+							a.nome
 						FROM gdoks_usuarios a
 						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
 						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
@@ -4076,14 +3920,18 @@
 					return;
 				} else {
 
-					// Salvando o id do usuário
+					// Salvando o id e nome do usuário
 					$id_usuario = $rs[0]['id'];
+					$nome_usuario = $rs[0]['nome'];
+
+					// Recuperando o nome da empresa a partir do header
+					$codigo_empresa = explode('-',getallheaders()['Authorization'])[0];
 
 					// Criando objeto da grd
-					$grd = getGrd($id_grd,$db);
+					$grd = Grd::CreateById($id_grd,$codigo_empresa);
 
 					// Criando o zip da Grd
-					$caminhoDoZip = gerarZipDaGrd($grd,$db);
+					$caminhoDoZip = $grd->gerarZip($nome_usuario);
 
 					// Definindo o email
 					$sgMail = new SendGrid\Email();
@@ -4223,7 +4071,7 @@
 				$id_grd = 1*$id_grd;
 
 				// verificando se a grd é da mesma empresa do usuário
-				$sql = 'SELECT a.id
+				$sql = 'SELECT a.id,a.nome
 						FROM gdoks_usuarios a
 						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
 						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
@@ -4241,9 +4089,13 @@
 
 					// Salvando o id do usuário
 					$id_usuario = $rs[0]['id'];
+					$nome_usuario = $rs[0]['nome'];
+
+					// Lendo empresa a partir de Authorization
+					$codigo_empresa = explode('-',getallheaders()['Authorization'])[0];
 
 					// Criando objeto da grd
-					$grd = getGrd($id_grd,$db);
+					$grd = Grd::CreateById($id_grd,$codigo_empresa);
 					
 					// levantando informações de ftp do cliente
 					$sql = 'SELECT ftp_host as host,
@@ -4277,7 +4129,7 @@
 						}
 
 						// Criando o zip da Grd
-						$caminhoDoZip = gerarZipDaGrd($grd,$db);
+						$caminhoDoZip = $grd->gerarZip($nome_usuario);
 
 						// Fazendo upload
 						if(!@ftp_put($ftp, basename($caminhoDoZip), $caminhoDoZip, FTP_BINARY)){
