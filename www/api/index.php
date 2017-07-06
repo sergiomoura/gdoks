@@ -1,11 +1,5 @@
 <?php
 	
-	if(file_exists('../../includes/Gdoks/Grd.php')){
-		die('não é isso...');
-	} else {
-		die('esse é o problema!');
-	}
-	
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
@@ -16,7 +10,7 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
-	require('../../includes/Gdoks/Grd.php');
+	require('../../includes/GDoks/Grd.php');
 	
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
