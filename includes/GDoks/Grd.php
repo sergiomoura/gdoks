@@ -180,7 +180,7 @@
 					      WHERE id_grd=?) R
 					   INNER JOIN gdoks_pdas pdas ON pdas.id_revisao=R.id) c ON c.id_pda=a.id_pda';
 			$arquivos = array_map(function($a){return (object)$a;}, $this->db->query($sql,'i',$this->_id));
-			print_r($arquivos);
+			
 			// Criando o arquivo zip na pasta raíz da empresa
 			$zip = new ZipArchive();
 			$caminhoZip = UPLOAD_PATH.$this->_id_empresa.'/'.$this->_codigo.'.zip';
@@ -200,11 +200,6 @@
 			
 			// Adicionando os arquivos da GRD
 			foreach ($arquivos as $f) {
-				if(file_exists(UPLOAD_PATH.$f->caminho)){
-					echo('Arquivo '.UPLOAD_PATH.$f->caminho.' existe<br>');
-				} else {
-					echo('Arquivo '.UPLOAD_PATH.$f->caminho.' NÃO existe<br>');
-				}
 				$zip->addFile(UPLOAD_PATH.$f->caminho,$pastaDeArquivos.'/'.$f->nome_cliente);
 			}
 
@@ -222,7 +217,6 @@
 			// Gerando o zip
 			$caminhoDoZip = $this->gerarZip($nome_do_emissor);
 
-			/*
 			// Enviando headers
 			header('HTTP/1.0 200 OK');
 			header('Cache-Control: public, must-revalidate, max-age=0');
@@ -235,7 +229,7 @@
 			// output the file first clean mem
 			ob_clean();
 			readfile($caminhoDoZip);
-			*/
+			
 			// apagando o zip
 			unlink($caminhoDoZip);
 		}
