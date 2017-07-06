@@ -222,6 +222,7 @@
 			// Gerando o zip
 			$caminhoDoZip = $this->gerarZip($nome_do_emissor);
 
+			/*
 			// Enviando headers
 			header('HTTP/1.0 200 OK');
 			header('Cache-Control: public, must-revalidate, max-age=0');
@@ -234,7 +235,7 @@
 			// output the file first clean mem
 			ob_clean();
 			readfile($caminhoDoZip);
-
+			*/
 			// apagando o zip
 			unlink($caminhoDoZip);
 		}
