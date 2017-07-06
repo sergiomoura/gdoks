@@ -10,8 +10,7 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
-
-	include('../../includes/GDoks/Grd.php');
+	require('../../includes/GDoks/Grd.php');
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
 
