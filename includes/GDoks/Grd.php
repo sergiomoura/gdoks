@@ -181,7 +181,6 @@
 					   INNER JOIN gdoks_pdas pdas ON pdas.id_revisao=R.id) c ON c.id_pda=a.id_pda';
 			$arquivos = array_map(function($a){return (object)$a;}, $this->db->query($sql,'i',$this->_id));
 			print_r($arquivos);
-			flush();
 			// Criando o arquivo zip na pasta raíz da empresa
 			$zip = new ZipArchive();
 			$caminhoZip = UPLOAD_PATH.$this->_id_empresa.'/'.$this->_codigo.'.zip';
@@ -206,7 +205,6 @@
 				} else {
 					echo('Arquivo '.UPLOAD_PATH.$f->caminho.' NÃO existe<br>');
 				}
-				flush();
 				$zip->addFile(UPLOAD_PATH.$f->caminho,$pastaDeArquivos.'/'.$f->nome_cliente);
 			}
 
