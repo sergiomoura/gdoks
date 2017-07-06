@@ -1,5 +1,6 @@
 <?php
-
+	
+	echo(__LINE__);
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
@@ -11,7 +12,7 @@
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 	require('../../includes/Gdoks/Grd.php');
-
+	echo(__LINE__);
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
 
@@ -45,7 +46,7 @@
 	$FILE_DBKEY = '../../client_data/'.$empresa.'/dbkey.php';
 	$FILE_GRD = '../../client_data/'.$empresa.'/grd.php';
 	$FILE_LOGO = '../../client_data/'.$empresa.'/logo.jpg';
-
+	echo(__LINE__);
 	// criando a conexão
 	if(isset($empresa) && file_exists($FILE_DBKEY)){
 		// incluindo arquivo que define $dbkey
@@ -67,7 +68,7 @@
 		$response->flush();
 		die();
 	}
-
+	echo(__LINE__);
 	// definindo função que realiza log
 	function registrarAcao($db,$idUsuario,$idAcao,$parametros = ''){
 		if($parametros == ''){
@@ -78,19 +79,19 @@
 			$result = $db->query($sql,'iis',$idUsuario,$idAcao,$parametros);
 		}
 	}
-
+	echo(__LINE__);
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
-
+	echo(__LINE__);
 	// defining api routes  V1 = = = = = = = = = = = = = = = =
 	$app->group('/v1',function() use($app,$db,$id_empresa,$token,$empresa){
 
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
 		$app->post('/login',function() use ($app,$db,$id_empresa,$empresa){
-			
+			echo(__LINE__);
 			// lendo dados da requisição
 			$data = json_decode($app->request->getBody());
-
+			echo(__LINE__);
 			// Verificando se é usuário é válido e carregando suas informações se for o caso.
 			$sql = 'SELECT id,
 						   nome,
@@ -104,16 +105,16 @@
 					  AND id_empresa=?
 					  AND ativo';
 			$rs = $db->query($sql,'ssi',$data->login,$data->senha,$id_empresa)[0];
-						
+			echo(__LINE__);
 			// perguntando se usuário é válido
 			if($rs['ok'] == 1){
 				// SIM, usuário é válido
 				// gerando novo token
 				$token = uniqid('',true);
-
+				echo(__LINE__);
 				// atualizando o token na base de dados
 				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$rs['id']);
-
+				echo(__LINE__);
 				// Arrumando dados do usuário
 				$user = new stdClass();
 				$user->id = $rs['id'];
@@ -121,14 +122,14 @@
 				$user->email = $rs['email'];
 				$user->token = $token;
 				$user->empresa = $empresa;
-
+				echo(__LINE__);
 				// definindo resposta http como 200
 				$app->response->setStatus(200);
 				$response = new response(0,'ok');
 
 				// Adicionando as informações do usuário no response
 				$response->user = $user;
-				
+				echo(__LINE__);
 				// registrando a ação no log
 				registrarAcao($db,$user->id,ACAO_LOGOU);
 			} else {
