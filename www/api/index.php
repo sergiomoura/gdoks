@@ -11,6 +11,7 @@
 	require('../../includes/db.php');
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
+	echo(__LINE__);
 	require('../../includes/Gdoks/Grd.php');
 	echo(__LINE__);
 	// constants - - - - - - - - - - - - - - - - - - - - - -
