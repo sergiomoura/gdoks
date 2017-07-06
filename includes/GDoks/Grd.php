@@ -1,4 +1,5 @@
 <?php
+	echo(__LINE__);
 	class Grd {
 
 		// Declarando atributos privados
@@ -234,5 +235,6 @@
 			unlink($caminhoDoZip);
 		}
 	}
+	echo(__LINE__);
 
 ?>
