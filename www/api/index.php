@@ -4042,8 +4042,13 @@
 					$sgMail->setSubject($mail->assunto);
 
 					// Parsing msg para por o link
+					$key = Crypter::crypt($empresa.'-'.$unique_link.'-'.$nome_usuario);
+					// Trocando caracteres '+'' vira '-', '/' vira '_' e '=' vira '.'
+					$key = str_replace('+', '-', $key);
+					$key = str_replace('/', '_', $key);
+					$key = str_replace('=', '.', $key);
 
-					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.urlencode(Crypter::crypt($empresa.'-'.$unique_link.'-'.$nome_usuario));
+					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.$key;
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
 

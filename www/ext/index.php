@@ -1,8 +1,4 @@
 <?php 
-	echo('<pre>');
-	print_r($_SERVER);
-	echo('</pre>');
-	die();
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
@@ -21,7 +17,7 @@
 
 	// definindo rota para download de grd
 	$app->get('/grds/:data',function($data){
-
+		die($data);
 		// Decrypting data
 		$data = Crypter::decrypt($data);
 		
