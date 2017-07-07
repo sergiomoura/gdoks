@@ -12,6 +12,7 @@
 	require('../../includes/response.php');
 	require('../../includes/GDoks/Grd.php');
 	require('../../includes/GDoks/Crypter.php');
+	die($_SERVER);
 
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
