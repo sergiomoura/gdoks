@@ -2,8 +2,8 @@
 	class Crypter {
 		
 		// Constantes internas
-		private const CIPHER = 'aes-256-cbc';
-		private const KEY = 'f51f87c023808d12413b037333543866d853aa55f76c779b7330eabab15b8b4c';
+		//private const CIPHER = 'aes-256-cbc';
+		//private const KEY = 'f51f87c023808d12413b037333543866d853aa55f76c779b7330eabab15b8b4c';
 
 		public static function crypt($data){/*
 			// Definindo vetor de inicialização
