@@ -40,7 +40,11 @@ server {
     
     location /api/{
         #try_files $uri /api/index.php;
-        try_files $uri $uri/ /api/index.php?$args /ext/index.php?$args;
+        try_files $uri $uri/ /api/index.php?$args;
+    }
+
+    location /ext/{
+        try_files $uri $uri/ /ext/index.php?$args;
     }
 
     # increase upload size limit
