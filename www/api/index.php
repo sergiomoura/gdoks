@@ -11,12 +11,12 @@
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 	require('../../includes/GDoks/Grd.php');
-	echo(__LINE__);
+	echo(__LINE__.'<br>');
 	require('../../includes/GDoks/Crypter.php');
-	
+	echo(__LINE__.'<br>');
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
-
+	echo(__LINE__.'<br>');
 	// definindo função getallheaders caso ela não exista (caso NGINX)
 	if (!function_exists('getallheaders')){ 
 		function getallheaders(){ 
