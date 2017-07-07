@@ -30,11 +30,6 @@
 		// Lendo dados da requisição
 		$data = explode('-', $data);
 
-		echo('<pre>');
-		print_r($data);
-		echo('</pre>');
-		die();
-		/*
 		// Lendo dados da requisição
 		$empresa = $data[0];
 		$unique_link = $data[1];
@@ -54,22 +49,12 @@
 		$db = new DB($dbkey);
 		unset($dbkey);
 
-		// Carregando id da grd em questão
-		$sql = 'SELECT id FROM gdoks_grds WHERE unique_link=?';
-		$rs = $db->query($sql,'s',$unique_link);
-		if(sizeof($rs) == 0){
-			die('Erro: 03');
-		}
-
-		// Salvando id da grd
-		$id_grd = $rs[0]['id'];
-
-		// Criando objeto GRD
-		$grd = getGrd($id_grd,$db);
+		// criando GRD a pargir do uniquelink
+		$grd = Grd::CreateByUniqueLink($unique_link,$empresa);
 
 		// Mandando zip da grd
-		mandaZipDaGrd($grd,$db);
-		*/
+		$grd->sendZip();
+		
 	});
 
 	// Running the app

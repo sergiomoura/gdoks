@@ -94,7 +94,72 @@
 		}
 
 		// Função estática que retorna insância de Grd a partir de codigo e db
-		public static function CreateByCodigo(int $codigo_grd,mysql $db){
+		public static function CreateByUniqueLink(int $unique_link,mysql $db){
+			// Incluindo dbkey da empresa
+			include('../../client_data/'.$codigo_empresa.'/dbkey.php');
+
+			// Estabelecendo conexão com banco e apagando dbkey
+			$db = new DB($dbkey);
+			unset($dbkey);
+
+			// Levantando dados de GRD
+			$sql = 'SELECT a.id,
+						   c.id AS cliente_id,
+						   c.nome AS cliente_nome,
+						   b.id AS projeto_id,
+					       b.nome AS projeto_nome,
+					       a.obs AS obs,
+					       c.contato_nome,
+					       c.contato_email,
+					       now() AS DATA,
+					       a.codigo,
+					       a.unique_link,
+					       c.id_empresa,
+					       a.datahora_enviada,
+					       a.datahora_registro
+					FROM gdoks_grds a
+					INNER JOIN gdoks_projetos b ON a.id_projeto=b.id
+					INNER JOIN gdoks_clientes c ON b.id_cliente = c.id
+					WHERE a._unique_link=?';
+			$rs = $db->query($sql,'s',$unique_link)['0'];
+
+			// Criando instância
+			$instance = new self($db);
+
+			// Preenchendo campos de instância
+			$instance->_id						= $rs['id'];
+			$instance->_codigo					= $rs['codigo'];
+			$instance->_projeto_id				= $rs['projeto_id'];
+			$instance->_projeto_nome			= $rs['projeto_nome'];
+			$instance->_cliente_id				= $rs['cliente_id'];
+			$instance->_cliente_nome			= $rs['cliente_nome'];
+			$instance->_cliente_contato_nome	= $rs['contato_nome'];
+			$instance->_cliente_contato_email	= $rs['contato_email'];
+			$instance->_obs						= $rs['obs'];
+			$instance->_datahora_registro		= $rs['datahora_registro'];
+			$instance->_datahora_enviada		= $rs['datahora_enviada'];
+			$instance->_unique_link				= $rs['unique_link'];
+			$instance->_id_empresa 				= $rs['id_empresa'];
+			$instance->_codigo_empresa 			= $codigo_empresa;
+
+			// Levantando dados dos documentos desta grd
+			$sql = 'SELECT c.codigo AS doc_codigo,
+					       d.simbolo AS tipo,
+					       b.serial AS rev_serial,
+					       e.simbolo AS codEMI,
+					       a.nFolhas,
+					       a.nVias,
+					       c.nome AS doc_nome
+					FROM gdoks_grds_x_revisoes a
+					INNER JOIN gdoks_revisoes b ON b.id=a.id_revisao
+					INNER JOIN gdoks_documentos c ON c.id=b.id_documento
+					INNER JOIN gdoks_tipos_de_doc d ON d.id=a.id_tipo
+					INNER JOIN gdoks_codigos_emi e ON e.id=a.id_codEMI
+					WHERE a.id_grd=?';
+			$instance->documentos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id));
+
+			// Retornando resultado
+			return $instance;
 		}
 
 		// Função que retorna o objeto pdf da Grd
