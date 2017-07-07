@@ -2,15 +2,15 @@
 	class Crypter {
 		
 		// Constantes internas
-		private static $CIPHER = 'aes-256-cbc';
-		private static $KEY = 'f51f87c023808d12413b037333543866d853aa55f76c779b7330eabab15b8b4c';
+		const CIPHER = 'aes-256-cbc';
+		const KEY = 'f51f87c023808d12413b037333543866d853aa55f76c779b7330eabab15b8b4c';
 
 		public static function crypt($data){
 			// Definindo vetor de inicialização
-			$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(Crypter::CIPHER));
+			$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(CIPHER));
 
 			// Criptografando dados
-			$encrypted = openssl_encrypt($data, Crypter::CIPHER, hex2bin(Crypter::KEY), 0, $iv);
+			$encrypted = openssl_encrypt($data, CIPHER, hex2bin(KEY), 0, $iv);
 
 			// Pondo o veto de inicialização na rabeira do resultado
 			$encrypted = $encrypted . ':' . base64_encode($iv);
@@ -26,7 +26,7 @@
 			if(sizeof($parts)!=2){
 				return false;
 			} else {
-				return @openssl_decrypt($parts[0], Crypter::CIPHER, hex2bin(Crypter::KEY), 0, base64_decode($parts[1]));
+				return @openssl_decrypt($parts[0], CIPHER, hex2bin(KEY), 0, base64_decode($parts[1]));
 			}
 		}
 	}
