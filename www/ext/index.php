@@ -34,7 +34,7 @@
 		print_r($data);
 		echo('</pre>');
 		die();
-
+		/*
 		// Lendo dados da requisição
 		$empresa = $data[0];
 		$unique_link = $data[1];
@@ -69,7 +69,7 @@
 
 		// Mandando zip da grd
 		mandaZipDaGrd($grd,$db);
-
+		*/
 	});
 
 	// Running the app
