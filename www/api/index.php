@@ -4043,7 +4043,7 @@
 
 					// Parsing msg para por o link
 
-					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.urlencode(Crypter::crypt($empresa.'-'.$unique_link));
+					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.urlencode(Crypter::crypt($empresa.'-'.$unique_link.'-'.$nome_usuario));
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
 

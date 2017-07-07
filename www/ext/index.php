@@ -33,6 +33,7 @@
 		// Lendo dados da requisição
 		$empresa = $data[0];
 		$unique_link = $data[1];
+		$nome_usuario = $data[2];
 
 		// Definindo os nomes dos arquivos do cliente;
 		$FILE_DBKEY = '../../client_data/'.$empresa.'/dbkey.php';
@@ -53,7 +54,7 @@
 		$grd = Grd::CreateByUniqueLink($unique_link,$empresa);
 
 		// Mandando zip da grd
-		$grd->sendZip();
+		$grd->sendZip($nome_usuario);
 		
 	});
 
