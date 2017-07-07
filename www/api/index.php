@@ -11,6 +11,7 @@
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 	require('../../includes/GDoks/Grd.php');
+	echo(__LINE__);
 	require('../../includes/GDoks/Crypter.php');
 	
 	// constants - - - - - - - - - - - - - - - - - - - - - -
