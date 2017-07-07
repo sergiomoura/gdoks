@@ -11,6 +11,7 @@
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 	require('../../includes/GDoks/Grd.php');
+	require('../../includes/GDoks/Crypter.php');
 	
 	// constants - - - - - - - - - - - - - - - - - - - - - -
 	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
@@ -4037,7 +4038,8 @@
 					$sgMail->setSubject($mail->assunto);
 
 					// Parsing msg para por o link
-					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.$empresa.'-'.$unique_link;
+
+					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.Crypter::crypt($empresa.'-'.$unique_link);
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
 

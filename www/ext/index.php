@@ -11,19 +11,29 @@
 	require('../../includes/definicoes_de_acoes.php');
 	require('../../includes/response.php');
 	require('../../includes/GDoks/Grd.php');
+	require('../../includes/GDoks/Crypter.php');
+
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
 
 	// definindo rota para download de grd
 	$app->get('/grds/:data',function($data){
+
+		// Decrypting data
+		$data = Crypter::decrypt($data);
+		
+		// Verificando se a descriptografia ocorreu
+		if($data === false){
+			die('Erro: 01');
+		}
 		
 		// Lendo dados da requisição
 		$data = explode('-', $data);
 
-		// Verificando se está no formato correto
-		if(sizeof($data)!=2){
-			die('Erro: 01');
-		}
+		echo('<pre>');
+		print_r($data);
+		echo('</pre>');
+		die();
 
 		// Lendo dados da requisição
 		$empresa = $data[0];
