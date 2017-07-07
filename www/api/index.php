@@ -3993,7 +3993,7 @@
 				}
 
 				// verificando se a grd é da mesma empresa do usuário
-				$sql = 'SELECT a.id
+				$sql = 'SELECT a.id,a.nome
 						FROM gdoks_usuarios a
 						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
 						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
@@ -4011,9 +4011,13 @@
 
 					// Salvando o id do usuário
 					$id_usuario = $rs[0]['id'];
+					$nome_usuario = $rs[0]['nome'];
+
+					// Lendo empresa do header Authorization
+					$codigo_empresa = explode('-',getallheaders()['Authorization'])[0];
 
 					// Criando objeto da grd
-					$grd = getGrd($id_grd,$db);
+					$grd = Grd::CreateById($id_grd,$codigo_empresa);
 
 					// Gerando unique_link
 					$unique_link = md5(uniqid(rand(), true));
