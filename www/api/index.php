@@ -12,6 +12,11 @@
 	require('../../includes/response.php');
 	require('../../includes/GDoks/Grd.php');
 	echo(__LINE__.'<br>');
+	if(file_exists('../../includes/GDoks/Crypter.php')){
+		echo("é isso");
+	} else {
+		echo("é outra coisa...");
+	}
 	require('../../includes/GDoks/Crypter.php');
 	echo(__LINE__.'<br>');
 	// constants - - - - - - - - - - - - - - - - - - - - - -
