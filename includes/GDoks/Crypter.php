@@ -1,5 +1,5 @@
 <?php
-	echo(__LINE__.'<br>');
+	echo(__LINE__.'<br>');/*
 	class Crypter {
 		
 		// Constantes internas
@@ -30,5 +30,5 @@
 			}
 		}
 	}
-	echo(__LINE__.'<br>');
+	echo(__LINE__.'<br>');*/
 ?>
