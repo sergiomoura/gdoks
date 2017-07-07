@@ -1,4 +1,8 @@
 <?php 
+echo('<pre>');
+print_r($_SERVER);
+echo('</pre>');
+die();
 
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
@@ -12,7 +16,6 @@
 	require('../../includes/response.php');
 	require('../../includes/GDoks/Grd.php');
 	require('../../includes/GDoks/Crypter.php');
-	die($_SERVER);
 
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
