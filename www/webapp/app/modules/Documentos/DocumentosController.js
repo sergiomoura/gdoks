@@ -13,13 +13,17 @@
 
 		// Definindo valores iniciais para filtros
 		$scope.busca = {
+			nome:'',
+			ordem:'nome',
+			id_cliente:undefined,
 			id_projeto:undefined,
 			id_area:undefined,
 			id_subarea:undefined,
 			id_disciplina:undefined,
 			id_subdisciplina:undefined,
-			mostrarPorValidar:'0', // ['0' | '01']
-			mostrarConcluidos:'01' // ['0' | '01']
+			completude: 3,
+			validacao: 3,
+			pagAtual:1
 		};
 
 		// Definindo 'agora'
@@ -28,16 +32,18 @@
 		// Definindo valor inicial para ordem
 		$scope.ordem = 'data_limite';
 
-		// Definindo se mostra busca avançada
-		$scope.mostraBuscaAvancada = false;
-
 		// Definindo o valor inicial para o vetor de areas
 		$scope.areas = [];
 
 		// Definindo o valor inicial para o vetor de subareas
 		$scope.subareas = [];
 
+		// Carregando clientes
+		$scope.clientes = [];
+		carregaClientes();
+
 		// Carregando projetos
+		var projetos = [];
 		$scope.projetos = [];
 		carregaProjetos();
 
@@ -49,19 +55,9 @@
 		$scope.disciplinas = [];
 		carregaDisciplinas();
 
-		// Função que carrega projetos
-		function carregaProjetos(){
-			indexedDB.open('gdoks').onsuccess = function(evt){
-				evt.target.result.transaction("projetos").objectStore("projetos").getAll().onsuccess = function(evt){
-					$scope.$apply(function(){
-						$scope.projetos = evt.target.result;
-					})
-				}
-			}
-		}
-
 		// Função que carrega documentos
 		function carregaDocumentos(){
+			/*
 			GDoksFactory.getDocumentos()
 			.success(function(response){
 				$scope.documentos = response.documentos;
@@ -92,6 +88,30 @@
 				// Escrevendo erro no console
 				console.warn(error);
 			});
+			*/
+		}
+
+		// Função que carrega clientes
+		function carregaClientes(){
+			indexedDB.open('gdoks').onsuccess = function(evt){
+				evt.target.result.transaction("clientes").objectStore("clientes").getAll().onsuccess = function(evt){
+					$scope.$apply(function(){
+						$scope.clientes = evt.target.result;
+					})
+				}
+			}
+		}
+
+		// Função que carrega projetos
+		function carregaProjetos(){
+			indexedDB.open('gdoks').onsuccess = function(evt){
+				evt.target.result.transaction("projetos").objectStore("projetos").getAll().onsuccess = function(evt){
+					$scope.$apply(function(){
+						projetos = evt.target.result;
+						$scope.projetos = projetos;
+					})
+				}
+			}
 		}
 
 		// função que carrega áreas de um projeto
@@ -144,6 +164,17 @@
 		}
 
 		// HANDLERS : : : : : : : : : : :
+		$scope.onClienteChange = function(){
+			if($scope.busca.id_cliente == undefined){
+				$scope.projetos = projetos;
+			} else {
+				$scope.projetos = projetos.filter(function(a){return a.id_cliente==this},$scope.busca.id_cliente);	
+			}
+			$scope.busca.id_projeto=undefined;
+			$scope.busca.id_area=undefined;
+			$scope.busca.id_subarea=undefined;
+		}
+
 		$scope.onProjetoChange = function(){
 			carregaAreas($scope.busca.id_projeto);
 			$scope.busca.id_area=undefined;
@@ -156,14 +187,40 @@
 		}
 
 		$scope.onDisciplinaChange = function(){
-			$scope.subdisciplinas = $scope.disciplinas.find(function(a){
+			if($scope.busca.id_disciplina!=undefined){
+				$scope.subdisciplinas = $scope.disciplinas.find(function(a){
 																return a.id==this;
 															},$scope.busca.id_disciplina).subs;
+			}
 			$scope.busca.id_subdisciplina = undefined;
 		}
 
 		$scope.onOpenClick = function(id){
 			$location.path('/documentos/'+id);
+		}
+
+		// Função de busca
+		$scope.buscarDocumentos = function(){
+			// Mostra carregando
+			$scope.root.carregando = true;
+
+			// Mandando fazer busca
+			GDoksFactory.buscarDocumentos($scope.busca)
+			.success(function(response){
+				console.log(response);
+				// Esconde Carregando
+				$scope.root.carregando = false;
+
+				// Carregando os documentos
+				$scope.documentos = response.documentos;
+
+				// determinando o total de páginas
+				$scope.totPaginas = Math.ceil(response.total/response.npp);
+			})
+			.error(function(error){
+				// Esconde Carregando
+				$scope.root.carregando = false;
+			});
 		}
 	}
 

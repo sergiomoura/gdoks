@@ -1,98 +1,126 @@
 <md-content id="lista_de_documentos_container" class="container_80" layout-padding layout-wrap>
     
-	<div layout="row">
-		<md-input-container flex>
-			<label>Busca</label>
-			<input focus autocomplete="off" type="text" ng-model="busca.nome" placeholder="Digite o nome ou codigo do documento...">
-		</md-input-container>
-		<md-button ng-click="mostrandoBuscaAvancada = !mostrandoBuscaAvancada" flex="none" class="md-icon-button md-primary" aria-label="Busca Avançada">
-			<md-icon class="material-icons step" aria-label="Busca Avançada">line_style</md-icon>
-		</md-button>
-	</div>
+	<div layout="row" layout-align="space-between start">
+		<div layout="column" flex="45">
+			<md-input-container>
+				<label>Busca</label>
+				<input focus autocomplete="off" type="text" ng-model="busca.nome" placeholder="Digite o nome ou codigo do documento...">
+			</md-input-container>
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex>
+					<label>Ordenar Por</label>
+					<md-select ng-model="busca.ordem">
+					  <md-option ng-value="'nome'">Nome</md-option>
+					  <md-option ng-value="'data_limite'">Data Limite</md-option>
+					</md-select>
+				</md-input-container>
+				<md-button ng-click="buscarDocumentos()" style="width: 250px; left:5px; position: relative;top: 7px" class="md-raised md-primary" aria-label="Buscar Documento"><md-icon class="material-icons step" aria-label="Buscar Documento">search</md-icon> Buscar Documento</md-button>
+			</div>
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="45">
+					<label>Completude</label>
+					<md-select ng-model="busca.completude">
+					  <md-option ng-value="1">Somente os por concluir</md-option>
+					  <md-option ng-value="2">Somente os concluídos</md-option>
+					  <md-option ng-value="3">Todos - Concluídos ou não</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container flex="45">
+					<label>Validação</label>
+					<md-select ng-model="busca.validacao">
+					  <md-option ng-value="1">... com progresso a validar</md-option>
+					  <md-option ng-value="2">... validados</md-option>
+					  <md-option ng-value="3">... qualquer situação</md-option>
+					</md-select>
+				</md-input-container>
+			</div>
+		</div>
+		<div layout="column" flex="45">
+			<div layout="row" layout-align="space-between center">
+				<md-input-container flex="45">
+					<label>Cliente</label>
+					<md-select ng-model="busca.id_cliente" ng-change="onClienteChange()">
+					  <md-option ng-value="undefined">Todos os Clientes</md-option>
+					  <md-option ng-value="c.id" ng-repeat="c in clientes|orderBy:'nome'">{{ c.nome }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container flex="45">
+					<label>Projeto</label>
+					<md-select ng-model="busca.id_projeto" ng-change="onProjetoChange()">
+					  <md-option ng-value="undefined">Todos os Projetos</md-option>
+					  <md-option ng-value="p.id" ng-repeat="p in projetos|orderBy:'nome'">{{ p.nome }}</md-option>
+					</md-select>
+				</md-input-container>
+			</div>
 
-	<div class=".busca_avancada-show-hide" layout="column" ng-show="mostrandoBuscaAvancada">
-		<div layout="row" layout-align="space-between center">
-			<md-input-container flex="20">
-				<label>Projeto</label>
-				<md-select ng-model="busca.id_projeto" ng-change="onProjetoChange()">
-				  <md-option ng-value="undefined">Todos os Projetos</md-option>
-				  <md-option ng-value="p.id" ng-repeat="p in projetos|orderBy:'nome'">{{ p.nome }}</md-option>
-				</md-select>
-			</md-input-container>
-			<md-input-container flex="20">
-				<label>Área</label>
-				<md-select ng-model="busca.id_area" ng-change="onAreaChange()">
-				  <md-option ng-value="undefined">Todas as Áreas</md-option>
-				  <md-option ng-value="a.id" ng-repeat="a in areas">{{ a.nome }}</md-option>
-				</md-select>
-			</md-input-container>
-			<md-input-container flex="20">
-				<label>Sub-área</label>
-				<md-select ng-model="busca.id_subarea">
-				  <md-option ng-value="undefined">Todas as Sub-áreas</md-option>
-				  <md-option ng-value="s.id" ng-repeat="s in subareas">{{ s.nome }}</md-option>
-				</md-select>
-			</md-input-container>
-			<md-input-container flex="20">
-				<label>Ordenar Por</label>
-				<md-select ng-model="ordem">
-				  <md-option ng-value="'nome'">Nome</md-option>
-				  <md-option ng-value="'data_limite'">Data Limite</md-option>
-				</md-select>
-			</md-input-container>
+			<div layout="row" layout-align="space-between center">
+				<md-input-container flex="45">
+					<label>Área</label>
+					<md-select ng-model="busca.id_area" ng-change="onAreaChange()">
+					  <md-option ng-value="undefined">Todas as Áreas</md-option>
+					  <md-option ng-value="a.id" ng-repeat="a in areas">{{ a.nome }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container flex="45">
+					<label>Sub-área</label>
+					<md-select ng-model="busca.id_subarea">
+					  <md-option ng-value="undefined">Todas as Sub-áreas</md-option>
+					  <md-option ng-value="s.id" ng-repeat="s in subareas">{{ s.nome }}</md-option>
+					</md-select>
+				</md-input-container>	
+			</div>
+
+			<div layout="row"  layout-align="space-between center">
+				<md-input-container flex="45">
+					<label>Disciplina</label>
+					<md-select ng-model="busca.id_disciplina" ng-change="onDisciplinaChange()">
+					  <md-option ng-value="undefined">Todas as Disciplinas</md-option>
+					  <md-option ng-value="d.id" ng-repeat="d in disciplinas">{{ d.nome }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container flex="45">
+					<label>Subdisciplinas</label>
+					<md-select ng-model="busca.id_subdisciplina">
+					  <md-option ng-value="undefined">Todas as Subdisciplinas</md-option>
+					  <md-option ng-value="sub.id" ng-repeat="sub in subdisciplinas">{{ sub.nome }}</md-option>
+					</md-select>
+				</md-input-container>	
+			</div>
 		</div>
-		<div layout="row" layout-align="space-between center">
-			<md-input-container flex="20">
-				<label>Disciplina</label>
-				<md-select ng-model="busca.id_disciplina" ng-change="onDisciplinaChange()">
-				  <md-option ng-value="undefined">Todas as Disciplinas</md-option>
-				  <md-option ng-value="d.id" ng-repeat="d in disciplinas">{{ d.nome }}</md-option>
-				</md-select>
-			</md-input-container>
-			<md-input-container flex="20">
-				<label>Subdisciplinas</label>
-				<md-select ng-model="busca.id_subdisciplina">
-				  <md-option ng-value="undefined">Todas as Subdisciplinas</md-option>
-				  <md-option ng-value="sub.id" ng-repeat="sub in subdisciplinas">{{ sub.nome }}</md-option>
-				</md-select>
-			</md-input-container>
-			<md-checkbox flex="20" ng-true-value="'0'" ng-false-value="'01'" class="md-primary" ng-model="busca.mostrarConcluidos" aria-label="Mostra Concluídos">
-				Exibir os concluídos
-			</md-checkbox>
-			<md-checkbox flex="20" ng-true-value="'01'" ng-false-value="'0'" class="md-primary" ng-model="busca.mostrarPorValidar" aria-label="Mostra documentos por validar">
-				Exibir somente os por validar
-			</md-checkbox>
-		</div>
+		
 	</div>
 
 	<md-content>
-		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos|orderBy:ordem|filter:busca as result track by doc.id">
+		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos track by doc.id">
 			<div layout="row">
 				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.nome}}</div>
-				<md-button ng-click="onOpenClick(doc.id)" flex="none" class="md-icon-button md-primary" aria-label="Visualizar Documento">
+				<md-button ng-click="onOpenClick(doc.id)" class="md-icon-button md-primary" aria-label="Visualizar Documento">
 					<md-icon class="material-icons step" aria-label="Visualizar Documento">open_in_new</md-icon>
 				</md-button>
 			</div>
 			<table class="info">
 				<tbody>
 					<tr>
-						<td>Projeto: {{doc.nome_projeto}}</td>
-						<td>Revisão: {{doc.serial_revisao==null?0:doc.serial_revisao}}</td>
+						<td colspan="2">Cliente: {{doc.cliente_nome}}</td>
+						<td colspan="2">Projeto: {{doc.projeto_nome}}</td>
 					</tr>
 					<tr>
-						<td>Área: {{doc.nome_area}}</td>
-						<td>Trabalho Estimado: {{doc.hh==null?0:doc.hh}}hh</td>
+						<td colspan="2">Área: {{doc.area_nome}}</td>
+						<td colspan="2">Sub-área: {{doc.subarea_nome}}</td>
 					</tr>
 					<tr>
-						<td>Sub-área: {{doc.nome_subarea}}</td>
+					</tr>
+					<tr>
+						<td colspan="4">Disciplina: {{doc.disciplina_nome}}</td>
+					</tr>
+					<tr>
+						<td colspan="4">Subdisciplina: {{doc.subdisciplina_nome}}</td>
+					</tr>
+					<tr>
+						
 						<td>Data Limite: {{doc.data_limite==null?"Não há":(doc.data_limite|date:'dd/MM/yyyy')}}</td>
-					</tr>
-					<tr>
-						<td>Disciplina: {{doc.nome_disciplina}}</td>
 						<td>{{doc.data_limite|daysFromNow}}</td>
-					</tr>
-					<tr>
-						<td>Subdisciplina: {{doc.nome_subdisciplina}}</td>
+						<td>Revisão: {{doc.revisao_serial==null?0:doc.revisao_serial}}</td>
 						<td><span md-colors={color:'orange-800'}>{{(doc.data_limite < agora && doc.data_limite !=null) ? 'Atrasado' : ''}}</span></td>
 					</tr>
 

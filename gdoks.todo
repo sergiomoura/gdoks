@@ -37,9 +37,9 @@ GDoks:
 	✔	Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD @done (17-07-03 17:12)
 	✔	tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB. @done (17-07-04 01:49)
 	✔	No cadastro do cliente: Por endereço e dados FTP @done (17-07-05 03:43)
-	☐	Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente
-	☐	Cadastrar documentos lendo lista de CSV
+	✔	Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente @done (17-07-07 11:42)
 	☐	visualizar o documento de outras disciplinas
+	☐	Cadastrar documentos lendo lista de CSV
 	☐	Quando for baixar um documento só, baixar sem zipar
 	☐	Lista de documento com percentual e datas
 	☐	Código de GRD deve ser preenchido automaticamente.. ano-contador
@@ -47,17 +47,13 @@ GDoks:
 	☐	Registrar Endereço físico do documento no cadastro do documento na grd.
 	☐	Número de revisões a serem guardadas é limitado e configurável
 	☐	Tela e-mails enviados
-
-
-
-  Gerenciamento de GRDs: 
-    ☐ Registrar Retorno de GRD
-      ☐ Desenhar tela de registro de retorno de GRD
-      ☐ Registrar Observações sobre arquivos que compões a GRD
-      Na tela de registro de retorno de GRD o usuário será capaz de
-        - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
-        - Dar o documento como concluído
-        - Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
+  ☐ Registrar Retorno de GRD
+    ☐ Desenhar tela de registro de retorno de GRD
+    ☐ Registrar Observações sobre arquivos que compões a GRD
+    Na tela de registro de retorno de GRD o usuário será capaz de
+      - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
+      - Dar o documento como concluído
+      - Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
   Dashboard:
     ☐ nº de documentos em revisão
     ☐ produtividade dos especialistas

@@ -407,6 +407,20 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/grds/'+id_grd+'/ftp',null,buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.buscarDocumentos = function(query){
+				// Montando a query string com base no objeto query
+				var queryString = '';
+				for(var i in query){
+					queryString += i+'='+query[i]+'&';
+				}
+
+				// removendo o derradeiro &;
+				queryString = queryString.substr(0,queryString.length-1);
+
+				// Retornando promise da requisição de busca
+				return $http.get(API_ROOT+'/documentos/search/q?'+queryString,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]
