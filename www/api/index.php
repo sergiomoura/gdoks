@@ -2955,7 +2955,7 @@
 					)[0]['n'];
 				
 				// Determinando a paginação
-				$npp = 20;
+				$npp = 10;
 				$pos_inicial  = ($q->pagAtual-1)*$npp;
 
 				// Montando sql
