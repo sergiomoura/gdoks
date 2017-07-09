@@ -91,6 +91,66 @@
 	</div>
 
 	<md-content>
+		<div class="paginacao" layout="row" flex="none" ng-if="totPaginas>1">
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==1"
+				ng-click="onFirstPageClick()">
+				<md-icon class="material-icons step" aria-label="">skip_previous</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				class="material-icons step"
+				aria-label=""
+				ng-disabled="busca.pagAtual==1"
+				ng-click="onPreviousPageClick()">
+					<md-icon>fast_rewind</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true"><md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==1"
+				ng-click="onPreviousPageClick()">{{busca.pagAtual==1?'':busca.pagAtual-1}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini selected"
+				ng-disabled="true">{{busca.pagAtual}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==totPaginas"
+				ng-click="onNextPageClick()">{{busca.pagAtual==totPaginas?'':busca.pagAtual+1}}
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true">
+					<md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==nPaginas"
+				ng-click="onNextPageClick()">
+					<md-icon class="material-icons step" aria-label="">fast_forward</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==nPaginas"
+				ng-click="onLastPageClick()">
+					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
+			</md-button>
+		</div>
+				
 		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos track by doc.id">
 			<div layout="row">
 				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.nome}}</div>
@@ -145,6 +205,66 @@
 				</div>
 			</div>
 			<div class="ua">{{doc.ua==null ? 'Documento nunca foi atualizado.' : (doc.ua|date:"Últi'ma' Atu'al'iz'a'ção: dd/MM/yyyy à's' HH:mm:ss")}}</div>
+		</div>
+
+		<div class="paginacao" layout="row" flex="none" ng-if="totPaginas>1">
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==1"
+				ng-click="onFirstPageClick()">
+				<md-icon class="material-icons step" aria-label="">skip_previous</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				class="material-icons step"
+				aria-label=""
+				ng-disabled="busca.pagAtual==1"
+				ng-click="onPreviousPageClick()">
+					<md-icon>fast_rewind</md-icon>
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true"><md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==1"
+				ng-click="onPreviousPageClick()">{{busca.pagAtual==1?'':busca.pagAtual-1}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini selected"
+				ng-disabled="true">{{busca.pagAtual}}
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==totPaginas"
+				ng-click="onNextPageClick()">{{busca.pagAtual==totPaginas?'':busca.pagAtual+1}}
+			</md-button>
+			
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="true">
+					<md-icon class="material-icons step" aria-label="">more_horiz</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==nPaginas"
+				ng-click="onNextPageClick()">
+					<md-icon class="material-icons step" aria-label="">fast_forward</md-icon>
+			</md-button>
+
+			<md-button
+				class="md-icon md-mini"
+				ng-disabled="busca.pagAtual==nPaginas"
+				ng-click="onLastPageClick()">
+					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
+			</md-button>
 		</div>
 	</md-content>
 </md-content>

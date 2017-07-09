@@ -218,6 +218,14 @@
 
 #lista_de_documentos_container .md-errors-spacer {
   display: none; }
+#lista_de_documentos_container .paginacao {
+  width: 400px;
+  position: relative;
+  left: 50%;
+  margin-left: -200px; }
+  #lista_de_documentos_container .paginacao .md-button {
+    width: 12%;
+    min-width: 0px; }
 #lista_de_documentos_container .docCard {
   padding: 0;
   margin: 0 0 30px 0;

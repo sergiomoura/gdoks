@@ -4,6 +4,17 @@
 		display: none;
 	}
 	
+	.paginacao{
+		width: 400px;
+		position: relative;
+		left: 50%;
+		margin-left: -200px;
+		.md-button{
+			width: 12%;
+			min-width: 0px;
+		}
+	}
+	
 	.docCard{
 		padding: 0;
 	    margin: 0 0 30px 0;

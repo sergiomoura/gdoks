@@ -49,47 +49,10 @@
 
 		// Carregando documentos
 		$scope.documentos = [];
-		carregaDocumentos();
 
 		// Carregando disciplinas
 		$scope.disciplinas = [];
 		carregaDisciplinas();
-
-		// Função que carrega documentos
-		function carregaDocumentos(){
-			/*
-			GDoksFactory.getDocumentos()
-			.success(function(response){
-				$scope.documentos = response.documentos;
-
-				// Parsing Data Limite, ua, progressos e criando ganchos para filtro
-				for (var i = $scope.documentos.length - 1; i >= 0; i--) {
-					$scope.documentos[i].data_limite = ($scope.documentos[i].data_limite==null ? null : new Date($scope.documentos[i].data_limite + 'T00:00:00') );
-					$scope.documentos[i].ua = ($scope.documentos[i].ua==null ? null : new Date($scope.documentos[i].ua) );
-					$scope.documentos[i].progresso_a_validar = ($scope.documentos[i].progresso_a_validar==null? 0 : $scope.documentos[i].progresso_a_validar);
-					$scope.documentos[i].progresso_validado = ($scope.documentos[i].progresso_validado==null? 0 : $scope.documentos[i].progresso_validado);
-
-					// Criando ganchos para filtro mostrarPorValidar
-					$scope.documentos[i].mostrarPorValidar = ($scope.documentos[i].progresso_a_validar>0 ? '01' :'0');
-
-					// Criando gancho para filtro mostrarConcluidos
-					$scope.documentos[i].mostrarConcluidos = ($scope.documentos[i].progresso_validado == 100 ? '0' : '01');
-				}
-			})
-			.error(function(error){
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Não foi possível carregar documentos.')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
-
-				// Escrevendo erro no console
-				console.warn(error);
-			});
-			*/
-		}
 
 		// Função que carrega clientes
 		function carregaClientes(){
@@ -199,6 +162,35 @@
 			$location.path('/documentos/'+id);
 		}
 
+		$scope.onFirstPageClick = function(){
+			if($scope.busca.pagAtual > 1){
+				$scope.busca.pagAtual=1;
+				$scope.buscarDocumentos();
+			}
+		}
+
+		$scope.onPreviousPageClick = function(){
+			if($scope.busca.pagAtual > 1){
+				$scope.busca.pagAtual--;
+				$scope.buscarDocumentos();
+			}
+		}
+
+		$scope.onNextPageClick = function(){
+			if($scope.busca.pagAtual < $scope.totPaginas){
+				$scope.busca.pagAtual++;
+				$scope.buscarDocumentos();
+			}
+		}
+
+
+		$scope.onLastPageClick = function(){
+			if($scope.busca.pagAtual < $scope.totPaginas){
+				$scope.busca.pagAtual=$scope.totPaginas;
+				$scope.buscarDocumentos();
+			}
+		}
+
 		// Função de busca
 		$scope.buscarDocumentos = function(){
 			// Mostra carregando
@@ -207,7 +199,6 @@
 			// Mandando fazer busca
 			GDoksFactory.buscarDocumentos($scope.busca)
 			.success(function(response){
-				console.log(response);
 				// Esconde Carregando
 				$scope.root.carregando = false;
 
