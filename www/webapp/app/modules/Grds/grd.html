@@ -63,7 +63,7 @@
 							<label>Cliente</label>
 							<md-select ng-model="grd.cliente" ng-change="onClienteChange()" required>
 							  <md-select-label>Selecione um Cliente</md-select-label>
-							  <md-option ng-value="cliente" ng-repeat="cliente in clientes">{{ cliente.nome }}</md-option>
+							  <md-option ng-value="cliente" ng-repeat="cliente in clientes|orderBy:'nome'">{{ cliente.nome }}</md-option>
 							</md-select>
 						</md-input-container>
 						<md-input-container flex="25">
@@ -85,12 +85,12 @@
 							<label>Projeto</label>
 							<md-select ng-model="grd.projeto" ng-change="onProjetoChange()" required>
 							  <md-select-label>Selecione um Projeto do Cliente</md-select-label>
-							  <md-option ng-value="projeto" ng-repeat="projeto in projetos">{{ projeto.nome }}</md-option>
+							  <md-option ng-value="projeto" ng-repeat="projeto in projetos|orderBy:'nome'">{{ projeto.nome }}</md-option>
 							</md-select>
 						</md-input-container>
 						<md-input-container flex="25">
 							<label>Código da GRD</label>
-							<input type="text" ng-model="grd.codigo" required>
+							<input type="text" ng-model="grd.codigo" disabled="disabled" placeholder="Automático após salvamento">
 						</md-input-container>
 						<md-input-container flex="50">
 							<label>Observações</label>
