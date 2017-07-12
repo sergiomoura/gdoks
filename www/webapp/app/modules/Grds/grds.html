@@ -56,7 +56,10 @@
 					<md-datepicker ng-model="q.envAte" md-hide-icons="calendar" ng-disabled="q.enviada!=1"></md-datepicker>
 				</md-input-container>
 			</div>
-			<md-button ng-click="onBuscarClick()" class="md-raised md-primary" aria-label="Buscar"><md-icon class="material-icons step" aria-label="Buscar">search</md-icon>Buscar</md-button>
+			<div layout="row" layout-align="space-between start">
+				<md-button flex="45" ng-click="onNovaClick()" class="md-raised md-accent" aria-label="Nova"><md-icon class="material-icons step" aria-label="Buscar">note_add</md-icon>Nova GRD</md-button>
+				<md-button flex="45" ng-click="onBuscarClick()" class="md-raised md-primary" aria-label="Buscar"><md-icon class="material-icons step" aria-label="Buscar">search</md-icon>Buscar</md-button>
+			</div>
 		</div>
 		<button type="submit" style="display: none"></button>
 	</form>
@@ -220,7 +223,6 @@
 					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
 			</md-button>
 		</div>
-		
 	</div>
 	<div class="resultados_container" ng-show="resultados == undefined">
 		<div class=" instrucoes">

@@ -44,6 +44,10 @@
 		}
 
 		// FUNÇÕES DE RESPOSTA A INTERFACE = = = = = = = = = = = = = = = = = = = = = = = = = = =
+		$scope.onNovaClick = function(){
+			$location.url('/grds/0');
+		}
+
 		$scope.onClienteChange = function(){
 			$scope.projetosListados = projetos.filter(
 				function(a){
