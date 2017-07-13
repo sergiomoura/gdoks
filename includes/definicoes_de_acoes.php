@@ -39,7 +39,7 @@
 	define('ACAO_ALTEROU_VALIDADORES',38);
 	define('ACAO_ATUALIZOU_REVISAO',39);
 	define('ACAO_CRIOU_GRD',40);
-	define('ACAO_ANEXOU_DOC_A_GRD',41);
+	define('__VAGA_1',41);
 	define('ACAO_ATUALIZOU_GRD',42);
 	define('ACAO_ENVIOU_GRD_VIA_FTP',43);
 	define('ACAO_ENVIOU_GRD_VIA_EMAIL',44);

@@ -1,7 +1,8 @@
 GDoks:
 	
 	Hoje:
-		☐	Código de GRD deve ser preenchido automaticamente.. ano-contador
+		✔	Código de GRD deve ser preenchido automaticamente.. ano-contador @done (17-07-12 17:18)
+		☐	Juntar funcionalidade da aba documento no cadastro de grd a tela principal do cadastro
 		☐	Marcar como enviado quando enviar uma GRD.
 	  ☐ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD
 	  ☐ Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca

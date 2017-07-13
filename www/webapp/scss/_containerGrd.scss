@@ -25,42 +25,34 @@
 	.documentos {
 
 		padding: 0 0;
-		
-		&>div:first-child{
-			border-right: 1px solid #DDD;
+
+		.controles_documentos{
+			padding: 2px 5px 2px 10px !important;
 		}
-		
-		&>div:nth-child(2){
-			.controles_documentos{
-				padding: 2px 5px 2px 10px !important;
-			}
-			.controles_de_doc {
-				.ptot{
-					cursor:pointer;
-					background-color: $azul;
-					color:#FFF;
-				}
-			}
-		} 			
-	
+
 		.doc{
 			padding: 5px 10px;
-			border-top:1px solid #DDD;
+			border-bottom:1px solid #DDD;
 
 			.controles_de_doc {
 				.ptot{
-					font-size: 10px;
+					font-size: 12px;
 					text-align: center;
 					border: 1px solid #999;
 					border: none;
 					background-color: #DDD;
 					color: #666;
-					padding: 1px 4px 0px 4px;
+					padding: 1px 6px 0px 6px;
 					border-radius: 2px;
 					margin-right: 4px;
 					display: inline-block;
 					text-align: center;
 					cursor: default;
+				}
+				.ptots_de_added .ptot{
+					cursor:pointer;
+					background-color: $azul;
+					color:#FFF;	
 				}
 				button {
 					margin: 0;
@@ -70,7 +62,9 @@
 		}
 
 		.controles_documentos{
-			padding: 10px 5px 10px 10px;
+			padding: 10px 5px 10px 0px;
+			height:72px;
+			border-bottom:1px solid #DDD;
 			input{
 				border: none;
 				padding: 15px 5px;

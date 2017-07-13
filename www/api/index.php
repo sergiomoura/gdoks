@@ -3776,7 +3776,7 @@
 
 				// Verificando se o projeto é da empresa atual
 				$sql = 'SELECT count(*) as ok FROM gdoks_projetos WHERE id=? AND id_empresa=?';
-				$rs = $db->query($sql,'ii',$grd->projeto->id,$id_empresa);
+				$rs = $db->query($sql,'ii',$grd->id_projeto,$id_empresa);
 				if($rs[0]['ok'] == 0){
 					$app->response->setStatus(401);
 					$response = new response(1,'Não altera dados de outra empresa.');
@@ -3788,27 +3788,37 @@
 				$grd->obs = (isset($grd->obs)?$grd->obs:'');
 
 				// Determinando o código da nova GRD
-				$sql = 'SELECT count(*) as n FROM gdoks_grds a INNER JOIN gdoks_projetos b on a.id_projeto=b.id INNER JOIN gdoks_clientes c ON c.id=b.id_cliente INNER JOIN gdoks_empresas d on d.id=c.id_empresa WHERE d.id=?';
+				$sql = 'SELECT count(*) as n FROM gdoks_grds a INNER JOIN gdoks_projetos b on a.id_projeto=b.id INNER JOIN gdoks_clientes c ON c.id=b.id_cliente INNER JOIN gdoks_empresas d on d.id=c.id_empresa WHERE d.id=? and YEAR(a.datahora_registro)=YEAR(NOW())';
 				$n = $db->query($sql,'i',$id_empresa)[0]['n'] + 1;
-				$grd->codigo = 'GRD-'.date('Y').'-'.str_pad($n, 6, "0", STR_PAD_LEFT);
+				$newCodigo = 'GRD-'.date('Y').'-'.str_pad($n, 6, "0", STR_PAD_LEFT);
 
 				
 				// Inserindo nova grd.
 				$sql = 'INSERT INTO gdoks_grds (id_projeto,codigo,obs,datahora_registro) VALUES (?,?,?,NOW())';
 				try {
-					$db->query($sql,'iss',$grd->projeto->id,$grd->codigo,$grd->obs);
-					$response = new response(0,'GRD criada com sucesso.');
-					$response->newId = $db->insert_id;
-					$response->newCodigo = $grd->codigo;
-					$response->flush();
+					$db->query($sql,'iss',$grd->id_projeto,$newCodigo,$grd->obs);
+					$newId = $db->insert_id;
 				} catch (Exception $e) {
 					$app->response->setStatus(401);
 					$response = new response(1,$e->getMessage());
 					$response->flush();
 					return;
 				}
+
+				// Inserindo revisões na GRD
+				$sql = 'INSERT INTO gdoks_grds_x_revisoes (id_grd,id_revisao,id_codEMI,id_tipo,nFolhas,nVias) VALUES (?,?,?,?,?,?)';
+				foreach ($grd->docs as $d) {
+					$db->query($sql,'iiiiii',$newId,$d->rev_id,$d->id_codEMI,$d->id_tipo,$d->nFolhas,$d->nVias);
+				}
+
+				// Retornando resposta ao computador cliente
+				$response = new response(0,'ok');
+				$response->newId = $newId;
+				$response->newCodigo = $newCodigo;
+				$response->flush();
+
 				// Registrando a ação
-				registrarAcao($db,$id,ACAO_CRIOU_GRD,$db->insert_id.','.$grd->codigo.','.$grd->projeto->id);
+				registrarAcao($db,$id,ACAO_CRIOU_GRD,$newId.','.$newCodigo.','.$grd->id_projeto);
 			});
 
 			$app->put('/grds/:id',function($id) use ($app,$db,$token){
@@ -3836,7 +3846,7 @@
 
 				// Verificando se o projeto é da empresa atual
 				$sql = 'SELECT count(*) as ok FROM gdoks_projetos WHERE id=? AND id_empresa=?';
-				$rs = $db->query($sql,'ii',$grd->projeto->id,$id_empresa);
+				$rs = $db->query($sql,'ii',$grd->id_projeto,$id_empresa);
 				if($rs[0]['ok'] == 0){
 					$app->response->setStatus(401);
 					$response = new response(1,'Não altera dados de outra empresa.');
@@ -3847,21 +3857,34 @@
 				// atribuindo um string vazio para obs caso ela venha vazia
 				$grd->obs = (isset($grd->obs)?$grd->obs:'');
 				
-				// Inserindo nova grd.
-				$sql = 'UPDATE gdoks_grds SET id_projeto=?,codigo=?,obs=?,datahora_registro=now() WHERE id=?';
+				// Atualizando a grd.
+				$sql = 'UPDATE gdoks_grds SET id_projeto=?,obs=?,datahora_registro=now() WHERE id=?';
 				try {
-					$db->query($sql,'issi',$grd->projeto->id,$grd->codigo,$grd->obs,$grd->id);
-					$response = new response(0,'GRD atualizada com sucesso.');
-					$response->newId = $db->insert_id;
-					$response->flush();
+					$db->query($sql,'isi',$grd->id_projeto,$grd->obs,$grd->id);
 				} catch (Exception $e) {
 					$app->response->setStatus(401);
 					$response = new response(1,$e->getMessage());
 					$response->flush();
 					return;
 				}
+
+				// Removendo documentos(revisoes) da GRD
+				$sql = 'DELETE FROM gdoks_grds_x_revisoes WHERE id_grd=?';
+				$db->query($sql,'i',$grd->id);
+
+				// Inserindo revisões na GRD
+				$sql = 'INSERT INTO gdoks_grds_x_revisoes (id_grd,id_revisao,id_codEMI,id_tipo,nFolhas,nVias) VALUES (?,?,?,?,?,?)';
+				foreach ($grd->docs as $d) {
+					$db->query($sql,'iiiiii',$grd->id,$d->rev_id,$d->id_codEMI,$d->id_tipo,$d->nFolhas,$d->nVias);
+				}
+
+
+				// Enviando resposta para o cliente
+				$response = new response(0,'GRD atualizada com sucesso.');
+				$response->flush();
+
 				// Registrando a ação
-				registrarAcao($db,$id,ACAO_ATUALIZOU_GRD,$grd->id.','.$grd->codigo.','.$grd->projeto->id);
+				registrarAcao($db,$id,ACAO_ATUALIZOU_GRD,$grd->id.','.$grd->codigo.','.$grd->id_projeto);
 			});
 
 			$app->get('/grds/:id',function($id_grd) use ($app,$db,$token){
@@ -3928,69 +3951,6 @@
 						$response->flush();
 						return;
 					}	
-				}
-			});
-
-			$app->post('/grds/documentos',function() use ($app,$db,$token){
-				// Lendo conteúdo da requisição
-				$grd = json_decode($app->request->getBody());
-
-				// verificando se a grd é da mesma empresa do usuário
-				$sql = 'SELECT a.id
-						FROM gdoks_usuarios a
-						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
-						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
-						WHERE token=?
-						  AND validade_do_token>now()
-						  AND c.id=?';
-				$rs = $db->query($sql,'si',$token,$grd->id);
-				if(sizeof($rs) == 0){
-					// Retornando erro
-					$app->response->setStatus(401);
-					$response = new response(1,'GRD inexistente ou token expirado.');
-					$response->flush();
-					return;
-				} else {
-
-					// Salvando o id do usuário
-					$id_usuario = $rs[0]['id'];
-
-					// Verificando se a GRD já foi enviada
-					$sql = 'SELECT !isnull(datahora_enviada) as enviada FROM gdoks_grds WHERE id=?';
-					$enviada = ($db->query($sql,'i',$grd->id)[0]['enviada'] == 1);
-					if($enviada){
-						// GRD já foi enviada para o cliente. retorna erro e não faz mais nada
-						$app->response->setStatus(401);
-						$response = new response(1,'Impossível alterar GRD. Ela já foi enviada para o cliente.');
-						$response->flush();
-						return;
-					} else {
-						
-						// Removendo revisoes antigas da grd em questão
-						$sql = 'DELETE FROM gdoks_grds_x_revisoes WHERE id_grd=?';
-						$db->query($sql,'i',$grd->id);
-
-						// Anexando revisoes dos documentos à grd
-						$sql = 'INSERT INTO gdoks_grds_x_revisoes
-									(
-										id_grd,
-										id_revisao,
-										id_codEMI,
-										id_tipo,
-										nFolhas,
-										nVias
-									) VALUES (?,?,?,?,?,?)';
-						foreach ($grd->docs as $d) {
-							$db->query($sql,'iiiiii',$grd->id,$d->rev_id,$d->id_codEMI,$d->id_tipo,$d->nFolhas,$d->nVias);
-						}
-
-						// Retornando sucesso
-						$response = new response(0,'ok');
-						$response->flush();
-
-						// Registrando no log
-						registrarAcao($db,$id_usuario,ACAO_ANEXOU_DOC_A_GRD,$grd->id);
-					}
 				}
 			});
 

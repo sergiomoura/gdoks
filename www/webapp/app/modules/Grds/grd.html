@@ -97,120 +97,80 @@
 							<input type="text" ng-model="grd.obs">
 						</md-input-container>
 					</div>
+					
+					<div class="documentos" layout="column" ng-if="grd.projeto!=undefined">
+						<div layout="row" layout-align="start center" class="controles_documentos">
+							<md-button class="md-icon-button md-mini" ng-click="selecionarTodos()">
+								<md-icon class="material-icons step" aria-label="description">done_all</md-icon>
+								<md-tooltip md-direction="bottom">Selecionar Todos</md-tooltip>
+							</md-button>
+							<span flex>
+								<md-icon class="material-icons step" aria-label="description">search</md-icon>
+								<input type="text" ng-model="qEsq.nome" placeholder="Filtrar documentos pelo nome...">	
+							</span>
+						</div>
+						<div class="doc" layout="row" layout-align="start center" ng-repeat="doc in documentos|filter:qEsq|orderBy:'-progresso'" ng-class="{selecionado_dir:doc.chk_dir}">
+							<div flex>
+								<md-checkbox
+									ng-model="doc.added"
+									ng-disabled="doc.progresso!=100"
+									class="md-primary"
+									flex aria-label="{{doc.nome}}">{{doc.nome}}
+								</md-checkbox>
+							</div>
+							
+							<span class="controles_de_doc" flex="none">
+								<span class="ptots_de_added" ng-if="doc.added">
+									<span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+										{{doc.nVias}} Via{{doc.nVias!=1?'s':''}}
+									</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+										{{doc.nFolhas}} Fls
+									</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+										{{doc.tipo.simbolo}}
+										<md-tooltip md-direction="bottom">Tipo</md-tooltip>
+									</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+										{{doc.codEMI.simbolo}}
+										<md-tooltip md-direction="bottom">Código EMI</md-tooltip>
+									</span>
+								</span>
+								<span class="ptot">rev {{doc.rev_serial}}</span><span class="ptot">
+									{{doc.progresso}}%
+								</span>
+
+								
+								<md-button
+									class="md-icon-button"
+									aria-label="Ir para documento">
+									<md-icon
+										class="material-icons step"
+										aria-label="Ir para documento"
+										ng-click="goToDoc(doc.id)">open_in_new</md-icon>
+										<md-tooltip md-direction="bottom">Ir para Página do Documento</md-tooltip>
+								</md-button>
+
+								<md-button
+									class="md-icon-button"
+									aria-label="Download"
+									ng-click="baixarPda(doc.ultimo_pda)">
+									<md-icon
+										class="material-icons step"
+										aria-label="Download">file_download</md-icon>
+										<md-tooltip md-direction="bottom">Baixar Documento</md-tooltip>
+								</md-button>
+							</span>
+						</div>
+					</div>
 					<button type="submit" style="display: none"></button>
 				</form>
 
 				<div layout="row" layout-align="end center">
-					<md-button ng-disabled="formDados.$pristine || formDados.$invalid" ng-click="salvar()" class="md-raised md-primary" aria-label="Salvar GRD">Salvar GRD</md-button>
+					<md-button ng-disabled="formDados.$pristine || formDados.$invalid || !grd.alterada" ng-click="salvar()" class="md-raised md-primary" aria-label="Salvar GRD">Salvar GRD</md-button>
 				</div>
 			</md-content>
 		</md-tab>
 		
-		<md-tab label="Documentos"  ng-disabled="grd.id==0 || grd.id==undefined">
-			<md-content class="documentos" layout="row">
-				<div layout="column" flex="50">
-					<div layout="row" layout-align="end center" class="controles_documentos">
-						<span flex>
-							<md-icon class="material-icons step" aria-label="description">search</md-icon>
-							<input type="text" ng-model="qEsq.nome" placeholder="Buscar pelo nome...">	
-						</span>
-						<md-button class="md-fab md-accent md-mini" ng-click="selecionarTodosEsq()">
-							<md-icon class="material-icons step" aria-label="description">done_all</md-icon>
-							<md-tooltip md-direction="bottom">Selecionar Todos</md-tooltip>
-						</md-button>
-						<md-button class="md-fab md-accent md-mini" ng-click="addSelecionados()">
-							<md-icon class="material-icons step" aria-label="description">playlist_add</md-icon>
-							<md-tooltip md-direction="bottom">Adicionar Selecionados</md-tooltip>
-						</md-button>
-					</div>
-					<div class="doc" layout="row" layout-align="start center" ng-repeat="doc in documentos|filter:qEsq|orderBy:'-progresso'" ng-class="{selecionado_dir:doc.chk_dir}">
-						<div flex>
-							<md-checkbox ng-model="doc.chk_esq" ng-disabled="doc.progresso!=100 || doc.added" class="md-accent" flex aria-label="{{doc.nome}}">
-								{{doc.nome}}
-							</md-checkbox>
-						</div>
-						
-						<span class="controles_de_doc" flex="none">
-							<span class="ptot">rev {{doc.rev_serial}}</span><span class="ptot">
-								{{doc.progresso}}%
-							</span>
-							
-							<md-button
-								class="md-icon-button"
-								aria-label="Ir para documento">
-								<md-icon
-									class="material-icons step"
-									aria-label="Ir para documento"
-									ng-click="goToDoc(doc.id)">open_in_new</md-icon>
-									<md-tooltip md-direction="bottom">Ir para Página do Documento</md-tooltip>
-							</md-button>
-
-							<md-button
-								class="md-icon-button"
-								aria-label="Download"
-								ng-click="baixarPda(doc.ultimo_pda)">
-								<md-icon
-									class="material-icons step"
-									aria-label="Download">file_download</md-icon>
-									<md-tooltip md-direction="bottom">Baixar Documento</md-tooltip>
-							</md-button>
-
-							<md-button
-							 	class="md-icon-button"
-							 	aria-label="Adicionar a GRD"
-								ng-disabled="doc.progresso!=100 || doc.added"
-								ng-click="addToGrd(doc)">
-								<md-icon
-									class="material-icons step"
-									aria-label="Adicionar a GRD">playlist_add</md-icon>
-								<md-tooltip md-direction="bottom">Adicionar a GRD</md-tooltip>
-							</md-button>
-						</span>
-					</div>
-				</div>
-				<div layout="column" flex="50">
-					<div layout="row" layout-align="end center" class="controles_documentos">
-						<span flex>
-							<md-icon class="material-icons step" aria-label="description">search</md-icon>
-							<input type="text" ng-model="qDir.nome" placeholder="Buscar pelo nome...">	
-						</span>
-						<md-button class="md-fab md-primary md-mini" ng-click="removeSelecionados()">
-							<md-icon class="material-icons step" aria-label="description">remove</md-icon>
-							<md-tooltip md-direction="bottom">Remover Selecionados</md-tooltip>
-						</md-button>
-						<md-button class="md-fab md-primary md-mini" ng-click="selecionarTodosDir()">
-							<md-icon class="material-icons step" aria-label="description">done_all</md-icon>
-							<md-tooltip md-direction="bottom">Selecionar Todos</md-tooltip>
-						</md-button>
-						<md-button ng-disabled="grd.documentos_salvos" class="md-fab md-primary" ng-click="salvarDocumentos()">
-							<md-icon class="material-icons step" aria-label="description">cloud_upload</md-icon>
-							<md-tooltip class="my-diff-tooltip" md-direction="top" md-visible="!grd.documentos_salvos">Anexar Documentos a GRD</md-tooltip>
-						</md-button>
-					</div>
-					<div class="doc" layout="row" layout-align="start center" ng-repeat="doc in documentos|filter:{added:true,nome:qDir.nome}|orderBy:'nome'">
-						<md-checkbox  ng-model="doc.chk_dir" class="md-primary" flex aria-label="{{doc.nome}}">
-							{{doc.nome}}
-						</md-checkbox>
-						<span class="controles_de_doc" flex="none">
-							<span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-								{{doc.nVias}} Via{{doc.nVias!=1?'s':''}}
-							</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-								{{doc.nFolhas}} Fls
-							</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-								{{doc.tipo.simbolo}}
-								<md-tooltip md-direction="bottom">Tipo</md-tooltip>
-							</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-								{{doc.codEMI.simbolo}}
-								<md-tooltip md-direction="bottom">Código EMI</md-tooltip>
-							</span>
-							<md-button class="md-icon-button" aria-label="Remover da GRD" ng-click="removeFromGrd(doc)">
-								<md-icon class="material-icons step" aria-label="Remover da GRD">remove_circle_outline</md-icon>
-								<md-tooltip md-direction="bottom">Remover da GRD</md-tooltip>
-							</md-button>
-						</span>
-					</div>
-				</div>
-			</md-content>
+		<md-tab label="Retorno de GRD"  ng-disabled="grd.id==0 || grd.id==undefined">
+			...
 		</md-tab>
 	</md-tabs>
 </div>

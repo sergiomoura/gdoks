@@ -315,10 +315,6 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/tiposDeDocumento',buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.postGrdDocs = function(grd){
-				return $http.post(API_ROOT+'/grds/documentos',grd,buildHeaders());
-			}
-			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.viewGRD = function(id_grd){
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");

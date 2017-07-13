@@ -131,9 +131,6 @@
 		// Lendo id da url
 		var id_grd = $routeParams.id;
 
-		// Definindo o tab selecionado
-		$scope.selectedTab = 0;
-
 		// definindo flag que indica se os codigos emi e os tipos de documento foram carregados
 		var codigosEmiCarregados = false;
 		var tiposDeDocumentoCarregados = false;
@@ -155,7 +152,7 @@
 
 		// definindo documentos
 		$scope.documentos = [];
-		
+
 		// Carregando clientes
 		$scope.clientes = [];
 		indexedDB.open('gdoks').onsuccess = function(evt){
@@ -193,7 +190,23 @@
 			
 			// Fazendo cópia de grd
 			var grd = angular.copy($scope.grd);
+
+			// Aplicando filtro e mapeamento nos documentos para um vetor de dados a ser enviado. 
+			grd.docs = ($scope.documentos.filter(function(a){return a.added})).map(function(a){
+				var result = {};
+				result.id_codEMI = a.codEMI.id;
+				result.id_tipo = a.tipo.id;
+				result.nFolhas = a.nFolhas;
+				result.nVias = a.nVias;
+				result.rev_id = a.rev_id;
+				return result;
+			})
+
+			grd.id_projeto = grd.projeto.id;
+			
+			// removendo dados desnecessários
 			delete grd.cliente;
+			delete grd.projeto;
 
 			if($scope.grd.id == undefined || $scope.grd.id==0){
 				GDoksFactory.adicionarGrd(grd)
@@ -216,7 +229,7 @@
 					// Retornando Toast para o usuário
 					$mdToast.show(
 						$mdToast.simple()
-						.textContent('GRD criada. Agora adicione documentos a ela!')
+						.textContent('GRD criada com sucesso!')
 						.position('bottom left')
 						.hideDelay(5000)
 					);
@@ -257,42 +270,15 @@
 				});
 			}
 		}
-
-		// Função que remove todos os documentos da grd
-		$scope.selecionarTodosDir = function(){
-			for (var i = $scope.documentos.length - 1; i >= 0; i--) {
-				if($scope.documentos[i].added){
-					$scope.documentos[i].chk_dir = true;
-				}
-			}
-		}
-
-		// Função que remove os documentos selecionados
-		$scope.removeSelecionados = function(){
-			for (var i = $scope.documentos.length - 1; i >= 0; i--) {
-				if($scope.documentos[i].chk_dir){
-					$scope.documentos[i].added = false;
-					$scope.documentos[i].chk_dir = false;
-				}
-			}
-		}
-
-		// Função que adiciona todos os selecionados
-		$scope.addSelecionados = function(){
-			for (var i = $scope.documentos.length - 1; i >= 0; i--) {
-				if($scope.documentos[i].chk_esq){
-					$scope.addToGrd($scope.documentos[i]);
-				}
-			}	
-		}
-
+		
 		// Função que adiciona todos os completados
-		$scope.selecionarTodosEsq = function(){
+		$scope.selecionarTodos = function(){
 			for (var i = $scope.documentos.length - 1; i >= 0; i--) {
 				if($scope.documentos[i].progresso==100 && !$scope.documentos[i].added){
 					$scope.documentos[i].chk_esq = true;
+					$scope.onDocumentoChange($scope.documentos[i]);
 				}
-			}	
+			}
 		}
 
 		// Vai para a página de um documento
@@ -345,83 +331,11 @@
 				parentDoc.tipo = $scope.doc.tipo;
 				parentDoc.nVias = $scope.doc.nVias;
 				parentDoc.nFolhas = $scope.doc.nFolhas;
-
-				// salvando os documentos na base
-				parentScope.salvarDocumentos();
-
+				parentScope.grd.alterada = true;
+				
 				// Escondendo caixa de dialogo
 				$mdDialog.hide();
 			}
-		}
-
-		// Função que adiciona o documento a grd
-		$scope.addToGrd = function(doc){
-			doc.added = true;
-			doc.chk_esq = false;
-			$scope.grd.documentos_salvos = false;
-		}
-
-		// Função que remove da GRD
-		$scope.removeFromGrd = function(doc){
-			doc.added = false;
-			doc.chk_dir = false;
-			$scope.grd.documentos_salvos = false;
-		}
-
-		// Função que salva os documentos na GRD
-		$scope.salvarDocumentos = function(){
-			// criando objeto grd a ser enviado
-			var grd = {};
-			grd.id = $scope.grd.id;
-
-			// Aplicando filtro e mapeamento nos documentos para um vetor de dados a ser enviado. 
-			grd.docs = ($scope.documentos.filter(function(a){return a.added})).map(function(a){
-				var result = {};
-				result.id_codEMI = a.codEMI.id;
-				result.id_tipo = a.tipo.id;
-				result.nFolhas = a.nFolhas;
-				result.nVias = a.nVias;
-				result.rev_id = a.rev_id;
-				return result;
-			})
-
-			// Mostra carregando
-			$scope.root.carregando = true;
-
-			// Enviando
-			GDoksFactory.postGrdDocs(grd)
-			.success(function(response){
-				// Esconde carregando
-				$scope.root.carregando = false;
-
-				// Registrando que grd foi salva
-				$scope.grd.documentos_salvos = true;
-
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Documentos anexados a GRD com sucesso!')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
-
-			})
-			.error(function(error){
-				// Esconde carregando
-				$scope.root.carregando = false;
-
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Ocorreu um erro ao tentar anexar documentos.')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
-
-				// Imprimindo erro no console
-				console.warn(error);
-
-			});
 		}
 
 		// Função executada quando se clica no burão para visualizar o GRD
@@ -724,7 +638,7 @@
 				if(id == 0){
 					$scope.grd = {
 						id: 0,
-						documentos_salvos: true
+						alterada:false
 					};
 				} else {
 					// verificando se tipos de documento e codigos emi estão carregados
@@ -742,12 +656,10 @@
 
 							// Settando GRD no scope
 							$scope.grd = response.grd;
+							$scope.grd.alterada = false;
 
 							// Carregando CodigosEMI, Tipos de documento e documentos do projeto desta grd
 							loadDocumentosDeProjeto($scope.grd.id_projeto);
-
-							// Definindo variável que controla se os documentos da grd foram salvos
-							$scope.grd.documentos_salvos = true;
 
 							// parsing datas
 							$scope.grd.enviada = ($scope.grd.datahora_enviada != null);
@@ -800,8 +712,6 @@
 
 					// Parsing documentos
 					for (var i = documentos.length - 1; i >= 0; i--) {
-						documentos[i].chk_esq = false;
-						documentos[i].chk_dir = false;
 						//verificando se documento está adicionado a grd
 						if($scope.grd.docs != undefined){
 							var grdDoc = $scope.grd.docs.find(function(a){return a.id_revisao==this},documentos[i].rev_id);
@@ -820,6 +730,13 @@
 								documentos[i].tipo = $scope.tiposDeDocumento.find(function(a){return a.id == this},grdDoc.id_tipo);
 								documentos[i].codEMI = $scope.codigosEmi.find(function(a){return a.id == this},grdDoc.id_codEMI);
 							}
+						} else {
+							// Documento não foi adicionado a grd. Mantendo valores padrão
+							documentos[i].added = false;
+							documentos[i].nVias = 1;
+							documentos[i].nFolhas = 1;
+							documentos[i].tipo = $scope.tipoDeDocumentoPadrao;
+							documentos[i].codEMI = $scope.codigoEmiPadrao;
 						}
 					}
 					$scope.documentos = documentos;
