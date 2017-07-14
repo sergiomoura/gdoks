@@ -4161,7 +4161,7 @@
 
 						// Retornando sucesso
 						$response = new response(0,'ok');
-						$response->datahora_enviada = date('Y-m-dTH:i:s');
+						$response->datahora_enviada = date('Y-m-d H:i:s');
 						$response->flush();
 
 						// Registrando no log
@@ -4268,7 +4268,7 @@
 
 						// Retornando sucesso
 						$response = new response(0,'ok');
-						$response->datahora_enviada = date('Y-m-dTH:i:s');
+						$response->datahora_enviada = date('Y-m-d H:i:s');
 						$response->flush();
 
 						// Registrando no log
