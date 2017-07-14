@@ -3,6 +3,9 @@
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
+	// Determinando o timezone America/Sao_Paulo
+	ini_set('date.timezone', 'America/Sao_Paulo');
+
 	// Required files - - - - - - - - - - - - - - - - - - -
 	require('../../includes/Slim/vendor/autoload.php');
 	require('../../includes/vendor/autoload.php');
