@@ -4148,12 +4148,19 @@
 					$response = $sendgrid->send($sgMail);
 
 					if($response->message == 'success'){
+						
+						// Registrando a datahora do envio
+						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
+						$db->query($sql,'i',$grd->id);
+
 						// Retornando sucesso
 						$response = new response(0,'ok');
+						$response->datahora_enviada = date('Y-m-dTH:i:s');
 						$response->flush();
 
 						// Registrando no log
 						registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
+
 					} else {
 
 						// Retornando erro
