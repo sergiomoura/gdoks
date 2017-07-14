@@ -458,7 +458,7 @@
 						$scope.root.carregando = false;
 
 						// Marcando a grd como enviada
-						// 0000
+						$scope.grd.datahora_enviada = new Date(response.datahora_enviada);
 
 						// Retornando Toast para o usuário
 						$mdToast.show(
