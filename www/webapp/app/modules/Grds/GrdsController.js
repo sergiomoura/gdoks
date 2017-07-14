@@ -405,6 +405,9 @@
 					// Esconde carregando
 					parentScope.root.carregando = false;
 
+					// Alterando a datahora enviada da GRD
+					$scope.grd.datahora_enviada = new Date(response.datahora_enviada)
+
 					// Retornando Toast para o usuário
 					$mdToast.show(
 						$mdToast.simple()
