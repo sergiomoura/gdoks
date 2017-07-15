@@ -121,20 +121,25 @@
 							</div>
 							
 							<span class="controles_de_doc" flex="none">
-								<span class="ptots_de_added" ng-if="doc.added">
-									<span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-										{{doc.nVias}} Via{{doc.nVias!=1?'s':''}}
-									</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-										{{doc.nFolhas}} Fls
-									</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-										{{doc.tipo.simbolo}}
-										<md-tooltip md-direction="bottom">Tipo</md-tooltip>
-									</span><span class="ptot" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
-										{{doc.codEMI.simbolo}}
-										<md-tooltip md-direction="bottom">Código EMI</md-tooltip>
-									</span>
+								
+								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+									{{doc.nVias}} Via{{doc.nVias!=1?'s':''}}
 								</span>
-								<span class="ptot">rev {{doc.rev_serial}}</span><span class="ptot">
+								<span class="ptot" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+									{{doc.nFolhas}} Fls
+								</span>
+								<span class="ptot" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+									{{doc.tipo.simbolo}}
+									<md-tooltip md-direction="bottom">Tipo</md-tooltip>
+								</span>
+								<span class="ptot" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+									{{doc.codEMI.simbolo}}
+									<md-tooltip md-direction="bottom">Código EMI</md-tooltip>
+								</span>
+								<span class="ptot">
+									rev {{doc.rev_serial}}
+								</span>
+								<span class="ptot">
 									{{doc.progresso}}%
 								</span>
 

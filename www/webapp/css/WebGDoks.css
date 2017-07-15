@@ -730,7 +730,7 @@
       display: inline-block;
       text-align: center;
       cursor: default; }
-    #grd_container .documentos .doc .controles_de_doc .ptots_de_added .ptot {
+    #grd_container .documentos .doc .controles_de_doc .clickable {
       cursor: pointer;
       background-color: #2196F3;
       color: #FFF; }
