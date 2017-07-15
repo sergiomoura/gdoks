@@ -8,8 +8,8 @@
 		</div>
 		<div flex layout="row" layout-align="end center">
 			<md-button class="md-raised md-primary" ng-disabled="true" aria-label="GRD enviada?">
-				<md-icon class="material-icons step" aria-label="icon">{{grd.enviada?'check':'close'}}</md-icon>
-				{{grd.enviada?'GRD Enviada':'GRD não enviada'}}
+				<md-icon class="material-icons step" aria-label="icon">{{grd.datahora_enviada!=null?'check':'close'}}</md-icon>
+				{{grd.datahora_enviada!=null?'GRD Enviada':'GRD não enviada'}}
 			</md-button>
 			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onVisualizarGrdClick()">
 				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">remove_red_eye</md-icon>
@@ -61,7 +61,7 @@
 					<div layout="row" layout-align="space-between start">
 						<md-input-container flex="25">
 							<label>Cliente</label>
-							<md-select ng-model="grd.cliente" ng-change="onClienteChange()" required>
+							<md-select ng-model="grd.cliente" ng-change="onClienteChange()" ng-disabled="grd.datahora_enviada!=null" required>
 							  <md-select-label>Selecione um Cliente</md-select-label>
 							  <md-option ng-value="cliente" ng-repeat="cliente in clientes|orderBy:'nome'">{{ cliente.nome }}</md-option>
 							</md-select>
@@ -83,7 +83,7 @@
 					<div layout="row" layout-align="space-between start">
 						<md-input-container flex="25">
 							<label>Projeto</label>
-							<md-select ng-model="grd.projeto" ng-change="onProjetoChange()" required>
+							<md-select ng-model="grd.projeto" ng-change="onProjetoChange()" ng-disabled="grd.datahora_enviada!=null" required>
 							  <md-select-label>Selecione um Projeto do Cliente</md-select-label>
 							  <md-option ng-value="projeto" ng-repeat="projeto in projetos|orderBy:'nome'">{{ projeto.nome }}</md-option>
 							</md-select>
@@ -113,7 +113,7 @@
 							<div flex>
 								<md-checkbox
 									ng-model="doc.added"
-									ng-disabled="doc.progresso!=100"
+									ng-disabled="!(doc.progresso==100 && grd.datahora_enviada==null)"
 									ng-click="grd.alterada=true"
 									class="md-primary"
 									flex aria-label="{{doc.nome}}">{{doc.nome}}

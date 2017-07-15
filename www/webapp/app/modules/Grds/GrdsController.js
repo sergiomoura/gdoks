@@ -139,12 +139,6 @@
 		// Carregando grd
 		$scope.grd = null;
 
-		// Acrescentando Watch em grd.datahora_enviada
-		$scope.$watch('grd.datahora_enviada',function(){
-			$scope.grd.enviada = ($scope.grd.datahora_enviada!=null);
-			console.log('watch viu!');
-		})
-
 		// Definindo códigos emis
 		$scope.codigosEmi = [];
 		loadCodigosEmi();
@@ -469,7 +463,7 @@
 						// Retornando Toast para o usuário
 						$mdToast.show(
 							$mdToast.simple()
-							.textContent(response.msg)
+							.textContent('GRD foi enviada com sucesso para o servidor do cliente.');
 							.position('bottom left')
 							.hideDelay(5000)
 						);
@@ -674,8 +668,7 @@
 							loadDocumentosDeProjeto($scope.grd.id_projeto);
 
 							// parsing datas
-							$scope.grd.enviada = ($scope.grd.datahora_enviada != null);
-							$scope.grd.datahora_enviada = $scope.grd.enviada?new Date($scope.grd.datahora_enviada):null;
+							$scope.grd.datahora_enviada = ($scope.grd.datahora_enviada!=null) ? new Date($scope.grd.datahora_enviada) : null;
 							$scope.grd.datahora_registro = new Date($scope.grd.datahora_registro);
 
 							// carregando o projeto da base local
