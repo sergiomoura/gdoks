@@ -7,10 +7,6 @@
 			</md-button>
 		</div>
 		<div flex layout="row" layout-align="end center">
-			<md-button class="md-raised md-primary" ng-disabled="true" aria-label="GRD enviada?">
-				<md-icon class="material-icons step" aria-label="icon">{{grd.datahora_enviada!=null?'check':'close'}}</md-icon>
-				{{grd.datahora_enviada!=null?'GRD Enviada':'GRD não enviada'}}
-			</md-button>
 			<md-button ng-disabled="grd.docs.length == 0 || grd.docs==undefined" class="md-raised md-primary" aria-label="Baixar GRD em ZIP" ng-click="onVisualizarGrdClick()">
 				<md-icon class="material-icons step" aria-label="Baixar GRD em ZIP">remove_red_eye</md-icon>
 				Visualizar GRD
@@ -170,7 +166,7 @@
 				</form>
 
 				<div layout="row" layout-align="end center">
-					<md-button ng-disabled="formDados.$pristine || formDados.$invalid || !grd.alterada" ng-click="salvar()" class="md-raised md-primary" aria-label="Salvar GRD">Salvar GRD</md-button>
+					<md-button ng-disabled="formDados.$pristine || formDados.$invalid || !grd.alterada" ng-click="salvar()" class="md-raised md-primary" aria-label="Salvar GRD">{{grd.datahora_enviada!=null?'Esta GRD foi enviada para o cliente. Ela não pode mais ser alterada':'Salvar GRD'</md-button>
 				</div>
 			</md-content>
 		</md-tab>
