@@ -1,14 +1,8 @@
 GDoks:
 	
 	Hoje:
-		✔	Código de GRD deve ser preenchido automaticamente.. ano-contador @done (17-07-12 17:18)
-		✔	Juntar funcionalidade da aba documento no cadastro de grd a tela principal do cadastro @done (17-07-14 10:33)
-		☐	Marcar como enviado quando enviar uma GRD.
-			☐	Registrando datahora de envio pdf por email
-			☐	Registrando datahora de envio link por email
-			☐	Registrando datahora de envioupload no servidor
-	  ☐ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD
-	  ☐ Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca
+	  ☐ Fazer com que se possa salvar GRD sem documento
+	  ☐	Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca
 		☐	Registrar Endereço físico do documento no cadastro do documento na grd.
 	  ☐ Registrar Retorno de GRD
 	    ☐ Desenhar tela de registro de retorno de GRD
@@ -83,6 +77,13 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD @done (17-07-15 08:52) @project(GDoks / Hoje)
+	✔	Registrando datahora de envioupload no servidor @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔	Registrando datahora de envio pdf por email @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔	Registrando datahora de envio link por email @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔	Marcar como enviado quando enviar uma GRD. @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔	Juntar funcionalidade da aba documento no cadastro de grd a tela principal do cadastro @done (17-07-14 10:33) @project(GDoks / Hoje)
+	✔	Código de GRD deve ser preenchido automaticamente.. ano-contador @done (17-07-12 17:18) @project(GDoks / Hoje)
 	✔	visualizar o documento de outras disciplinas @done (17-07-09 05:04) @project(GDoks)
 	✔ Otimizar página de documentos para grande volume de dados @done (17-07-09 05:03) @project(GDoks)
 	✔ Mostrar nome do cliente no bloco de documento @done (17-07-09 05:03) @project(GDoks)

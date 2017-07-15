@@ -171,11 +171,13 @@
 			}
 			// Anula o projeto do cliente selecionado
 			$scope.grd.projeto = null;
+			$scope.grd.alterada = true;
 		}
 
 		// Define função a ser executada quando o projeto muda
 		$scope.onProjetoChange = function(){
 			loadDocumentosDeProjeto($scope.grd.projeto.id);
+			$scope.grd.alterada = true;
 		}
 
 		// Função que leva para a busca de grds
