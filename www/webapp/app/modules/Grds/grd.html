@@ -125,14 +125,14 @@
 								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.nVias}} Via{{doc.nVias!=1?'s':''}}
 								</span>
-								<span class="ptot" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.nFolhas}} Fls
 								</span>
-								<span class="ptot" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.tipo.simbolo}}
 									<md-tooltip md-direction="bottom">Tipo</md-tooltip>
 								</span>
-								<span class="ptot" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.codEMI.simbolo}}
 									<md-tooltip md-direction="bottom">Código EMI</md-tooltip>
 								</span>

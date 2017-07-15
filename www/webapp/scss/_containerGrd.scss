@@ -49,6 +49,9 @@
 					text-align: center;
 					cursor: default;
 				}
+				.ptot:focus{
+					outline:none;
+				}
 				.clickable{
 					cursor:pointer;
 					background-color: $azul;
