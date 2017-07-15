@@ -4339,7 +4339,8 @@
 						}
 
 						// Efetuando login
-						if(!@ftp_login($ftp, $ftp_keys['login'], $ftp_keys['senha'])){
+						$loginResult = @ftp_login($ftp, $ftp_keys['login'], $ftp_keys['senha']);
+						if($loginResult === false){
 							$app->response->setStatus(401);
 							$response = new response(1,'Não foi possível efetuar login no servidor do cliente');
 							$response->flush();
