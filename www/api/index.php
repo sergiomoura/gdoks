@@ -4349,6 +4349,7 @@
 
 						// Criando o zip da Grd
 						$caminhoDoZip = $grd->gerarZip($nome_usuario);
+						die($caminhoDoZip);
 
 						// Fazendo upload
 						if(!ftp_put($ftp, basename($caminhoDoZip), $caminhoDoZip, FTP_BINARY)){
