@@ -114,6 +114,7 @@
 								<md-checkbox
 									ng-model="doc.added"
 									ng-disabled="doc.progresso!=100"
+									ng-click="grd.alterada=true"
 									class="md-primary"
 									flex aria-label="{{doc.nome}}">{{doc.nome}}
 								</md-checkbox>

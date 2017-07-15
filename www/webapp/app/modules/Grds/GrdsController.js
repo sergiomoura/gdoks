@@ -274,9 +274,9 @@
 		// Função que adiciona todos os completados
 		$scope.selecionarTodos = function(){
 			for (var i = $scope.documentos.length - 1; i >= 0; i--) {
-				if($scope.documentos[i].progresso==100 && !$scope.documentos[i].added){
-					$scope.documentos[i].chk_esq = true;
-					$scope.onDocumentoChange($scope.documentos[i]);
+				if($scope.documentos[i].progresso==100){
+					$scope.documentos[i].added = true;
+					$scope.grd.alterada = true;
 				}
 			}
 		}
