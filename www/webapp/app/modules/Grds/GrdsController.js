@@ -139,6 +139,12 @@
 		// Carregando grd
 		$scope.grd = null;
 
+		// Acrescentando Watch em grd.datahora_enviada
+		$scope.$watch('grd.datahora_enviada',function(){
+			$scope.grd.enviada = ($scope.grd.datahora_enviada!=null);
+			console.log('watch viu!');
+		})
+
 		// Definindo códigos emis
 		$scope.codigosEmi = [];
 		loadCodigosEmi();
