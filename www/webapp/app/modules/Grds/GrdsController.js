@@ -293,24 +293,27 @@
 
 		// Função que abre diálogo para alterar oções de documento de grd
 		$scope.openOpcoesDeDocumentoDialog = function(evt,doc){
-			$mdDialog.show(
-				{
-					controller: opcoesDeDocumentoDialogController,
-					locals:{
-						doc:angular.copy(doc),
-						parentDoc:doc,
-						parentScope:$scope,
-					},
-					templateUrl: './app/modules/Grds/grddoc.dialog.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: evt,
-					clickOutsideToClose:true
-				})
-				.then(function(answer) {
-				$scope.status = 'You said the information was "' + answer + '".';
-				}, function() {
-				$scope.status = 'You cancelled the dialog.';
-				});
+			// Mostra diálogo somente se grd não foi enviada ainda.
+			if($scope.grd.datahora_enviada==null){
+				$mdDialog.show(
+					{
+						controller: opcoesDeDocumentoDialogController,
+						locals:{
+							doc:angular.copy(doc),
+							parentDoc:doc,
+							parentScope:$scope,
+						},
+						templateUrl: './app/modules/Grds/grddoc.dialog.tmpl.html',
+						parent: angular.element(document.body),
+						targetEvent: evt,
+						clickOutsideToClose:true
+					})
+					.then(function(answer) {
+					$scope.status = 'You said the information was "' + answer + '".';
+					}, function() {
+					$scope.status = 'You cancelled the dialog.';
+					});
+			}
 		}
 
 		// Função controller da caixa de diálogo de opções de um documento de grd
