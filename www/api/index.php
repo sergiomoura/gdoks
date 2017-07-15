@@ -4346,14 +4346,14 @@
 							$response->flush();
 							return;
 						}
+						// Configurando para ftp Passivo
+						ftp_pasv($ftp, true);
 
 						// Criando o zip da Grd
 						$caminhoDoZip = $grd->gerarZip($nome_usuario);
 
-						$fh = fopen($caminhoDoZip, 'r');
-
 						// Fazendo upload
-						if(!ftp_fput($ftp, basename($caminhoDoZip), $fh, FTP_BINARY)){
+						if(!ftp_put($ftp, basename($caminhoDoZip), $caminhoDoZip, FTP_BINARY)){
 							$app->response->setStatus(401);
 							$response = new response(1,'Não foi possível fazer upload no servidor do cliente');
 							$response->flush();
