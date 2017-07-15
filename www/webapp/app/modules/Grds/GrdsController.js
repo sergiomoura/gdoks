@@ -463,7 +463,7 @@
 						// Retornando Toast para o usuário
 						$mdToast.show(
 							$mdToast.simple()
-							.textContent('GRD foi enviada com sucesso para o servidor do cliente.');
+							.textContent('GRD foi enviada com sucesso para o servidor do cliente.')
 							.position('bottom left')
 							.hideDelay(5000)
 						);
