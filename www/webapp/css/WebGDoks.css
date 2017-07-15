@@ -1,92 +1,1050 @@
-/*
-Error: Invalid CSS after "					outline:none.": expected "{", was "}"
-        on line 54 of scss/_containerGrd.scss
-        from line 13 of scss/WebGDoks.scss
+#topo {
+  height: 36px;
+  background-color: #2196F3;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0; }
 
-49: 					text-align: center;
-50: 					cursor: default;
-51: 				}
-52: 				.ptot:focus{
-53: 					outline:none.
-54: 				}
-55: 				.clickable{
-56: 					cursor:pointer;
-57: 					background-color: $azul;
-58: 					color:#FFF;	
-59: 				}
+#abreMenu {
+  background-image: url(../img/menu.png);
+  display: inline-block;
+  width: 16px;
+  height: 13px;
+  cursor: pointer;
+  padding: 0 12px 4px 14px;
+  background-repeat: no-repeat;
+  background-position-x: 13px; }
 
-Backtrace:
-scss/_containerGrd.scss:54
-scss/WebGDoks.scss:13
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:1207:in `expected'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:1137:in `expected'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:1132:in `tok!'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:665:in `block'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:735:in `declaration_or_ruleset'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:685:in `block_child'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:674:in `block_contents'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:666:in `block'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:735:in `declaration_or_ruleset'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:685:in `block_child'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:677:in `block_contents'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:666:in `block'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:735:in `declaration_or_ruleset'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:685:in `block_child'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:677:in `block_contents'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:666:in `block'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:735:in `declaration_or_ruleset'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:685:in `block_child'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:677:in `block_contents'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:666:in `block'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:735:in `declaration_or_ruleset'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:685:in `block_child'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:677:in `block_contents'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:666:in `block'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:658:in `ruleset'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:684:in `block_child'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:674:in `block_contents'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:125:in `stylesheet'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/scss/parser.rb:41:in `parse'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/engine.rb:406:in `_to_tree'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/engine.rb:312:in `to_tree'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:326:in `block in visit_import'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/stack.rb:88:in `block in with_import'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/stack.rb:115:in `with_frame'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/stack.rb:88:in `with_import'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:325:in `visit_import'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:36:in `visit'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/stack.rb:79:in `block in with_base'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/stack.rb:115:in `with_frame'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/stack.rb:79:in `with_base'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:160:in `visit'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:52:in `map'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:52:in `visit_children'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:169:in `block in visit_children'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:181:in `with_environment'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:168:in `visit_children'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:36:in `block in visit'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:188:in `visit_root'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:36:in `visit'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:159:in `visit'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:8:in `visit'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/root_node.rb:36:in `css_tree'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/engine.rb:381:in `_render_with_sourcemap'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/engine.rb:298:in `render_with_sourcemap'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:492:in `update_stylesheet'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:209:in `each'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:473:in `on_file_changed'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:331:in `block in watch'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/vendor/listen/lib/listen/listener.rb:252:in `on_change'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/vendor/listen/lib/listen/listener.rb:290:in `block in initialize_adapter'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/vendor/listen/lib/listen/adapters/polling.rb:48:in `poll_changed_directories'
-C:/Ruby23-x64/lib/ruby/gems/2.3.0/gems/sass-3.4.23/vendor/listen/lib/listen/adapter.rb:299:in `block in start_poller'
-*/
-body:before {
-  white-space: pre;
+#logo {
+  margin: 6px; }
+
+#container_horizontal {
+  position: fixed;
+  top: 36px;
+  left: 0;
+  min-width: 800px;
+  height: calc(100% - 36px);
+  width: 100%;
+  overflow: auto; }
+
+#view {
+  width: 100%;
+  position: relative; }
+
+#ua {
+  position: fixed;
+  bottom: 0px;
+  font-size: 12px;
+  color: #BBB;
+  padding: 2px 2px 2px 3px;
+  background-color: #EAEAEA;
+  right: 20px; }
+
+#lk_opcoes {
+  background-image: url(../img/min-menu.png);
+  display: block;
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  background-position: 17px 11px; }
+
+#opcoes {
+  background-color: #2196F3;
+  position: absolute;
+  top: -85px;
+  /*top: 36px;*/
+  right: 0;
+  width: 200px;
+  height: 90px;
+  color: #FFF;
+  transition: top 0.5s;
+  transition-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1); }
+
+#opcoes a {
+  display: block;
+  background-repeat: no-repeat;
+  background-position: 5px 8px;
+  text-indent: 36px;
+  cursor: pointer;
+  padding: 10px;
+  text-decoration: none;
+  color: #FFF; }
+
+#opcoes a:hover {
+  background-color: rgba(255, 255, 255, 0.3); }
+
+#opcoes .trocar_senha {
+  background-image: url(../img/chpass.png);
+  background-position: 5px 8px; }
+
+#opcoes .sair {
+  background-image: url(../img/onoff.png);
+  background-position: 8px 5px; }
+
+#carregando {
+  background-color: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; }
+
+.carregando-show-hide {
+  transition: opacity linear 0.3s; }
+
+.carregando-show-hide.ng-hide {
+  opacity: 0; }
+
+.md-raised md-icon {
+  margin: 0 10px 0 3px; }
+
+.area_dialog {
+  padding: 20px; }
+
+.area_dialog md-dialog-content {
+  overflow: hidden;
+  padding: 16px 0 0 0; }
+
+.area_dialog md-dialog-actions {
+  padding: 0; }
+
+.area_dialog md-dialog-actions button {
+  margin: 0 !important; }
+
+#cargos_container {
+  padding: 20px; }
+
+.cargo_dialog {
+  padding: 40px 20px 20px 20px; }
+
+.cargo_dialog md-dialog-content {
+  overflow: hidden;
+  padding: 16px 0 0 0; }
+
+.cargo_dialog md-dialog-actions {
+  padding: 0; }
+
+.cargo_dialog md-dialog-actions button {
+  margin: 0 !important; }
+
+#cliente_container .bt_salvar {
+  position: absolute;
+  right: 15px; }
+#cliente_container .bt_cancelar {
+  margin-left: 15px; }
+
+#clientes_container md-input-container {
+  margin-top: 40px; }
+#clientes_container .lista .cliente {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  padding: 20px;
+  text-decoration: none;
+  margin-right: 20px; }
+#clientes_container .lista .cliente:nth-child(3n) {
+  margin-right: 0px; }
+
+#subdisciplina_container .bt_adicionar {
+  position: absolute;
+  right: 15px;
+  bottom: 15px; }
+
+#subdisciplina_container {
+  padding-bottom: 55px;
+  margin-bottom: 50px; }
+
+#subdisciplina_container table td:nth-child(1),
+#subdisciplina_container table td:nth-child(2),
+#subdisciplina_container table td:nth-child(3) {
+  width: 20%; }
+
+#especialista_container .bt_adicionar {
+  position: absolute;
+  right: 15px;
+  bottom: 15px; }
+
+#especialista_container {
+  padding-bottom: 55px;
+  margin-bottom: 50px; }
+
+#especialista_container table td:nth-child(1),
+#especialista_container table td:nth-child(2),
+#especialista_container table td:nth-child(3) {
+  width: 20%; }
+
+#validador_container .bt_adicionar {
+  position: absolute;
+  right: 15px;
+  bottom: 15px; }
+
+#validador_container {
+  padding-bottom: 55px;
+  margin-bottom: 150px; }
+
+#validador_container table td:nth-child(1),
+#validador_container table td:nth-child(2),
+#validador_container table td:nth-child(3) {
+  width: 25%; }
+
+#validador_container table tr td:first-child select {
+  width: 100%; }
+
+.sub_dialog {
+  padding: 40px 20px 20px 20px; }
+  .sub_dialog md-dialog-content {
+    overflow: hidden;
+    padding: 16px 0 0 0; }
+  .sub_dialog md-dialog-actions {
+    padding: 0; }
+    .sub_dialog md-dialog-actions button {
+      margin: 0 !important; }
+
+#disciplinas_container md-input-container {
+  margin-top: 50px; }
+#disciplinas_container .lista .disciplina {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  text-decoration: none; }
+#disciplinas_container .lista .disciplina:nth-child(3n) {
+  margin-right: 0; }
+
+#lista_de_documentos_container .md-errors-spacer {
+  display: none; }
+#lista_de_documentos_container .paginacao {
+  width: 400px;
+  position: relative;
+  left: 50%;
+  margin-left: -200px; }
+  #lista_de_documentos_container .paginacao .md-button {
+    width: 12%;
+    min-width: 0px; }
+#lista_de_documentos_container .docCard {
+  padding: 0;
+  margin: 0 0 30px 0;
+  display: inline-block;
+  width: 100%; }
+  #lista_de_documentos_container .docCard .titulo {
+    margin: 10px;
+    font-size: 20px; }
+  #lista_de_documentos_container .docCard .md-icon-button {
+    position: relative;
+    top: 5px; }
+  #lista_de_documentos_container .docCard .info {
+    width: 100%;
+    background-color: #e3f2fd;
+    color: #2196F3; }
+    #lista_de_documentos_container .docCard .info td {
+      padding: 0px 10px;
+      font-size: 14px; }
+    #lista_de_documentos_container .docCard .info td:nth-child(2n) {
+      text-align: right; }
+    #lista_de_documentos_container .docCard .info tr:first-child > td {
+      padding-top: 10px; }
+    #lista_de_documentos_container .docCard .info tr:last-child > td {
+      padding-bottom: 10px; }
+  #lista_de_documentos_container .docCard .progresso {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 0 10px 0 0; }
+    #lista_de_documentos_container .docCard .progresso .validado {
+      color: #2196F3; }
+    #lista_de_documentos_container .docCard .progresso .aValidar:before {
+      content: "+"; }
+    #lista_de_documentos_container .docCard .progresso .aValidar {
+      color: #6DD900; }
+  #lista_de_documentos_container .docCard .hbar {
+    background-color: #DFDFDF;
+    height: 16px;
+    width: calc(100% - 20px);
+    margin: 1px 10px 5px 10px; }
+    #lista_de_documentos_container .docCard .hbar div {
+      cursor: default;
+      transition: width 0.3s ease-out;
+      display: inline-block;
+      height: 16px;
+      font-size: 11px;
+      text-align: right;
+      padding-right: 2px;
+      position: relative;
+      top: -2px;
+      left: 0;
+      overflow: hidden; }
+    #lista_de_documentos_container .docCard .hbar .prgValidado {
+      background-color: #2196F3;
+      color: #FFF; }
+    #lista_de_documentos_container .docCard .hbar .prgAValidar {
+      background-color: #6DD900;
+      color: #FFF; }
+  #lista_de_documentos_container .docCard .ua {
+    margin: 0 10px 10px 10px;
+    text-align: right;
+    font-size: 12px; }
+
+#documento_container .header_table {
+  font-size: 14px;
+  width: 100%; }
+  #documento_container .header_table tr td {
+    padding: 2px 0px; }
+    #documento_container .header_table tr td label {
+      font-weight: bold; }
+    #documento_container .header_table tr td label:after {
+      content: ": "; }
+#documento_container .files_table {
+  font-size: 14px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px; }
+  #documento_container .files_table td {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0 15px;
+    border-right: 1px solid #e5e5e5; }
+  #documento_container .files_table td:nth-child(1) {
+    border-left: 1px solid #e5e5e5; }
+  #documento_container .files_table td:nth-child(2) {
+    width: 25px; }
+  #documento_container .files_table td:nth-child(3) {
+    width: 50px;
+    padding: 0; }
+    #documento_container .files_table td:nth-child(3) input {
+      border: none;
+      background: none;
+      padding: 10px;
+      height: 100%;
+      text-align: center;
+      width: 100px; }
+    #documento_container .files_table td:nth-child(3) input:focus {
+      outline: none; }
+  #documento_container .files_table td:nth-child(4) {
+    width: 95px; }
+  #documento_container .files_table td:nth-child(5) {
+    width: 200px; }
+  #documento_container .files_table td:nth-child(6) {
+    width: 50px; }
+  #documento_container .files_table md-select {
+    margin: 0; }
+  #documento_container .files_table md-input-container {
+    margin: 0; }
+  #documento_container .files_table md-input-container input {
+    margin: 25px 0 0 0; }
+  #documento_container .files_table tbody tr:nth-child(odd) td {
+    background-color: #FFF; }
+  #documento_container .files_table thead {
+    color: #2196F3; }
+    #documento_container .files_table thead td {
+      padding: 10px 0 10px 10px !important; }
+#documento_container .afterControls {
+  margin: 20px 0 0 0; }
+#documento_container .hbar {
+  background-color: #DFDFDF;
+  height: 20px;
+  width: 100%;
+  margin-bottom: 25px; }
+  #documento_container .hbar div {
+    transition: width 0.3s ease-out;
+    display: inline-block;
+    height: 20px;
+    font-size: 10px;
+    text-align: right;
+    padding-right: 2px;
+    position: relative;
+    left: 0;
+    overflow: hidden;
+    line-height: 20px; }
+  #documento_container .hbar .prgValidado {
+    background-color: #2196F3;
+    color: #FFF; }
+  #documento_container .hbar .prgAValidar {
+    background-color: #6DD900;
+    color: #FFF; }
+
+#docs_container {
+  padding-top: 20px;
+  position: relative; }
+
+#docs_container > .controles {
+  position: absolute;
+  right: 0;
+  top: 20px; }
+
+#docs_filtro {
+  background-color: #F3F3F3;
+  border: none;
+  font-family: Poppins;
+  padding: 10px;
+  width: 200px;
+  color: #BABABA;
+  margin-right: 20px; }
+
+#docs_filtro:focus {
+  outline: none;
+  border: none; }
+
+#docs_filtro::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: #BABABA;
+  opacity: 1; }
+
+#docs_filtro:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #BABABA;
+  opacity: 1; }
+
+#docs_filtro::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #BABABA;
+  opacity: 1; }
+
+#docs_filtro:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #BABABA;
+  opacity: 1; }
+
+#docs_container .controles .item {
+  display: inline-block; }
+
+#docs_container .controles .item label {
+  display: block;
+  color: #BABABA;
+  font-size: 12px;
+  text-indent: 3px; }
+
+#docs_ordem {
+  outline: none;
+  border: none;
+  background-color: #EEE;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  padding: 9px;
+  width: 250px;
+  color: #BABABA; }
+
+#docs_ordem:focus {
+  outline: none;
+  border: none; }
+
+#lista_de_docs {
+  column-count: 2;
+  column-gap: 50px; }
+
+#lista_de_docs > * > .bloco_conteudo {
+  display: inline-block;
+  padding: 10px 10px 0px 10px;
+  position: relative;
+  margin: 2px 2px 30px 2px;
+  width: 100%; }
+
+#lista_de_docs > * > .locked {
+  background-color: #2B2B2B; }
+
+#lista_de_docs > * > .bloco_conteudo .data_limite {
+  position: absolute;
+  right: 0px;
+  top: 0px; }
+
+#lista_de_docs > * > .bloco_conteudo .dias_restantes {
+  position: absolute;
+  right: 0px;
+  top: 20px; }
+
+#lista_de_docs > * > .bloco_conteudo .ultima_atualizacao {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  margin: 7px 0 0 0; }
+
+#lista_de_docs > * > .bloco_conteudo .progresso {
+  margin-top: 5px;
+  text-align: right;
+  font-size: 20px; }
+
+#lista_de_docs > * > .bloco_conteudo .progresso .validado {
+  color: #6DD900; }
+
+#lista_de_docs > * > .bloco_conteudo .progresso .aValidar:before {
+  content: "+"; }
+
+#lista_de_docs > * > .bloco_conteudo .hbar {
+  background-color: #DFDFDF;
+  height: 16px; }
+
+#lista_de_docs > * > .bloco_conteudo .hbar > div {
+  cursor: default;
+  transition: width 0.3s ease-out;
+  display: inline-block;
+  height: 16px;
+  font-size: 11px;
+  text-align: right;
+  padding-right: 2px;
+  position: relative;
+  top: -2px;
+  left: 0;
+  overflow: hidden; }
+
+#lista_de_docs > * > .bloco_conteudo .hbar > .prgValidado {
+  background-color: #6DD900;
+  color: #FFF; }
+
+#lista_de_docs > * > .bloco_conteudo .hbar > .prgAValidar {
+  background-color: #2196F3;
+  color: #FFF; }
+
+#lista_de_docs > * > .bloco_conteudo .historico {
+  margin: 5px 0 0 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s cubic-bezier(0.65, 0.01, 0, 1); }
+
+#lista_de_docs > * > .bloco_conteudo .historico .historico-item {
+  margin-top: 3px;
+  position: relative; }
+
+#lista_de_docs > * > .bloco_conteudo .historico .historico-item .hbar {
+  width: calc(100% - 151px);
+  display: inline-block; }
+
+#lista_de_docs > * > .bloco_conteudo .historico .historico-item span {
+  display: inline-block;
+  font-size: 12px;
+  margin-left: 3px;
+  text-align: right;
+  color: #666;
+  position: relative;
+  top: -5px;
+  width: 130px;
+  text-align: center; }
+
+#lista_de_docs > * > .bloco_conteudo .download_file:hover {
+  background-position: 0 -16px; }
+
+#lista_de_docs > * > .locked .download_file:hover {
+  background-position: 0px -32px; }
+
+#lista_de_docs > * > .bloco_conteudo .controles {
+  position: absolute;
+  top: 10px;
+  right: 10px; }
+
+#lista_de_docs > * > .bloco_conteudo .docInfo {
+  position: relative; }
+
+#lista_de_docs > * > .bloco_conteudo .controles button {
+  border: none;
+  background-color: transparent; }
+
+#lista_de_docs > * > .bloco_conteudo .controles button:focus {
+  outline: none; }
+
+#lista_de_docs > * > .bloco_conteudo .lock_doc {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-image: url(../img/mini-icons.png);
+  cursor: pointer;
+  background-position: -78px -1px; }
+
+#lista_de_docs > * > .bloco_conteudo .lock_doc:hover {
+  background-position: -78px 33px; }
+
+#lista_de_docs > * > .locked .lock_doc {
+  background-position: -65px 1px; }
+
+#lista_de_docs > * > .locked .lock_doc:hover {
+  background-position: -65px 20px; }
+
+#lista_de_docs > * > .bloco_conteudo .download_file {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-image: url(../img/mini-icons.png);
+  cursor: pointer;
+  background-position: 1px 0px;
+  background-repeat: no-repeat; }
+
+#lista_de_docs > * > .bloco_conteudo .upload_file {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-image: url(../img/mini-icons.png);
+  cursor: pointer;
+  background-position: 42px 0px; }
+
+#lista_de_docs > * > .bloco_conteudo .upload_file:hover {
+  background-position: 42px -16px; }
+
+#lista_de_docs > * > .locked .upload_file:hover {
+  background-position: 42px -32px; }
+
+#lista_de_docs > * > .bloco_conteudo .mostra_historico {
+  display: inline-block;
+  width: 16px;
+  height: 15px;
+  background-image: url(../img/mini-icons.png);
+  cursor: pointer;
+  background-position: 60px 0; }
+
+#lista_de_docs > * > .bloco_conteudo .mostra_historico:hover {
+  background-position: 60px 35px; }
+
+#lista_de_docs > * > .locked .mostra_historico:hover {
+  background-position: 60px -32px; }
+
+#lista_de_docs > * > .bloco_conteudo .historico .historico-item .download_file {
+  position: absolute;
+  top: 1px;
+  right: 0px; }
+
+#lista_de_docs .formUploadContainer {
+  position: relative;
+  top: -34px;
+  width: calc(100%);
+  margin-bottom: 10px; }
+  #lista_de_docs .formUploadContainer .bt {
+    background-color: #e1e1e1;
+    display: block;
+    width: 16px;
+    background-image: url(../img/mini-icons.png);
+    height: 16px;
+    position: absolute;
+    background-position: -50px 35px;
+    border: 2px solid #e1e1e1;
+    border-bottom: 20px solid #e1e1e1;
+    right: 58px;
+    top: 2px; }
+  #lista_de_docs .formUploadContainer .form {
+    top: 33px;
+    position: relative;
+    background-color: #e1e1e1;
+    padding: 15px 15px 40px 15px;
+    height: 130px;
+    font-size: 14px;
+    color: #333;
+    width: calc(100% - 30px); }
+    #lista_de_docs .formUploadContainer .form .bt_salvar {
+      position: absolute;
+      right: 15px; }
+  #lista_de_docs .formUploadContainer .fucItem {
+    margin-bottom: 10px; }
+    #lista_de_docs .formUploadContainer .fucItem label {
+      display: inline-block;
+      width: 110px;
+      text-align: right;
+      margin-right: 5px; }
+    #lista_de_docs .formUploadContainer .fucItem input {
+      width: 110px; }
+    #lista_de_docs .formUploadContainer .fucItem textarea {
+      width: calc(100% - 125px); }
+
+#lista_de_docs .formUploadContainer .form input {
+  border: none;
+  background: #FFF;
+  padding: 6px;
+  width: 50px; }
+
+#docs_container {
+  padding: 20px; }
+
+.doc_dialog {
+  padding: 40px 20px 20px 20px;
+  width: 900px; }
+  .doc_dialog md-dialog-content {
+    overflow: hidden;
+    padding: 16px 0 0 0; }
+    .doc_dialog md-dialog-content form > div:nth-child(2) {
+      border-left: 1px solid #e0e0e0;
+      margin-left: 20px;
+      padding-left: 20px; }
+      .doc_dialog md-dialog-content form > div:nth-child(2) md-input-container {
+        margin-bottom: 20px; }
+    .doc_dialog md-dialog-content form > div:nth-child(3) {
+      border-left: 1px solid #e0e0e0;
+      margin-left: 20px;
+      padding-left: 20px; }
+      .doc_dialog md-dialog-content form > div:nth-child(3) .section-title {
+        margin: 0 0 20px 0;
+        text-align: center; }
+    .doc_dialog md-dialog-content .md-errors-spacer {
+      min-height: 0px; }
+  .doc_dialog md-dialog-actions {
+    padding: 0; }
+  .doc_dialog md-dialog-actions button {
+    margin: 0 !important; }
+
+.validarProgresso_dialog {
+  padding: 0px 20px 20px 20px;
+  width: 350px; }
+  .validarProgresso_dialog md-dialog-content {
+    overflow: hidden;
+    padding: 16px 0 0 0; }
+    .validarProgresso_dialog md-dialog-content form > div:nth-child(2) {
+      border-left: 1px solid #e0e0e0;
+      margin-left: 20px;
+      padding-left: 20px; }
+      .validarProgresso_dialog md-dialog-content form > div:nth-child(2) .section-title {
+        margin: 0 0 20px 0;
+        text-align: center; }
+  .validarProgresso_dialog md-dialog-actions {
+    padding: 0; }
+  .validarProgresso_dialog md-dialog-actions button {
+    margin: 0 !important; }
+
+#grd_container .controle_principal {
+  padding: 20px 0px 20px 0; }
+  #grd_container .controle_principal div:first-child {
+    width: 160px; }
+  #grd_container .controle_principal md-fab-speed-dial {
+    position: absolute;
+    top: 65px;
+    right: 86px;
+    width: 50px; }
+  #grd_container .controle_principal md-fab-speed-dial md-fab-actions {
+    width: 58px; }
+#grd_container .dados {
+  padding-top: 50px; }
+#grd_container .documentos {
+  padding: 0 0; }
+  #grd_container .documentos .controles_documentos {
+    padding: 2px 5px 2px 10px !important; }
+  #grd_container .documentos .doc {
+    padding: 5px 10px;
+    border-bottom: 1px solid #DDD; }
+    #grd_container .documentos .doc .controles_de_doc .ptot {
+      font-size: 12px;
+      text-align: center;
+      border: 1px solid #999;
+      border: none;
+      background-color: #DDD;
+      color: #666;
+      padding: 1px 6px 0px 6px;
+      border-radius: 2px;
+      margin-right: 4px;
+      display: inline-block;
+      text-align: center;
+      cursor: default; }
+    #grd_container .documentos .doc .controles_de_doc .ptot:focus {
+      outline: none; }
+    #grd_container .documentos .doc .controles_de_doc .clickable {
+      cursor: pointer;
+      background-color: #2196F3;
+      color: #FFF; }
+    #grd_container .documentos .doc .controles_de_doc button {
+      margin: 0;
+      padding: 0; }
+  #grd_container .documentos .controles_documentos {
+    padding: 10px 5px 10px 0px;
+    height: 72px;
+    border-bottom: 1px solid #DDD; }
+    #grd_container .documentos .controles_documentos input {
+      border: none;
+      padding: 15px 5px;
+      background-color: transparent;
+      width: calc(100% - 50px);
+      font-size: 16px; }
+      #grd_container .documentos .controles_documentos input:focus {
+        border: none;
+        outline: none; }
+  #grd_container .documentos md-checkbox {
+    margin: 0; }
+    #grd_container .documentos md-checkbox span {
+      font-size: 12px;
+      position: relative;
+      top: -2px; }
+#grd_container md-input-container {
+  margin: 10px 10px; }
+
+.grddoc_dialog {
+  width: 600px;
+  padding: 20px; }
+
+.enviarEmail_dialog {
+  padding: 20px;
+  width: 400px; }
+  .enviarEmail_dialog .container_assunto_msg {
+    width: 98%; }
+  .enviarEmail_dialog .md-errors-spacer {
+    min-height: 5px; }
+
+#grds_container {
+  position: relative; }
+  #grds_container .controles {
+    width: 400px;
+    margin-top: 30px;
+    padding: 15px;
+    position: fixed;
+    background-color: #FFF; }
+    #grds_container .controles .hint {
+      color: #CCC;
+      font-size: 12px;
+      position: absolute;
+      top: 33px;
+      left: 4px; }
+    #grds_container .controles md-datepicker .md-datepicker-input {
+      width: 180px; }
+    #grds_container .controles md-input-container .md-errors-spacer {
+      min-height: 0 !important; }
+    #grds_container .controles .input-container-documento {
+      position: relative;
+      top: -10px; }
+  #grds_container .resultados_container {
+    margin: 30px 0 0 410px;
+    width: calc(100% - 400px); }
+    #grds_container .resultados_container .resultado {
+      cursor: pointer;
+      padding: 20px;
+      margin: 0 0 10px 0;
+      background-color: #fafafa;
+      width: 100%; }
+      #grds_container .resultados_container .resultado > div:first-child {
+        margin-bottom: 10px; }
+      #grds_container .resultados_container .resultado * {
+        cursor: pointer; }
+    #grds_container .resultados_container .resultado:hover {
+      background-color: #FFF; }
+    #grds_container .resultados_container .resultado_item {
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 10px; }
+      #grds_container .resultados_container .resultado_item label {
+        display: block;
+        font-size: 12px;
+        color: #BBB; }
+      #grds_container .resultados_container .resultado_item span {
+        font-size: 14px; }
+    #grds_container .resultados_container .resultado_item:last-child {
+      margin-right: 0; }
+    #grds_container .resultados_container .paginacao {
+      width: 400px;
+      position: relative;
+      left: 50%;
+      margin-left: -200px; }
+      #grds_container .resultados_container .paginacao .md-button {
+        width: 12%;
+        min-width: 0px; }
+  #grds_container .instrucoes {
+    text-align: center;
+    width: 50%;
+    min-width: 600px;
+    color: #2196F3;
+    margin: 0 auto 0 auto; }
+
+#logs_container {
+  padding-top: 20px;
+  position: relative; }
+
+#logs_container > .controles {
+  position: absolute;
+  right: 0;
+  top: 20px;
+  width: 800px; }
+
+#logs_filtro {
+  background-color: #F3F3F3;
+  border: none;
+  font-family: Poppins;
+  padding: 10px;
+  width: 200px;
+  color: #BABABA;
+  margin-right: 20px; }
+
+#logs_filtro:focus {
+  outline: none;
+  border: none; }
+
+#logs_filtro::-webkit-input-placeholder {
+  /* WebKit, Blink, Edge */
+  color: #BABABA;
+  opacity: 1; }
+
+#logs_filtro:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #BABABA;
+  opacity: 1; }
+
+#logs_filtro::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #BABABA;
+  opacity: 1; }
+
+#logs_filtro:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #BABABA;
+  opacity: 1; }
+
+#logs_container .controles .item {
+  display: inline-block; }
+
+#logs_container table {
+  width: 100%;
+  border-collapse: collapse; }
+
+#logs_container table td {
+  border-top: 1px solid #999;
+  color: #999;
   font-family: monospace;
-  content: "Error: Invalid CSS after \"					outline:none.\": expected \"{\", was \"}\"\A         on line 54 of scss/_containerGrd.scss\A         from line 13 of scss/WebGDoks.scss\A \A 49: 					text-align: center;\A 50: 					cursor: default;\A 51: 				}\A 52: 				.ptot:focus{\A 53: 					outline:none.\A 54: 				}\A 55: 				.clickable{\A 56: 					cursor:pointer;\A 57: 					background-color: $azul;\A 58: 					color:#FFF;	\A 59: 				}"; }
+  font-size: 16px;
+  padding: 10px; }
+
+#logs_container table td:nth-child(1) {
+  width: 200px; }
+
+#logs_container table td:nth-child(2) {
+  width: 200px;
+  text-align: center; }
+
+#logs_container table tr:hover td {
+  background-color: #FFF;
+  color: #333; }
+
+#logs_container table tr:last-child td {
+  border-bottom: 1px solid #999; }
+
+#addprojeto_container .bt_salvar {
+  position: absolute;
+  right: 15px;
+  bottom: 15px; }
+
+#addprojeto_container .bt_cancelar {
+  margin-left: 15px; }
+
+#addprojeto_dao_container {
+  padding-bottom: 556px; }
+
+#addprojeto_dao_container .bt_salvar {
+  position: absolute;
+  right: 15px;
+  bottom: -45px; }
+
+#addprojeto_dao_container table input[type=text] {
+  width: 100%; }
+
+#addprojeto_areas_container {
+  padding-bottom: 56px; }
+
+#addprojeto_areas_container .bt_adicionar {
+  position: absolute;
+  right: 15px;
+  bottom: 15px; }
+
+#addprojeto_areas_container table input[type=text] {
+  width: 100%; }
+
+#addprojeto_documentos_container {
+  padding-bottom: 56px;
+  margin-bottom: 180px; }
+
+#addprojeto_documentos_container table > tr > td > span {
+  display: block;
+  color: #CCC;
+  font-size: 12px; }
+
+#addprojeto_documentos_container .bt_adicionar {
+  position: absolute;
+  right: 15px;
+  bottom: 15px; }
+
+md-expansion-panel-collapsed {
+  cursor: pointer; }
+  md-expansion-panel-collapsed .md-expansion-panel-item {
+    margin: 25px 10px 25px 0; }
+    md-expansion-panel-collapsed .md-expansion-panel-item .label {
+      color: #bcbcbc;
+      font-size: 12px;
+      line-height: 20px;
+      height: 20px; }
+    md-expansion-panel-collapsed .md-expansion-panel-item .value {
+      font-size: 14px;
+      height: 24px;
+      line-height: 24px; }
+
+md-expansion-panel-expanded .md-expansion-panel-item {
+  margin: 25px 40px 10px 0;
+  float: left; }
+  md-expansion-panel-expanded .md-expansion-panel-item .label {
+    color: #bcbcbc;
+    font-size: 12px;
+    line-height: 20px;
+    height: 20px; }
+  md-expansion-panel-expanded .md-expansion-panel-item .value {
+    font-size: 14px;
+    height: 24px;
+    line-height: 24px; }
+
+#daosRegistradas_container table td:last-child {
+  text-align: right; }
+
+#projetos_container md-input-container {
+  margin-top: 50px; }
+#projetos_container .lista .projeto {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  text-decoration: none; }
+#projetos_container .lista .projeto:nth-child(3n) {
+  margin-right: 0px; }
+
+#senha_container {
+  padding: 20px; }
+
+.subarea_dialog {
+  padding: 20px; }
+
+.subarea_dialog md-dialog-content {
+  overflow: hidden;
+  padding: 16px 0 0 0; }
+
+.subarea_dialog md-dialog-actions {
+  padding: 0; }
+
+.subarea_dialog md-dialog-actions button {
+  margin: 0 !important; }
+
+#usuarios_container md-input-container {
+  margin-top: 40px; }
+#usuarios_container .lista .usuario {
+  display: inline-block;
+  width: calc(33% - 50px);
+  margin-bottom: 20px;
+  padding: 20px;
+  text-decoration: none;
+  margin-right: 20px; }
+#usuarios_container .lista .usuario:nth-child(3n) {
+  margin-right: 0px; }
+
+#usuario_container .aviso {
+  color: #FF5722;
+  font-size: 14px; }
+#usuario_container .permissoes_container > div {
+  border-top: 1px solid #DDD; }
+  #usuario_container .permissoes_container > div .telas_container {
+    height: 299px;
+    overflow-y: hidden;
+    border-right: 1px solid #DDD; }
+    #usuario_container .permissoes_container > div .telas_container .tela {
+      border-bottom: 1px solid #DDD;
+      padding: 10px 20px 0 20px;
+      width: 100%; }
+      #usuario_container .permissoes_container > div .telas_container .tela md-checkbox {
+        width: calc(100% - 50px); }
+      #usuario_container .permissoes_container > div .telas_container .tela button {
+        width: 32px; }
+    #usuario_container .permissoes_container > div .telas_container .tela:hover {
+      background-color: #e3f2fd; }
+  #usuario_container .permissoes_container > div .telas_container:hover {
+    overflow-y: auto; }
+  #usuario_container .permissoes_container > div .opcoesDeTela_container .opcao {
+    padding: 16px 20px 0 20px; }
+#usuario_container .permissoes_container .controles {
+  padding: 15px 10px 0 10px; }
+
+/*# sourceMappingURL=WebGDoks.css.map */
