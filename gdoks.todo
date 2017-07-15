@@ -17,6 +17,7 @@ GDoks:
 	      - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
 	      - Dar o documento como concluído
 	      - Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
+	   ☐	Alterar cadastro do cliente (info de ftp) deve salvar na base local
 		
 
 Bloqueio de Telas:

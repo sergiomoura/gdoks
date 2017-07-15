@@ -4353,7 +4353,7 @@
 						$fh = fopen($caminhoDoZip, 'r');
 
 						// Fazendo upload
-						if(!ftp_put($ftp, basename($caminhoDoZip), $fh, FTP_BINARY)){
+						if(!ftp_fput($ftp, basename($caminhoDoZip), $fh, FTP_BINARY)){
 							$app->response->setStatus(401);
 							$response = new response(1,'Não foi possível fazer upload no servidor do cliente');
 							$response->flush();
