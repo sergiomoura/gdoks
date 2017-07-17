@@ -1,8 +1,8 @@
 GDoks:
 	
 	Hoje:
-	  ☐ Fazer com que se possa salvar GRD sem documento
-	  ☐	Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca
+	  ✔ Fazer com que se possa salvar GRD sem documento @done (17-07-15 10:32)
+	  ✔	Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca @done (17-07-17 07:51)
 		☐	Registrar Endereço físico do documento no cadastro do documento na grd.
 	  ☐ Registrar Retorno de GRD
 	    ☐ Desenhar tela de registro de retorno de GRD

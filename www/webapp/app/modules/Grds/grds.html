@@ -22,12 +22,6 @@
 					</md-select>
 				</md-input-container>
 			</div>
-			<md-input-container class="input-container-documento">
-				<label>Documento</label>
-				<input type="text" ng-model="q.doc" ng-disabled="q.id_projeto==0">
-				<div class="hint" ng-if="q.id_projeto==0">Selecione primeiro o projeto do documento</div>
-				<div class="hint" ng-if="q.id_projeto!=0">Digite parte do nome de um documento</div>
-			</md-input-container>
 			<div layout="row" layout-align="space-between start">
 				<md-input-container>
 					<label>Registrada de</label>
@@ -131,30 +125,34 @@
 			layout="column"
 			ng-repeat="grd in resultados"
 			 md-whiteframe="2dp"
-			ng-click="onResultadoClick(grd.id_grd)">
+			ng-click="onResultadoClick(grd.grd_id)">
 				<div layout="row" layout-align="space-between start">
 					<div class="resultado_item">
 						<label>Código da GRD</label>
-						<span>{{grd.codigo_grd}}</span>
+						<span>{{grd.grd_cod}}</span>
 					</div>
 					<div class="resultado_item">
 						<label>Cliente</label>
-						<span>{{grd.nome_cliente}}</span>
+						<span>{{grd.cliente_nome}}</span>
 					</div>
 					<div class="resultado_item">
 						<label>Projeto</label>
-						<span>{{grd.nome_projeto}}</span>
+						<span>{{grd.projeto_nome}}</span>
 					</div>
 				</div>
 				<div layout="row"  layout-align="space-between start">
 					<div class="resultado_item">
+						<label>Quantidade de Documentos</label>
+						<span>{{grd.n_docs}}</span>
+					</div>
+					<div class="resultado_item">
 						<label>Registrada em</label>
-						<span>{{grd.datahora_registro|date:"dd/MM/yyyy à's' HH:mm:ss"}}</span>
+						<span>{{grd.grd_registradaEm|date:"dd/MM/yyyy à's' HH:mm:ss"}}</span>
 					</div>
 					<div class="resultado_item">
 						<label>Enviada em</label>
-						<span ng-if="grd.datahora_enviada!=null">{{grd.datahora_enviada|date:"dd/MM/yyyy à's' HH:mm:ss"}}</span>
-						<span ng-if="grd.datahora_enviada==null">(NÃO ENVIADA)</span>
+						<span ng-if="grd.grd_enviadaEm!=null">{{grd.grd_enviadaEm|date:"dd/MM/yyyy à's' HH:mm:ss"}}</span>
+						<span ng-if="grd.grd_enviadaEm==null">(NÃO ENVIADA)</span>
 					</div>
 				</div>
 		</div>
