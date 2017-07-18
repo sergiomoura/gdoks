@@ -132,8 +132,14 @@
 									{{doc.codEMI.simbolo}}
 									<md-tooltip md-direction="bottom">Código EMI</md-tooltip>
 								</span>
+								<span class="ptot clickable" ng-click="openEndFisicoDialog($event,doc)">
+									End Físico {{doc.end_fisico==null?'vazio':'ok'}}
+									<md-tooltip md-visible="false" md-direction="bottom" md-autohide="true" ng-if="doc.end_fisico!=null">
+										{{doc.end_fisico}}
+									</md-tooltip>
+								</span>
 								<span class="ptot">
-									rev {{doc.rev_serial}}
+									Rev {{doc.rev_serial}}
 								</span>
 								<span class="ptot">
 									{{doc.progresso}}%

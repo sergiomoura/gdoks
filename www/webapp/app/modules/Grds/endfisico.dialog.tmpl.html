@@ -1,0 +1,18 @@
+<md-dialog class="endfisico_dialog">
+	<md-dialog-content>
+		<h3>{{doc.nome}}</h3>
+		<form name="endfisicoDocForm" ng-submit="salvar()" layout="column">
+			
+			<md-input-container flex="45">
+				<label>Endereço Físico</label>
+				<input type="text" ng-model="doc.end_fisico" md-maxlength="60" maxlength="60">
+			</md-input-container>
+		
+			<button type="submit" style="display: none"></button>
+		</form>
+		<div layout="row" layout-align="space-between start">
+			<md-button ng-click="cancelar()" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
+			<md-button ng-disabled="endfisicoForm.$pristine" ng-click="salvar()" class="md-raised md-primary" aria-label="Salvar">Salvar</md-button>
+		</div>
+	</md-dialog-content>
+</md-dialog>

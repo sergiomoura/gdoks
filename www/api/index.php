@@ -2029,6 +2029,7 @@
 							       M.id_subarea,
 							       rev_serial,
 							       rev_id,
+							       end_fisico,
 							       progresso,
 							       data_limite,
 							       ultimo_pda
@@ -2049,12 +2050,14 @@
 							LEFT JOIN
 							  (SELECT X.id_documento,
 							          X.rev_serial,
+							          X.end_fisico,
 							          Y.id as rev_id,
 							          Y.progresso,
 							          Y.data_limite,
 							          Z.ultimo_pda
 							   FROM
 							     (SELECT id_documento,
+							     		 end_fisico,
 							             max(serial) AS rev_serial
 							      FROM gdoks_revisoes
 							      GROUP BY id_documento) X
@@ -3010,6 +3013,43 @@
 				$response->total = $n;
 				$response->npp = $npp;
 				$response->flush();
+			});
+			
+			$app->put('/documentos/:id_doc/revisoes/:id_rev/enderecoFisico',function($id_doc,$id_rev) use ($app,$db,$token){
+
+				// Guardando o endereço
+				$endereco = $app->request->getBody();
+
+				// Validando consistência: se drevisão é do documento
+				$sql = 'SELECT count(*) as n FROM gdoks_revisoes WHERE id=? and id_documento=?';	
+				$ok = ($db->query($sql,'ii',$id_rev,$id_doc)[0]['n'] == 1);
+				if($ok){
+					try {
+						if(trim($endereco) == ''){
+							$sql = 'UPDATE gdoks_revisoes SET end_fisico=null WHERE id=?';
+							$db->query($sql,'i',$id_rev);
+						} else {
+							$sql = 'UPDATE gdoks_revisoes SET end_fisico=? WHERE id=?';
+							$db->query($sql,'si',$endereco,$id_rev);
+						}
+					} catch (Exception $e) {
+						$app->response->setStatus(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						return;
+					}
+					$response = new response(0,'ok');
+					$response->flush();
+					
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Inconsistência nos dados');
+					$response->flush();
+					return;
+				}
+
+
+
 			});
 		// FIM DE ROTAS DE DOCUMENTOS */
 

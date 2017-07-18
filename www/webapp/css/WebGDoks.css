@@ -767,6 +767,12 @@
   width: 600px;
   padding: 20px; }
 
+.endfisico_dialog {
+  width: 400px;
+  padding: 20px; }
+  .endfisico_dialog md-dialog-content {
+    overflow: hidden; }
+
 .enviarEmail_dialog {
   padding: 20px;
   width: 400px; }

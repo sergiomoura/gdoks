@@ -343,6 +343,78 @@
 			}
 		}
 
+		// Função que abre diálogo para alterar endereço físico do documento/revisão
+		$scope.openEndFisicoDialog = function(evt,doc){
+			$mdDialog.show(
+				{
+					controller: endFisicoDialogController,
+					locals:{
+						doc:angular.copy(doc),
+						parentDoc:doc,
+						parentScope:$scope
+					},
+					templateUrl: './app/modules/Grds/endfisico.dialog.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: evt,
+					clickOutsideToClose:true
+				})
+				.then(function(answer) {
+				$scope.status = 'You said the information was "' + answer + '".';
+				}, function() {
+				$scope.status = 'You cancelled the dialog.';
+				});
+		}
+
+		// Função controller do diálogo para alterar endereço físico
+		function endFisicoDialogController($scope,parentScope,parentDoc,doc){
+			$scope.doc = doc;
+
+			$scope.cancelar = function(){
+				$mdDialog.hide();
+			}
+
+			$scope.salvar = function(){
+
+				// Mostra carregando
+				parentScope.root.carregando = true;
+
+				// Fazendo requisição
+				GDoksFactory.updateEndFisico(doc)
+				.success(function(response){
+					// Escondendo carregando
+					parentScope.root.carregando = false;
+
+					// Alterando o endereço físico no documento
+					if(doc.end_fisico == null || doc.end_fisico.trim()==''){
+						parentDoc.end_fisico = null;
+					} else {
+						parentDoc.end_fisico = doc.end_fisico;
+					}					
+
+					// Escondendo caixa de diálogo
+					$mdDialog.hide();
+
+				})
+				.error(function(error){
+					// Escondendo carregando
+					parentScope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível alterar endereço físico.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Imprimindo erro no console
+					console.warn(error)
+
+				});
+			}
+		}
+
+
 		// Função executada quando se clica no burão para visualizar o GRD
 		$scope.onVisualizarGrdClick = function(){
 			GDoksFactory.viewGRD($scope.grd.id);
