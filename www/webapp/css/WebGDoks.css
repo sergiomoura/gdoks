@@ -760,6 +760,26 @@
       font-size: 12px;
       position: relative;
       top: -2px; }
+#grd_container .retorno {
+  padding-top: 50px; }
+  #grd_container .retorno .obs {
+    border: 1px solid #D0D0D0;
+    padding-top: 30px;
+    background-color: #F0F0F0;
+    margin-bottom: 30px;
+    position: relative; }
+    #grd_container .retorno .obs .title {
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 12px; }
+    #grd_container .retorno .obs a {
+      color: #2196F3;
+      text-indent: 10px;
+      font-size: 14px;
+      margin-top: 5px; }
+    #grd_container .retorno .obs .controles {
+      padding: 0 10px 10px 0; }
+  #grd_container .retorno .obs:last-child {
+    margin-bottom: 0; }
 #grd_container md-input-container {
   margin: 10px 10px; }
 

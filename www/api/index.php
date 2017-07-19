@@ -4421,6 +4421,57 @@
 					}
 				}
 			});
+
+			$app->get('/grds/:id_grd/obs',function($id_grd) use ($app,$db,$token){
+				// Lendo dados nas variáveis
+				$id_grd = 1*$id_grd;
+
+				// Verificando se GRD é da mesma empresa do usuário
+				$sql = 'SELECT
+							count(*)=1 as ok
+						FROM
+							gdoks_grds a
+						    inner join gdoks_projetos b on b.id=a.id_projeto
+						    inner join gdoks_usuarios c on (c.id_empresa=b.id_empresa and c.token=? and c.validade_do_token>now())
+						WHERE a.id=?;';
+				$ok = $db->query($sql,'si',$token,$id_grd)[0]['ok']==1;
+
+				// Indo adiante
+				if($ok){
+					// Levantando observações
+					$sql = 'SELECT a.id,
+							       c.codigo as doc_codigo,
+							       c.nome as doc_titulo,
+							       a.data_recebida,
+							       a.datahora_registrada,
+							       a.idu,
+							       a.obs
+							FROM gdoks_observacoes a
+							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
+							INNER JOIN gdoks_documentos c ON c.id=b.id_documento
+							WHERE a.id_grd=?';
+					$observacoes = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_grd));
+
+					// levantando arquivos de observações
+					$sql = 'SELECT id,
+							       nome_cliente
+							FROM gdoks_observacoes_arquivos
+							WHERE id_observacao=?';
+					foreach ($observacoes as $obs) {
+						$obs->arquivos = $db->query($sql,'i',$obs->id);
+					}
+
+					// Mandando resposta para o cliente
+					$response = new response(0,'ok');
+					$response->observacoes = $observacoes;
+					$response->flush();
+				} else {
+					$app->response->setStatus(401);
+					$response = new response(1,'Levantando dados de outra empresa ou token expirado.');
+					$response->flush();
+					return;
+				}
+			});
 		// FIM DE ROTAS PARA GRDS
 
 		// ROTAS DE CODIGOS EMI

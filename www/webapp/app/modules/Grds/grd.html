@@ -49,7 +49,7 @@
 		</div>
 	</div>
 	
-	<md-tabs md-selected="selectedTab" md-dynamic-height md-border-bottom md-whiteframe="1dp">
+	<md-tabs md-selected="0" md-dynamic-height md-border-bottom md-whiteframe="1dp">
 		
 		<md-tab label="Dados da GRD">
 			<md-content class="md-padding dados">
@@ -178,7 +178,62 @@
 		</md-tab>
 		
 		<md-tab label="Retorno de GRD"  ng-disabled="grd.datahora_enviada==null">
-			...
+			<md-content class="md-padding retorno">
+				<div class="obs" ng-repeat="obs in grd.observacoes">
+					<div layout="row" layout-align="space-between center">
+						<md-input-container>
+							<label>Codigo</label>
+							<input type="text" value="{{obs.doc_codigo}}" disabled="disabled">
+						</md-input-container>
+						<md-input-container>
+							<label>Título</label>
+							<input type="text" value="{{obs.doc_titulo}}" disabled="disabled">
+						</md-input-container>
+						<md-input-container>
+							<label>Data</label>
+							<input type="text" value="{{obs.data_recebida|date:'dd/MM/yyyy'}}" disabled="disabled">
+						</md-input-container>
+						<md-input-container>
+							<label>Registrada em</label>
+							<input type="text" value="{{obs.datahora_registrada|date:'dd/MM/yyyy à\'s\' HH:mm:ss'}}" disabled="disabled">
+						</md-input-container>
+						<md-input-container>
+							<label>Registrada por</label>
+							<input type="text" value="{{obs.nome_usuario}}" disabled="disabled">
+						</md-input-container>
+					</div>
+					<div layout="row" layout-align="space-between start">
+						<md-input-container flex="70">
+							<label>Observação</label>
+							<textarea disabled="disabled">{{obs.obs}}</textarea>
+						</md-input-container>
+						<div layout="column" flex="25">
+							<span class="title">Arquivos:</span>
+							<a href="#" ng-click="downloadObsFile(a.id)" ng-repeat="a in obs.arquivos">{{a.nome_cliente}}</a>
+						</div>
+					</div>
+					<div layout="row" layout-align="end start" class="controles">
+						<md-button class="md-fab md-mini md-primary" aria-label="Adicionar Observação">
+							<md-icon class="material-icons step">note_add</md-icon>
+							<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
+								Adicionar Observação
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-fab md-mini md-primary" aria-label="Alterar">
+							<md-icon class="material-icons step" >edit_mode</md-icon>
+							<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
+								Alterar Observação
+							</md-tooltip>
+						</md-button>
+						<md-button class="md-fab md-mini md-accent" aria-label="Remover">
+							<md-icon class="material-icons step">delete</md-icon>
+							<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
+								Remover Observação
+							</md-tooltip>
+						</md-button>
+					</div>
+				</div>
+			</md-content>
 		</md-tab>
 	</md-tabs>
 </div>

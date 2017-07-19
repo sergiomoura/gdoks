@@ -748,6 +748,11 @@
 							$scope.grd.datahora_enviada = ($scope.grd.datahora_enviada!=null) ? new Date($scope.grd.datahora_enviada) : null;
 							$scope.grd.datahora_registro = new Date($scope.grd.datahora_registro);
 
+							// Se a grd já foi enviada para o cliente, tenta carregar
+							if($scope.grd.datahora_enviada!=null){
+								loadObservacoes();
+							}
+
 							// carregando o projeto da base local
 							indexedDB.open('gdoks').onsuccess = function(evt){
 								evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
@@ -823,6 +828,47 @@
 					}
 					$scope.documentos = documentos;
 				})
+			}
+
+			function loadObservacoes(){
+				GDoksFactory.loadObservacoesDeGRD($scope.grd.id)
+				.success(function(response){
+					$scope.grd.observacoes = response.observacoes;
+
+					// Parsing datas
+					var grd;
+					for (var i = $scope.grd.observacoes.length - 1; i >= 0; i--) {
+						grd = $scope.grd.observacoes[i];
+						grd.data_recebida = new Date(grd.data_recebida+' 00:00:00');
+						grd.datahora_registrada = new Date(grd.datahora_registrada);
+					}
+
+					// Parsing nomes dos usuários
+					indexedDB.open('gdoks').onsuccess = function(evt){
+						var os = evt.target.result.transaction('usuarios').objectStore('usuarios');
+						var obs;
+						for (var i = $scope.grd.observacoes.length - 1; i >= 0; i--) {
+							obs = $scope.grd.observacoes[i];
+							os.get(obs.idu).onsuccess = function(evt){
+								obs.nome_usuario = evt.target.result.nome;
+							}
+						}
+					}
+				})
+				.error(function(error){
+					
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível carregar obvservacoes da grd')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Imprimindo erro no console
+					console.warn(error);
+				});
+
 			}
 		// FIM DE FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 	}
