@@ -773,9 +773,11 @@
       font-size: 12px; }
     #grd_container .retorno .obs a {
       color: #2196F3;
-      text-indent: 10px;
-      font-size: 14px;
-      margin-top: 5px; }
+      padding: 0 0 0 10px;
+      font-size: 12px;
+      margin-top: 5px;
+      width: 250px;
+      overflow: hidden; }
     #grd_container .retorno .obs .controles {
       padding: 0 10px 10px 0; }
   #grd_container .retorno .obs:last-child {
@@ -792,6 +794,54 @@
   padding: 20px; }
   .endfisico_dialog md-dialog-content {
     overflow: hidden; }
+
+.grdobs_dialog {
+  width: 500px;
+  padding: 20px; }
+  .grdobs_dialog .md-errors-spacer {
+    min-height: 0 !important; }
+  .grdobs_dialog md-dialog-content {
+    overflow: hidden; }
+    .grdobs_dialog md-dialog-content textarea {
+      font-family: "Poppins", sans-serif;
+      line-height: 18px;
+      font-size: 14px; }
+    .grdobs_dialog md-dialog-content .lista_de_anexos {
+      margin: 15px 0; }
+      .grdobs_dialog md-dialog-content .lista_de_anexos div {
+        display: inline-block;
+        padding: 5px 45px 5px 10px;
+        border-radius: 5px;
+        margin: 0 5px 5px 0;
+        font-size: 14px;
+        min-width: 100px;
+        cursor: default;
+        position: relative; }
+        .grdobs_dialog md-dialog-content .lista_de_anexos div a {
+          display: inline-block;
+          position: absolute;
+          right: 5px;
+          top: 6px;
+          font-family: "Verdana";
+          cursor: pointer;
+          border-radius: 10px;
+          height: 20px;
+          width: 20px;
+          line-height: 18px;
+          text-align: center;
+          text-indent: 1px; }
+        .grdobs_dialog md-dialog-content .lista_de_anexos div a:hover {
+          background-color: #ef6c00;
+          color: #FFF; }
+      .grdobs_dialog md-dialog-content .lista_de_anexos .pre {
+        color: rgba(0, 0, 0, 0.54);
+        background-color: rgba(0, 0, 0, 0.12); }
+      .grdobs_dialog md-dialog-content .lista_de_anexos .novos {
+        color: #2196F3;
+        background-color: #e3f2fd; }
+      .grdobs_dialog md-dialog-content .lista_de_anexos button {
+        position: relative;
+        top: -1px; }
 
 .enviarEmail_dialog {
   padding: 20px;

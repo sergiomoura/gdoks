@@ -1,0 +1,58 @@
+<md-dialog class="grdobs_dialog">
+	<md-dialog-content>
+		<h3>{{grd.codigo}}</h3>
+		<form name="grdObsForm" ng-submit="salvar()" layout="column">
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex>
+					<label>Documento</label>
+					<md-select ng-model="obs.doc_id" ng-disabled="obs.id!=0" required>
+						<md-option ng-value="opt.id" ng-repeat="opt in documentos">{{opt.codigo}} - {{opt.nome}}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container style="width: 140px">
+					<label>Data</label>
+					<md-datepicker md-hide-icons="calendar" ng-model="obs.data_recebida" md-max-date="hoje" required="true"></md-datepicker>
+				</md-input-container>
+			</div>
+			
+			<div layout="row" layout-align="space-between start">
+				<md-input-container flex="100">
+					<label>Observação</label>
+					<textarea ng-model="obs.obs" required>
+					</textarea>
+				</md-input-container>
+			</div>
+			<div class="lista_de_anexos">
+				<div ng-repeat="file in obs.arquivos" class="pre">
+					<span>{{file.nome_cliente}}</span>
+					<a
+						aria-label="Desanexar arquivo {{file.nome_cliente}}"
+						ng-click="desanexar($index)">x</a>
+				</div>
+				<div ng-repeat="file in novos_arquivos" class="novos">
+					<span>{{file.name}}</span>
+					<a
+						aria-label="Desanexar arquivo {{file.name}}"
+						ng-click="desanexarDosNovos($index)">x</a>
+				</div>
+			</div>
+			
+			<div layout="row" layout-align="space-between start">
+				<md-button ng-click="cancelar()" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
+				<md-button
+					ngf-change="obs.alterada=true"
+					class="md-raised md-primary"
+					ngf-multiple="true"
+					ngf-select
+					ng-model="novos_arquivos"
+					aria-label="Selecionar arquivos para anexar">
+							<md-icon class="material-icons step">attach_file</md-icon>
+							Anexar arquivos a observação
+						</md-button>			
+				<md-button ng-disabled="(grdObsForm.$pristine && !obs.alterada) || !grdObsForm.$valid" ng-click="salvar()" class="md-raised md-primary" aria-label="Salvar">Salvar</md-button>
+			</div>
+			
+			<button type="submit" style="display: none"></button>
+		</form>
+	</md-dialog-content>
+</md-dialog>

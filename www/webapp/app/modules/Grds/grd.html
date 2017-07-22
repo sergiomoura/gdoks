@@ -183,11 +183,11 @@
 					<div layout="row" layout-align="space-between center">
 						<md-input-container>
 							<label>Codigo</label>
-							<input type="text" value="{{obs.doc_codigo}}" disabled="disabled">
+							<input type="text" value="{{obs.doc.codigo}}" disabled="disabled">
 						</md-input-container>
 						<md-input-container>
 							<label>Título</label>
-							<input type="text" value="{{obs.doc_titulo}}" disabled="disabled">
+							<input type="text" value="{{obs.doc.nome}}" disabled="disabled">
 						</md-input-container>
 						<md-input-container>
 							<label>Data</label>
@@ -213,13 +213,13 @@
 						</div>
 					</div>
 					<div layout="row" layout-align="end start" class="controles">
-						<md-button class="md-fab md-mini md-primary" aria-label="Adicionar Observação">
+						<md-button class="md-fab md-mini md-primary" ng_click="openObservacaoDeGRD($event)" aria-label="Adicionar Observação">
 							<md-icon class="material-icons step">note_add</md-icon>
 							<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
 								Adicionar Observação
 							</md-tooltip>
 						</md-button>
-						<md-button class="md-fab md-mini md-primary" aria-label="Alterar">
+						<md-button class="md-fab md-mini md-primary" ng_click="openObservacaoDeGRD($event,obs)" aria-label="Alterar">
 							<md-icon class="material-icons step" >edit_mode</md-icon>
 							<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
 								Alterar Observação
@@ -236,4 +236,5 @@
 			</md-content>
 		</md-tab>
 	</md-tabs>
+	<pre>{{grd.observacoes|json}}</pre>
 </div>

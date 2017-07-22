@@ -1,11 +1,7 @@
 GDoks:
 	
 	Hoje:
-	  ✔ Fazer com que se possa salvar GRD sem documento @done (17-07-15 10:32)
-	  ✔	Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca @done (17-07-17 07:51)
-		☐	Registrar Endereço físico do documento no cadastro do documento na grd.
 	  ☐ Registrar Retorno de GRD
-	    ☐ Desenhar tela de registro de retorno de GRD
 	    ☐ Registrar Observações sobre arquivos que compões a GRD
 	    Na tela de registro de retorno de GRD o usuário será capaz de
 	      - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
@@ -77,6 +73,10 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Desenhar tela de registro de retorno de GRD @done (17-07-19 11:18) @project(GDoks / Hoje)
+	✔	Registrar Endereço físico do documento no cadastro do documento na grd. @done (17-07-19 11:18) @project(GDoks / Hoje)
+	✔	Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca @done (17-07-17 07:51) @project(GDoks / Hoje)
+	✔ Fazer com que se possa salvar GRD sem documento @done (17-07-15 10:32) @project(GDoks / Hoje)
 	✔ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD @done (17-07-15 08:52) @project(GDoks / Hoje)
 	✔	Registrando datahora de envioupload no servidor @done (17-07-15 08:51) @project(GDoks / Hoje)
 	✔	Registrando datahora de envio pdf por email @done (17-07-15 08:51) @project(GDoks / Hoje)

@@ -293,6 +293,165 @@
 			GDoksFactory.baixarPDA(id_pda);
 		}
 
+		// Função que abre diálogo para alterar observações de uma grd
+		$scope.openObservacaoDeGRD = function(evt,obs){
+			if(obs==undefined){
+				obs = {
+					id:0,
+					arquivos:[]
+				}
+			}
+			
+			$mdDialog.show(
+				{
+					controller: observacaoDeGrdDialogController,
+					locals:{
+						obs:angular.copy(obs),
+						documentos:$scope.documentos.filter(function(a){return a.added}),
+						parentObs:obs,
+						parentScope:$scope,
+					},
+					templateUrl: './app/modules/Grds/observacoesDeGrd.dialog.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: evt,
+					clickOutsideToClose:false
+				}
+			);
+		}
+
+		function observacaoDeGrdDialogController($scope, $filter, $mdDialog,obs,documentos,parentScope,parentObs,Upload,$cookies){
+
+			// Passando documentos para o scope
+			$scope.documentos = documentos;
+			delete documentos;
+
+			// Passando obs para o scope local
+			$scope.obs = obs;
+			delete obs;
+			$scope.obs.alterada = false;
+
+			// Passando grd para scope local
+			$scope.grd = parentScope.grd;
+
+			// Definindo hoje
+			$scope.hoje = new Date();
+
+			// Definindo vetor de novos arquivos
+			$scope.novos_arquivos = [];
+
+			// Definindo função que fecha o dialogo
+			$scope.cancelar = function(){
+				$mdDialog.hide();
+			}
+
+			// Definindo função que remove anexo da observação
+			$scope.desanexar = function(index){
+				$scope.obs.arquivos.splice(index,1);
+				$scope.obs.alterada = true;
+			}
+
+			// Definindo função que remove anexo da observação
+			$scope.desanexarDosNovos = function(index){
+				$scope.novos_arquivos.splice(index,1);
+			}
+
+			// Definindo função que salva observação
+			$scope.salvar = function () {
+				// mostrando barra de progresso de upload
+				parentScope.root.carregando = true;
+				
+				// Criando pacote a enviar
+				var packToSend = [];
+				for (var i = $scope.novos_arquivos.length - 1; i >= 0; i--) {
+					packToSend.push({file:$scope.novos_arquivos[i]});
+				};
+
+				var data = {
+					id:$scope.obs.id,
+					id_grd:parentScope.grd.id,
+					id_revisao:$scope.obs.doc.rev_id,
+					data_recebida:$filter('date')($scope.obs.data_recebida,'yyyy-MM-dd'),
+					obs:$scope.obs.obs,
+					arquivos:$scope.obs.arquivos.map(function(a){return a.id})
+				};
+
+				// Enviando pacote
+				Upload.upload(
+					{
+	                	url: API_ROOT+'/grds/'+$scope.grd.id+'/obs',
+	                	method: 'POST',
+	                	data: {profiles: packToSend, obs:data},
+	                	headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
+	            	}
+	            ).then(
+	            	function(response){
+	            		if(response.status == 200){
+	            			
+	            			// Escondendo o carregando
+	            			parentScope.root.carregando = false;
+
+	            			// Configurando a obs do scope pai
+	            			parentObs.obs = $scope.obs.obs;
+	            			parentObs.datahora_registrada =  new Date(response.data.datahora_registrada);
+	            			parentObs.data_recebida = $scope.obs.data_recebida;
+	            			parentObs.idu = $cookies.getObject('user').id;
+	            			parentObs.arquivos = $scope.obs.arquivos;
+
+	            			var escondeDialogo = true;
+	            			// tratando arquivos de uploads
+	            			for(i in response.data.uploads){
+	            				if(response.data.uploads[i].err == 0){
+	            					parentObs.arquivos.push({id:response.data.uploads[i].newId,nome_cliente:response.data.uploads[i].file});
+	            					
+	            					// removendo o arquivo adicionado do vetor de novos arquivos
+	            					$scope.novos_arquivos.splice($scope.novos_arquivos.findIndex(function(a){return a.name==this},response.data.uploads[i].file),1);
+	            				} else {
+	            					// Marcando para sumir como diálogo
+	            					escondeDialogo = false;
+
+	            					// Retornando Toast para o usuário
+	            					$mdToast.show(
+	            						$mdToast.simple()
+	            						.textContent('Upload do arquivo '+response.data.uploads[i].file+' falhou: ' + response.data.uploads[i].msg)
+	            						.position('bottom left')
+	            						.hideDelay(5000)
+	            					);
+	            				}
+	            			}
+
+	            			// Escondendo diálogo se for o caso
+	            			if(escondeDialogo){
+	            				$mdDialog.hide();
+	            			}
+	            		}
+	            	},
+	            	function(error){
+	            		
+	            		// Escondendo o carregando
+	            		parentScope.root.carregando = false;
+
+	            		// Imprimindo erro no console
+	            		console.warn(error);
+
+	            		// Retornando Toast para o usuário
+	            		$mdToast.show(
+	            			$mdToast.simple()
+	            			.textContent(error.statusText + ' ' + error.status)
+	            			.position('bottom left')
+	            			.hideDelay(5000)
+	            		);
+	            	},
+	            	function (evt) {
+						$scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+					}
+	            );
+			}
+
+			function insertObs(){
+				console.log("salvando!");
+			}
+		}
+
 		// Função que abre diálogo para alterar oções de documento de grd
 		$scope.openOpcoesDeDocumentoDialog = function(evt,doc){
 			// Mostra diálogo somente se grd não foi enviada ainda.
@@ -791,7 +950,7 @@
 			}
 
 			// Função que carrega documentos de um projeto e põe no scope.
-			// Só funciona direitp se cpdogos emi e tipos de documento já tiverem sido carregados
+			// Só funciona direito se cpdogos emi e tipos de documento já tiverem sido carregados
 			function loadDocumentosDeProjeto(id_projeto){
 				GDoksFactory.getDocumentosDoProjeto(id_projeto)
 				.success(function(response){
@@ -835,12 +994,13 @@
 				.success(function(response){
 					$scope.grd.observacoes = response.observacoes;
 
-					// Parsing datas
-					var grd;
+					// Parsing datas e documentos
+					var obs;
 					for (var i = $scope.grd.observacoes.length - 1; i >= 0; i--) {
-						grd = $scope.grd.observacoes[i];
-						grd.data_recebida = new Date(grd.data_recebida+' 00:00:00');
-						grd.datahora_registrada = new Date(grd.datahora_registrada);
+						obs = $scope.grd.observacoes[i];
+						obs.data_recebida = new Date(obs.data_recebida+' 00:00:00');
+						obs.datahora_registrada = new Date(obs.datahora_registrada);
+						obs.doc = $scope.documentos.find(function(a){return a.id==this},obs.doc_id);
 					}
 
 					// Parsing nomes dos usuários

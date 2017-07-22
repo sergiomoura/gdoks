@@ -112,9 +112,11 @@
 
 			a{
 				color:$azul;
-				text-indent:10px;
-				font-size:14px;
+				padding: 0 0 0 10px;
+				font-size:12px;
 				margin-top:5px;
+				width:250px;
+				overflow:hidden;
 			}
 
 			.controles{
@@ -142,6 +144,67 @@
 	padding: 20px;
 	md-dialog-content {
 		overflow: hidden;	
+	}
+}
+
+.grdobs_dialog{
+	width: 500px;
+	padding: 20px;
+	.md-errors-spacer{
+		min-height:0 !important;
+	}
+	md-dialog-content {
+
+		overflow: hidden;
+		textarea {
+			font-family:$fontFamily;
+			line-height:18px;
+			font-size:14px;
+		}
+		.lista_de_anexos{
+			margin:15px 0;
+			div{
+				display:inline-block;
+				padding:5px 45px 5px 10px;
+				border-radius:5px;
+				margin:0 5px 5px 0;
+				font-size:14px;
+				min-width:100px;
+				cursor:default;
+				position:relative;
+				a {
+					display:inline-block;
+					position: absolute;
+					right:5px;
+					top:6px;
+					font-family:"Verdana";
+					cursor:pointer;
+					border-radius:10px;
+					height:20px;
+					width:20px;
+					line-height:18px;
+					text-align:center;
+					text-indent:1px;
+				}
+				a:hover{
+					background-color:$laranja;
+					color:#FFF;
+				}
+			}
+			.pre {
+				color:$cinza;
+				background-color:$cinzaClaro;
+			}
+			.novos {
+				color:$azul;
+				background-color:$azulClaro;
+			}
+
+			button{
+				position:relative;
+				top:-1px;
+			}
+		}
 	}
 }
 

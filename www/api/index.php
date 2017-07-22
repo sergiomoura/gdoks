@@ -4440,15 +4440,13 @@
 				if($ok){
 					// Levantando observações
 					$sql = 'SELECT a.id,
-							       c.codigo as doc_codigo,
-							       c.nome as doc_titulo,
+								   b.id_documento as doc_id,
 							       a.data_recebida,
 							       a.datahora_registrada,
 							       a.idu,
 							       a.obs
 							FROM gdoks_observacoes a
 							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
-							INNER JOIN gdoks_documentos c ON c.id=b.id_documento
 							WHERE a.id_grd=?';
 					$observacoes = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_grd));
 
@@ -4470,6 +4468,164 @@
 					$response = new response(1,'Levantando dados de outra empresa ou token expirado.');
 					$response->flush();
 					return;
+				}
+			});
+
+			$app->post('/grds/:id_grd/obs',function($id_grd) use ($app,$db,$token){
+				
+				// Lendo dados nas variáveis
+				$id_grd = 1*$id_grd;
+
+				// Verificando se GRD é da mesma empresa do usuário
+				$sql = 'SELECT
+							c.id as idu,
+							c.id_empresa,
+							b.id as id_projeto,
+							count(*)=1 as ok
+						FROM
+							gdoks_grds a
+						    inner join gdoks_projetos b on b.id=a.id_projeto
+						    inner join gdoks_usuarios c on (c.id_empresa=b.id_empresa and c.token=? and c.validade_do_token>now())
+						WHERE a.id=?;';
+				$rs = $db->query($sql,'si',$token,$id_grd);
+				$ok = $rs[0]['ok'];
+				$idu = $rs[0]['idu'];
+				$id_projeto = $rs[0]['id_projeto'];
+				$id_empresa = $rs[0]['id_empresa'];
+
+				// retornando erro se usuário logado não for da empresa da grd
+				if(!$ok){
+					$app->response->setStatus(401);
+					$response = new response(1,'Não pode inserir ou alterar observações de GRDs de outra empresa.');
+					$response->flush();
+					return;
+				}
+
+				$obs = (object)$_POST['obs'];
+				if($obs->id!=0){
+					// = = = = = = = = = = = = = = = = = = = = = = =
+					// Atualizando observação
+					// = = = = = = = = = = = = = = = = = = = = = = =
+					$sql = 'UPDATE gdoks_observacoes SET obs=?,data_recebida=?,datahora_registrada=NOW(),idu=? WHERE id=?';
+					$db->query($sql,'ssii',$obs->obs,$obs->data_recebida,$idu,$obs->id);
+
+					// levantando os anexos existentes que devem ser removidos
+					if(isset($obs->arquivos)) {
+						$condicao = 'id=' . implode(' OR id=', array_map(function($a){return 1*$a;},$obs->arquivos));
+					} else {
+						$condicao = 'FALSE';
+					}
+					$sql = "SELECT caminho,nome_cliente,id FROM gdoks_observacoes_arquivos WHERE id_observacao=? && !($condicao)";
+					$paraRemover = array_map(function($a){return (object)$a;},$db->query($sql,'i',$obs->id));
+
+					// removendo arquivos
+					foreach ($paraRemover as $file) {
+						if(file_exists(UPLOAD_PATH.$file->caminho)){
+							unlink(UPLOAD_PATH.$file->caminho);
+						}
+					}
+					
+					// apagando da base
+					$sql = "DELETE FROM gdoks_observacoes_arquivos WHERE id_observacao=? && !($condicao)";
+					$db->query($sql,'i',$obs->id);
+
+					// Definindo vetor de resultados de uploads
+					$upload_results = Array();
+
+					// Verificando se a pasta destino existe, se não existe, tenta criar
+					$pasta_destino = UPLOAD_PATH.'/'.$id_empresa.'/'.$id_projeto;
+					if(!file_exists($pasta_destino)){
+						if(!@mkdir($pasta_destino)){
+							$app->response->setStatus(401);
+							$response = new response(1,'Pasta destino inexistente. Não foi possível criar uma pasta destino.');
+							$response->flush();
+							return;
+						}
+					}
+
+					// Lendo dados de $_FILES
+					if(isset($_FILES['profiles'])){
+						$filenames = array_map(function($n){return $n['file'];}, $_FILES['profiles']['name']);
+						$types = array_map(function($n){return $n['file'];}, $_FILES['profiles']['type']);
+						$tmp_names = array_map(function($n){return $n['file'];}, $_FILES['profiles']['tmp_name']);
+						$erros = array_map(function($n){return $n['file'];}, $_FILES['profiles']['error']);
+						$sizes = array_map(function($n){return $n['file'];}, $_FILES['profiles']['size']);
+
+						// montando vetor de upload results
+						foreach ($filenames as $i => $file) {
+							$result = new stdClass();
+							$result->file = $file;
+							$result->err = $erros[$i];
+							switch ($erros[$i]) {
+								case UPLOAD_ERR_OK:
+									$result->msg = 'Ok';
+									break;
+
+								case UPLOAD_ERR_INI_SIZE:
+									$result->msg = 'O arquivo enviado excede o limite definido ('.ini_get('upload_max_filesize') .')';
+									break;
+
+								case UPLOAD_ERR_FORM_SIZE:
+									$result->msg = 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
+									break;
+
+								case UPLOAD_ERR_PARTIAL:
+									$result->msg = 'O upload do arquivo foi feito parcialmente';
+									break;
+
+								case UPLOAD_ERR_NO_FILE:
+									$result->msg = 'Nenhum arquivo foi enviado';
+									break;
+
+								case UPLOAD_ERR_NO_TMP_DIR:
+									$result->msg = 'Pasta temporária ausente';
+									break;
+
+								case UPLOAD_ERR_CANT_WRITE:
+									$result->msg = 'Falha em escrever o arquivo em disco';
+									break;
+								
+								case UPLOAD_ERR_EXTENSION:
+									$result->msg = 'Uma extensão interrompeu o upload do arquivo';
+									break;
+
+								default:
+									$result->msg = 'Desconhecido (Cod '.$_FILES['profiles']['error'][$i]['file'].')';
+									break;
+							}
+
+							if($erros[$i] == 0){
+								// gerando nome unico do arquivo
+								$uniq_name = uniqid();
+								$caminho = '/'.$id_empresa.'/'.$id_projeto.'/'.$uniq_name;
+
+								// salvando o arquivo
+								if(!@move_uploaded_file($tmp_names[$i], UPLOAD_PATH.$caminho)){
+									$result->error = -1;
+									$result->msg = 'Impossível salvar arquivo no servidor. Verifique existência/permissão da pasta destino.';
+									$result->newId = 0;
+								} else {
+									// inserindo na base
+									$sql = 'INSERT INTO gdoks_observacoes_arquivos (caminho,nome_cliente,id_observacao) VALUES (?,?,?)';
+									$db->query($sql,'ssi',$caminho,$file,$obs->id);
+									$result->newId = $db->insert_id;
+								}
+							}
+
+							// Adicionando resultado de upload ao vetor de resultados
+							array_push($upload_results, $result);
+						}
+					}
+					// Retornando ao cliente
+					$response = new response(0,'ok');
+					$response->uploads = $upload_results;
+					$response->datahora_registrada = date('Y-m-d H:i:s');
+					$response->flush();
+
+					// registrando no log
+					registrarAcao($db,$idu,ACAO_ALTEROU_RETORNO_DE_GRD,$id_grd.','.$obs->id);
+				} else {
+
 				}
 			});
 		// FIM DE ROTAS PARA GRDS
