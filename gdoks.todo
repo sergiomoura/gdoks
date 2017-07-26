@@ -1,5 +1,12 @@
 GDoks:
-	
+  Ir para página do documento a partir do cadastro da grd
+  Salvar enderço Físico para todos os documentos da grd
+  Tipo De documento EB-> E/B
+
+  Por um botão salvar no alto do cadastro da GRD
+  Mostrar botões de envio
+  Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações
+  Cadastrar logo do cliente na GRD
 	Hoje:
 	  ☐ Registrar Retorno de GRD
 	    ☐ Registrar Observações sobre arquivos que compões a GRD

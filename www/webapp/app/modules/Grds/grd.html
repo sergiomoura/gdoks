@@ -104,6 +104,13 @@
 								<md-icon class="material-icons step" aria-label="description">search</md-icon>
 								<input type="text" ng-model="qEsq.nome" placeholder="Filtrar documentos pelo nome...">	
 							</span>
+							<md-button
+								ng-disabled="formDados.$pristine || formDados.$invalid || !grd.alterada"
+								ng-click="salvar()"
+								class="md-raised md-primary"
+								aria-label="Salvar GRD">
+									{{grd.datahora_enviada!=null?'Esta GRD foi já enviada para o cliente. Ela não pode mais ser alterada':'Salvar GRD'}}
+								</md-button>
 						</div>
 						<div class="doc" layout="row" layout-align="start center" ng-repeat="doc in documentos|filter:qEsq|orderBy:'-progresso'" ng-class="{selecionado_dir:doc.chk_dir}">
 							<div flex>
