@@ -142,10 +142,16 @@
 		</md-tab>
 
 		<md-tab label="Documentos de Abertura de Operações" ng-disabled="projeto.id==0">
-			<md-content class="md-padding" ng-controller="ProjetosDAOsController">
+			<md-content id="addprojeto_dao_container" class="md-padding" ng-controller="ProjetosDAOsController">
 				<h1 class="md-display-2">Documentos de Abertura de Operações</h1>
 				<form id="form_daos" name="form_daos">
-					<md-button class="md-raised md-primary" ngf-multiple="true" ngf-select ng-model="daoFiles" ng-disabled="daoFiles.length>0" aria-label="Selecione Documentos de Abertura de Operções">Selecione Documentos de Abertura de Operções ...</md-button>
+					<div layout="row" layout-align="space-between center">
+						<md-button class="md-raised md-primary" ngf-multiple="true" ngf-select ng-model="daoFiles" ng-disabled="daoFiles.length>0" aria-label="Selecione Documentos de Abertura de Operções">Selecione Documentos de Abertura de Operções ...</md-button>
+						<md-input-container>
+							<label>Busca</label>
+							<input type="text" ng-model="qDao.nome">
+						</md-input-container>
+					</div>
 					<table ng-if="daoFiles.length>0">
 						<thead>
 							<tr>
@@ -185,7 +191,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="dao in projeto.daos">
+							<tr ng-repeat="dao in projeto.daos|filter:qDao">
 								<td>{{dao.nome}}</td>
 								<td>{{dao.nome_cliente}}</td>
 								<td>{{dao.tipo}}</td>

@@ -993,16 +993,9 @@
 #addprojeto_container .bt_cancelar {
   margin-left: 15px; }
 
-#addprojeto_dao_container {
-  padding-bottom: 556px; }
-
-#addprojeto_dao_container .bt_salvar {
-  position: absolute;
-  right: 15px;
-  bottom: -45px; }
-
-#addprojeto_dao_container table input[type=text] {
-  width: 100%; }
+#addprojeto_dao_container md-input-container {
+  position: relative;
+  top: 20px; }
 
 #addprojeto_areas_container {
   padding-bottom: 56px; }

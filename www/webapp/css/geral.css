@@ -184,7 +184,7 @@ h2 {
 
 #view .bt_limpo {
   border: none;
-  background-color: transparent !important;
+  background-color: rgba(0, 0, 0, 0) !important;
   text-decoration: underline;
   padding: 0 10px;
   color: #999;
