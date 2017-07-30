@@ -35,13 +35,13 @@
 				<md-input-container>
 					<label>Área</label>
 					<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()" required>
-					  <md-option ng-value="opt" ng-repeat="opt in areas">{{ opt.nome }}</md-option>
+					  <md-option ng-value="opt" ng-repeat="opt in areas">{{opt.codigo}} - {{opt.nome}}</md-option>
 					</md-select>
 				</md-input-container>
 				<md-input-container>
 					<label>Subárea</label>
 					<md-select ng-model="doc.subarea" required>
-						<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{ opt.nome }}</md-option>
+						<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{opt.codigo}}{{(opt.nome!=null && opt.nome!='') ? (' - '+opt.nome):''}}</md-option>
 					</md-select>
 				</md-input-container>
 				<md-input-container>
