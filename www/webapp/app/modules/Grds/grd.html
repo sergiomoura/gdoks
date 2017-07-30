@@ -199,10 +199,16 @@
 						</md-input-container>
 					</div>
 					<div layout="row" layout-align="space-between start">
-						<md-input-container flex="70">
-							<label>Observação</label>
-							<textarea disabled="disabled">{{obs.obs}}</textarea>
-						</md-input-container>
+						<div layout="column" flex="70">
+							<md-input-container>
+								<label>Observação</label>
+								<textarea disabled="disabled">{{obs.obs}}</textarea>
+							</md-input-container>
+							<md-input-container>
+								<label>Comentário do Cliente</label>
+								<textarea disabled="disabled">{{obs.cc}}</textarea>
+							</md-input-container>
+						</div>
 						<div layout="column" flex="25">
 							<span class="title">Arquivos:</span>
 							<a href="#" ng-click="downloadObsFile(a.id)" ng-repeat="a in obs.arquivos">{{a.nome_cliente}}</a>
@@ -232,5 +238,5 @@
 			</md-content>
 		</md-tab>
 	</md-tabs>
-	<pre>{{grd.observacoes|json}}</pre>
+	<pre>{{grd|json}}</pre>
 </div>

@@ -15,13 +15,18 @@
 				</md-input-container>
 			</div>
 			
-			<div layout="row" layout-align="space-between start">
-				<md-input-container flex="100">
-					<label>Observação</label>
-					<textarea ng-model="obs.obs" required>
-					</textarea>
-				</md-input-container>
-			</div>
+			<md-input-container flex="100">
+				<label>Observação</label>
+				<textarea ng-model="obs.obs" required>
+				</textarea>
+			</md-input-container>
+
+			<md-input-container flex="100">
+				<label>Comentário do Cliente</label>
+				<textarea ng-model="obs.cc" required>
+				</textarea>
+			</md-input-container>
+			
 			<div class="lista_de_anexos">
 				<div ng-repeat="file in obs.arquivos" class="pre">
 					<span>{{file.nome_cliente}}</span>

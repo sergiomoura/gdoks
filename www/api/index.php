@@ -4297,7 +4297,10 @@
 					// Enviando o email
 					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
 					$response = $sendgrid->send($sgMail);
-
+					echo('<pre>');
+					print_r($response);
+					echo('</pre>');
+					die();
 					if($response->message == 'success'){
 						
 						// Registrando a datahora do envio
@@ -4444,7 +4447,8 @@
 							       a.data_recebida,
 							       a.datahora_registrada,
 							       a.idu,
-							       a.obs
+							       a.obs,
+							       a.comentario_cliente as cc
 							FROM gdoks_observacoes a
 							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
 							WHERE a.id_grd=?';
@@ -4506,8 +4510,8 @@
 					// = = = = = = = = = = = = = = = = = = = = = = =
 					// Atualizando observação
 					// = = = = = = = = = = = = = = = = = = = = = = =
-					$sql = 'UPDATE gdoks_observacoes SET obs=?,data_recebida=?,datahora_registrada=NOW(),idu=? WHERE id=?';
-					$db->query($sql,'ssii',$obs->obs,$obs->data_recebida,$idu,$obs->id);
+					$sql = 'UPDATE gdoks_observacoes SET obs=?,comentario_cliente=?,data_recebida=?,datahora_registrada=NOW(),idu=? WHERE id=?';
+					$db->query($sql,'sssii',$obs->obs,$obs->cc,$obs->data_recebida,$idu,$obs->id);
 
 					// levantando os anexos existentes que devem ser removidos
 					if(isset($obs->arquivos)) {

@@ -372,6 +372,7 @@
 					id_revisao:$scope.obs.doc.rev_id,
 					data_recebida:$filter('date')($scope.obs.data_recebida,'yyyy-MM-dd'),
 					obs:$scope.obs.obs,
+					cc:$scope.obs.cc,
 					arquivos:$scope.obs.arquivos.map(function(a){return a.id})
 				};
 
@@ -392,6 +393,7 @@
 
 	            			// Configurando a obs do scope pai
 	            			parentObs.obs = $scope.obs.obs;
+	            			parentObs.cc = $scope.obs.cc;
 	            			parentObs.datahora_registrada =  new Date(response.data.datahora_registrada);
 	            			parentObs.data_recebida = $scope.obs.data_recebida;
 	            			parentObs.idu = $cookies.getObject('user').id;
