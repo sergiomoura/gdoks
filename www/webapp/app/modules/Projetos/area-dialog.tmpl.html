@@ -2,13 +2,12 @@
 	<md-dialog-content >
 		<form ng-submit="salvar(area)" name="form" layout="column">
 			<md-input-container>
-				<label>Nome da Área</label>
-				<input type="text" ng-model="area.nome" required>
-			</md-input-container>
-
-			<md-input-container>
 				<label>Código da Área</label>
 				<input type="text" ng-model="area.codigo" required>
+			</md-input-container>
+			<md-input-container>
+				<label>Nome da Área</label>
+				<input type="text" ng-model="area.nome" required>
 			</md-input-container>
 			<button type="submit" style="display: none"></button>
 		</form>

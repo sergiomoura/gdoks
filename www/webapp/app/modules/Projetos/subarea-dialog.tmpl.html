@@ -2,20 +2,17 @@
 	<md-dialog-content >
 		<form name="form" ng-submit="salvar(subarea)" layout="column">
 			<md-input-container>
-				<label>Nome da Sub-área</label>
-				<input type="text" ng-model="subarea.nome" required>
-			</md-input-container>
-
-			<md-input-container>
 				<label>Código da Sub-área</label>
 				<input type="text" ng-model="subarea.codigo" required>
 			</md-input-container>
-
+			<md-input-container>
+				<label>Nome da Sub-área</label>
+				<input type="text" ng-model="subarea.nome">
+			</md-input-container>
 			<md-input-container>
 				<label>Área</label>
 				<md-select ng-model="subarea.area" required>
-					<!-- <md-select-label>Selecione a Área</md-select-label> -->
-					<md-option ng-value="area" ng-repeat="area in areas">{{ area.nome }}</md-option>
+					<md-option ng-value="area" ng-repeat="area in areas|orderBy:'codigo'">{{area.codigo}} - {{area.nome}}</md-option>
 				</md-select>
 			</md-input-container>
 			<button type="submit" style="display: none" ng-disabled="form.$pristine || form.$invalid"></button>
