@@ -701,13 +701,9 @@
   padding: 20px 0px 20px 0; }
   #grd_container .controle_principal div:first-child {
     width: 160px; }
-  #grd_container .controle_principal md-fab-speed-dial {
+  #grd_container .controle_principal .sendActions {
     position: absolute;
-    top: 65px;
-    right: 86px;
-    width: 50px; }
-  #grd_container .controle_principal md-fab-speed-dial md-fab-actions {
-    width: 58px; }
+    top: 65px; }
 #grd_container .bottom_controls {
   margin: 15px 0 0 0; }
 #grd_container .dados {

@@ -1,20 +1,17 @@
 GDoks:
-  Ir para página do documento a partir do cadastro da grd
-  Salvar enderço Físico para todos os documentos da grd
-  Tipo De documento EB-> E/B
 
-  Por um botão salvar no alto do cadastro da GRD
-  Mostrar botões de envio
-  Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações
-  Cadastrar logo do cliente na GRD
-	Hoje:
-	  ☐ Registrar Retorno de GRD
-	    ☐ Registrar Observações sobre arquivos que compões a GRD
-	    Na tela de registro de retorno de GRD o usuário será capaz de
-	      - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
-	      - Dar o documento como concluído
-	      - Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
-	   ☐	Alterar cadastro do cliente (info de ftp) deve salvar na base local
+  ☐ Por um botão salvar no alto do cadastro da GRD
+  ☐ Mostrar botões de envio sempre
+  ☐ Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações
+  ☐ Cadastrar logo do cliente
+  ☐ Fazer logo de cliente aparecer na GRD da faraday
+  ☐ Registrar Retorno de GRD
+    ☐ Registrar Observações sobre arquivos que compões a GRD
+    Na tela de registro de retorno de GRD o usuário será capaz de
+      - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
+      - Dar o documento como concluído
+      - Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
+   ☐	Alterar cadastro do cliente (info de ftp) deve salvar na base local
 		
 
 Bloqueio de Telas:
@@ -28,8 +25,6 @@ Bloqueio de Telas:
     ☐ Log
     ☐ Configurações
 
-
-
   ☐ Otimizar página de projetos para grande volume de dados
   ☐ Mostrar Campo de Cliente na busca por projetos
   ☐ Quebra de linha no PDF para dados longos
@@ -37,8 +32,6 @@ Bloqueio de Telas:
   ☐ Baixar para revisão deve registrar no log
   ☐ No download Resource interpreted as Document but transferred with MIME type application/zip
 	☐	Melhorar a forma com que os documentos atrasados são destacados
-
-  Alterações Urgentes:
 	☐	Cadastrar usuário com sigla
 	☐	Lista de documento com percentual e datas
 	☐	Cadastrar documentos lendo lista de CSV
@@ -80,31 +73,34 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
-	✔ Desenhar tela de registro de retorno de GRD @done (17-07-19 11:18) @project(GDoks / Hoje)
-	✔	Registrar Endereço físico do documento no cadastro do documento na grd. @done (17-07-19 11:18) @project(GDoks / Hoje)
-	✔	Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca @done (17-07-17 07:51) @project(GDoks / Hoje)
-	✔ Fazer com que se possa salvar GRD sem documento @done (17-07-15 10:32) @project(GDoks / Hoje)
-	✔ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD @done (17-07-15 08:52) @project(GDoks / Hoje)
-	✔	Registrando datahora de envioupload no servidor @done (17-07-15 08:51) @project(GDoks / Hoje)
-	✔	Registrando datahora de envio pdf por email @done (17-07-15 08:51) @project(GDoks / Hoje)
-	✔	Registrando datahora de envio link por email @done (17-07-15 08:51) @project(GDoks / Hoje)
-	✔	Marcar como enviado quando enviar uma GRD. @done (17-07-15 08:51) @project(GDoks / Hoje)
-	✔	Juntar funcionalidade da aba documento no cadastro de grd a tela principal do cadastro @done (17-07-14 10:33) @project(GDoks / Hoje)
-	✔	Código de GRD deve ser preenchido automaticamente.. ano-contador @done (17-07-12 17:18) @project(GDoks / Hoje)
-	✔	visualizar o documento de outras disciplinas @done (17-07-09 05:04) @project(GDoks)
-	✔ Otimizar página de documentos para grande volume de dados @done (17-07-09 05:03) @project(GDoks)
-	✔ Mostrar nome do cliente no bloco de documento @done (17-07-09 05:03) @project(GDoks)
-	✔ Campo de CLiente para Busca @done (17-07-09 05:03) @project(GDoks)
-	✔	Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente @done (17-07-07 11:42) @project(GDoks)
-	✔	No cadastro do cliente: Por endereço e dados FTP @done (17-07-05 03:43) @project(GDoks)
-	✔	tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB. @done (17-07-04 01:49) @project(GDoks)
-	✔	Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD @done (17-07-03 17:12) @project(GDoks)
-	✔	Melhorar caixa de diálogo para cadastrar um documento @done (17-07-03 16:48) @project(GDoks)
-	✔	No cadastro do por o código do cliente @done (17-07-03 15:08) @project(GDoks)
-	✔	Trocar Código do documento para número do documento @done (17-07-03 15:07) @project(GDoks)
-	✔	TROCAR NOME DE DOCUMENTO PARA TÍTULO @done (17-07-03 15:07) @project(GDoks)
-	✔	Ordem: Codigo do Cliente, Codigo interno,  depois nome do documento @done (17-07-03 15:07) @project(GDoks)
-	✔ projetos @done (17-06-30 12:17) @project(GDoks)
+ ✔ Ir para página do documento a partir do cadastro da grd @done (17-07-30 04:10) @project(GDoks)
+  Salvar enderço Físico para todos os documentos da grd
+  Tipo De documento EB-> E/B
+  ✔ Desenhar tela de registro de retorno de GRD @done (17-07-19 11:18) @project(GDoks / Hoje)
+  ✔  Registrar Endereço físico do documento no cadastro do documento na grd. @done (17-07-19 11:18) @project(GDoks / Hoje)
+  ✔  Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca @done (17-07-17 07:51) @project(GDoks / Hoje)
+  ✔ Fazer com que se possa salvar GRD sem documento @done (17-07-15 10:32) @project(GDoks / Hoje)
+  ✔ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD @done (17-07-15 08:52) @project(GDoks / Hoje)
+  ✔  Registrando datahora de envioupload no servidor @done (17-07-15 08:51) @project(GDoks / Hoje)
+  ✔  Registrando datahora de envio pdf por email @done (17-07-15 08:51) @project(GDoks / Hoje)
+  ✔  Registrando datahora de envio link por email @done (17-07-15 08:51) @project(GDoks / Hoje)
+  ✔  Marcar como enviado quando enviar uma GRD. @done (17-07-15 08:51) @project(GDoks / Hoje)
+  ✔  Juntar funcionalidade da aba documento no cadastro de grd a tela principal do cadastro @done (17-07-14 10:33) @project(GDoks / Hoje)
+  ✔  Código de GRD deve ser preenchido automaticamente.. ano-contador @done (17-07-12 17:18) @project(GDoks / Hoje)
+  ✔  visualizar o documento de outras disciplinas @done (17-07-09 05:04) @project(GDoks)
+  ✔ Otimizar página de documentos para grande volume de dados @done (17-07-09 05:03) @project(GDoks)
+  ✔ Mostrar nome do cliente no bloco de documento @done (17-07-09 05:03) @project(GDoks)
+  ✔ Campo de CLiente para Busca @done (17-07-09 05:03) @project(GDoks)
+  ✔  Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente @done (17-07-07 11:42) @project(GDoks)
+  ✔  No cadastro do cliente: Por endereço e dados FTP @done (17-07-05 03:43) @project(GDoks)
+  ✔  tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB. @done (17-07-04 01:49) @project(GDoks)
+  ✔  Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD @done (17-07-03 17:12) @project(GDoks)
+  ✔  Melhorar caixa de diálogo para cadastrar um documento @done (17-07-03 16:48) @project(GDoks)
+  ✔  No cadastro do por o código do cliente @done (17-07-03 15:08) @project(GDoks)
+  ✔  Trocar Código do documento para número do documento @done (17-07-03 15:07) @project(GDoks)
+  ✔  TROCAR NOME DE DOCUMENTO PARA TÍTULO @done (17-07-03 15:07) @project(GDoks)
+  ✔  Ordem: Codigo do Cliente, Codigo interno,  depois nome do documento @done (17-07-03 15:07) @project(GDoks)
+  ✔ projetos @done (17-06-30 12:17) @project(GDoks)
  ✔ Fazer com que menu carregue de acordo com essas permissões @done (17-06-30 11:48) @project(GDoks / Para Hoje)
  ✔ Salvar alterações na base e no cookie @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
  ✔ Fazer interface funcionar de acordo @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
