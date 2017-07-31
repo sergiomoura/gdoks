@@ -141,7 +141,6 @@
 									{{doc.progresso}}%
 								</span>
 
-								
 								<md-button
 									class="md-icon-button"
 									aria-label="Ir para documento">
@@ -174,7 +173,10 @@
 		</md-tab>
 		
 		<md-tab label="Retorno de GRD"  ng-disabled="grd.datahora_enviada==null">
-			<md-content class="md-padding retorno">
+			<md-content class="md-padding retorno" ng-if="grd.observacoes.length == 0">
+				<md-button class="md-raised md-primary" ng_click="openObservacaoDeGRD($event)"><md-icon class="material-icons step">note_add</md-icon>Inserir nova observação</md-button>
+			</md-content>
+			<md-content class="md-padding retorno" ng-if="grd.observacoes.length>0">
 				<div class="obs" ng-repeat="obs in grd.observacoes">
 					<div layout="row" layout-align="space-between center">
 						<md-input-container>
@@ -238,5 +240,4 @@
 			</md-content>
 		</md-tab>
 	</md-tabs>
-	<pre>{{grd|json}}</pre>
 </div>

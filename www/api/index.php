@@ -4492,6 +4492,7 @@
 						    inner join gdoks_usuarios c on (c.id_empresa=b.id_empresa and c.token=? and c.validade_do_token>now())
 						WHERE a.id=?;';
 				$rs = $db->query($sql,'si',$token,$id_grd);
+
 				$ok = $rs[0]['ok'];
 				$idu = $rs[0]['idu'];
 				$id_projeto = $rs[0]['id_projeto'];
@@ -4632,8 +4633,8 @@
 					// = = = = = = = = = = = = = = = = = = = = = = =
 					// INSERINDO observação
 					// = = = = = = = = = = = = = = = = = = = = = = =
-					$sql = 'INSERT INTO gdoks_observacoes (obs,comentario_cliente,data_recebida,datahora_registrada,idu) VALUES (?,?,?,now(),?)';
-					$db->query($sql,'sssi',$obs->obs,$obs->cc,$obs->data_recebida,$idu);
+					$sql = 'INSERT INTO gdoks_observacoes (id_grd,id_revisao,obs,comentario_cliente,data_recebida,datahora_registrada,idu) VALUES (?,?,?,?,?,now(),?)';
+					$db->query($sql,'iisssi',$id_grd,$obs->id_revisao,$obs->obs,$obs->cc,$obs->data_recebida,$idu);
 					$newId = $db->insert_id;
 
 					// Definindo vetor de resultados de uploads
@@ -4714,7 +4715,7 @@
 								} else {
 									// inserindo na base
 									$sql = 'INSERT INTO gdoks_observacoes_arquivos (caminho,nome_cliente,id_observacao) VALUES (?,?,?)';
-									$db->query($sql,'ssi',$caminho,$file,$obs->id);
+									$db->query($sql,'ssi',$caminho,$file,$newId);
 									$result->newId = $db->insert_id;
 								}
 							}

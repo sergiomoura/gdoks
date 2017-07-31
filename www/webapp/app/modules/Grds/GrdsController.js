@@ -319,7 +319,7 @@
 			);
 		}
 
-		function observacaoDeGrdDialogController($scope, $filter, $mdDialog,obs,documentos,parentScope,parentObs,Upload,$cookies){
+		function observacaoDeGrdDialogController($scope, $route, $filter, $mdDialog,obs,documentos,parentScope,parentObs,Upload,$cookies){
 			
 			// Passando obs para o scope local
 			$scope.obs = obs;
@@ -466,7 +466,110 @@
 
 			// Definindo função que insere observação
 			function inserir(){
-				console.log("inserindo nova observação!");
+
+				// mostrando barra de progresso de upload
+				parentScope.root.carregando = true;
+				
+				// Criando pacote a enviar
+				var packToSend = [];
+				for (var i = $scope.novos_arquivos.length - 1; i >= 0; i--) {
+					packToSend.push({file:$scope.novos_arquivos[i]});
+				};
+
+				var data = {
+					id:0,
+					id_grd:parentScope.grd.id,
+					id_revisao:$scope.obs.doc.rev_id,
+					data_recebida:$filter('date')($scope.obs.data_recebida,'yyyy-MM-dd'),
+					obs:$scope.obs.obs,
+					cc:$scope.obs.cc,
+					arquivos:$scope.obs.arquivos.map(function(a){return a.id})
+				};
+
+				// Enviando pacote
+				Upload.upload(
+					{
+	                	url: API_ROOT+'/grds/'+$scope.grd.id+'/obs',
+	                	method: 'POST',
+	                	data: {profiles: packToSend, obs:data},
+	                	headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
+	            	}
+	            ).then(
+	            	function(response){
+
+	            		if(response.status == 200){
+	            			
+	            			// Escondendo o carregando
+	            			parentScope.root.carregando = false;
+
+	            			// Configurando a obs do scope pai
+
+	            			parentObs.id = response.data.newId;
+	            			parentObs.obs = $scope.obs.obs;
+	            			parentObs.cc = $scope.obs.cc;
+	            			parentObs.datahora_registrada =  new Date(response.data.datahora_registrada);
+	            			parentObs.data_recebida = $scope.obs.data_recebida;
+	            			parentObs.idu = $cookies.getObject('user').id;
+	            			parentObs.arquivos = $scope.obs.arquivos;
+	            			
+	            			var escondeDialogo = true;
+	            			// tratando arquivos de uploads
+	            			for(i in response.data.uploads){
+	            				if(response.data.uploads[i].err == 0){
+	            					parentObs.arquivos.push({id:response.data.uploads[i].newId,nome_cliente:response.data.uploads[i].file});
+	            					
+	            					// removendo o arquivo adicionado do vetor de novos arquivos
+	            					$scope.novos_arquivos.splice($scope.novos_arquivos.findIndex(function(a){return a.name==this},response.data.uploads[i].file),1);
+	            				} else {
+	            					// Marcando para sumir como diálogo
+	            					escondeDialogo = false;
+
+	            					// Retornando Toast para o usuário
+	            					$mdToast.show(
+	            						$mdToast.simple()
+	            						.textContent('Upload do arquivo '+response.data.uploads[i].file+' falhou: ' + response.data.uploads[i].msg)
+	            						.position('bottom left')
+	            						.hideDelay(5000)
+	            					);
+	            				}
+	            			}
+							
+	            			// Escondendo diálogo se for o caso
+	            			$mdDialog.hide();
+
+	            			// Retornando Toast para o usuário
+        					$mdToast.show(
+        						$mdToast.simple()
+        						.textContent('Observação cadastrada com sucesso.')
+        						.position('bottom left')
+        						.hideDelay(5000)
+        					);
+
+        					// recarregando a view
+        					$route.reload();
+	            		}
+	            		
+	            	},
+	            	function(error){
+	            		
+	            		// Escondendo o carregando
+	            		parentScope.root.carregando = false;
+
+	            		// Imprimindo erro no console
+	            		console.warn(error);
+
+	            		// Retornando Toast para o usuário
+	            		$mdToast.show(
+	            			$mdToast.simple()
+	            			.textContent(error.statusText + ' ' + error.status)
+	            			.position('bottom left')
+	            			.hideDelay(5000)
+	            		);
+	            	},
+	            	function (evt) {
+						$scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+					}
+	            );
 			}
 		}
 
