@@ -4629,7 +4629,109 @@
 					// registrando no log
 					registrarAcao($db,$idu,ACAO_ALTEROU_RETORNO_DE_GRD,$id_grd.','.$obs->id);
 				} else {
+					// = = = = = = = = = = = = = = = = = = = = = = =
+					// INSERINDO observação
+					// = = = = = = = = = = = = = = = = = = = = = = =
+					$sql = 'INSERT INTO gdoks_observacoes (obs,comentario_cliente,data_recebida,datahora_registrada,idu) VALUES (?,?,?,now(),?)';
+					$db->query($sql,'sssi',$obs->obs,$obs->cc,$obs->data_recebida,$idu);
+					$newId = $db->insert_id;
 
+					// Definindo vetor de resultados de uploads
+					$upload_results = Array();
+
+					// Verificando se a pasta destino existe, se não existe, tenta criar
+					$pasta_destino = UPLOAD_PATH.'/'.$id_empresa.'/'.$id_projeto;
+					if(!file_exists($pasta_destino)){
+						if(!@mkdir($pasta_destino)){
+							$app->response->setStatus(401);
+							$response = new response(1,'Pasta destino inexistente. Não foi possível criar uma pasta destino.');
+							$response->flush();
+							return;
+						}
+					}
+
+					// Lendo dados de $_FILES
+					if(isset($_FILES['profiles'])){
+						$filenames = array_map(function($n){return $n['file'];}, $_FILES['profiles']['name']);
+						$types = array_map(function($n){return $n['file'];}, $_FILES['profiles']['type']);
+						$tmp_names = array_map(function($n){return $n['file'];}, $_FILES['profiles']['tmp_name']);
+						$erros = array_map(function($n){return $n['file'];}, $_FILES['profiles']['error']);
+						$sizes = array_map(function($n){return $n['file'];}, $_FILES['profiles']['size']);
+
+						// montando vetor de upload results
+						foreach ($filenames as $i => $file) {
+							$result = new stdClass();
+							$result->file = $file;
+							$result->err = $erros[$i];
+							switch ($erros[$i]) {
+								case UPLOAD_ERR_OK:
+									$result->msg = 'Ok';
+									break;
+
+								case UPLOAD_ERR_INI_SIZE:
+									$result->msg = 'O arquivo enviado excede o limite definido ('.ini_get('upload_max_filesize') .')';
+									break;
+
+								case UPLOAD_ERR_FORM_SIZE:
+									$result->msg = 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
+									break;
+
+								case UPLOAD_ERR_PARTIAL:
+									$result->msg = 'O upload do arquivo foi feito parcialmente';
+									break;
+
+								case UPLOAD_ERR_NO_FILE:
+									$result->msg = 'Nenhum arquivo foi enviado';
+									break;
+
+								case UPLOAD_ERR_NO_TMP_DIR:
+									$result->msg = 'Pasta temporária ausente';
+									break;
+
+								case UPLOAD_ERR_CANT_WRITE:
+									$result->msg = 'Falha em escrever o arquivo em disco';
+									break;
+								
+								case UPLOAD_ERR_EXTENSION:
+									$result->msg = 'Uma extensão interrompeu o upload do arquivo';
+									break;
+
+								default:
+									$result->msg = 'Desconhecido (Cod '.$_FILES['profiles']['error'][$i]['file'].')';
+									break;
+							}
+
+							if($erros[$i] == 0){
+								// gerando nome unico do arquivo
+								$uniq_name = uniqid();
+								$caminho = '/'.$id_empresa.'/'.$id_projeto.'/'.$uniq_name;
+
+								// salvando o arquivo
+								if(!@move_uploaded_file($tmp_names[$i], UPLOAD_PATH.$caminho)){
+									$result->error = -1;
+									$result->msg = 'Impossível salvar arquivo no servidor. Verifique existência/permissão da pasta destino.';
+									$result->newId = 0;
+								} else {
+									// inserindo na base
+									$sql = 'INSERT INTO gdoks_observacoes_arquivos (caminho,nome_cliente,id_observacao) VALUES (?,?,?)';
+									$db->query($sql,'ssi',$caminho,$file,$obs->id);
+									$result->newId = $db->insert_id;
+								}
+							}
+
+							// Adicionando resultado de upload ao vetor de resultados
+							array_push($upload_results, $result);
+						}
+					}
+					// Retornando ao cliente
+					$response = new response(0,'ok');
+					$response->uploads = $upload_results;
+					$response->datahora_registrada = date('Y-m-d H:i:s');
+					$response->newId = $newId;
+					$response->flush();
+
+					// registrando no log
+					registrarAcao($db,$idu,ACAO_ADICIONOU_RETORNO_DE_GRD,$id_grd.','.$newId);
 				}
 			});
 		// FIM DE ROTAS PARA GRDS

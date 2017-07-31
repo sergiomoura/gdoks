@@ -5,8 +5,8 @@
 			<div layout="row" layout-align="space-between start">
 				<md-input-container flex>
 					<label>Documento</label>
-					<md-select ng-model="obs.doc_id" ng-disabled="obs.id!=0" required>
-						<md-option ng-value="opt.id" ng-repeat="opt in documentos">{{opt.codigo}} - {{opt.nome}}</md-option>
+					<md-select ng-model="obs.doc" ng-disabled="obs.id!=0" required>
+						<md-option ng-value="opt" ng-repeat="opt in documentos">{{opt.codigo}} - {{opt.nome}}</md-option>
 					</md-select>
 				</md-input-container>
 				<md-input-container style="width: 140px">
@@ -59,5 +59,6 @@
 			
 			<button type="submit" style="display: none"></button>
 		</form>
+		
 	</md-dialog-content>
 </md-dialog>

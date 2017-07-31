@@ -320,15 +320,18 @@
 		}
 
 		function observacaoDeGrdDialogController($scope, $filter, $mdDialog,obs,documentos,parentScope,parentObs,Upload,$cookies){
-
-			// Passando documentos para o scope
-			$scope.documentos = documentos;
-			delete documentos;
-
+			
 			// Passando obs para o scope local
 			$scope.obs = obs;
 			delete obs;
 			$scope.obs.alterada = false;
+
+			// Passando documentos para o scope
+			$scope.documentos = documentos;
+			delete documentos;
+			if($scope.obs.doc_id){
+				$scope.obs.doc = $scope.documentos.find(function(d){return d.id==this},$scope.obs.doc_id);
+			}
 
 			// Passando grd para scope local
 			$scope.grd = parentScope.grd;
@@ -357,6 +360,15 @@
 
 			// Definindo função que salva observação
 			$scope.salvar = function () {
+				if ($scope.obs.id!=0) {
+					atualizar();
+				} else {
+					inserir();
+				}
+			}
+
+			// Definindo função que atualiza observação
+			function atualizar(){
 				// mostrando barra de progresso de upload
 				parentScope.root.carregando = true;
 				
@@ -398,6 +410,9 @@
 	            			parentObs.data_recebida = $scope.obs.data_recebida;
 	            			parentObs.idu = $cookies.getObject('user').id;
 	            			parentObs.arquivos = $scope.obs.arquivos;
+	            			if($scope.obs.id == 0){
+	            				parentObs.id = response.data.newId;
+	            			}
 
 	            			var escondeDialogo = true;
 	            			// tratando arquivos de uploads
@@ -449,8 +464,9 @@
 	            );
 			}
 
-			function insertObs(){
-				console.log("salvando!");
+			// Definindo função que insere observação
+			function inserir(){
+				console.log("inserindo nova observação!");
 			}
 		}
 
