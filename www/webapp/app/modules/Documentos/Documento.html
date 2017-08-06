@@ -157,81 +157,84 @@
 
 		<md-tab label="Atualizar Revisão" ng-disabled="documento.idu_checkout!=idu && documento.revisoes[0].pdas!=undefined">
 			<md-content class="md-padding" layout="column">
-				<h3>Atualizar Revisão</h3>
-				<div layout="row" layout-align="space-between center">
-					<md-button
-						class="md-raised md-primary"
-						ng-disabled="false"
-						aria-label="Selecionar Arquivos"
-						ng-model="updateFiles"
-						ngf-select
-						ngf-multiple="true"
-						ngf-change="onFilesChange()"
-						>
-							<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>Selecionar Arquivos
-					</md-button>
-				</div>
-				
-				<div layout="row" layout-align="space-between start" style="margin-top: 40px;">
-					<md-input-container ng-if="formUploadItems.length>0" flex="45">
-						<label>Progresso Total</label>
-						<input required type="number" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" ng-value="documento.revisoes[0].progresso_validado+1" min="{{documento.revisoes[0].progresso_validado+1}}" max="100">
-					</md-input-container>
+				<form name="form_atualizarRevisao">
+					<h3>Atualizar Revisão</h3>
+					<div layout="row" layout-align="space-between center">
+						<md-button
+							class="md-raised md-primary"
+							ng-disabled="false"
+							aria-label="Selecionar Arquivos"
+							ng-model="updateFiles"
+							ngf-select
+							ngf-multiple="true"
+							ngf-change="onFilesChange()"
+							>
+								<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>Selecionar Arquivos
+						</md-button>
+					</div>
 					
-					<md-input-container ng-if="formUploadItems.length>0" flex="45">
-						<label>Observações</label>
-						<input required type="text" placeholder="Escreva observações sobre esta atualização" ng-model="update.observacoes">
-					</md-input-container>
-				</div>
-				<table ng-if="formUploadItems.length>0" class="files_table">
-					<thead>
-						<tr>
-							<td>Nome</td>
-							<td></td>
-							<td>Nº de Páginas</td>
-							<td>Tam. do Papel</td>
-							<td>Tipo</td>
-							<td>Ação</td>
+					<div layout="row" layout-align="space-between start" style="margin-top: 40px;">
+						<md-input-container ng-if="formUploadItems.length>0" flex="45">
+							<label>Progresso Total</label>
+							<input required type="number" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" ng-value="documento.revisoes[0].progresso_validado" min="{{documento.revisoes[0].progresso_validado}}" max="100">
+						</md-input-container>
+						
+						<md-input-container ng-if="formUploadItems.length>0" flex="45">
+							<label>Observações<span ng-if="agora>documento.revisoes[0].data_limite"> (Obrigatória por atraso)</span></label>
+							<input ng-required="agora>documento.revisoes[0].data_limite" type="text" placeholder="Escreva observações sobre esta atualização" ng-model="update.observacoes">
+						</md-input-container>
+					</div>
+					<table ng-if="formUploadItems.length>0" class="files_table">
+						<thead>
+							<tr>
+								<td>Nome</td>
+								<td></td>
+								<td>Nº de Páginas</td>
+								<td>Tam. do Papel</td>
+								<td>Tipo</td>
+								<td>Ação</td>
+							</tr>
+						</thead>
+						<tr ng-repeat="item in formUploadItems|orderBy:'nome'">
+							<td>{{item.nome}}</td>
+							<td><md-button ng-click="onDeleteClick(item.nome)" class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
+							<td>
+								<input type="number" aria-label="Número de Páginas" min="1" ng-model="item.nPaginas">
+							</td>
+							<td>
+								<md-select md-selected-text="dic_tamanhosDePapel[item.tamanhoDoPapel]" ng-model="item.tamanhoDoPapel" aria-label="Tamanho do Papel" class="md-no-underline">
+									<md-option ng-value="opt.id" ng-repeat="opt in tamanhosDePapel">{{ opt.nome }} ({{opt.a}}mm x {{opt.l}}mm)</md-option>
+								</md-select>
+							</td>
+							<td>
+								{{item.tipo=='novo'?'Novo':''}}
+								{{item.tipo=='antigoParaAtualizar'?'Preexistente para Atualizar':''}}
+								{{item.tipo=='antigoNaoAtualizar'?'Preexistente':''}}
+							</td>
+							<td>
+								<md-select ng-model="item.acao" class="md-no-underline" ng-if="item.tipo=='antigoNaoAtualizar'" aria-label="Ação">
+								  <md-option ng-value="1">Manter</md-option>
+								  <md-option ng-value="0">Excluir</md-option>
+								</md-select>
+								<span ng-if="item.tipo!='antigoNaoAtualizar'">Enviar</span>
+							</td>
 						</tr>
-					</thead>
-					<tr ng-repeat="item in formUploadItems|orderBy:'nome'">
-						<td>{{item.nome}}</td>
-						<td><md-button ng-click="onDeleteClick(item.nome)" class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
-						<td>
-							<input type="number" aria-label="Número de Páginas" min="1" ng-model="item.nPaginas">
-						</td>
-						<td>
-							<md-select md-selected-text="dic_tamanhosDePapel[item.tamanhoDoPapel]" ng-model="item.tamanhoDoPapel" aria-label="Tamanho do Papel" class="md-no-underline">
-								<md-option ng-value="opt.id" ng-repeat="opt in tamanhosDePapel">{{ opt.nome }} ({{opt.a}}mm x {{opt.l}}mm)</md-option>
-							</md-select>
-						</td>
-						<td>
-							{{item.tipo=='novo'?'Novo':''}}
-							{{item.tipo=='antigoParaAtualizar'?'Preexistente para Atualizar':''}}
-							{{item.tipo=='antigoNaoAtualizar'?'Preexistente':''}}
-						</td>
-						<td>
-							<md-select ng-model="item.acao" class="md-no-underline" ng-if="item.tipo=='antigoNaoAtualizar'" aria-label="Ação">
-							  <md-option ng-value="1">Manter</md-option>
-							  <md-option ng-value="0">Excluir</md-option>
-							</md-select>
-							<span ng-if="item.tipo!='antigoNaoAtualizar'">Enviar</span>
-						</td>
-					</tr>
-				</table>
-				
-				<div layout="row" layout-align="end center"class="afterControls">
-					<md-button
-						class="md-raised md-primary"
-						ng-disabled="update.progressoTotal==undefined || update.observacoes=='' || update.observacoes==undefined"
-						aria-label="Enviar Arquivos"
-						ng-if="formUploadItems.length>0"
-						ng-click="enviarArquivos()"
-						>
-							<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>Enviar Atualização
-					</md-button>
-				</div>
-				
+					</table>
+					
+					<div layout="row" layout-align="end center"class="afterControls">
+						<md-button
+							class="md-raised md-primary"
+							ng-disabled="!form_atualizarRevisao.$valid"
+							aria-label="Enviar Arquivos"
+							ng-if="formUploadItems.length>0"
+							ng-click="enviarArquivos()"
+							>
+								<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>
+								<span ng-if="agora<=documento.revisoes[0].data_limite || (update.observacoes!=undefined && update.observacoes!='')">Enviar Atualização</span>
+								<span ng-if="agora>documento.revisoes[0].data_limite && (update.observacoes==undefined || update.observacoes=='')">Atualização atrasada. Preencha o campo de observação.</span>
+						</md-button>
+					</div>
+				</form>	
 			</md-content>
 		</md-tab>
 	</md-tabs>

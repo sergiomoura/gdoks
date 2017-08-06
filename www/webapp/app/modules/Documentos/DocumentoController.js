@@ -43,6 +43,11 @@
 			// Declarando item
 			var item;
 
+			// Definindo agora
+			$scope.agora = new Date();
+
+			$scope.update.progressoTotal = $scope.documento.revisoes[0].progresso_validado;
+
 			// Percorrendo vetor de arquivos escolhidos para saber se eles constam no último pacote
 			for (var i = $scope.updateFiles.length - 1; i >= 0; i--) {
 				if(ultimosArquivos.find(function(a){return a.nome_cliente==this},$scope.updateFiles[i].name) == undefined){
