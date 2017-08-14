@@ -60,29 +60,3 @@ WebGDoks.directive('ngFileModel', ['$parse', function ($parse) {
 		}
 	};
 }]);
-
-WebGDoks.directive('gdoksHbar',function(){
-		return {
-			templateUrl:'app/directives/tmpl-gdoksHbar.html',
-			scope:{
-				values:'='
-			},
-			controller:['$scope',function($scope){
-				// Define as cores ...
-				$scope.bgcolors = ['#6DD900','#2196F3','#DFDFDF'];
-				$scope.fgcolors = ['#FFF','#FFF','#DFDFDF'];
-				
-				// Calculando o valor total
-				var total = 0;
-				for (var i = $scope.values.length - 1; i >= 0; i--) {
-					total += $scope.values[i];
-				}
-
-				// Calculando os percentuais
-				$scope.percents = [];
-				for (var i = 0; i < $scope.values.length; i++) {
-					$scope.percents.push(Math.round($scope.values[i]/total*100));
-				}
-			}]
-		}	
-	});
