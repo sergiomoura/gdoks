@@ -179,7 +179,7 @@ WebGDoks.config(function($mdDateLocaleProvider) {
 
     // Brazilian localization.
     $mdDateLocaleProvider.months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-    $mdDateLocaleProvider.shortMonths = ['jan','fev','mar', 'abr','mai','jun','ago','set','out','nov','dez'];
+    $mdDateLocaleProvider.shortMonths = ['jan','fev','mar', 'abr','mai','jun','jul','ago','set','out','nov','dez'];
     $mdDateLocaleProvider.days = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
     $mdDateLocaleProvider.shortDays = ['D','S','T','Q','Q','S','S'];
     $mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
