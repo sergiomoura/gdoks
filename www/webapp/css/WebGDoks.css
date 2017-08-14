@@ -102,6 +102,16 @@
 .md-raised md-icon {
   margin: 0 10px 0 3px; }
 
+#selfdata {
+  background-color: #fafafa;
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  padding: 5px;
+  color: #AAA;
+  font-size: 12px;
+  line-height: 12px; }
+
 .area_dialog {
   padding: 20px; }
 

@@ -81,6 +81,9 @@
 				</ng-view>
 			</md-content>
 		</div>
+		<div id="selfdata">
+			<?php echo($user->empresa) ?> - <?php echo($user->nome) ?>
+		</div>
 		<div id="carregando" ng-show="root.carregando" class="carregando-show-hide" layout="row" layout-align="center center">
 			<md-progress-circular md-mode="indeterminate" md-diameter="64"></md-progress-circular>
 		</div>

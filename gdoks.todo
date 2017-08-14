@@ -1,7 +1,5 @@
 GDoks:
 
-  ☐ Por um botão salvar no alto do cadastro da GRD
-  ☐ Mostrar botões de envio sempre
   ☐ Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações
   ☐ Cadastrar logo do cliente
   ☐ Fazer logo de cliente aparecer na GRD da faraday
@@ -73,6 +71,8 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Mostrar botões de envio sempre @done (17-07-30 12:41) @project(GDoks)
+ ✔ Por um botão salvar no alto do cadastro da GRD @done (17-07-30 12:11) @project(GDoks)
  ✔ Ir para página do documento a partir do cadastro da grd @done (17-07-30 04:10) @project(GDoks)
   Salvar enderço Físico para todos os documentos da grd
   Tipo De documento EB-> E/B
