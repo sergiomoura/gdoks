@@ -227,7 +227,6 @@
 				return '';
 			} else {
 				var diff = Math.ceil((futureDate - (new Date()))/86400000);
-				console.log(futureDate);
 				if(diff == 1){
 					return ('1 dia restante');
 				} else if(diff > 1){
