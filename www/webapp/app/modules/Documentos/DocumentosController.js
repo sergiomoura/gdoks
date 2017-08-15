@@ -205,6 +205,11 @@
 				// Carregando os documentos
 				$scope.documentos = response.documentos;
 
+				// Parsing
+				for (var i = $scope.documentos.length - 1; i >= 0; i--) {
+					$scope.documentos[i].data_limite = ($scope.documentos[i].data_limite?new Date($scope.documentos[i].data_limite+'T00:00'):null);
+				}
+
 				// determinando o total de páginas
 				$scope.totPaginas = Math.ceil(response.total/response.npp);
 			})
@@ -222,6 +227,7 @@
 				return '';
 			} else {
 				var diff = Math.ceil((futureDate - (new Date()))/86400000);
+				console.log(futureDate);
 				if(diff == 1){
 					return ('1 dia restante');
 				} else if(diff > 1){
