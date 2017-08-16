@@ -2948,6 +2948,7 @@
 						WHERE
 							$restrict->completude AND
 							$restrict->validacao";
+
 				$n = $db->query(
 						$sql,
 						'iiiiiissss',
@@ -2982,18 +2983,25 @@
 						   		AND ($restrict->nome)
 						   ) X
 						LEFT JOIN
-						  (SELECT id_documento,max(id) AS revisao_id, serial as revisao_serial, data_limite,
-						                                                      progresso_validado,
-						                                                      progresso_a_validar
-						   FROM gdoks_revisoes
-						   GROUP BY id_documento,data_limite,progresso_validado,progresso_a_validar,serial) Y ON X.id=Y.id_documento
+						  (SELECT id_revisao,
+							       b.id_documento,
+							       b.serial,
+							       b.data_limite,
+							       b.progresso_validado,
+							       b.progresso_a_validar
+							FROM
+							  (SELECT id_documento,
+							          max(id) AS id_revisao
+							   FROM gdoks_revisoes
+							   GROUP BY id_documento) a
+							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id) Y ON X.id=Y.id_documento
 						WHERE
 							$restrict->completude AND
 							$restrict->validacao
 						ORDER BY $ordem
 						LIMIT $pos_inicial,$npp
 						";
-						
+				
 				$rs = $db->query(
 						$sql,
 						'iiiiiissss',
