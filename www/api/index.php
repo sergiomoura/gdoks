@@ -2987,6 +2987,7 @@
 							       b.id_documento,
 							       b.serial,
 							       b.data_limite,
+							       b.ua,
 							       b.progresso_validado,
 							       b.progresso_a_validar
 							FROM

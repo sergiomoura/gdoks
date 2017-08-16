@@ -208,6 +208,7 @@
 				// Parsing
 				for (var i = $scope.documentos.length - 1; i >= 0; i--) {
 					$scope.documentos[i].data_limite = ($scope.documentos[i].data_limite?new Date($scope.documentos[i].data_limite+'T00:00'):null);
+					$scope.documentos[i].ua = ($scope.documentos[i].ua?new Date($scope.documentos[i].ua):null);
 				}
 
 				// determinando o total de páginas
