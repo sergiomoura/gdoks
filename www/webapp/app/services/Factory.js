@@ -425,6 +425,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.put(API_ROOT+'/documentos/'+doc.id+'/revisoes/'+doc.rev_id+'/enderecoFisico', doc.end_fisico,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.avancarRevisao = function(doc){
+				return $http.get(API_ROOT+'/documentos/'+doc.id+'/avancarRevisao',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

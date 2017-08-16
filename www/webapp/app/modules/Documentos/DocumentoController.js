@@ -154,6 +154,10 @@
 			)
 		}
 
+		$scope.avancarRevisao = function(){
+			GDoksFactory.avancarRevisao($scope.documento);
+		}
+
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = =
 		function ValidarProgressoDialogController($scope,doc,parentScope){
 			$scope.doc = doc;
