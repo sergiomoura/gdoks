@@ -2599,7 +2599,7 @@
 				$id_doc = 1*$id_doc;
 				$itens = array_map(function($a){return (object)$a['dados'];}, $_POST['profiles']);
 				$progresso_total = $_POST['update']['progressoTotal'];
-				$obs = $_POST['update']['observacoes'];
+				$obs = isset($_POST['update']['observacoes']) ? $_POST['update']['observacoes'] : '';
 				
 				// Levantando o idu do token, se ele ainda for válido
 				$sql = 'SELECT id,id_empresa FROM gdoks_usuarios WHERE token=? AND validade_do_token>NOW()';
@@ -3047,10 +3047,30 @@
 					$response->flush();
 					return;
 				}
-
-
-
 			});
+
+			$app->get('/documentos/:id_doc/avancarRevisao',function($id_doc) use ($app,$db,$token){
+				// Lendo dados de id_doc
+				$id_doc = 1*$id_doc;
+
+				// Levantando o serial atual
+				$sql = "SELECT data_limite, max(serial)+1 as novoSerial FROM gdoks_revisoes WHERE id_documento=?";
+				$rs = $db->query($sql,'i',$id_doc);
+				$novoSerial = $rs[0]['novoSerial'];
+				$dataLimite = $rs[0]['data_limite'];
+
+				// Criando nova revisão
+				$sql = "INSERT INTO gdoks_revisoes (serial,id_documento,data_limite) VALUES (?,?,?)";
+				$db->query($sql,'iis',$novoSerial,$id_doc,$dataLimite);
+
+				// Retornando resposta ao cliente
+				$response = new response(0,'Ok');
+				$response->newId = $db->insert_id;
+				$response->newSerial = $novoSerial;
+				$response->flush();
+				return;
+			});
+
 		// FIM DE ROTAS DE DOCUMENTOS */
 
 		// ROTAS DE ARQUIVOS
