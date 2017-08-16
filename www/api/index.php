@@ -230,7 +230,8 @@
 						       a.login,
 						       a.nome,
 						       a.email,
-						       a.ativo
+						       a.ativo,
+						       a.sigla
 						FROM gdoks_usuarios a
 						INNER JOIN
 						  (SELECT id_empresa
@@ -344,14 +345,14 @@
 					if(!isset($usuario->senha1) || $usuario->senha1 == ''){
 
 						// NÃO alterar senha do usuário
-						$sql = 'UPDATE gdoks_usuarios SET nome=?,email=?,login=?,ativo=? WHERE id=?';
+						$sql = 'UPDATE gdoks_usuarios SET nome=?,email=?,login=?,ativo=?,sigla=? WHERE id=?';
 						try {
-							$db->query($sql,'sssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->ativo,$usuario->id);	
+							$db->query($sql,'sssisi',$usuario->nome,$usuario->email,$usuario->login,$usuario->ativo,$usuario->sigla,$usuario->id);	
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
 						} catch (Exception $e) {
 							$app->response->setStatus(401);
-							$response = new response(1,'Já existe um usuário cadastrado com este login.');
+							$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla.');
 							$response->flush();
 							return;
 						}
@@ -359,14 +360,14 @@
 						registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.($usuario->ativo==true?1:0));
 					} else {
 						// Alterar a senha do usuário
-						$sql = 'UPDATE gdoks_usuarios SET nome=?, email=?, login=?, senha=PASSWORD(?), ativo=? WHERE id=?';
+						$sql = 'UPDATE gdoks_usuarios SET nome=?, email=?, login=?, senha=PASSWORD(?), ativo=?, sigla=? WHERE id=?';
 						try {
-							$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$usuario->ativo,$usuario->id);	
+							$db->query($sql,'ssssisi',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$usuario->ativo,$usuario->sigla,$usuario->id);	
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
 						} catch (Exception $e) {
 							$app->response->setStatus(401);
-							$response = new response(1,'Já existe um usuário cadastrado com este login');
+							$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla');
 							$response->flush();
 							return;
 						}
@@ -395,15 +396,15 @@
 				$id = $rs['id'];
 
 				// Inserindo novo usuário.
-				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_empresa,ativo) VALUES (?,?,?,PASSWORD(?),?,?)';
+				$sql = 'INSERT INTO gdoks_usuarios (nome,email,login,senha,id_empresa,ativo,sigla) VALUES (?,?,?,PASSWORD(?),?,?,?)';
 				try {
-					$db->query($sql,'ssssii',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$id_empresa,$usuario->ativo);
+					$db->query($sql,'ssssiis',$usuario->nome,$usuario->email,$usuario->login,$usuario->senha1,$id_empresa,$usuario->ativo,$usuario->sigla);
 					$response = new response(0,'Usuário criado com sucesso.');
 					$response->newId = $db->insert_id;
 					$response->flush();
 				} catch (Exception $e) {
 					$app->response->setStatus(401);
-					$response = new response(1,'Já existe um usuário cadastrado com este login.');
+					$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla.:'.$e->getMessage());
 					$response->flush();
 					return;
 				}

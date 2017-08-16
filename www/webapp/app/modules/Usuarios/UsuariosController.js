@@ -42,6 +42,7 @@
 			$scope.usuario.nome = '';
 			$scope.usuario.email = '';
 			$scope.usuario.login = '';
+			$scope.usuario.sigla = '';
 			$scope.usuario.ativo = true;
 			$scope.inicialmenteAtivo = true;
 		} else {
