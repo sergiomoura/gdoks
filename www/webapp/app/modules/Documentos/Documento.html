@@ -2,7 +2,7 @@
 	<div layout="row" layout-align="space-between center">
 		<h3>{{documento.nome}}</h3>
 		<div layout="row" layout-align="end center">
-		<md-button
+			<md-button
 				class="md-raised md-primary"
 				ng-click="avancarRevisao()"
 				aria-label="Avançar Revisão">
@@ -133,25 +133,31 @@
 								</div>
 								<div ng-if="rev.pdas.length==0">Nenhum progresso anterior registrado.</div>
 								<div ng-if="rev.pdas.length>0">Progresso</div>
-								<div class="hbar" ng-repeat="pda in rev.pdas">
-									<!-- se for o primeiro pda -->
-									<div ng-if="$first && rev.progresso_validado>0"
-										class="prgValidado"
-										style="width: calc({{rev.progresso_validado}}% - 2px)">
-										{{rev.progresso_validado}}%
-									</div
-									><div ng-if="$first && rev.progresso_a_validar>0"
-										class="prgAValidar"
-										style="width: calc({{rev.progresso_a_validar}}% - 2px)">
-										{{rev.progresso_a_validar}}%
+								<div ng-repeat="pda in rev.pdas">
+									<div class="hbar short">
+										<!-- se for o primeiro pda -->
+										<div ng-if="$first && rev.progresso_validado>0"
+											class="prgValidado"
+											style="width: calc({{rev.progresso_validado}}% - 2px)">
+											{{rev.progresso_validado}}%
+										</div
+										><div ng-if="$first && rev.progresso_a_validar>0"
+											class="prgAValidar"
+											style="width: calc({{rev.progresso_a_validar}}% - 2px)">
+											{{rev.progresso_a_validar}}%
+										</div>
+										<!-- se NÃO for o primeiro pda -->
+										<div ng-if="!$first && pda.progresso_total>0"
+											class="prgValidado"
+											style="width: calc({{pda.progresso_total}}% - 2px)">
+											{{pda.progresso_total}}%
+										</div>
 									</div>
-									<!-- se NÃO for o primeiro pda -->
-									<div ng-if="!$first && pda.progresso_total>0"
-										class="prgValidado"
-										style="width: calc({{pda.progresso_total}}% - 2px)">
-										{{pda.progresso_total}}%
-									</div>
+									<span class="pda_data" ng-if="pda.idu_validador!=null">
+										Valid.: {{pda.idu_validador}} em {{pda.datahora_validacao}}
+									</span>
 								</div>
+									
 								<div layout="row" layout-align="center center">
 									<md-button ng-click="collapseHistPanel($index)" class="md-icon-button" aria-label="Colapsar"><md-icon class="material-icons step" aria-label="Colapsar">keyboard_arrow_up</md-icon></md-button>
 								</div>

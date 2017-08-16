@@ -86,6 +86,7 @@
 		height: 20px;
 		width: 100%;
 		margin-bottom: 25px;
+		display: inline-block;
 
 		div{
 			transition: width 0.3s ease-out;
@@ -109,5 +110,19 @@
 			background-color: #6DD900;
 			color: #FFF;
 		}
+	}
+	.short {
+		width: 75%;
+	}
+	.pda_data{
+		color:rgb(189,189,189);
+		font-size:12px;
+		position:relative;
+		top: -3px;
+		display:inline-block;
+		width:24%;
+		text-align:right;
+
+
 	}
 }
