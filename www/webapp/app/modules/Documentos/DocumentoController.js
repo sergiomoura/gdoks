@@ -8,8 +8,8 @@
 	// Defininfo controller
 	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies,$mdDialog){
 
-		// Pedindo para carregar documento
-		carregaDocumento($routeParams.id);
+		// Pedindo para carregar usuários. Documento é carregado em seguida.
+		carregaUsuarios();
 
 		// Alguns dados do possível update a ser realizado
 		$scope.update = {};
@@ -18,6 +18,9 @@
 		$scope.tamanhosDePapel = [];
 		$scope.tamanhoPadrao = null;
 		carregaTamanhosDePapel();
+
+		// Definindo vetor que mantém os usuários
+		$scope.usuarios = [];
 
 		// Determinando o odu do usuário logado
 		$scope.idu = $cookies.getObject('user').id;
@@ -205,6 +208,20 @@
 				for (var i = doc.revisoes.length - 1; i >= 0; i--) {
 					doc.revisoes[i].data_limite = new Date(doc.revisoes[i].data_limite+'T00:00:00');
 					doc.revisoes[i].ua = new Date(doc.revisoes[i].ua);
+
+					// parsing pdas
+					if(doc.revisoes[i].pdas != null){
+						for (var j = doc.revisoes[i].pdas.length - 1; j >= 0; j--) {
+
+							// Parsing validador
+							if(doc.revisoes[i].pdas[j].idu_validador==null){
+								doc.revisoes[i].pdas[j].validador = null;
+							} else {
+								doc.revisoes[i].pdas[j].validador = $scope.usuarios.find(function(u){return u.id==this},doc.revisoes[i].pdas[j].idu_validador);
+								doc.revisoes[i].pdas[j].datahora_validacao = new Date(doc.revisoes[i].pdas[j].datahora_validacao);
+							}
+						}
+					}
 				}
 
 				// Carrega documento no scope
@@ -251,6 +268,17 @@
 			})
 		}
 
-
+		function carregaUsuarios(){
+			indexedDB.open("gdoks").onsuccess = function(evt){
+				evt.target.result.transaction('usuarios').objectStore('usuarios').getAll().onsuccess = function(evt){
+					$scope.$apply(function(){
+						$scope.usuarios = evt.target.result;
+					});
+					carregaDocumento($routeParams.id)
+				}
+			}
+		}
 	}
+
+
 })();

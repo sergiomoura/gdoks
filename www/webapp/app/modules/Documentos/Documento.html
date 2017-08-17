@@ -154,10 +154,12 @@
 										</div>
 									</div>
 									<span class="pda_data" ng-if="pda.idu_validador!=null">
-										Valid.: {{pda.idu_validador}} em {{pda.datahora_validacao}}
+										{{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
+									</span>
+									<span class="pda_data" ng-if="pda.idu_validador==null">
+										Validação Dispensada.
 									</span>
 								</div>
-									
 								<div layout="row" layout-align="center center">
 									<md-button ng-click="collapseHistPanel($index)" class="md-icon-button" aria-label="Colapsar"><md-icon class="material-icons step" aria-label="Colapsar">keyboard_arrow_up</md-icon></md-button>
 								</div>
