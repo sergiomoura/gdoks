@@ -1,14 +1,12 @@
 GDoks:
-
-  ☐ Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações
   ☐ Cadastrar logo do cliente
   ☐ Fazer logo de cliente aparecer na GRD da faraday
-  ☐ Registrar Retorno de GRD
-    ☐ Registrar Observações sobre arquivos que compões a GRD
+  ✔ Registrar Retorno de GRD @done (17-08-14 14:29)
+    ✔ Registrar Observações sobre arquivos que compõe a GRD @done (17-08-14 14:29)
     Na tela de registro de retorno de GRD o usuário será capaz de
-      - Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
-      - Dar o documento como concluído
-      - Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
+      ☐ Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
+      ☐ Dar o documento como concluído
+      ☐ Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
    ☐	Alterar cadastro do cliente (info de ftp) deve salvar na base local
 		
 
@@ -71,6 +69,7 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações @done (17-08-14 14:28) @project(GDoks)
  ✔ Mostrar botões de envio sempre @done (17-07-30 12:41) @project(GDoks)
  ✔ Por um botão salvar no alto do cadastro da GRD @done (17-07-30 12:11) @project(GDoks)
  ✔ Ir para página do documento a partir do cadastro da grd @done (17-07-30 04:10) @project(GDoks)

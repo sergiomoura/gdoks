@@ -378,14 +378,14 @@
     background-color: #6DD900;
     color: #FFF; }
 #documento_container .short {
-  width: 75%; }
+  width: calc(100% - 200px); }
 #documento_container .pda_data {
   color: #bdbdbd;
   font-size: 12px;
   position: relative;
-  top: -3px;
+  top: -6px;
   display: inline-block;
-  width: 24%;
+  width: 192px;
   text-align: right; }
 
 #docs_container {

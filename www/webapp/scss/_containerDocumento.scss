@@ -112,15 +112,15 @@
 		}
 	}
 	.short {
-		width: 75%;
+		width: calc(100% - 200px);
 	}
 	.pda_data{
 		color:rgb(189,189,189);
 		font-size:12px;
 		position:relative;
-		top: -3px;
+		top: -6px;
 		display:inline-block;
-		width:24%;
+		width:192px;
 		text-align:right;
 
 
