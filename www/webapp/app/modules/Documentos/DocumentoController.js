@@ -37,10 +37,10 @@
 			$scope.formUploadItems = [];
 
 			// Levantando qual foi o último pacote de arquivos
-			if($scope.documento.revisoes[0].pdas != undefined){
-				var ultimosArquivos = $scope.documento.revisoes[0].pdas[0].arquivos;
-			} else {
+			if($scope.documento.revisoes[0].pdas == undefined || $scope.documento.revisoes[0].pdas.length == 0){
 				var ultimosArquivos = [];
+			} else {
+				var ultimosArquivos = $scope.documento.revisoes[0].pdas[0].arquivos;
 			}
 
 			// Declarando item
@@ -77,7 +77,15 @@
 		}
 
 		$scope.baixarParaRevisao = function(){
-			GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[0].pdas[0].id);
+			if($scope.documento.revisoes[0].pdas.length == 0) {
+				if($scope.documento.revisoes.length > 1){
+					GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[1].pdas[0].id);
+				} else {
+				}
+			} else {
+				GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[0].pdas[0].id);	
+			}
+			
 			$scope.documento.idu_checkout = $cookies.getObject('user').id;
 			$scope.documento.datahora_do_checkout = new Date();
 		}
@@ -182,7 +190,7 @@
 								progresso_validado:0,
 								pdas:[]
 							};
-							$scope.documento.revisoes.push(rev);
+							$scope.documento.revisoes.unshift(rev);
 
 							$mdToast.show(
 								// Retornando toast para usuário

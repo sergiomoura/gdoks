@@ -2630,7 +2630,7 @@
 					if($rs[0]['nPdas'] != 0){
 						// Não é o primeiro pda e usuário não fez checkout do último pda
 						$app->response->setStatus(401);
-						$response = new response(1,'Usuário não realizou checkout.');	
+						$response = new response(1,'Usuário não realizou checkout.');
 						$response->flush();
 						die();
 					}
