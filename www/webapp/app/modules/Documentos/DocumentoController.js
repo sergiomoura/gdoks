@@ -227,7 +227,7 @@
 		}
 
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = =
-		function ValidarProgressoDialogController($scope,doc,parentScope){
+		function ValidarProgressoDialogController($scope,$cookies,doc,parentScope){
 			$scope.doc = doc;
 
 			$scope.cancelar = function(){
@@ -241,6 +241,9 @@
 					parentScope.documento.revisoes[0].pdas[0].progresso_total = $scope.doc.revisoes[0].progresso_a_validar + $scope.doc.revisoes[0].progresso_validado;
 					parentScope.documento.revisoes[0].progresso_validado = $scope.doc.revisoes[0].progresso_a_validar + $scope.doc.revisoes[0].progresso_validado;
 					parentScope.documento.revisoes[0].progresso_a_validar = 0;
+					parentScope.documento.revisoes[0].pdas[0].validador = parentScope.usuarios.find(function(u){return u.id == this},$cookies.getObject('user').id);
+					parentScope.documento.revisoes[0].pdas[0].idu_validador = parentScope.documento.revisoes[0].pdas[0].validador.id;
+					parentScope.documento.revisoes[0].pdas[0].datahora_validacao = new Date();
 
 					// escondendo caixa de diálogo
 					$mdDialog.hide();

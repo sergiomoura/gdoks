@@ -156,8 +156,11 @@
 									<span class="pda_data" ng-if="pda.idu_validador!=null">
 										{{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
 									</span>
-									<span class="pda_data" ng-if="pda.idu_validador==null">
+									<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar==0">
 										Validação Dispensada.
+									</span>
+									<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar>0">
+										Aguardando Validação
 									</span>
 								</div>
 								<div layout="row" layout-align="center center">
