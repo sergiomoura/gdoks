@@ -4,7 +4,7 @@
 		<div layout="row" layout-align="end center">
 			<md-button
 				class="md-raised md-primary"
-				ng-click="avancarRevisao()"
+				ng-click="avancarRevisao($event)"
 				aria-label="Avançar Revisão">
 					<md-icon class="material-icons step" aria-label="Avançar revisão">skip_next</md-icon>Avançar Revisão
 			</md-button>
@@ -92,7 +92,7 @@
 			<h3>Histórico de Revisões</h3>
 			<div ng-if="documento.revisoes.length==0">Esse documento não teve nenhuma revisão registrada.</div>
 				<md-expansion-panel-group md-component-id="panelGroup" ng-if="documento.revisoes.length>0">
-					<md-expansion-panel  ng-repeat="rev in documento.revisoes" md-component-id="{{'histPanel_'+$index}}">
+					<md-expansion-panel  ng-repeat="rev in documento.revisoes|orderBy:'-serial'" md-component-id="{{'histPanel_'+$index}}">
 						<md-expansion-panel-collapsed layout="column" class="md-padding">
 							<div layout="row" layout-align="space-between start">
 								<div>Revisão: {{rev.serial}}</div>
@@ -253,5 +253,4 @@
 			</md-content>
 		</md-tab>
 	</md-tabs>
-	
 </md-content>

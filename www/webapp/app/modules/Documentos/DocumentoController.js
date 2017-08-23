@@ -157,8 +157,65 @@
 			)
 		}
 
-		$scope.avancarRevisao = function(){
-			GDoksFactory.avancarRevisao($scope.documento);
+		$scope.avancarRevisao = function(ev){
+
+			// Appending dialog to document.body to cover sidenav in docs app
+			var confirm = $mdDialog.confirm()
+				.title('Tem que deseja avançar a revisão deste documento?')
+				.textContent('A ação não poderá ser desfeita.')
+				.ariaLabel('Deseja avançar a revisão deste documento? Esta ação não poderá ser desfeita.')
+				.targetEvent(ev)
+				.ok('Sim')
+				.cancel('Não');
+
+			$mdDialog.show(confirm).then(
+				function() {
+					GDoksFactory.avancarRevisao($scope.documento)
+					.success(function(response){
+						if(response.error == 0){
+							var rev = {
+								data_limite:$scope.documento.revisoes[0].data_limite,
+								id:response.newId,
+								ua:null,
+								serial:response.newSerial,
+								progresso_a_validar: 0,
+								progresso_validado:0,
+								pdas:[]
+							};
+							$scope.documento.revisoes.push(rev);
+
+							$mdToast.show(
+								// Retornando toast para usuário
+								$mdToast.simple()
+								.textContent('Revisão avançou com sucesso!')
+								.position('bottom left')
+								.hideDelay(5000)
+							);
+						} else {
+							$mdToast.show(
+								// Retornando toast para usuário
+								$mdToast.simple()
+								.textContent('Ocorreu um erro ao tentar avançar a revisão: ' + response.error )
+								.position('bottom left')
+								.hideDelay(5000)
+							);
+						}
+					})
+					.error(function(error){
+						$mdToast.show(
+							// Retornando toast para usuário
+							$mdToast.simple()
+							.textContent('Ocorreu um erro ao tentar avançar a revisão.')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Imprimindo erro no console
+						console.warn(response);
+					})
+				}
+			);
+
 		}
 
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = =

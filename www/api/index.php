@@ -3076,11 +3076,11 @@
 				// Retornando resposta ao cliente
 				$response = new response(0,'Ok');
 				$response->newId = $db->insert_id;
+				$response->newId = 620;
 				$response->newSerial = $novoSerial;
 				$response->flush();
 				return;
 			});
-
 		// FIM DE ROTAS DE DOCUMENTOS */
 
 		// ROTAS DE ARQUIVOS
