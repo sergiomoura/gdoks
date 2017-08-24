@@ -43,7 +43,7 @@
 	<div id="lista_de_logs">
 		<table ng-if="logs.length>0">
 			<tr ng-repeat="log in logs">
-				<td>{{log.data|date:"dd.MM.yyyy à's' hh:mm:ss"}}</td>
+				<td>{{log.data|date:"dd.MM.yyyy à's' HH:mm:ss"}}</td>
 				<td>{{log|logUsername:dicUsuarios}}</td>
 				<td>{{log|logDescreveAcao:dicAcoes}}</td>
 			</tr>
