@@ -56,7 +56,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="sub in disciplina.subs | filter:q.nome">
+						<tr ng-repeat="sub in disciplina.subs | orderBy:'nome' | filter:q.nome">
 							<td>{{sub.nome}}</td>
 							<td>{{sub.sigla}}</td>
 							<td>{{sub.ativa?"Ativa":"Inativa"}}</td>
