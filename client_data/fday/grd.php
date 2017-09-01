@@ -65,7 +65,7 @@
 
 			// Corpo da tabela
 			$alturaDaLinha = 5;
-			foreach ($this->grd->docs as $i => $doc) {
+			foreach ($this->grd->documentos as $i => $doc) {
 				$this->Cell($this->titles[0]->width,$alturaDaLinha,($i+1)			,1,0,'C');
 				$this->Cell($this->titles[1]->width,$alturaDaLinha,utf8_decode($doc->doc_codigo	),1,0,'C');
 				$this->Cell($this->titles[2]->width,$alturaDaLinha,utf8_decode($doc->tipo		),1,0,'C');
