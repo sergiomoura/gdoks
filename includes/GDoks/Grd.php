@@ -183,6 +183,7 @@
 
 			// Incluindo classe FPdf
 			include('../../includes/FPDF/fpdf.php');
+			include('../../includes/FPDF/xfpdf.php');
 			set_include_path('../../includes/FPDF/fonts/');
 
 			// Incluindo arquivo que seta a classe PDFGrd para a empresa
