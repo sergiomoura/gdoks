@@ -1,5 +1,5 @@
 <?php
-	class PDFGrd extends FPDF {
+	class PDFGrd extends xPDF {
 		// Construtor
 		function __construct($empresa,$grd,$resp_envio,$codigosEmi,$tiposDeDocumento){
 			parent::__construct();
@@ -11,12 +11,12 @@
 			$this->titles = json_decode('[
 				{"titulo":"Item","width":15},
 				{"titulo":"Nº Documento","width":50},
-				{"titulo":"Tipo","width":8},
+				{"titulo":"Tipo","width":10},
 				{"titulo":"Qtd. Vias","width":15},
 				{"titulo":"Revisão","width":15},
 				{"titulo":"Cód. EMI","width":15},
 				{"titulo":"Nº Fls","width":15},
-				{"titulo":"Título","width":0}
+				{"titulo":"Título","width":55}
 			]');
 			$this->addContent();
 		}
@@ -57,24 +57,33 @@
 		}
 
 		function addContent(){
-			$this->AliasNbPages();
 			$this->AddPage();
 			$this->SetFont('Helvetica','',8);
 			$this->SetAutoPageBreak(true,60);
-			$hHeight = 10;
 
-			// Corpo da tabela
-			$alturaDaLinha = 5;
-			foreach ($this->grd->documentos as $i => $doc) {
-				$this->Cell($this->titles[0]->width,$alturaDaLinha,($i+1)			,1,0,'C');
-				$this->Cell($this->titles[1]->width,$alturaDaLinha,utf8_decode($doc->doc_codigo	),1,0,'C');
-				$this->Cell($this->titles[2]->width,$alturaDaLinha,utf8_decode($doc->tipo		),1,0,'C');
-				$this->Cell($this->titles[3]->width,$alturaDaLinha,utf8_decode($doc->nVias 		),1,0,'C');
-				$this->Cell($this->titles[4]->width,$alturaDaLinha,utf8_decode($doc->rev_serial	),1,0,'C');
-				$this->Cell($this->titles[5]->width,$alturaDaLinha,utf8_decode($doc->codEMI		),1,0,'C');
-				$this->Cell($this->titles[6]->width,$alturaDaLinha,utf8_decode($doc->nFolhas 	),1,0,'C');
-				$this->Cell($this->titles[7]->width,$alturaDaLinha,utf8_decode($doc->doc_nome	),1,0,'C');
-				$this->Ln();
+			$this->SetWidths(Array(
+				$this->titles[0]->width,
+				$this->titles[1]->width,
+				$this->titles[2]->width,
+				$this->titles[3]->width,
+				$this->titles[4]->width,
+				$this->titles[5]->width,
+				$this->titles[6]->width,
+				$this->titles[7]->width
+			));
+			for ($i=0; $i < sizeof($this->grd->documentos); $i++) { 
+			 	$doc = 	$this->grd->documentos[$i];
+				$data = Array(
+					($i+1),
+					utf8_decode($doc->doc_codigo),
+					utf8_decode($doc->tipo		),
+					utf8_decode($doc->nVias 	),
+					utf8_decode($doc->rev_serial),
+					utf8_decode($doc->codEMI	),
+					utf8_decode($doc->nFolhas 	),
+					utf8_decode($doc->doc_nome	)
+				);
+				$this->row($data);
 			}
 		}
 
