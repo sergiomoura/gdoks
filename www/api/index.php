@@ -2,6 +2,7 @@
 	
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+	ini_set('display_errors', 1);
 
 	// Determinando o timezone America/Sao_Paulo
 	ini_set('date.timezone', 'America/Sao_Paulo');
