@@ -77,12 +77,15 @@
 	
 	// definindo função que realiza log
 	function registrarAcao($db,$idUsuario,$idAcao,$parametros = ''){
+
+		// definindo tamanho máximo do parâmetro
+		$param_maxlen = 256;
 		if($parametros == ''){
 			$sql = 'INSERT INTO gdoks_log (id_usuario,id_acao,data) values (?,?,now())';
 			$result = $db->query($sql,'ii',$idUsuario,$idAcao);
 		} else {
 			$sql = 'INSERT INTO gdoks_log (id_usuario,id_acao,data,parametros) values (?,?,now(),?)';
-			$result = $db->query($sql,'iis',$idUsuario,$idAcao,$parametros);
+			$result = $db->query($sql,'iis',$idUsuario,$idAcao,substr($parametros, 0,$param_maxlen));
 		}
 	}
 	
