@@ -1,17 +1,20 @@
-GDoks:
-  ✔ Registrar Retorno de GRD @done (17-08-14 14:29)
-    ✔ Registrar Observações sobre arquivos que compõe a GRD @done (17-08-14 14:29)
-    Na tela de registro de retorno de GRD o usuário será capaz de
-      ☐ Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?)
-      ☐ Dar o documento como concluído
-      ☐ Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado arquivo
-   ☐  Alterar cadastro do cliente (info de ftp) deve salvar na base local
-  ☐ Cadastrar logo do cliente
-  ☐ Fazer logo de cliente aparecer na GRD da faraday
-    
-
+✔ Quebrar nomes longos na GRD @done (17-09-20 17:01)
+☐ Dar o documento como concluído
+☐ Alterar cadastro do cliente (info de ftp) deve salvar na base local
+☐ Cadastrar logo do cliente
+☐ Fazer logo de cliente aparecer na GRD da faraday
+☐ Notificar o usuário na tela de documeto quado este fordema disciplna sem validador ou especialista
+☐ Registrar no log Validação de Progresso
+☐ Registrar no log envio de GRD por email
+☐ Alertar usuário quando remover documento que todos os arquivos serão excluídos
+☐ Mostrar código do documento no resultado da busca por documento
+☐ Mostrar código do documento na tela do documento
+☐ Marcar a GRD como enviada
+☐ Analisar Documento com 200% na JDE
+☐ Sequência das revisões deve ser configurável
+☐ No cadastro da GRD, filtrar documentos por área e disciplina
+☐ No cadastro do projeto, marcar se documentos estão disponíveis para GRD quando autorizada pelo validador ou somente quando estiver 100%
 Bloqueio de Telas:
-  ☐ Bloquear o acesso direto a tela de acordo com as permissões de telas do usuárrio
     ☐ usuários
     ☐ documentos
     ☐ GRDs
@@ -20,7 +23,6 @@ Bloqueio de Telas:
     ☐ Cargos
     ☐ Log
     ☐ Configurações
-
   ☐ Otimizar página de projetos para grande volume de dados
   ☐ Mostrar Campo de Cliente na busca por projetos
   ☐ Quebra de linha no PDF para dados longos
@@ -36,11 +38,9 @@ Bloqueio de Telas:
 	☐	Tela e-mails enviados
   Dashboard:
     ☐ nº de documentos em revisão
-    ☐ produtividade dos especialistas
-
-      
+    ☐ produtividade dos especialistas   
   BUGS Avulsos:
-    ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.
+    ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.(liha 159 do ProjetoController)
     ☐ Fazer mudar para tab de documentos depois de salvar GRD
     ☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
     ☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
@@ -55,7 +55,6 @@ Bloqueio de Telas:
       - usuários (1)
       - Codigos EMI
       - tipos de docs
-
     ☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
     ☐ Primeira subárea de um projeto não aparece assim que é criada
     ☐ Tela Cadastro de Formatos de Papel
@@ -69,6 +68,11 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?) @done (17-09-19 13:55) @project(GDoks)
+ ✔ Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado documento @done (17-09-19 13:55) @project(GDoks)
+ ✔ Registrar Retorno de GRD @done (17-08-14 14:29) @project(GDoks)
+ ✔ Registrar Observações sobre arquivos que compõe a GRD @done (17-08-14 14:29) @project(GDoks)
+  Na tela de registro de retorno de GRD o usuário será capaz de
  ✔ Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações @done (17-08-14 14:28) @project(GDoks)
  ✔ Mostrar botões de envio sempre @done (17-07-30 12:41) @project(GDoks)
  ✔ Por um botão salvar no alto do cadastro da GRD @done (17-07-30 12:11) @project(GDoks)
@@ -204,3 +208,4 @@ Archive:
  ✔ Inserir um novo documento no projeto @done (17-05-20 11:05) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔ Salvar alterações em no cadastro de um documento @done (17-05-20 10:42) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔ Fazer campo de dependências funcionar corretamente @done (17-05-20 10:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+ +  ☐ Bloquear o acesso direto a tela de acordo com as permissões de telas do usuárrio
