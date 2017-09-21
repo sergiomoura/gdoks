@@ -1,15 +1,15 @@
 ✔ Quebrar nomes longos na GRD @done (17-09-20 17:01)
 ✔ Mostrar código do documento no resultado da busca por documento @done (17-09-21 04:46)
 ✔ Mostrar código do documento na tela do documento @done (17-09-21 04:53)
-☐ Cadastrar endereço do cliente
-☐ Fazer com que endereço do cliente apareça na GRD
+✔ Cadastrar endereço do cliente @done (17-09-21 11:19)
+✔ Fazer com que endereço do cliente apareça na GRD @done (17-09-21 12:41)
+☐ Registrar no log Validação de Progresso
+☐ Registrar no log envio de GRD por email
 ☐ Dar o documento como concluído
 ☐ Alterar cadastro do cliente (info de ftp) deve salvar na base local
 ☐ Cadastrar logo do cliente
 ☐ Fazer logo de cliente aparecer na GRD da faraday
 ☐ Notificar o usuário na tela de documeto quado este fordema disciplna sem validador ou especialista
-☐ Registrar no log Validação de Progresso
-☐ Registrar no log envio de GRD por email
 ☐ Alertar usuário quando remover documento que todos os arquivos serão excluídos
 ☐ Marcar a GRD como enviada
 ☐ Analisar Documento com 200% na JDE

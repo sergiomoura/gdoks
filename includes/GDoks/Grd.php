@@ -37,6 +37,7 @@
 			// Levantando dados de GRD
 			$sql = 'SELECT c.id AS cliente_id,
 						   c.nome AS cliente_nome,
+						   c.endereco AS cliente_endereco,
 						   b.id AS projeto_id,
 					       b.nome AS projeto_nome,
 					       a.obs AS obs,
@@ -64,6 +65,7 @@
 			$instance->_projeto_nome			= $rs['projeto_nome'];
 			$instance->_cliente_id				= $rs['cliente_id'];
 			$instance->_cliente_nome			= $rs['cliente_nome'];
+			$instance->_cliente_endereco		= $rs['cliente_endereco'];
 			$instance->_cliente_contato_nome	= $rs['contato_nome'];
 			$instance->_cliente_contato_email	= $rs['contato_email'];
 			$instance->_obs						= $rs['obs'];
@@ -106,6 +108,7 @@
 			$sql = 'SELECT a.id,
 						   c.id AS cliente_id,
 						   c.nome AS cliente_nome,
+						   c.endereco AS cliente_endereco,
 						   b.id AS projeto_id,
 					       b.nome AS projeto_nome,
 					       a.obs AS obs,
@@ -138,6 +141,7 @@
 			$instance->_projeto_nome			= $rs[0]['projeto_nome'];
 			$instance->_cliente_id				= $rs[0]['cliente_id'];
 			$instance->_cliente_nome			= $rs[0]['cliente_nome'];
+			$instance->_cliente_endereco		= $rs[0]['cliente_endereco'];
 			$instance->_cliente_contato_nome	= $rs[0]['contato_nome'];
 			$instance->_cliente_contato_email	= $rs[0]['contato_email'];
 			$instance->_obs						= $rs[0]['obs'];

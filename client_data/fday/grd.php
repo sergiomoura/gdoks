@@ -45,8 +45,13 @@
 		    $this->Cell(125,5,utf8_decode('Projeto: '.$this->grd->projeto_nome),0);
 		    $this->Cell(65,5,utf8_decode('Destinatário: '.$this->grd->cliente_contato_nome),0);
 		    $this->Ln(5);
-		    $this->Cell(0,5,utf8_decode('Endereço: _______________________________________'),0);$this->Ln();
-		    $this->Cell(0,5,utf8_decode('Observações: '.$this->grd->obs),0);$this->Ln();
+		    if($this->grd->cliente_endereco != '' && !is_null($this->grd->cliente_endereco)){
+		    	$this->Cell(0,5,utf8_decode('Endereço: ' . $this->grd->cliente_endereco),0);$this->Ln();
+			}
+			if($this->grd->obs != '' && !is_null($this->grd->obs)){
+		    	$this->Cell(0,5,utf8_decode('Observações: '.$this->grd->obs),0);$this->Ln();
+			}
+		    
 		    $this->Ln(5);
 
 		    // Imprimindo Primeira linha (títulos)
