@@ -1,6 +1,6 @@
 <md-content id="documento_container" class="container_80" layout="column" layout-padding>
 	<div layout="row" layout-align="space-between center">
-		<h3>{{documento.nome}}</h3>
+		<h3>{{documento.codigo}}</h3>
 		<div layout="row" layout-align="end center">
 			<md-button
 				class="md-raised md-primary"
@@ -35,6 +35,11 @@
 		</div>
 	</div>
 	<table class="header_table">
+		<tr>
+			<td colspan="3">
+				<label>Título</label> {{documento.nome}}
+			</td>
+		</tr>
 		<tr>
 			<td>
 				<label>Projeto</label> {{documento.nome_projeto}}
