@@ -9,6 +9,7 @@
 				$_projeto_nome,
 				$_cliente_id,
 				$_cliente_nome,
+				$_cliente_endereco,
 				$_cliente_contato_nome,
 				$_cliente_contato_email,
 				$_obs,
