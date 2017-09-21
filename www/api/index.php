@@ -4338,10 +4338,7 @@
 					// Enviando o email
 					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
 					$response = $sendgrid->send($sgMail);
-					echo('<pre>');
-					print_r($response);
-					echo('</pre>');
-					die();
+					
 					if($response->message == 'success'){
 						
 						// Registrando a datahora do envio
