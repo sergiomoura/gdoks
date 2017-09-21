@@ -2795,8 +2795,11 @@
 				$db->query($sql,'iii',$progresso_validado,$idu,$id_pda);
 
 				// registrando no log
+				registrarAcao($db,$idu,ACAO_VALIDOU_PROGRESSO,$progresso_validado.','.$id_doc);
 
 				// dando retorno para o cliente.
+				$response = new response(0,'ok');
+				$response->flush();
 			});
 
 			$app->get('/documentos/search/q',function() use ($app,$db,$token){

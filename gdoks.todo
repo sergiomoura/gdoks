@@ -3,7 +3,7 @@
 ✔ Mostrar código do documento na tela do documento @done (17-09-21 04:53)
 ✔ Cadastrar endereço do cliente @done (17-09-21 11:19)
 ✔ Fazer com que endereço do cliente apareça na GRD @done (17-09-21 12:41)
-☐ Registrar no log Validação de Progresso
+✔ Registrar no log Validação de Progresso @done (17-09-21 13:28)
 ☐ Registrar no log envio de GRD por email
 ☐ Dar o documento como concluído
 ☐ Alterar cadastro do cliente (info de ftp) deve salvar na base local
@@ -16,6 +16,8 @@
 ☐ Sequência das revisões deve ser configurável
 ☐ No cadastro da GRD, filtrar documentos por área e disciplina
 ☐ No cadastro do projeto, marcar se documentos estão disponíveis para GRD quando autorizada pelo validador ou somente quando estiver 100%
+☐ Consertar busca de documento com progresso a validar:  Failed to create statement: Unknown column 'id_progresso_a_validar' in 'where clause'
+☐ Registrar corretamente no log a adi~çao de um documento a um projeto
 Bloqueio de Telas:
     ☐ usuários
     ☐ documentos
