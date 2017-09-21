@@ -3756,12 +3756,26 @@
 
 					// Adicionando arquivos ao zip
 					$arquivosOk = true;
+					$inexistentes = Array();
 					foreach ($caminhos as $c) {
-						$arquivosOk = $arquivosOk && file_exists(UPLOAD_PATH.$c['caminho']) && $zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+						if(!file_exists(UPLOAD_PATH.$c['caminho'])){
+							array_push($inexistentes, UPLOAD_PATH.$c['caminho']);
+						}
 					}
+					$arquivosOk = (sizeof($inexistentes) == 0);
+
 					if(!$arquivosOk){
-						echo("Um ou mais arquivos não foram adicionados ao zip.");
+						echo("Um ou mais arquivos inexistente.");
 						die();
+
+					} else {
+						$arquivosOk = true;
+						foreach ($caminhos as $c) {
+							$arquivosOk = $arquivosOk && $zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+						}
+						if(!$arquivosOk){
+							die("Um ou mais arquivos não adicionados ao zip.");
+						}
 					}
 
 					// Fechando o arquivo zip
