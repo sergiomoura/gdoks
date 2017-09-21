@@ -71,6 +71,7 @@
 				$this->titles[6]->width,
 				$this->titles[7]->width
 			));
+			$this->SetAligns(Array('C','L','C','C','C','C','C','L'));
 			for ($i=0; $i < sizeof($this->grd->documentos); $i++) { 
 			 	$doc = 	$this->grd->documentos[$i];
 				$data = Array(
