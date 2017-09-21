@@ -36,14 +36,14 @@
 		    $this->SetFont('Helvetica','B',9);
 
 		    // Escrevendo os Cabeçalho da GRD
-		    $this->Cell(95,5,utf8_decode('Cliente: '.$this->grd->cliente_nome),0);
-		    $this->Cell(95,5,utf8_decode('GRD Nº: '.$this->grd->codigo),0);
+		    $this->Cell(125,5,utf8_decode('Cliente: '.$this->grd->cliente_nome),0);
+		    $this->Cell(65,5,utf8_decode('GRD Nº: '.$this->grd->codigo),0);
 		    $this->Ln(5);
-		    $this->Cell(95,5,utf8_decode('Resp. Envio: '.$this->resp_envio),0);
-		    $this->Cell(95,5,utf8_decode('Data: '.date('d/M/Y')),0);
+		    $this->Cell(125,5,utf8_decode('Resp. Envio: '.$this->resp_envio),0);
+		    $this->Cell(65,5,utf8_decode('Data: '.date('d/m/Y')),0);
 		    $this->Ln(5);
-		    $this->Cell(95,5,utf8_decode('Projeto: '.$this->grd->projeto_nome),0);
-		    $this->Cell(95,5,utf8_decode('Destinatário: '.$this->grd->cliente_contato_nome),0);
+		    $this->Cell(125,5,utf8_decode('Projeto: '.$this->grd->projeto_nome),0);
+		    $this->Cell(65,5,utf8_decode('Destinatário: '.$this->grd->cliente_contato_nome),0);
 		    $this->Ln(5);
 		    $this->Cell(0,5,utf8_decode('Endereço: _______________________________________'),0);$this->Ln();
 		    $this->Cell(0,5,utf8_decode('Observações: '.$this->grd->obs),0);$this->Ln();
@@ -71,7 +71,9 @@
 				$this->titles[6]->width,
 				$this->titles[7]->width
 			));
+
 			$this->SetAligns(Array('C','L','C','C','C','C','C','L'));
+
 			for ($i=0; $i < sizeof($this->grd->documentos); $i++) { 
 			 	$doc = 	$this->grd->documentos[$i];
 				$data = Array(
