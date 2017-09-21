@@ -3147,6 +3147,7 @@
 						       a.contato_nome,
 						       a.contato_email,
 						       a.contato_telefone,
+						       a.endereco,
                                (!isnull(ftp_host) and !isnull(ftp_usuario) and !isnull(ftp_senha)) as ftp_configurado
 						FROM gdoks_clientes a
 						INNER JOIN
@@ -3169,7 +3170,8 @@
 						       a.contato_email,
 						       a.contato_telefone,
 						       a.ftp_host,
-						       a.ftp_usuario
+						       a.ftp_usuario,
+						       a.endereco
 						FROM gdoks_clientes a
 						INNER JOIN
 						  (SELECT id_empresa
@@ -3233,11 +3235,12 @@
 	                                contato_nome=?,
 	                                contato_email=?,
 	                                contato_telefone=?,
+	                                endereco=?,
 	                                ftp_host=?,
 	                                ftp_usuario=?
 	                            WHERE id=?";
 	                    try {
-	                    	$db->query($sql,'sssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->ftp_host,$cliente->ftp_usuario,$id);
+	                    	$db->query($sql,'ssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$id);
 	                    } catch (Exception $e) {
 	                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 							$response->flush();
@@ -3254,12 +3257,13 @@
 	                                contato_nome=?,
 	                                contato_email=?,
 	                                contato_telefone=?,
+	                                endereco=?,
 	                                ftp_host=?,
 	                                ftp_usuario=?,
 	                                ftp_senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512)))
 	                            WHERE id=?";
 	                    try {
-	                    	$db->query($sql,'sssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY,$id);
+	                    	$db->query($sql,'ssssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY,$id);
 	                    } catch (Exception $e) {
 	                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 							$response->flush();
@@ -3306,9 +3310,9 @@
 				if(empty($cliente->ftp_senha) || is_null($cliente->ftp_senha) || $cliente->ftp_senha==''){
 
 					// Inserindo novo cliente sem senha ftp.
-					$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em,ftp_host,ftp_usuario) VALUES (?,?,?,?,?,?,?,?,NOW(),?,?)';
+					$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em,endereco,ftp_host,ftp_usuario) VALUES (?,?,?,?,?,?,?,?,NOW(),?,?,?)';
 					try {
-						$db->query($sql,'sssssssiss',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa,$cliente->ftp_host,$cliente->ftp_usuario);
+						$db->query($sql,'sssssssisss',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario);
 						$response = new response(0,'Cliente adicionado com sucesso.');
 						$response->newId = $db->insert_id;
 						$response->flush();
@@ -3320,9 +3324,9 @@
 					}
 				} else {
 					// Inserindo novo cliente com senha ftp.
-					$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em,ftp_host,ftp_usuario,ftp_senha) VALUES (?,?,?,?,?,?,?,?,NOW(),?,?,AES_ENCRYPT(?,UNHEX(SHA2(?,512))))';
+					$sql = 'INSERT INTO gdoks_clientes (nome,nome_fantasia,cpf,cnpj,contato_nome,contato_email,contato_telefone,id_empresa,registrado_em,endereco,ftp_host,ftp_usuario,ftp_senha) VALUES (?,?,?,?,?,?,?,?,NOW(),?,?,?,AES_ENCRYPT(?,UNHEX(SHA2(?,512))))';
 					try {
-						$db->query($sql,'sssssssissss',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY);
+						$db->query($sql,'sssssssisssss',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$id_empresa,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY);
 						$response = new response(0,'Cliente adicionado com sucesso.');
 						$response->newId = $db->insert_id;
 						$response->flush();

@@ -23,7 +23,7 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 
 	// se id== 0, adicionar um novo usuário. se não carregar o cliente de id passado
 	if(id == 0) {
-		// Criando um usuário vazio.
+		// Criando um cliente vazio.
 		$scope.cliente = {};
 		$scope.cliente.id = 0;
 		$scope.cliente.nome = '';
@@ -34,6 +34,7 @@ function ClienteController($scope,$routeParams,GDoksFactory,$location,$mdToast){
 		$scope.cliente.contato_nome = '';
 		$scope.cliente.contato_email = '';
 		$scope.cliente.contato_telefone = '';
+		$scope.cliente.endereco = '';
 		$scope.cliente.ftp_host = '';
 		$scope.cliente.ftp_usuario = '';
 		$scope.cliente.ftp_senha = '';
