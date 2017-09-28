@@ -13,6 +13,7 @@
 ☐ No cadastro do projeto, marcar se documentos estão disponíveis para GRD quando autorizada pelo validador ou somente quando estiver 100%
 ☐ Consertar busca de documento com progresso a validar:  Failed to create statement: Unknown column 'id_progresso_a_validar' in 'where clause'
 ☐ Página de Busca de documentos retornar a páginação pág 1 antes da busca...(busque tudo, vá para página 4, altere parâmetros e busque restrito)
+
 Bloqueio de Telas:
     ☐ usuários
     ☐ documentos
