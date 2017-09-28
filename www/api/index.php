@@ -1968,6 +1968,9 @@
 						$sql = "insert into gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) values (1,?,?,0,0,null)";
 						$db->query($sql,'is',$newId,$documento->data_limite);
 
+						// registrando no log
+						registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,$newId.','.$documento->nome.','.$documento->id_subdisciplina.','.$documento->id_subarea);
+
 						$response = new response(0,'Documento adicionado com sucesso.');
 						$response->newId = $newId;
 						$response->flush();
