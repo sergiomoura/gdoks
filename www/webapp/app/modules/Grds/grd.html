@@ -89,9 +89,15 @@
 								<md-icon class="material-icons step" aria-label="description">done_all</md-icon>
 								<md-tooltip md-direction="bottom">Selecionar Todos</md-tooltip>
 							</md-button>
-							<span flex>
+							<span flex layout="row">
 								<md-icon class="material-icons step" aria-label="description">search</md-icon>
-								<input type="text" ng-model="qEsq.nome" placeholder="Filtrar documentos pelo nome...">	
+								<input type="text" ng-model="qEsq.nome" placeholder="Filtrar documentos pelo nome...">
+								<md-select ng-model="qEsq.id_disciplina">
+								  <md-option ng-repeat="d in disciplinas|orderBy:'nome'" ng-value="d.id">{{d.nome}}</md-option>
+								</md-select>
+								<md-select ng-model="qEsq.id_area">
+								  <md-option ng-repeat="a in areas|orderBy:'codigo'" ng-value="a.id">{{a.codigo}} - {{a.nome}}</md-option>
+								</md-select>
 							</span>
 							<md-button
 								ng-disabled="formDados.$pristine || formDados.$invalid || !grd.alterada"
@@ -240,4 +246,9 @@
 			</md-content>
 		</md-tab>
 	</md-tabs>
+	>>
+	<pre>
+	{{qEsq|json}}
+	</pre>
+	<<
 </div>

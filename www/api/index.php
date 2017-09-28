@@ -2076,6 +2076,8 @@
 							       M.codigo_alternativo,
 							       M.id_subdisciplina,
 							       M.id_subarea,
+							       M.id_disciplina,
+							       M.id_area,
 							       rev_serial,
 							       rev_id,
 							       end_fisico,
@@ -2089,7 +2091,9 @@
 							          a.codigo_cliente,
 							          a.codigo_alternativo,
 							          b.id AS id_subdisciplina,
-							          d.id AS id_subarea
+							          d.id AS id_subarea,
+							          c.id AS id_disciplina,
+							          e.id AS id_area
 							   FROM gdoks_documentos a
 							   INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
 							   INNER JOIN gdoks_disciplinas c ON b.id_disciplina=c.id

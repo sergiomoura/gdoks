@@ -15,7 +15,13 @@
 			id_projeto:0,
 			enviada:2,
 			pagAtual:1
-		}
+		};
+
+		$scope.qEsq = {
+			nome:'',
+			id_area:0,
+			id_disciplina:0
+		};
 
 		// Carregando dados
 		loadClientes();
@@ -139,6 +145,10 @@
 		// Carregando grd
 		$scope.grd = null;
 
+		// Definindo e carregando disciplinas
+		$scope.disciplinas = [];
+		loadDisciplinas();
+
 		// Definindo códigos emis
 		$scope.codigosEmi = [];
 		loadCodigosEmi();
@@ -177,6 +187,7 @@
 		// Define função a ser executada quando o projeto muda
 		$scope.onProjetoChange = function(){
 			loadDocumentosDeProjeto($scope.grd.projeto.id);
+			loadAreasDeProjeto($scope.grd.projeto.id);
 			$scope.grd.alterada = true;
 		}
 
@@ -694,7 +705,6 @@
 			}
 		}
 
-
 		// Função executada quando se clica no burão para visualizar o GRD
 		$scope.onVisualizarGrdClick = function(){
 			GDoksFactory.viewGRD($scope.grd.id);
@@ -1042,6 +1052,9 @@
 									// atribuindo projeto a grd
 									$scope.grd.projeto = $scope.projetos.find(function(a){return a.id==this}, $scope.grd.id_projeto);
 									
+									// Carregando áreas do projeto
+									loadAreasDeProjeto($scope.grd.projeto.id);
+
 									// atribuindo o cliente
 									$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.projeto.id_cliente);
 
@@ -1071,7 +1084,7 @@
 			}
 
 			// Função que carrega documentos de um projeto e põe no scope.
-			// Só funciona direito se cpdogos emi e tipos de documento já tiverem sido carregados
+			// Só funciona direito se códigos emi e tipos de documento já tiverem sido carregados
 			function loadDocumentosDeProjeto(id_projeto){
 				GDoksFactory.getDocumentosDoProjeto(id_projeto)
 				.success(function(response){
@@ -1108,6 +1121,46 @@
 					}
 					$scope.documentos = documentos;
 				})
+			}
+
+			// Função que carrega disciplinas
+			function loadDisciplinas(){
+				GDoksFactory.getDisciplinas()
+				.success(function(response){
+					$scope.disciplinas = response.disciplinas;
+				})
+				.error(function(error){
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Erro ao carregar disciplinas')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Imprimindo erro no console
+					console.warn(error);
+				})
+			}
+
+			// Função que carrega áreas do projeto
+			function loadAreasDeProjeto(id_projeto){
+				GDoksFactory.getAreas(id_projeto)
+				.success(function(response){
+					$scope.areas = response.areas;
+				})
+				.error(function(response){
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha ao tentar carregar áreas do projeto')
+						.position('bottom left')
+						.hideDelay(5000)
+					)
+
+					// Imprimindo erro no console
+					console.warn(error);
+				});
 			}
 
 			function loadObservacoes(){
@@ -1149,7 +1202,6 @@
 					// Imprimindo erro no console
 					console.warn(error);
 				});
-
 			}
 		// FIM DE FUNÇÕES DE CARGA DE DADOS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 	}
