@@ -3896,6 +3896,9 @@
 					// Registrando o checkout
 					$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=NOW() WHERE id=?';
 					$db->query($sql,'ii',$idu,$id_doc);
+
+					// Registrando no log
+					registrarAcao($db,$idu,ACAO_BLOQUEOU_DOCUMENTO,$id_doc);
 				}
 			});
 		// FIM DE ROTAS DE PDAS
