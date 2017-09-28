@@ -17,7 +17,10 @@
 		<md-button 
 			ng-click="validar()"
 			class="md-raised md-primary"
-			aria-label="Validar Progresso">Validar progresso total de {{doc.revisoes[0].progresso_a_validar + doc.revisoes[0].progresso_validado}}%
+			aria-label="Validar Progresso"
+			ng-disabled="!form.$valid"
+			>Validar progresso total de {{doc.revisoes[0].progresso_a_validar + doc.revisoes[0].progresso_validado}}%
 		</md-button>
+
 	</md-dialog-actions>
 </md-dialog>
