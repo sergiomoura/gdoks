@@ -1,8 +1,3 @@
-✔ Marcar a GRD como enviada @done (17-09-27 09:33)
-✔ Fazer com que email enviado não vá para spam @done (17-09-28 08:48)
-✔ Analisar Documento com 200% na JDE @done (17-09-28 09:14)
-✔ Baixar para revisão deve registrar no log @done (17-09-28 09:23)
-✔ Registrar corretamente no log a adiçao de um documento a um projeto @done (17-09-28 10:24)
 ☐ No cadastro da GRD, filtrar documentos por área e disciplina
 ☐ Desenhar e Implementar Dashboard do Projeto
 ☐ Desenhar e Implementar Dashboard Home
@@ -28,12 +23,9 @@ Bloqueio de Telas:
     ☐ Log
     ☐ Configurações
   ☐ Otimizar página de projetos para grande volume de dados
-  ✔ Quebra de linha no PDF para dados longos @done (17-09-28 05:36)
   ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
   ☐ No download Resource interpreted as Document but transferred with MIME type application/zip
 	☐	Melhorar a forma com que os documentos atrasados são destacados
-  ✔  Cadastrar usuário com sigla @done (17-09-28 05:37)
-  ✔  Lista de documento com percentual e datas @done (17-09-28 10:41)
 	☐	Cadastrar documentos lendo lista de CSV
 	☐	Quando for baixar um documento só, baixar sem zipar
 	☐	Número de revisões a serem guardadas é limitado e configurável
@@ -68,6 +60,14 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔  Lista de documento com percentual e datas @done (17-09-28 10:41) @project(Bloqueio de Telas)
+ ✔ Registrar corretamente no log a adiçao de um documento a um projeto @done (17-09-28 10:24)
+ ✔ Baixar para revisão deve registrar no log @done (17-09-28 09:23)
+ ✔ Analisar Documento com 200% na JDE @done (17-09-28 09:14)
+ ✔ Fazer com que email enviado não vá para spam @done (17-09-28 08:48)
+ ✔  Cadastrar usuário com sigla @done (17-09-28 05:37) @project(Bloqueio de Telas)
+ ✔ Quebra de linha no PDF para dados longos @done (17-09-28 05:36) @project(Bloqueio de Telas)
+ ✔ Marcar a GRD como enviada @done (17-09-27 09:33)
  ✔ Registrar no log envio de GRD por email @done (17-09-21 14:22)
  ✔ Registrar no log Validação de Progresso @done (17-09-21 13:28)
  ✔ Fazer com que endereço do cliente apareça na GRD @done (17-09-21 12:41)
