@@ -154,29 +154,29 @@
 		});
 
 		// LOGIN REFRESH ROUTE DEFINITION - - - - - - - - -
-		$app->get('/refresh',function() use ($app,$db,$token){
-			$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
-			if(sizeof($rs) == 0){
-				$app->response->setStatus(401);
-				$response = new response(1,'Não renovou token: '.$token);
-				$response->flush();
-				return;
-			} else {
-				$new_token = uniqid('',true);
-				$id = $rs[0]['id'];
-				try {
-					$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$new_token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$id);
-					$app->response->setStatus(200);
-					$response = new response(0,'ok');
-					$response->token = $new_token;
+			$app->get('/refresh',function() use ($app,$db,$token){
+				$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
+				if(sizeof($rs) == 0){
+					$app->response->setStatus(401);
+					$response = new response(1,'Não renovou token: '.$token);
 					$response->flush();
-				} catch (Exception $e) {
-					$app->response->setStatus(500);
-					$response = new response(1,'Falha na consulta sql:'.$e);
-					$response->flush();
+					return;
+				} else {
+					$new_token = uniqid('',true);
+					$id = $rs[0]['id'];
+					try {
+						$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$new_token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$id);
+						$app->response->setStatus(200);
+						$response = new response(0,'ok');
+						$response->token = $new_token;
+						$response->flush();
+					} catch (Exception $e) {
+						$app->response->setStatus(500);
+						$response = new response(1,'Falha na consulta sql:'.$e);
+						$response->flush();
+					}
 				}
-			}
-		});
+			});
 
 		// DEFINIÇÃO DE MUDA LOGIN/SENHA
 			$app->post('/mudaLoginSenha',function() use ($app,$db,$token){
@@ -228,7 +228,7 @@
 				}
 			});
 		
-		// ROTAS DE USUÁRIOS - - - - - - - - - - - - - - - -
+		// ROTAS DE USUÁRIOS
 			$app->get('/usuarios',function() use ($app,$db,$token){
 				$sql = 'SELECT a.id,
 						       a.login,
@@ -417,7 +417,7 @@
 			});
 		// FIM DE ROTAS DE USUÁRIOS
 		
-		// ROTAS DE DISCIPLINAS - - - - - - - - - - - - - - -
+		// ROTAS DE DISCIPLINAS
 			$app->get('/disciplinas',function() use ($app,$db,$token){
 				// lendo o token
 
@@ -1101,7 +1101,7 @@
 			});
 		// FIM DE ROTAS DE DISCIPLINAS
 		
-		// ROTAS DE PROJETOS - - - - - - - - - - - - - - - - -
+		// ROTAS DE PROJETOS 
 			$app->get('/projetos',function() use ($app,$db,$token){
 				// Lendo o token
 
@@ -3132,7 +3132,7 @@
 				$response->flush();
 				return;
 			});
-		// FIM DE ROTAS DE DOCUMENTOS */
+		// FIM DE ROTAS DE DOCUMENTOS
 
 		// ROTAS DE ARQUIVOS
 			$app->get('/arquivos/:id',function($id) use ($app,$db,$token){
