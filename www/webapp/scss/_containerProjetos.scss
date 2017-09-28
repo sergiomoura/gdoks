@@ -4,18 +4,26 @@
 		margin-top: 50px;
 	}
 
-	.lista{
-		.projeto{
-			display: inline-block;
-			width: calc(33% - 50px);
-			margin-bottom: 20px;
-			margin-right: 20px;
-			padding: 20px;
-			text-decoration: none;
+	table{
+		border-collapse: collapse;
+		td {
+			padding: 5px 20px;
+		}
+		thead{
+			td{
+				color:$azul;
+				font-size: 14px;
+			}	
 		}
 
-		.projeto:nth-child(3n){
-			margin-right: 0px;
+		tbody{
+			td{
+				border-top: 1px solid #CCC;
+			}
+			tr:hover>td{
+				background-color: #FFF;
+				cursor: default;
+			}
 		}
 	}
 }

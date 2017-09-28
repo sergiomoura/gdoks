@@ -91,6 +91,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/projetos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getProjetosDetalhados = function(){
+				return $http.get(API_ROOT+'/projetos/detalhados',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjeto = function(id){
 				return $http.get(API_ROOT+'/projetos/'+id,buildHeaders());
 			}

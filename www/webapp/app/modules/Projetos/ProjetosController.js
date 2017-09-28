@@ -5,16 +5,38 @@ angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 function ProjetosController($scope,GDoksFactory,$location){
 	// levantando projetos na base de dados local
 	$scope.projetos = [];
-	indexedDB.open('gdoks').onsuccess = function(evt){
-		evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
-			$scope.$apply(function(){$scope.projetos = evt.target.result});
-		}
-	}
+	
+	$scope.getProjetos = function(){
+		GDoksFactory.getProjetosDetalhados()
+		.success(function(response){
+			$scope.projetos = response.projetos;
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Não foi possível carregar os projetos do servidor.')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
 
-	// função que leva para a tela de adicionar disciplina
+			// Imprimindo erro no console
+			console.log(error);
+		})
+	}	
+
+	// função que leva para a tela de adicionar projeto
 	$scope.goToAddProjeto = function(){
 		$location.url('/projetos/0');
 	}
+
+
+	$scope.editProjeto = function(id){
+		$location.url('/projetos/'+id);
+	}
+
+	// Listando carregando os projetos
+	$scope.getProjetos(1);
 }
 
 

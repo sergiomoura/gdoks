@@ -41,12 +41,33 @@
 			<input ng-minlength="4" type="text" ng-model="q.nome" placeholder="Digite">
 		</md-input-container>
 	</div>
-	
-	<div class="lista">
-		<span ng-if="projetos.length == 0">Não existe nenhum projeto cadastrado.</span>
-		<a ng-repeat="p in projetos|filter:q|orderBy:'nome'" <?=$opcoes['AcessarPrj']?'href="#/projetos/{{p.id}}"':''?>" class="bloco_conteudo projeto" md-whiteframe="1dp" >
-			<h2>{{p.nome}}</h2>
-			<h3>{{p.codigo}}</h3>
-		</a>
-	</div>
+	<table>
+		<thead>
+			<tr>
+				<td>Código</td>
+				<td>Nome</td>
+				<td>Cliente</td>
+				<td>Progresso</td>
+				<td>Ações</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="p in projetos|filter:q|orderBy:'nome'">
+				<td>{{p.codigo}}</td>
+				<td>{{p.nome}}</td>
+				<td>{{p.nome_cliente}}</td>
+				<td>{{p.progresso_total}} %</td>
+				<td>
+					<?php if($opcoes['AcessarPrj']): ?>
+					<md-button
+						class="md-raised md-fab md-mini md-primary"
+						ng-click="editProjeto(p.id)"
+						aria-label="Abrir Projeto">
+							<md-icon class="material-icons step">mode_edit</md-icon>
+					</md-button>
+					<?php endif; ?>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>

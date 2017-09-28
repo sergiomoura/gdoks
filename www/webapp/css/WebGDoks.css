@@ -1071,15 +1071,18 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 
 #projetos_container md-input-container {
   margin-top: 50px; }
-#projetos_container .lista .projeto {
-  display: inline-block;
-  width: calc(33% - 50px);
-  margin-bottom: 20px;
-  margin-right: 20px;
-  padding: 20px;
-  text-decoration: none; }
-#projetos_container .lista .projeto:nth-child(3n) {
-  margin-right: 0px; }
+#projetos_container table {
+  border-collapse: collapse; }
+  #projetos_container table td {
+    padding: 5px 20px; }
+  #projetos_container table thead td {
+    color: #2196F3;
+    font-size: 14px; }
+  #projetos_container table tbody td {
+    border-top: 1px solid #CCC; }
+  #projetos_container table tbody tr:hover > td {
+    background-color: #FFF;
+    cursor: default; }
 
 #senha_container {
   padding: 20px; }

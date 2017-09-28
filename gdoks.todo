@@ -1,23 +1,18 @@
-✔ Quebrar nomes longos na GRD @done (17-09-20 17:01)
-✔ Mostrar código do documento no resultado da busca por documento @done (17-09-21 04:46)
-✔ Mostrar código do documento na tela do documento @done (17-09-21 04:53)
-✔ Cadastrar endereço do cliente @done (17-09-21 11:19)
-✔ Fazer com que endereço do cliente apareça na GRD @done (17-09-21 12:41)
-✔ Registrar no log Validação de Progresso @done (17-09-21 13:28)
-☐ Registrar no log envio de GRD por email
+✔ Marcar a GRD como enviada @done (17-09-27 09:33)
+☐ DASHBOARD DO PROJETO
 ☐ Dar o documento como concluído
 ☐ Alterar cadastro do cliente (info de ftp) deve salvar na base local
 ☐ Cadastrar logo do cliente
 ☐ Fazer logo de cliente aparecer na GRD da faraday
 ☐ Notificar o usuário na tela de documeto quado este fordema disciplna sem validador ou especialista
 ☐ Alertar usuário quando remover documento que todos os arquivos serão excluídos
-☐ Marcar a GRD como enviada
 ☐ Analisar Documento com 200% na JDE
 ☐ Sequência das revisões deve ser configurável
 ☐ No cadastro da GRD, filtrar documentos por área e disciplina
 ☐ No cadastro do projeto, marcar se documentos estão disponíveis para GRD quando autorizada pelo validador ou somente quando estiver 100%
 ☐ Consertar busca de documento com progresso a validar:  Failed to create statement: Unknown column 'id_progresso_a_validar' in 'where clause'
 ☐ Registrar corretamente no log a adi~çao de um documento a um projeto
+☐ Página de Busca de documentos retornar a páginação pág 1 antes da busca...(busque tudo, vá para página 4, altere parâmetros e busque restrito)
 Bloqueio de Telas:
     ☐ usuários
     ☐ documentos
@@ -72,6 +67,13 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Registrar no log envio de GRD por email @done (17-09-21 14:22)
+ ✔ Registrar no log Validação de Progresso @done (17-09-21 13:28)
+ ✔ Fazer com que endereço do cliente apareça na GRD @done (17-09-21 12:41)
+ ✔ Cadastrar endereço do cliente @done (17-09-21 11:19)
+ ✔ Mostrar código do documento na tela do documento @done (17-09-21 04:53)
+ ✔ Mostrar código do documento no resultado da busca por documento @done (17-09-21 04:46)
+ ✔ Quebrar nomes longos na GRD @done (17-09-20 17:01)
  ✔ Registrar observações sobre um ou mais arquivos que foi enviado ao cliente (Foto?) @done (17-09-19 13:55) @project(GDoks)
  ✔ Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado documento @done (17-09-19 13:55) @project(GDoks)
  ✔ Registrar Retorno de GRD @done (17-08-14 14:29) @project(GDoks)

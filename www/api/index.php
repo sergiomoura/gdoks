@@ -1120,6 +1120,47 @@
 				$response->flush();
 			});
 
+			$app->get('/projetos/detalhados',function() use ($app,$db,$token){
+
+				// Levantando os projetos que este usuário possui pemissão
+				$sql = 'SELECT
+							A.*,
+							B.progresso_total
+						FROM
+						  (SELECT a.id,
+						          a.codigo,
+						          a.nome,
+						          count(d.id) AS n_docs,
+						          e.id AS id_cliente,
+						          e.nome_fantasia AS nome_cliente
+						   FROM gdoks_projetos a
+						   INNER JOIN gdoks_areas b ON a.id=b.id_projeto
+						   INNER JOIN gdoks_subareas c ON b.id=c.id_area
+						   INNER JOIN gdoks_documentos d ON c.id=d.id_subarea
+						   INNER JOIN gdoks_clientes e ON a.id_cliente=e.id
+						   INNER JOIN gdoks_usuarios u ON a.id_empresa=u.id_empresa
+						   WHERE u.token=?
+						   GROUP BY a.id,
+						            a.codigo,
+						            a.nome) A
+						LEFT JOIN
+						  (SELECT id_projeto,
+						          ROUND(sum_progressos/n_docs) AS progresso_total
+						   FROM
+						     (SELECT c.id_projeto,
+						             count(a.id) AS n_docs,
+						             sum(d.progresso_validado) AS sum_progressos
+						      FROM gdoks_documentos a
+						      INNER JOIN gdoks_subareas b ON b.id=a.id_subarea
+						      INNER JOIN gdoks_areas c ON c.id=b.id_area
+						      INNER JOIN gdoks_revisoes d ON a.id=d.id_documento
+						      GROUP BY id_projeto) Y) B ON A.id=B.id_projeto';
+
+				$response = new response(0,'ok');
+				$response->projetos = $db->query($sql,'s',$token);
+				$response->flush();
+			});
+
 			$app->get('/projetos/:id',function($id) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
 				$id_projeto = 1*$id;
