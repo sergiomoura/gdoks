@@ -5,6 +5,9 @@ angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 function ProjetosController($scope,GDoksFactory,$location){
 	// levantando projetos na base de dados local
 	$scope.projetos = [];
+
+	// definindo critério padrão de ordem
+	$scope.o = 'nome';
 	
 	$scope.getProjetos = function(){
 		GDoksFactory.getProjetosDetalhados()
@@ -30,9 +33,18 @@ function ProjetosController($scope,GDoksFactory,$location){
 		$location.url('/projetos/0');
 	}
 
-
+	// Função que leva a tela de edição de projeto
 	$scope.editProjeto = function(id){
 		$location.url('/projetos/'+id);
+	}
+
+	// Função que altera a ordem de exibição dos projetos
+	$scope.setOrderBy = function(ordem){
+		if($scope.o == ordem){
+			$scope.o = '-' + ordem;
+		} else {
+			$scope.o = ordem;
+		}
 	}
 
 	// Listando carregando os projetos

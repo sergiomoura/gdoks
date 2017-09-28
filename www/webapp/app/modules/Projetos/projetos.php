@@ -44,15 +44,33 @@
 	<table>
 		<thead>
 			<tr>
-				<td>Código</td>
-				<td>Nome</td>
-				<td>Cliente</td>
-				<td>Progresso</td>
-				<td>Ações</td>
+				<td ng-click="setOrderBy('codigo')">
+					Código
+					<md-icon ng-if="o=='-codigo'" class="material-icons step md-primary">keyboard_arrow_down</md-icon>
+					<md-icon ng-if="o=='codigo'" class="material-icons step md-primary">keyboard_arrow_up</md-icon>
+				</td>
+				<td ng-click="setOrderBy('nome')">
+					Nome
+					<md-icon ng-if="o=='-nome'" class="material-icons step md-primary">keyboard_arrow_down</md-icon>
+					<md-icon ng-if="o=='nome'" class="material-icons step md-primary">keyboard_arrow_up</md-icon>
+				</td>
+				<td ng-click="setOrderBy('nome_cliente')">
+					Cliente
+					<md-icon ng-if="o=='-nome_cliente'" class="material-icons step md-primary">keyboard_arrow_down</md-icon>
+					<md-icon ng-if="o=='nome_cliente'" class="material-icons step md-primary">keyboard_arrow_up</md-icon>
+				</td>
+				<td ng-click="setOrderBy('progresso')">
+					Progresso
+					<md-icon ng-if="o=='-progresso'" class="material-icons step md-primary">keyboard_arrow_down</md-icon>
+					<md-icon ng-if="o=='progresso'" class="material-icons step md-primary">keyboard_arrow_up</md-icon>
+				</td>
+				<td>
+					Ações
+				</td>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="p in projetos|filter:q|orderBy:'nome'">
+			<tr ng-repeat="p in projetos|filter:q|orderBy:o">
 				<td>{{p.codigo}}</td>
 				<td>{{p.nome}}</td>
 				<td>{{p.nome_cliente}}</td>
