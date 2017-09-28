@@ -70,7 +70,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="p in projetos|filter:q|orderBy:o">
+			<tr ng-repeat="p in projetos|filter:q|orderBy:o" ng-click="gotoProjeto(p.id)">
 				<td>{{p.codigo}}</td>
 				<td>{{p.nome}}</td>
 				<td>{{p.nome_cliente}}</td>
@@ -79,7 +79,7 @@
 					<?php if($opcoes['AcessarPrj']): ?>
 					<md-button
 						class="md-raised md-fab md-mini md-primary"
-						ng-click="editProjeto(p.id)"
+						ng-click="editProjeto(p.id,$event)"
 						aria-label="Abrir Projeto">
 							<md-icon class="material-icons step">mode_edit</md-icon>
 					</md-button>

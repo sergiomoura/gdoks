@@ -1087,11 +1087,14 @@ md-expansion-panel-expanded .md-expansion-panel-item {
       top: 3px; }
   #projetos_container table thead td:focus {
     outline: none; }
-  #projetos_container table tbody td {
-    border-top: 1px solid #CCC; }
-  #projetos_container table tbody tr:hover > td {
-    background-color: #FFF;
-    cursor: default; }
+  #projetos_container table tbody tr {
+    cursor: pointer; }
+    #projetos_container table tbody tr td {
+      border-top: 1px solid #CCC; }
+    #projetos_container table tbody tr:hover > td {
+      background-color: #FFF; }
+    #projetos_container table tbody tr:focus {
+      outline: none; }
 
 #senha_container {
   padding: 20px; }

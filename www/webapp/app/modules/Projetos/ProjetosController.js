@@ -1,6 +1,7 @@
 angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 .controller('ProjetosController',ProjetosController)
 .controller('ProjetoController',ProjetoController)
+.controller('DashProjetoController',DashProjetoController)
 
 function ProjetosController($scope,GDoksFactory,$location){
 	// levantando projetos na base de dados local
@@ -34,8 +35,14 @@ function ProjetosController($scope,GDoksFactory,$location){
 	}
 
 	// Função que leva a tela de edição de projeto
-	$scope.editProjeto = function(id){
+	$scope.editProjeto = function(id,evt){
+		evt.stopPropagation();
 		$location.url('/projetos/'+id);
+	}
+
+	// Função que leva a dashboard do projeto
+	$scope.gotoProjeto = function(id){
+		$location.url('/projetos/'+id+'/dashboard');
 	}
 
 	// Função que altera a ordem de exibição dos projetos
@@ -348,5 +355,8 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 			);
 		}
 	}
-
 };
+
+function DashProjetoController($scope){
+	$scope.teste = 'em desenvolvimento';
+}

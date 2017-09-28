@@ -29,12 +29,17 @@
 		}
 
 		tbody{
-			td{
-				border-top: 1px solid #CCC;
-			}
-			tr:hover>td{
-				background-color: #FFF;
-				cursor: default;
+			tr{
+				cursor:pointer;
+				td {
+					border-top: 1px solid #CCC;
+				}
+				&:hover>td {
+					background-color: #FFF;
+				}
+				&:focus{
+					outline:none;
+				}
 			}
 		}
 	}

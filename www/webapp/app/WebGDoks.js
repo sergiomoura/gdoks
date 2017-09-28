@@ -59,6 +59,13 @@ WebGDoks.config(
 			}
 		)
 		.when(
+			'/projetos/:id/dashboard',
+			{
+				controller: 'DashProjetoController',
+				templateUrl: 'app/modules/Projetos/dash_projeto.html'
+			}
+		)
+		.when(
 			'/usuarios',
 			{
 				controller: 'UsuariosController',
