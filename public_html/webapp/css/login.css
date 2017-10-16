@@ -1,0 +1,32 @@
+.container {
+  width: 440px;
+  position: relative;
+  left: 50%;
+  margin-left: -220px;
+  top: 50px;
+  font-size: 20px; }
+  .container md-progress-linear {
+    position: absolute;
+    top: 124px;
+    width: calc(100% + 1px); }
+  .container .login {
+    background-color: #FFF;
+    padding: 40px 20px 20px 20px;
+    margin-top: 5px; }
+    .container .login div {
+      margin-bottom: 10px; }
+    .container .login button[type=submit] {
+      display: none; }
+  .container img {
+    height: 113px;
+    width: 420px;
+    margin: 0 0 0px 15px; }
+  .container input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: #CCC !important; }
+  .container .loginFail {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 16px; }
+
+/*# sourceMappingURL=login.css.map */

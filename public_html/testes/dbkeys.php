@@ -1,0 +1,10 @@
+<?php 
+	echo('<pre>');
+	echo(getenv('OPENSHIFT_MYSQL_DB_HOST')."\n");
+	echo(getenv('OPENSHIFT_MYSQL_DB_USERNAME')."\n");
+	echo(getenv('OPENSHIFT_MYSQL_DB_PASSWORD')."\n");
+	echo(getenv('OPENSHIFT_APP_NAME')."\n");
+	echo(getenv('OPENSHIFT_MYSQL_DB_PORT')."\n");
+	echo('fim');
+	echo('</pre>');
+?>
