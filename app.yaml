@@ -3,7 +3,10 @@ runtime: php
 runtime_config:
   document_root: ./www
 
+beta_settings:
+    cloud_sql_instances: 'projeto-gdoks:southamerica-east1:mysql-gdoks'
+
 env_variables:
-  MYSQL_DSN: mysql:unix_socket=/cloudsql/projeto-gdoks:southamerica-east1:mysql-gdoks;dbname=gdoks_001
+  MYSQL_DSN: 'mysql:dbname=gdoks_001;unix_socket=/cloudsql/projeto-gdoks:southamerica-east1:mysql-gdoks'
   MYSQL_USER: root
-  MYSQL_PASSWORD: k128#_gdoks
+  MYSQL_PASSWORD: 'k128#_gdoks'
