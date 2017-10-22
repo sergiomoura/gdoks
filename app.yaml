@@ -2,3 +2,8 @@ env: flex
 runtime: php
 runtime_config:
   document_root: ./www
+
+env_variables:
+  MYSQL_DSN: mysql:unix_socket=/cloudsql/projeto-gdoks:southamerica-east1:mysql-gdoks;dbname=gdoks_001
+  MYSQL_USER: root
+  MYSQL_PASSWORD: k128#_gdoks
