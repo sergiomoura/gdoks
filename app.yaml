@@ -6,7 +6,6 @@ runtime_config:
 beta_settings:
     cloud_sql_instances: 'projeto-gdoks:southamerica-east1:mysql-gdoks'
 
-env_variables:
-  MYSQL_DSN: 'mysql:dbname=gdoks_001;unix_socket=/cloudsql/projeto-gdoks:southamerica-east1:mysql-gdoks'
-  MYSQL_USER: root
-  MYSQL_PASSWORD: 'k128#_gdoks'
+handlers:
+- url: ./api/*
+  script: index.php

@@ -1,5 +1,7 @@
 <?php
 	
+	die('tentou executar a api!');
+
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 	ini_set('display_errors', 1);
