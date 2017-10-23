@@ -5,7 +5,7 @@
 			$this->set_charset("utf8");
 		}
 
-		public function query($sql){
+		public function query($sql,$resultmode=null){
 			// verificando número de parametros
 			$n_args = func_num_args();
 			if($n_args == 2 || $n_args == 0){
