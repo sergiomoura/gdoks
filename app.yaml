@@ -9,3 +9,6 @@ beta_settings:
 handlers:
 - url: /api/.*
   script: api/index.php
+
+error_handlers:
+  - file: ./www/default_error.html
