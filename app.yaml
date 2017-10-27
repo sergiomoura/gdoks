@@ -6,9 +6,6 @@ runtime_config:
 beta_settings:
     cloud_sql_instances: 'projeto-gdoks:southamerica-east1:mysql-gdoks'
 
-handlers:
-- url: /api/.*
-  script: api/index.php
-
-error_handlers:
-  - file: ./www/default_error.html
+#handlers:
+#- url: /api/.*
+#  script: api/index.php
