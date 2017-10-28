@@ -1,9 +1,4 @@
 <?php
-	echo('<pre>');
-	print_r($_COOKIE);
-	echo('</pre>');
-	die("webgdoks.php");
-
 	// Incluindo bloqueador de acesso externo a página.
 	require('../../includes/blocker.php');
 
