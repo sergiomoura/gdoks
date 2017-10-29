@@ -7,5 +7,8 @@ beta_settings:
   cloud_sql_instances: 'projeto-gdoks:southamerica-east1:mysql-gdoks'
 
 handlers:
-- url: /api
-  script: www/api/index.php
+- url: /.*
+  script: www/404.php
+
+#- url: /api
+#  script: www/api/index.php
