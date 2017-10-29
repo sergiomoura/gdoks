@@ -1,7 +1,7 @@
 env: flex
 runtime: php
-#runtime_config:
-#  document_root: ./www
+runtime_config:
+  document_root: ./
 
 beta_settings:
   cloud_sql_instances: 'projeto-gdoks:southamerica-east1:mysql-gdoks'
