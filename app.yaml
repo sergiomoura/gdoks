@@ -8,7 +8,7 @@ beta_settings:
 
 handlers:
 - url: /.*
-  script: www/404.php
+  script: 404.php
 
 #- url: /api
 #  script: www/api/index.php
