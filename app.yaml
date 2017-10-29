@@ -4,8 +4,8 @@ runtime_config:
   document_root: ./www
 
 beta_settings:
-    cloud_sql_instances: 'projeto-gdoks:southamerica-east1:mysql-gdoks'
+  cloud_sql_instances: 'projeto-gdoks:southamerica-east1:mysql-gdoks'
 
-#handlers:
-#- url: /api/.*
-#  script: api/index.php
+handlers:
+- url: /api
+  script: www/api/index.php
