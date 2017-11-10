@@ -5,7 +5,7 @@ FROM nginx
 # Copy the nginx configuration file. This sets up the behavior of nginx, most
 # importantly, it ensure nginx listens on port 8080. Google App Engine expects
 # the runtime to respond to HTTP requests at port 8080.
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx/nginx.conf /etc/nginx/nginx.conf
 
 # create log dir configured in nginx.conf
 RUN mkdir -p /var/log/app_engine
@@ -72,11 +72,12 @@ RUN mkdir -p /etc/cloudsql/
 # Copiando arquivo de configuração co cloud sql proxy
 COPY cloudsql-service/etc/cloudsql/cloudsql.conf /etc/cloudsql/cloudsql.conf
 
-# Criando pasta que vai conter o socket
+# Criando pastas que vão conter o socket
 RUN mkdir /cloudsql_socket && chmod 777 /cloudsql_socket
+RUN mkdir /localsql_socket && chmod 777 /localsql_socket
 
 # Atualizando não sei o que
 RUN update-rc.d cloudsql defaults
 
 #Iniciando o serviços php, nginx
-CMD service cloudsql start && service php7.0-fpm start && nginx -g "daemon off;" 
+CMD service cloudsql start && service php7.0-fpm start && nginx -g "daemon off;"
