@@ -2,13 +2,13 @@
 	
 	$dbkey = new stdClass();
 
-	if($_SERVER['SERVER_NAME'] == 'localhost'){
-		$dbkey->DB_HOST = "localhost";
+	if(substr($_SERVER['HTTP_HOST'],0,9) == 'localhost'){
+		$dbkey->DB_HOST = null;
 		$dbkey->DB_USER = "root";
 		$dbkey->DB_PASS = "vaiplaneta";
 		$dbkey->DB_BASE = "gdoks_001";
-		$dbkey->DB_PORT = 3306;
-		$dbkey->DB_SOCKET = null;
+		$dbkey->DB_PORT = null;
+		$dbkey->DB_SOCKET = '/localsql_socket/mysqld.sock';
 		$dbkey->ID_EMPRESA = 1;
 	} else {
 		$dbkey->DB_HOST = null;
