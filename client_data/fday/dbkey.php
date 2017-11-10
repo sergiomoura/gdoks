@@ -16,7 +16,7 @@
 		$dbkey->DB_PASS = 'k128#_gdoks';
 		$dbkey->DB_BASE = 'gdoks_001';
 		$dbkey->DB_PORT = null;
-		$dbkey->DB_SOCKET = '/cloudsql/projeto-gdoks:southamerica-east1:mysql-gdoks';
+		$dbkey->DB_SOCKET = '/cloudsql_socket/projeto-gdoks:southamerica-east1:mysql-gdoks';
 		$dbkey->ID_EMPRESA = 1;
 	}
 	
