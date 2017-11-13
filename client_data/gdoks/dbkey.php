@@ -2,7 +2,7 @@
 	
 	$dbkey = new stdClass();
 
-	if($_SERVER['SERVER_NAME'] == 'localhost'){
+	if(substr($_SERVER['HTTP_HOST'],0,9) == 'localhost'){
 		$dbkey->DB_HOST = null;
 		$dbkey->DB_USER = "root";
 		$dbkey->DB_PASS = "vaiplaneta";
