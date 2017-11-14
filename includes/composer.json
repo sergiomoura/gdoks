@@ -11,6 +11,14 @@
         "php": ">=7.0",
         "sendgrid/sendgrid": "2.2.1",
         "google/cloud": "^0.43.0",
-        "google/appengine-php-sdk": "^1.9"
+        "google/appengine-php-sdk": "^1.9",
+        "aws/aws-sdk-php": "^3.38",
+        "graylog2/gelf-php": "^1.5",
+        "ircmaxell/random-lib": "^1.2",
+        "php-console/php-console": "^3.1",
+        "phpseclib/phpseclib": "^2.0",
+        "ramsey/uuid-doctrine": "^1.4",
+        "ruflin/elastica": "^5.3",
+        "swiftmailer/swiftmailer": "^6.0"
     }
 }
