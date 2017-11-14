@@ -1,6 +1,6 @@
 {
     "name": "GDoks",
-    "description": "Gestor de documentos WEB",
+    "description": "Gestor Eletrônico de Documentos WEB",
     "authors": [
         {
             "name": "Sérgio Moura",
@@ -9,6 +9,8 @@
     ],
     "require": {
         "php": ">=7.0",
-        "sendgrid/sendgrid": "2.2.1"
+        "sendgrid/sendgrid": "2.2.1",
+        "google/appengine-php-sdk": ">=1.9.30"
+
     }
 }

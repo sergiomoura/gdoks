@@ -6,6 +6,10 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit5e7f24154bf0f9e9c22fca889a94233a
 {
+    public static $files = array (
+        '6168a046c8c04f3c376e38a1d1912448' => __DIR__ . '/..' . '/google/appengine-php-sdk/google/appengine/runtime/autoloader.php',
+    );
+
     public static $prefixesPsr0 = array (
         'S' => 
         array (
