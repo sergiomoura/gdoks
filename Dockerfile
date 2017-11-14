@@ -54,8 +54,8 @@ RUN apt-get autoremove -y && \
 COPY conf/php.ini /etc/php/7.0/fpm/php.ini
 
 # Criando o arquivo de credenciais
-RUN mkdir -p /root/.credentials
-COPY conf/gdoks-6e1a2cd4a4e4.json /root/.credentials/credentials.json
+RUN mkdir /credentials && chmod +x /credentials
+COPY conf/gdoks-6e1a2cd4a4e4.json /credentials/credentials.json
 
 #Instalando wget e o google sql cloud proxy
 RUN apt-get install -y wget
