@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'Smtpapi' => array($vendorDir . '/sendgrid/smtpapi/lib'),
     'SendGrid' => array($vendorDir . '/sendgrid/sendgrid/lib'),
+    'Rize\\UriTemplate' => array($vendorDir . '/rize/uri-template/src'),
 );
