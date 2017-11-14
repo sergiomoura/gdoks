@@ -8,12 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     'Smtpapi' => array($vendorDir . '/sendgrid/smtpapi/lib'),
     'SendGrid' => array($vendorDir . '/sendgrid/sendgrid/lib'),
-    'SecurityLib' => array($vendorDir . '/ircmaxell/security-lib/lib'),
-    'Rize\\UriTemplate' => array($vendorDir . '/rize/uri-template/src'),
-    'RandomLib' => array($vendorDir . '/ircmaxell/random-lib/lib'),
-    'PhpConsole' => array($vendorDir . '/php-console/php-console/src'),
-    'Doctrine\\ORM\\' => array($vendorDir . '/doctrine/orm/lib'),
-    'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/lib'),
-    'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
-    'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
 );

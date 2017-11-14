@@ -43,7 +43,8 @@ RUN	apt-get update && \
 	    php7.0-cli \
 	    php7.0-json \
 	    php7.0-mbstring \
-	    php7.0-zip
+	    php7.0-zip \
+	    php7.0-bcmath
 
 # Cleanup
 RUN apt-get autoremove -y && \
