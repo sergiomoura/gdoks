@@ -1,8 +1,9 @@
 <?php
-	
+	include_once('GDoks/GDoks.php');
 	$dbkey = new stdClass();
 
-	if(substr($_SERVER['HTTP_HOST'],0,9) == 'localhost'){
+
+	if(GDoks::server() == GDoks::SERVER_LOCAL){
 		$dbkey->DB_HOST = null;
 		$dbkey->DB_USER = "root";
 		$dbkey->DB_PASS = "vaiplaneta";
@@ -19,5 +20,4 @@
 		$dbkey->DB_SOCKET = '/cloudsql_socket/projeto-gdoks:southamerica-east1:mysql-gdoks';
 		$dbkey->ID_EMPRESA = 1;
 	}
-	
 ?>
