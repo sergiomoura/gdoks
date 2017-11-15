@@ -9,7 +9,6 @@
     ],
     "require": {
         "php": ">=7.0",
-        "sendgrid/sendgrid": "2.2.1",
-        "google/appengine-php-sdk": "^1.9"
+        "sendgrid/sendgrid": "2.2.1"
     }
 }

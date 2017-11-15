@@ -4,49 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "899692b8b36fe14c0378c4e4c0d941dc",
+    "content-hash": "fb0507fbe8585cb719acf8e4564a0346",
     "packages": [
-        {
-            "name": "google/appengine-php-sdk",
-            "version": "1.9.30",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/GoogleCloudPlatform/appengine-php-sdk.git",
-                "reference": "6bdf4bcb638782526a6969aa36528ac583cbc3da"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/GoogleCloudPlatform/appengine-php-sdk/zipball/6bdf4bcb638782526a6969aa36528ac583cbc3da",
-                "reference": "6bdf4bcb638782526a6969aa36528ac583cbc3da",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mikey179/vfsstream": "~1",
-                "phpunit/phpunit": "4.6.*",
-                "satooshi/php-coveralls": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "google/appengine/runtime/autoloader.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "Google App Engine PHP SDK",
-            "homepage": "https://cloud.google.com/appengine/docs/php/",
-            "keywords": [
-                "appengine",
-                "google",
-                "sdk"
-            ],
-            "time": "2015-12-08T07:29:30+00:00"
-        },
         {
             "name": "sendgrid/sendgrid",
             "version": "2.2.1",
