@@ -9,12 +9,13 @@
 	<?php
 		
 		include('vendor/autoload.php');
-		
 		use google\appengine\api\cloud_storage\CloudStorageTools;
+		//echo(CloudStorageTools::getPublicUrl('gs://gdoks-bucket/uploads/GDoks.mwb', true));
 		
-		$options = ['gs_bucket_name' => 'projeto-gdoks.appspot.com'];
-		$upload_url = CloudStorageTools::createUploadUrl('/upload/handler', $options);
 		
+		$options = ['gs_bucket_name' => 'gdoks-bucket'];
+		$upload_url = CloudStorageTools::createUploadUrl('/index.php', $options);
+		die($upload_url);
 
 
 		/*
