@@ -3,6 +3,6 @@
 	if(GDoks::server() == GDoks::SERVER_LOCAL){
 		header("Location: /webapp/login.php");
 	} else {
-		header("Location: https://www.gdoks.com.br/webapp/login.php");
+		header("Location: http://gdoks.provisorio.ws/webapp/login.php");
 	}
  ?>
