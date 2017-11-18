@@ -1,90 +1,92 @@
 [
     {
-        "name": "sendgrid/smtpapi",
-        "version": "0.6.1",
-        "version_normalized": "0.6.1.0",
+        "name": "sendgrid/php-http-client",
+        "version": "3.8.0",
+        "version_normalized": "3.8.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/sendgrid/smtpapi-php.git",
-            "reference": "1c835388c11dc5e792260ae3e9662d6a661ace30"
+            "url": "https://github.com/sendgrid/php-http-client.git",
+            "reference": "929018c62b7fcd99b3b356216ae75fff4d47b5a1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sendgrid/smtpapi-php/zipball/1c835388c11dc5e792260ae3e9662d6a661ace30",
-            "reference": "1c835388c11dc5e792260ae3e9662d6a661ace30",
+            "url": "https://api.github.com/repos/sendgrid/php-http-client/zipball/929018c62b7fcd99b3b356216ae75fff4d47b5a1",
+            "reference": "929018c62b7fcd99b3b356216ae75fff4d47b5a1",
             "shasum": ""
         },
         "require": {
             "php": ">=5.6"
         },
-        "replace": {
-            "sendgrid/smtpapi-php": "*"
-        },
         "require-dev": {
-            "phpunit/phpunit": "3.7.*"
+            "phpunit/phpunit": "~4.4",
+            "squizlabs/php_codesniffer": "~2.0"
         },
-        "suggest": {
-            "swiftmailer/swiftmailer": "^5.4 - Needed to run the example scripts"
-        },
-        "time": "2017-07-06T22:11:41+00:00",
+        "time": "2017-09-13T16:52:38+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
-            "psr-0": {
-                "Smtpapi": "lib/"
+            "psr-4": {
+                "SendGrid\\": "lib/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
-        "description": "Build SendGrid X-SMTPAPI headers in PHP.",
-        "homepage": "http://github.com/sendgrid/smtpapi-php",
+        "authors": [
+            {
+                "name": "Matt Bernier",
+                "email": "dx@sendgrid.com"
+            },
+            {
+                "name": "Elmer Thomas",
+                "email": "elmer@thinkingserious.com"
+            }
+        ],
+        "description": "HTTP REST client, simplified for PHP",
+        "homepage": "http://github.com/sendgrid/php-http-client",
         "keywords": [
-            "X-SMTP",
             "api",
-            "email",
-            "grid",
-            "send",
-            "sendgrid",
-            "smtp",
-            "smtpapi",
-            "xsmtp"
+            "fluent",
+            "http",
+            "rest",
+            "sendgrid"
         ]
     },
     {
         "name": "sendgrid/sendgrid",
-        "version": "2.2.1",
-        "version_normalized": "2.2.1.0",
+        "version": "6.0.0",
+        "version_normalized": "6.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sendgrid/sendgrid-php.git",
-            "reference": "83cec4aa7a86064c8ea30cc7180b1b558b0ac7e9"
+            "reference": "8db454e4b5674b545c207a162b64202b0d63259b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/83cec4aa7a86064c8ea30cc7180b1b558b0ac7e9",
-            "reference": "83cec4aa7a86064c8ea30cc7180b1b558b0ac7e9",
+            "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/8db454e4b5674b545c207a162b64202b0d63259b",
+            "reference": "8db454e4b5674b545c207a162b64202b0d63259b",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3",
-            "sendgrid/smtpapi": "0.*"
+            "php": ">=5.6",
+            "sendgrid/php-http-client": "~3.7"
         },
         "replace": {
             "sendgrid/sendgrid-php": "*"
         },
         "require-dev": {
-            "phpunit/phpunit": "3.7.*",
-            "vlucas/phpdotenv": "1.0.2"
+            "phpunit/phpunit": "4.*",
+            "squizlabs/php_codesniffer": "2.*"
         },
-        "time": "2015-01-29T22:34:03+00:00",
+        "time": "2017-07-01T04:30:16+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
-            "psr-0": {
-                "SendGrid": "lib/"
-            }
+            "files": [
+                "lib/SendGrid.php",
+                "lib/helpers/mail/Mail.php"
+            ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [

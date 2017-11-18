@@ -1,8 +1,8 @@
 ☐ No cadastro da GRD, filtrar documentos por área e disciplina
 ☐ Desenhar e Implementar Dashboard do Projeto
 ☐ Desenhar e Implementar Dashboard Home
-  - nº de documentos em revisão
-  - produtividade dos especialistas
+	- nº de documentos em revisão
+	- produtividade dos especialistas
 ☐ Notificar o usuário na tela de documeto quado este for de uma disciplna sem validador ou especialista
 ☐ no cadastro de um documento no projeto, habilitar aba documento somente depois de subarea cadastrada
 ☐ Dar o documento como concluído
@@ -14,49 +14,49 @@
 ☐ Consertar busca de documento com progresso a validar:  Failed to create statement: Unknown column 'id_progresso_a_validar' in 'where clause'
 ☐ Página de Busca de documentos retornar a páginação pág 1 antes da busca...(busque tudo, vá para página 4, altere parâmetros e busque restrito)
 Bloqueio de Telas:
-    ☐ usuários
-    ☐ documentos
-    ☐ GRDs
-    ☐ Disciplinas
-    ☐ Clientes
-    ☐ Cargos
-    ☐ Log
-    ☐ Configurações
-  ☐ Otimizar página de projetos para grande volume de dados
-  ☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
-  ☐ No download Resource interpreted as Document but transferred with MIME type application/zip
+		☐ usuários
+		☐ documentos
+		☐ GRDs
+		☐ Disciplinas
+		☐ Clientes
+		☐ Cargos
+		☐ Log
+		☐ Configurações
+	☐ Otimizar página de projetos para grande volume de dados
+	☐ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes.
+	☐ No download Resource interpreted as Document but transferred with MIME type application/zip
 	☐	Melhorar a forma com que os documentos atrasados são destacados
 	☐	Cadastrar documentos lendo lista de CSV
 	☐	Quando for baixar um documento só, baixar sem zipar
 	☐	Número de revisões a serem guardadas é limitado e configurável
 	☐	Tela e-mails enviados
 
-  BUGS Avulsos:
-    ☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.(liha 159 do ProjetoController)
-    ☐ Fazer mudar para tab de documentos depois de salvar GRD
-    ☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
-    ☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
-    ☐ Separador de decimal e de grupo de milhar estão trocados. estudar filto currency e locale para conserto
-    ☐ Tabelas a serem preenchidas na instalação
-      - Empresas
-      - Ações
-      - Cargos
-      - Disciplinas
-      - Subdisciplinas
-      - tamanhos de papel
-      - usuários (1)
-      - Codigos EMI
-      - tipos de docs
-    ☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
-    ☐ Primeira subárea de um projeto não aparece assim que é criada
-    ☐ Tela Cadastro de Formatos de Papel
-    ☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
-    Cannot read property 'find' of undefined at ProjetosController.js:159
-    ☐ Mostrar Carregando para ações
-      ☐ Inserir Cargo
-      ☐ Atualizar Cargo
-      ☐ Inserir Projeto
-      ☐ Atualizar Projeto
+	BUGS Avulsos:
+		☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.(liha 159 do ProjetoController)
+		☐ Fazer mudar para tab de documentos depois de salvar GRD
+		☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
+		☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
+		☐ Separador de decimal e de grupo de milhar estão trocados. estudar filto currency e locale para conserto
+		☐ Tabelas a serem preenchidas na instalação
+			- Empresas
+			- Ações
+			- Cargos
+			- Disciplinas
+			- Subdisciplinas
+			- tamanhos de papel
+			- usuários (1)
+			- Codigos EMI
+			- tipos de docs
+		☐ ProjetosDocumentosController.js:57 undefined<<<< (online)
+		☐ Primeira subárea de um projeto não aparece assim que é criada
+		☐ Tela Cadastro de Formatos de Papel
+		☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
+		Cannot read property 'find' of undefined at ProjetosController.js:159
+		☐ Mostrar Carregando para ações
+			☐ Inserir Cargo
+			☐ Atualizar Cargo
+			☐ Inserir Projeto
+			☐ Atualizar Projeto
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
@@ -79,38 +79,38 @@ Archive:
  ✔ Incrementar o número da revisão ou diminuir o percentual de concluído de um determinado documento @done (17-09-19 13:55) @project(GDoks)
  ✔ Registrar Retorno de GRD @done (17-08-14 14:29) @project(GDoks)
  ✔ Registrar Observações sobre arquivos que compõe a GRD @done (17-08-14 14:29) @project(GDoks)
-  Na tela de registro de retorno de GRD o usuário será capaz de
+	Na tela de registro de retorno de GRD o usuário será capaz de
  ✔ Em retorno de GRD, adicionar campo: Comentário do Cliente/Observações @done (17-08-14 14:28) @project(GDoks)
  ✔ Mostrar botões de envio sempre @done (17-07-30 12:41) @project(GDoks)
  ✔ Por um botão salvar no alto do cadastro da GRD @done (17-07-30 12:11) @project(GDoks)
  ✔ Ir para página do documento a partir do cadastro da grd @done (17-07-30 04:10) @project(GDoks)
-  Salvar enderço Físico para todos os documentos da grd
-  Tipo De documento EB-> E/B
-  ✔ Desenhar tela de registro de retorno de GRD @done (17-07-19 11:18) @project(GDoks / Hoje)
-  ✔  Registrar Endereço físico do documento no cadastro do documento na grd. @done (17-07-19 11:18) @project(GDoks / Hoje)
-  ✔  Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca @done (17-07-17 07:51) @project(GDoks / Hoje)
-  ✔ Fazer com que se possa salvar GRD sem documento @done (17-07-15 10:32) @project(GDoks / Hoje)
-  ✔ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD @done (17-07-15 08:52) @project(GDoks / Hoje)
-  ✔  Registrando datahora de envioupload no servidor @done (17-07-15 08:51) @project(GDoks / Hoje)
-  ✔  Registrando datahora de envio pdf por email @done (17-07-15 08:51) @project(GDoks / Hoje)
-  ✔  Registrando datahora de envio link por email @done (17-07-15 08:51) @project(GDoks / Hoje)
-  ✔  Marcar como enviado quando enviar uma GRD. @done (17-07-15 08:51) @project(GDoks / Hoje)
-  ✔  Juntar funcionalidade da aba documento no cadastro de grd a tela principal do cadastro @done (17-07-14 10:33) @project(GDoks / Hoje)
-  ✔  Código de GRD deve ser preenchido automaticamente.. ano-contador @done (17-07-12 17:18) @project(GDoks / Hoje)
-  ✔  visualizar o documento de outras disciplinas @done (17-07-09 05:04) @project(GDoks)
-  ✔ Otimizar página de documentos para grande volume de dados @done (17-07-09 05:03) @project(GDoks)
-  ✔ Mostrar nome do cliente no bloco de documento @done (17-07-09 05:03) @project(GDoks)
-  ✔ Campo de CLiente para Busca @done (17-07-09 05:03) @project(GDoks)
-  ✔  Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente @done (17-07-07 11:42) @project(GDoks)
-  ✔  No cadastro do cliente: Por endereço e dados FTP @done (17-07-05 03:43) @project(GDoks)
-  ✔  tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB. @done (17-07-04 01:49) @project(GDoks)
-  ✔  Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD @done (17-07-03 17:12) @project(GDoks)
-  ✔  Melhorar caixa de diálogo para cadastrar um documento @done (17-07-03 16:48) @project(GDoks)
-  ✔  No cadastro do por o código do cliente @done (17-07-03 15:08) @project(GDoks)
-  ✔  Trocar Código do documento para número do documento @done (17-07-03 15:07) @project(GDoks)
-  ✔  TROCAR NOME DE DOCUMENTO PARA TÍTULO @done (17-07-03 15:07) @project(GDoks)
-  ✔  Ordem: Codigo do Cliente, Codigo interno,  depois nome do documento @done (17-07-03 15:07) @project(GDoks)
-  ✔ projetos @done (17-06-30 12:17) @project(GDoks)
+	Salvar enderço Físico para todos os documentos da grd
+	Tipo De documento EB-> E/B
+	✔ Desenhar tela de registro de retorno de GRD @done (17-07-19 11:18) @project(GDoks / Hoje)
+	✔  Registrar Endereço físico do documento no cadastro do documento na grd. @done (17-07-19 11:18) @project(GDoks / Hoje)
+	✔  Fazer com que GRDs sem documentos cadastrados também apareçam no resultado da Busca @done (17-07-17 07:51) @project(GDoks / Hoje)
+	✔ Fazer com que se possa salvar GRD sem documento @done (17-07-15 10:32) @project(GDoks / Hoje)
+	✔ Fazer com que o botão de enviar email fique habilitado logo depois de salvar a GRD @done (17-07-15 08:52) @project(GDoks / Hoje)
+	✔  Registrando datahora de envioupload no servidor @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔  Registrando datahora de envio pdf por email @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔  Registrando datahora de envio link por email @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔  Marcar como enviado quando enviar uma GRD. @done (17-07-15 08:51) @project(GDoks / Hoje)
+	✔  Juntar funcionalidade da aba documento no cadastro de grd a tela principal do cadastro @done (17-07-14 10:33) @project(GDoks / Hoje)
+	✔  Código de GRD deve ser preenchido automaticamente.. ano-contador @done (17-07-12 17:18) @project(GDoks / Hoje)
+	✔  visualizar o documento de outras disciplinas @done (17-07-09 05:04) @project(GDoks)
+	✔ Otimizar página de documentos para grande volume de dados @done (17-07-09 05:03) @project(GDoks)
+	✔ Mostrar nome do cliente no bloco de documento @done (17-07-09 05:03) @project(GDoks)
+	✔ Campo de CLiente para Busca @done (17-07-09 05:03) @project(GDoks)
+	✔  Enviar com as opções ZIP em anexo de email, Link por email, upar no ftp do cliente @done (17-07-07 11:42) @project(GDoks)
+	✔  No cadastro do cliente: Por endereço e dados FTP @done (17-07-05 03:43) @project(GDoks)
+	✔  tIPOS DE DOCUMENTO NA grd PODE SER E,B OU EB. @done (17-07-04 01:49) @project(GDoks)
+	✔  Enviar por Email deve conter a GRD e uma pasta contendo os arquivos da GRD @done (17-07-03 17:12) @project(GDoks)
+	✔  Melhorar caixa de diálogo para cadastrar um documento @done (17-07-03 16:48) @project(GDoks)
+	✔  No cadastro do por o código do cliente @done (17-07-03 15:08) @project(GDoks)
+	✔  Trocar Código do documento para número do documento @done (17-07-03 15:07) @project(GDoks)
+	✔  TROCAR NOME DE DOCUMENTO PARA TÍTULO @done (17-07-03 15:07) @project(GDoks)
+	✔  Ordem: Codigo do Cliente, Codigo interno,  depois nome do documento @done (17-07-03 15:07) @project(GDoks)
+	✔ projetos @done (17-06-30 12:17) @project(GDoks)
  ✔ Fazer com que menu carregue de acordo com essas permissões @done (17-06-30 11:48) @project(GDoks / Para Hoje)
  ✔ Salvar alterações na base e no cookie @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
  ✔ Fazer interface funcionar de acordo @done (17-06-29 15:31) @project(GDoks / Para Hoje / Fazer permissões de acesso a tela por usuário funcionar / Fazer a tela functionar)
@@ -164,50 +164,50 @@ Archive:
  ✔ Baixar PDA  @due(17-06-08 10:00) @done (17-06-08 14:28) @project(GDoks / Tela de Documento)
  ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔  Verificar acrescimo de documento em projeto. Data_limite é de revisão, não mais de documento @done (17-06-08 08:41) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
  ✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔ Lista de Documentos: @due(17-05-23 06:00) @done (17-05-24 10:35) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Destacar informação de quando um documento está atrasado @done (17-05-24 10:35) @project(GDoks / Gerenciamento de Documentos)
-    Filtros/Ordem
-  ✔  Aplicar filtro para mostrar dias restantes @done (17-05-24 09:19) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Fazer com que botão aponte para o abrir o documento @done (17-05-24 09:04) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Exibir os que aguardam validação @done (17-05-24 08:53) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Exibir os concluídos (100%) @done (17-05-24 08:53) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Por Área @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Por Subárea @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Por Subdisciplina @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Por Projeto @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Por Nome @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Por Disciplina @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Ordenar por data limite @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Ordenar por HH @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Mostrar última at0ualização do documento @done (17-05-23 22:34) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Linkar com os dados reais @due(17-05-23 06:00) @done (17-05-23 17:05) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Criar dumb data na BD @done (17-05-23 17:05) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Desenhar tela onde lista-se os documentos (.html/js/css) @due(17-05-23 02:00) @done (17-05-23 09:40) @project(GDoks / Gerenciamento de Documentos)
-  ✔  Desenhar tela no FWorks com todas funcionalidades @due(17-05-23 00:30) @done (17-05-23 01:05) @project(GDoks / Gerenciamento de Documentos)
-  ✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25) @project(GDoks / Gerenciamento de Documentos)
-  ✔ Atualizar BD para que uma revisão possa ter vários arquivos @done (17-05-22 14:25) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
-  ✔ Atualizar BD para que guarde revisões de um documento @done (17-05-22 14:24) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
-  ✔ Limpar código @done (17-05-22 11:09) @project(GDoks / Cadastro de Projeto 1 - Documentos)
-  ✔  Tela que Cadstrar Disciplina @done (17-05-22 11:05) @project(GDoks / BUGS Avulsos)
-  ✔  Verificar necessidade de subareas serem submetidas quando se salva dados de um projeto @done (17-05-21 02:19) @project(GDoks / BUGS Avulsos)
-  ✔  Consertar erro quando tenta registrar no log a alteração de dados de um projeto @done (17-05-21 02:12) @project(GDoks / BUGS Avulsos)
-  ✔  Logo que abrir a página de log, tentar carregar ações realizadas pelo usuário no dia atual @done (17-05-21 02:06) @project(GDoks / BUGS Avulsos)
-  ✔  Consertar tela de cadastro de cargos para suportar o novo nome da coluna na tabel cargos @done (17-05-21 01:50) @project(GDoks / BUGS Avulsos)
-  ✔  Consertar erro ao cadastrar nova disciplina (Cannot set property 'onsuccess' of null at DisciplinasController.js:93) @done (17-05-21 01:28) @project(GDoks / BUGS Avulsos)
-  ✔ Ao atualizar dados de um projeto as informações não são salvas no base do browser @done (17-05-21 01:05) @project(GDoks / BUGS Avulsos)
-  ✔ Listando Projetos com nome errado (C e D) @done (17-05-21 01:04) @project(GDoks / BUGS Avulsos)
-  ✔  Documentos sem hhs atribuídas ficam com uma hh atribuída @done (17-05-21 00:46) @project(GDoks / BUGS Avulsos)
-  ✔ Botão de salvar cadastro de documento está ficando habilitado com o form inválido @done (17-05-21 00:25) @project(GDoks / BUGS Avulsos)
-  ✔ Alterar cadastro de documento @done (17-05-20 17:01) @project(GDoks / BUGS Avulsos)
-  ✔ Salvar cadastro de documento @done (17-05-20 16:47) @project(GDoks / BUGS Avulsos)
+	✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔ Fazer filtro de documentos funcionar @done (17-06-08 08:31) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔ Lista de Documentos: @due(17-05-23 06:00) @done (17-05-24 10:35) @project(GDoks / Gerenciamento de Documentos)
+	✔  Destacar informação de quando um documento está atrasado @done (17-05-24 10:35) @project(GDoks / Gerenciamento de Documentos)
+		Filtros/Ordem
+	✔  Aplicar filtro para mostrar dias restantes @done (17-05-24 09:19) @project(GDoks / Gerenciamento de Documentos)
+	✔  Fazer com que botão aponte para o abrir o documento @done (17-05-24 09:04) @project(GDoks / Gerenciamento de Documentos)
+	✔  Exibir os que aguardam validação @done (17-05-24 08:53) @project(GDoks / Gerenciamento de Documentos)
+	✔  Exibir os concluídos (100%) @done (17-05-24 08:53) @project(GDoks / Gerenciamento de Documentos)
+	✔  Por Área @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Por Subárea @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Por Subdisciplina @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Por Projeto @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Por Nome @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Por Disciplina @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Ordenar por data limite @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Ordenar por HH @done (17-05-24 05:27) @project(GDoks / Gerenciamento de Documentos)
+	✔  Mostrar última at0ualização do documento @done (17-05-23 22:34) @project(GDoks / Gerenciamento de Documentos)
+	✔  Linkar com os dados reais @due(17-05-23 06:00) @done (17-05-23 17:05) @project(GDoks / Gerenciamento de Documentos)
+	✔  Criar dumb data na BD @done (17-05-23 17:05) @project(GDoks / Gerenciamento de Documentos)
+	✔  Desenhar tela onde lista-se os documentos (.html/js/css) @due(17-05-23 02:00) @done (17-05-23 09:40) @project(GDoks / Gerenciamento de Documentos)
+	✔  Desenhar tela no FWorks com todas funcionalidades @due(17-05-23 00:30) @done (17-05-23 01:05) @project(GDoks / Gerenciamento de Documentos)
+	✘ Listar documentos da alçada do usuário logado @cancelled (17-05-22 16:25) @project(GDoks / Gerenciamento de Documentos)
+	✔ Atualizar BD para que uma revisão possa ter vários arquivos @done (17-05-22 14:25) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
+	✔ Atualizar BD para que guarde revisões de um documento @done (17-05-22 14:24) @project(GDoks / Gerenciamento de Documentos / Lista de Documentos)
+	✔ Limpar código @done (17-05-22 11:09) @project(GDoks / Cadastro de Projeto 1 - Documentos)
+	✔  Tela que Cadstrar Disciplina @done (17-05-22 11:05) @project(GDoks / BUGS Avulsos)
+	✔  Verificar necessidade de subareas serem submetidas quando se salva dados de um projeto @done (17-05-21 02:19) @project(GDoks / BUGS Avulsos)
+	✔  Consertar erro quando tenta registrar no log a alteração de dados de um projeto @done (17-05-21 02:12) @project(GDoks / BUGS Avulsos)
+	✔  Logo que abrir a página de log, tentar carregar ações realizadas pelo usuário no dia atual @done (17-05-21 02:06) @project(GDoks / BUGS Avulsos)
+	✔  Consertar tela de cadastro de cargos para suportar o novo nome da coluna na tabel cargos @done (17-05-21 01:50) @project(GDoks / BUGS Avulsos)
+	✔  Consertar erro ao cadastrar nova disciplina (Cannot set property 'onsuccess' of null at DisciplinasController.js:93) @done (17-05-21 01:28) @project(GDoks / BUGS Avulsos)
+	✔ Ao atualizar dados de um projeto as informações não são salvas no base do browser @done (17-05-21 01:05) @project(GDoks / BUGS Avulsos)
+	✔ Listando Projetos com nome errado (C e D) @done (17-05-21 01:04) @project(GDoks / BUGS Avulsos)
+	✔  Documentos sem hhs atribuídas ficam com uma hh atribuída @done (17-05-21 00:46) @project(GDoks / BUGS Avulsos)
+	✔ Botão de salvar cadastro de documento está ficando habilitado com o form inválido @done (17-05-21 00:25) @project(GDoks / BUGS Avulsos)
+	✔ Alterar cadastro de documento @done (17-05-20 17:01) @project(GDoks / BUGS Avulsos)
+	✔ Salvar cadastro de documento @done (17-05-20 16:47) @project(GDoks / BUGS Avulsos)
  ✔ Consertar comportamento pesado do menu principal @done (17-05-20 14:02) @project(GDoks / BUGS Avulsos)
  ✔ Erro na criação de um novo projeto @done (17-05-20 13:47) @project(GDoks / BUGS Avulsos)
  ✔ Remover um documento do projeto @done (17-05-20 11:49) @project(GDoks / Cadastro de Projeto 1 - Documentos)

@@ -4401,8 +4401,10 @@
 					$sgMail->setHtml($mail->msg);
 
 					// Enviando o email
-					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
-					$response = $sendgrid->send($sgMail);
+					// $sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
+					// $response = $sendgrid->send($sgMail);
+					$sendgrid = new \SendGrid(SENDGRID_KEY);
+					$response = $sendgrid->client->mail()->send()->post($mail);
 					
 					if($response->message == 'success'){
 						
