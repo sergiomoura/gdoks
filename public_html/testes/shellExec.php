@@ -10,6 +10,7 @@
 	$output = shell_exec("ls");
 	echo('Saída do shell_exec():'."\n" . $output."\n");
 	print_r($_SERVER);
+	echo('modificado');
  ?>
 	 </pre>
 </body>
