@@ -905,16 +905,30 @@
 					// Esconde carregando
 					parentScope.root.carregando = false;
 
-					// Atualizando a datahora de envio da grd
-					parentScope.grd.datahora_enviada = new Date(response.datahora_enviada);
+					// Verificando se tem algum erro no envio
+					if(response.error == 0){
+						// Atualizando a datahora de envio da grd
+						parentScope.grd.datahora_enviada = new Date(response.datahora_enviada);
 
-					// Retornando Toast para o usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('GRD enviada com successo!')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('GRD enviada com successo!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					} else {
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Falha no envio. Tente novamente mais tarde.')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Imprimindo erro no console
+						console.warn(response.msg);
+					}
 
 					// Escondendo dialogo
 					$mdDialog.hide();

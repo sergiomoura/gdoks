@@ -4371,23 +4371,21 @@
 					$sql = 'UPDATE gdoks_grds SET unique_link=? WHERE id=?';
 					$db->query($sql,'si',$unique_link,$grd->id);
 
-					// Definindo o email
-					$sgMail = new SendGrid\Email();
+					// Definindo o From
+					$sgFrom = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
 
-					// adicionando o from
-					$sgMail->setFrom(SENDGRID_DEFAULT_FROM);
-					$sgMail->setFromName(SENDGRID_DEFAULT_FROM_NAME);
-
-					// Adicionando os Tos
-					foreach ($mail->destinatarios as $d) {
-						$sgMail->addTo($d->email,$d->nome);
-					}
-
-					// Settando o assunto
-					$sgMail->setSubject($mail->assunto);
-
+					// Definindo Tos
+					$sgTos = array_map(
+								function($d){
+									return new SendGrid\Email($d->nome,$d->email);
+								},
+								$mail->destinatarios
+							);
+					
+					// Definindo mensagem
 					// Parsing msg para por o link
 					$key = Crypter::crypt($empresa.'-'.$unique_link.'-'.$nome_usuario);
+					
 					// Trocando caracteres '+'' vira '-', '/' vira '_' e '=' vira '.'
 					$key = str_replace('+', '-', $key);
 					$key = str_replace('/', '_', $key);
@@ -4396,18 +4394,22 @@
 					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.$key;
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
+					$content = new SendGrid\Content("text/html", $mail->msg);
 
-					// Settando conteúdo
-					$sgMail->setHtml($mail->msg);
+					// Definindo o email
+					$sgEmail = new SendGrid\Mail($sgFrom, $mail->assunto, $sgTos[0], $content);
+
+					// Adicionando os outros destinatários
+					for ($i=1; $i < sizeof($sgTos); $i++) { 
+						echo('entrou');
+					 	$sgEmail->personalization[0]->addCC($sgTos[$i]);
+					}
 
 					// Enviando o email
-					// $sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
-					// $response = $sendgrid->send($sgMail);
 					$sendgrid = new \SendGrid(SENDGRID_KEY);
-					$response = $sendgrid->client->mail()->send()->post($mail);
-					
-					if($response->message == 'success'){
-						
+					$response = $sendgrid->client->mail()->send()->post($sgEmail);
+
+					if($response->statusCode() == 202){
 						// Registrando a datahora do envio
 						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
 						$db->query($sql,'i',$grd->id);
@@ -4423,7 +4425,7 @@
 
 						// Retornando erro
 						$app->response->setStatus(401);
-						$response = new response(1,'Falha no envio: '.$response->message);
+						$response = new response(1,'Falha no envio: '.$response->statusCode());
 						$response->flush();
 						die();
 					}
