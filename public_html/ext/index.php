@@ -3,14 +3,13 @@
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 	// Required files - - - - - - - - - - - - - - - - - - -
-	require('../../includes/Slim/vendor/autoload.php');
-	require('../../includes/vendor/autoload.php');
-	require('../../includes/constantes.php');
-	require('../../includes/db.php');
-	require('../../includes/definicoes_de_acoes.php');
-	require('../../includes/response.php');
-	require('../../includes/GDoks/Grd.php');
-	require('../../includes/GDoks/Crypter.php');
+	require('vendor/autoload.php');
+	require('constantes.php');
+	require('db.php');
+	require('definicoes_de_acoes.php');
+	require('response.php');
+	require('GDoks/Grd.php');
+	require('GDoks/Crypter.php');
 
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
