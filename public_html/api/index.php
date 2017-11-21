@@ -4385,10 +4385,10 @@
 					// Parsing msg para por o link
 					$key = Crypter::crypt($empresa.'-'.$unique_link.'-'.$nome_usuario);
 					
-					// Trocando caracteres '+'' vira '-', '/' vira '_' e '=' vira '.'
+					// Trocando caracteres '+'' vira '-', '/' vira '_' e '=' vira '|'
 					$key = str_replace('+', '-', $key);
 					$key = str_replace('/', '_', $key);
-					$key = str_replace('=', '.', $key);
+					$key = str_replace('=', '|', $key);
 
 					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.$key;
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);

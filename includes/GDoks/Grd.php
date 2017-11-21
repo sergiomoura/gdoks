@@ -224,7 +224,7 @@
 		// getter...
 		public function __get($string){
 			$vars = get_object_vars($this);
-			if(isset($vars['_'.$string])){
+			if(array_key_exists('_'.$string,$vars)) {
 				return $vars['_'.$string];
 			} else {
 				trigger_error('Undefined property: '.$string);
@@ -238,9 +238,15 @@
 		public function gerarZip($nome_do_emissor){
 			// Gerando pdf da grd
 			$pdf = $this->pdf($nome_do_emissor);
+
+			// criando a pata temp da empresa caso ela não exista
+			if(!is_dir(TMP_PATH.$this->_codigo_empresa)) {
+				mkdir(TMP_PATH.$this->_codigo_empresa);
+			}
+
+			// salvando pdf na pasta temp da empresa
+			$caminhoPdf = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.pdf';
 			
-			// salvando pdf na pasta da empresa
-			$caminhoPdf = UPLOAD_PATH.$this->_id_empresa.'/'.$this->_codigo.'.pdf';
 			$pdf->Output('F',$caminhoPdf);
 
 			// listando arquivos mais recentes da grd
@@ -259,7 +265,7 @@
 			
 			// Criando o arquivo zip na pasta raíz da empresa
 			$zip = new ZipArchive();
-			$caminhoZip = UPLOAD_PATH.$this->_id_empresa.'/'.$this->_codigo.'.zip';
+			$caminhoZip = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.zip';
 			$zip->open($caminhoZip,ZipArchive::CREATE);
 
 			// Adicionando o pdf ao zip;

@@ -17,10 +17,10 @@
 	// definindo rota para download de grd
 	$app->get('/grds/:data',function($data){
 		
-		// Destrocando caracteres '-' volta a ser '-', '_' volta a ser '/' e '.' volta a ser '='
+		// Destrocando caracteres '-' volta a ser '-', '_' volta a ser '/' e '|' volta a ser '='
 		$data = str_replace('-','+', $data);
 		$data = str_replace('_','/', $data);
-		$data = str_replace('.','=', $data);
+		$data = str_replace('|','=', $data);
 
 		// Decrypting data
 		$data = Crypter::decrypt($data);
