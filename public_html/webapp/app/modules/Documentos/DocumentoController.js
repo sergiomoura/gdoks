@@ -311,7 +311,6 @@
 			GDoksFactory.getTamanhosDePapel()
 			.success(function(response){
 				$scope.tamanhosDePapel = response.tamanhosDePapel;
-
 				$scope.tamanhoPadrao = $scope.tamanhosDePapel.find(function(a){
 						return a.nome == "A4";
 					});
