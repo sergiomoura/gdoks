@@ -37,7 +37,7 @@
 
 	// lendo informações no header
 	$headers = getallheaders();
-	if(isset($headers['Authorization'])){
+	if(isset($headers['Authorization']) || $headers['Authorization'] != '' || is_null($headers['Authorization'])){
 		// definindo iddb e token a partir do header
 		$empresa =  explode('-', $headers['Authorization'])[0];
 		$token = explode('-', $headers['Authorization'])[1];
