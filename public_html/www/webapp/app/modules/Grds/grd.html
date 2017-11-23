@@ -93,6 +93,7 @@
 								<md-icon class="material-icons step" aria-label="description">search</md-icon>
 								<input flex="50" type="text" ng-model="qEsq.nome" placeholder="Filtrar documentos pelo nome...">
 								<md-select flex="20" ng-model="qEsq.id_disciplina">
+									<md-option ng-value="0">Todas as Disciplinas</md-option>
 									<md-option ng-repeat="d in disciplinas|orderBy:'nome'" ng-value="d.id">{{d.nome}}</md-option>
 								</md-select>
 								<md-select flex="20" ng-model="qEsq.id_area">

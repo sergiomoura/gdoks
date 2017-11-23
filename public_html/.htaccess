@@ -2,3 +2,10 @@
 AddHandler php7-script .php
 suPHP_ConfigPath /home/gdoks1/
 ##### LOCAWEB - NAO REMOVER #####
+
+RewriteEngine On
+Options +FollowSymlinks
+RewriteBase /
+RewriteCond %{HTTP_HOST} gdoks.com.br
+RewriteCond %{REQUEST_URI} !gdoks/
+RewriteRule ^(.*)$ gdoks/$1 [L]
