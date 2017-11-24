@@ -1,12 +1,4 @@
 <?php
-	echo('<pre>');
-	print_r($_SERVER);
-	echo('</pre>');
-	echo('<pre>');
-	print_r($_REQUEST);
-	echo('</pre>');
-	die();
-	die();
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 	ini_set('display_errors', 1);
@@ -98,67 +90,66 @@
 	
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
-	
+
 	// defining api routes  V1 = = = = = = = = = = = = = = = =
-	$app->group('/v1',function() use($app,$db,$id_empresa,$token,$empresa){
-
+	$app->group('/api/v1',function() use($app,$db,$id_empresa,$token,$empresa){
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
-		$app->post('/login',function() use ($app,$db,$id_empresa,$empresa){
-			
-			// lendo dados da requisição
-			$data = json_decode($app->request->getBody());
-			
-			// Verificando se é usuário é válido e carregando suas informações se for o caso.
-			$sql = 'SELECT id,
-						   nome,
-						   login,
-						   email,
-					       count(*)=1 AS ok
-					FROM
-						gdoks_usuarios
-					WHERE login=?
-					  AND senha=PASSWORD(?)
-					  AND id_empresa=?
-					  AND ativo';
-			$rs = $db->query($sql,'ssi',$data->login,$data->senha,$id_empresa)[0];
-			
-			// perguntando se usuário é válido
-			if($rs['ok'] == 1){
-				// SIM, usuário é válido
-				// gerando novo token
-				$token = uniqid('',true);
+			$app->post('/login/',function() use ($app,$db,$id_empresa,$empresa){
 				
-				// atualizando o token na base de dados
-				$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$rs['id']);
+				// lendo dados da requisição
+				$data = json_decode($app->request->getBody());
 				
-				// Arrumando dados do usuário
-				$user = new stdClass();
-				$user->id = $rs['id'];
-				$user->nome = $rs['nome'];
-				$user->email = $rs['email'];
-				$user->token = $token;
-				$user->empresa = $empresa;
+				// Verificando se é usuário é válido e carregando suas informações se for o caso.
+				$sql = 'SELECT id,
+							   nome,
+							   login,
+							   email,
+						       count(*)=1 AS ok
+						FROM
+							gdoks_usuarios
+						WHERE login=?
+						  AND senha=PASSWORD(?)
+						  AND id_empresa=?
+						  AND ativo';
+				$rs = $db->query($sql,'ssi',$data->login,$data->senha,$id_empresa)[0];
 				
-				// definindo resposta http como 200
-				$app->response->setStatus(200);
-				$response = new response(0,'ok');
+				// perguntando se usuário é válido
+				if($rs['ok'] == 1){
+					// SIM, usuário é válido
+					// gerando novo token
+					$token = uniqid('',true);
+					
+					// atualizando o token na base de dados
+					$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$rs['id']);
+					
+					// Arrumando dados do usuário
+					$user = new stdClass();
+					$user->id = $rs['id'];
+					$user->nome = $rs['nome'];
+					$user->email = $rs['email'];
+					$user->token = $token;
+					$user->empresa = $empresa;
+					
+					// definindo resposta http como 200
+					$app->response->setStatus(200);
+					$response = new response(0,'ok');
 
-				// Adicionando as informações do usuário no response
-				$response->user = $user;
-				
-				// registrando a ação no log
-				registrarAcao($db,$user->id,ACAO_LOGOU);
-			} else {
-				// Não! usuário não é válido.
-				// Preparando resposta negativa
-				$app->response->setStatus(401);
-				$response = new response(1,'Login falhou');
-			}
+					// Adicionando as informações do usuário no response
+					$response->user = $user;
+					
+					// registrando a ação no log
+					registrarAcao($db,$user->id,ACAO_LOGOU);
+				} else {
+					// Não! usuário não é válido.
+					// Preparando resposta negativa
+					$app->response->setStatus(401);
+					$response = new response(1,'Login falhou');
+				}
 
-			// Enviando resposta.
-			$response->flush();
-		});
-
+				// Enviando resposta.
+				$response->flush();
+			});
+		
 		// LOGIN REFRESH ROUTE DEFINITION - - - - - - - - -
 			$app->get('/refresh',function() use ($app,$db,$token){
 				$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
