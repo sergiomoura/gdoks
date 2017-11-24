@@ -1,5 +1,12 @@
 <?php
-
+	echo('<pre>');
+	print_r($_SERVER);
+	echo('</pre>');
+	echo('<pre>');
+	print_r($_REQUEST);
+	echo('</pre>');
+	die();
+	die();
 	// Configurando a descrição do erro at runtime
 	error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 	ini_set('display_errors', 1);

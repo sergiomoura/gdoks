@@ -1,11 +1,12 @@
 ##### LOCAWEB - NAO REMOVER #####
-AddHandler php71-script .php
-suPHP_ConfigPath /home/gdoks1/
+#AddHandler php71-script .php
+#suPHP_ConfigPath /home/gdoks1/
 ##### LOCAWEB - NAO REMOVER #####
 
 RewriteEngine On
+
 Options +FollowSymlinks
 RewriteBase /
-RewriteCond %{HTTP_HOST} gdoks.com.br
+#RewriteCond %{HTTP_HOST} gdoks.com.br
 RewriteCond %{REQUEST_URI} !www/
 RewriteRule ^(.*)$ www/$1 [L]
