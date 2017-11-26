@@ -44,6 +44,9 @@
 
 		public static function CreateByUrl(string $url_tela,int $id_usuario, mysqli $db){
 
+			// Tratando url de tela para testar na query
+			$url_tela = str_replace('/www','', $url_tela);
+
 			// verificando se usuário tem acesso a tela
 			$sql = 'SELECT
 						a.id,

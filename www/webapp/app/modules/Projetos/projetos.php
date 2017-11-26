@@ -9,7 +9,7 @@
 	$user = json_decode($_COOKIE['user']);
 
 	// Carregando db
-	include('../../../../../includes/db.php');
+	include('db.php');
 
 	// Carregando dbkey
 	include('../../../../../client_data/'.$user->empresa.'/dbkey.php');
@@ -22,7 +22,7 @@
 	$url = $_SERVER['SCRIPT_NAME'];
 
 	// Carregando o objeto tela
-	include('../../../../../includes/GDoks/Tela.php');
+	include('GDoks/Tela.php');
 	try {
 		$tela = Tela::CreateByUrl($url,$user->id,$db);
 	} catch (Exception $e) {

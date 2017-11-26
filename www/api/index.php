@@ -91,8 +91,17 @@
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
 
+	// Definindo BaseRoute para dunciconar tanto no PHPBuiltInServer quanto no Apache
+	$resourceUri = $app->request->getResourceUri();
+	if(substr($resourceUri, 0, 3) == '/v1'){
+		$baseRoute = '/v1';
+	} else {
+		$baseRoute = '/api/v1';
+	}
+
 	// defining api routes  V1 = = = = = = = = = = = = = = = =
-	$app->group('/api/v1',function() use($app,$db,$id_empresa,$token,$empresa){
+	$app->group($baseRoute,function() use($app,$db,$id_empresa,$token,$empresa){
+		
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
 			$app->post('/login/',function() use ($app,$db,$id_empresa,$empresa){
 				
