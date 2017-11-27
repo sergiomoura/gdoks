@@ -15,7 +15,7 @@
 	$app = new \Slim\Slim();
 
 	// definindo rota para download de grd
-	$app->get('/grds/:data',function($data){
+	$app->get('/ext/grds/:data',function($data){
 		
 		// Destrocando caracteres '-' volta a ser '-', '_' volta a ser '/' e '|' volta a ser '='
 		$data = str_replace('-','+', $data);
@@ -58,7 +58,6 @@
 
 		// Mandando zip da grd
 		$grd->sendZip($nome_usuario);
-		
 	});
 
 	// Running the app
