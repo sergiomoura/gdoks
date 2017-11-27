@@ -81,8 +81,8 @@
 				</ng-view>
 			</md-content>
 		</div>
-		<div id="selfdata" title="Última atualização: <?php echo(shell_exec("git log -n 1 --date=format:'%d/%m/%Y %H:%M:%S' --pretty=format:\"%cd [%h]\""))?>">
-			<?php echo($user->empresa) ?> - <?php echo($user->nome) ?>
+		<div id="selfdata"">
+			<?php echo($user->nome.' - '.$user->empresa .' - UA: '. shell_exec("git log -n 1 --date=format:'%d/%m/%Y %H:%M:%S' --pretty=format:\"%cd [%h]\"")); ?>
 		</div>
 		<div id="carregando" ng-show="root.carregando" class="carregando-show-hide" layout="row" layout-align="center center">
 			<md-progress-circular md-mode="indeterminate" md-diameter="64"></md-progress-circular>
