@@ -18,9 +18,8 @@
 		};
 
 		$scope.qEsq = {
-			nome:'',
-			id_area:0,
-			id_disciplina:0
+			id_area:undefined,
+			id_disciplina:undefined
 		};
 
 		// Carregando dados
