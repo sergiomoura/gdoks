@@ -760,8 +760,9 @@
       padding: 0; }
   #grd_container .documentos .controles_documentos {
     padding: 10px 5px 10px 0px;
-    height: 72px;
-    border-bottom: 1px solid #DDD; }
+    height: 73px;
+    /* border-bottom: 1px solid #DDD; */
+    }
     #grd_container .documentos .controles_documentos input {
       border: none;
       padding: 15px 5px;

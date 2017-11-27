@@ -184,7 +184,7 @@ h2 {
 
 #view .bt_limpo {
   border: none;
-  background-color: rgba(0, 0, 0, 0) !important;
+  background-color: transparent !important;
   text-decoration: underline;
   padding: 0 10px;
   color: #999;
@@ -312,7 +312,7 @@ help:hover > text {
   color: #FF5722;
   text-align: justify; }
 
-/* Corre├º├Áes no Angular Material */
+/* Correções no Angular Material */
 .md-sidemenu {
   margin-top: 64px;
   color: #757575; }
