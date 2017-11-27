@@ -4278,32 +4278,43 @@
 					// Criando o zip da Grd
 					$caminhoDoZip = $grd->gerarZip($nome_usuario);
 
-					// Definindo o email
-					$sgMail = new SendGrid\Email();
+					// Setting From:
+					$from = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
 
-					// adicionando o from
-					$sgMail->setFrom(SENDGRID_DEFAULT_FROM);
-					$sgMail->setFromName(SENDGRID_DEFAULT_FROM_NAME);
+					// Setting to
+					$to = new SendGrid\Email($mail->destinatarios[0]->nome,$mail->destinatarios[0]->email);
 
-					// Adicionando os Tos
-					foreach ($mail->destinatarios as $d) {
-						$sgMail->addTo($d->email,$d->nome);
+					// Setting content
+					$content = new SendGrid\Content("text/html", ($mail->msg==''?'-':$mail->msg));
+
+					// Setting Mail object
+					$sgMail = new SendGrid\Mail($from, $mail->assunto, $to, $content);
+
+					// Setting CCs
+					for ($i=1; $i < sizeof($mail->destinatarios); $i++) { 
+						$d = new SendGrid\Email($mail->destinatarios[$i]->nome,$mail->destinatarios[$i]->email);
+					 	$sgMail->personalization[0]->addCC($d);
 					}
 
-					// Settando o assunto
-					$sgMail->setSubject($mail->assunto);
+					// Criando anexo
+					$file_encoded = base64_encode(file_get_contents(realpath($caminhoDoZip)));
+					$attachment = new SendGrid\Attachment();
+					$attachment->setContent($file_encoded);
+					$attachment->setType("application/zip");
+					$attachment->setDisposition("attachment");
+					$attachment->setFileName(basename($caminhoDoZip));
 
-					// Settando conteúdo
-					$sgMail->setHtml($mail->msg);
+					// Anexando o arquivo da GRD
+					$sgMail->addAttachment($attachment);
 
-					// Anexando arquivo da GRD
-					$sgMail->setAttachment(realpath($caminhoDoZip));
+					// Definindo o SendGrid sender
+					$sendgrid = new SendGrid(SENDGRID_KEY);
 
-					// Enviando o email
-					$sendgrid = new SendGrid(getenv('SENDGRID_USERNAME'), getenv('SENDGRID_PASSWORD'));
-					$response = $sendgrid->send($sgMail);
+					// Enviando
+					$response = $sendgrid->client->mail()->send()->post($sgMail);
 
-					if($response->message == 'success'){
+					// Verificando se obteve sucesso ou não
+					if($response->statusCode() == 202){
 
 						// Registrando a datahora do envio
 						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
@@ -4318,10 +4329,9 @@
 						registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
 
 					} else {
-
 						// Retornando erro
 						$app->response->setStatus(401);
-						$response = new response(1,'Falha no envio: '.$response->message);
+						$response = new response(1,'Falha no envio: '.$response->statusCode());
 						$response->flush();
 						die();
 					}
@@ -4400,14 +4410,13 @@
 					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.$key;
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
-					$content = new SendGrid\Content("text/html", $mail->msg);
+					$content = new SendGrid\Content("text/html", ($mail->msg==''?'-':$mail->msg));
 
 					// Definindo o email
 					$sgEmail = new SendGrid\Mail($sgFrom, $mail->assunto, $sgTos[0], $content);
 
 					// Adicionando os outros destinatários
 					for ($i=1; $i < sizeof($sgTos); $i++) { 
-						echo('entrou');
 					 	$sgEmail->personalization[0]->addCC($sgTos[$i]);
 					}
 
@@ -4428,7 +4437,6 @@
 						// Registrando no log
 						registrarAcao($db,$id_usuario,ACAO_ENVIOU_LINK_DE_GRD_VIA_EMAIL,$grd->id);
 					} else {
-
 						// Retornando erro
 						$app->response->setStatus(401);
 						$response = new response(1,'Falha no envio: '.$response->statusCode());
