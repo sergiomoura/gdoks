@@ -771,16 +771,27 @@
 					// Esconde carregando
 					parentScope.root.carregando = false;
 
-					// Alterando a datahora enviada da GRD
-					$scope.grd.datahora_enviada = new Date(response.datahora_enviada)
+					if(response.error == 0){
+						// Alterando a datahora enviada da GRD
+						$scope.grd.datahora_enviada = new Date(response.datahora_enviada)
 
-					// Retornando Toast para o usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('GRD enviada com successo!')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('GRD enviada com successo!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					} else {
+							// Retornando Toast para o usuário
+							$mdToast.show(
+								$mdToast.simple()
+								.textContent(response.msg)
+								.position('bottom left')
+								.hideDelay(5000)
+							);
+					}
+
 
 					// Escondendo dialogo
 					$mdDialog.hide();
