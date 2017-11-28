@@ -29,14 +29,13 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" />
-
 		<link rel="stylesheet" href="css/normalizer.css">
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
-		<link rel="stylesheet" href="css/md-expansion-panel.min.css">
-		<link rel="stylesheet" href="css/angular-material-sidemenu.css">
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/WebGDoks.css">
-		<link rel="stylesheet" type="text/css" href="css/ng-tags-input.css">
+		<link rel="stylesheet" href="js/node_modules/ng-tags-input/build/ng-tags-input.min.css">
+		<link rel="stylesheet" href="js/node_modules/angular-material/angular-material.min.css">
+		<link rel="stylesheet" href="js/node_modules/angular-material-expansion-panel/dist/md-expansion-panel.min.css">
+		<link rel="stylesheet" href="js/node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.css">
 	</head>
 	<body ng-controller="RootController" layout="column" ng-cloak>
 		<md-toolbar layout="row" layout-align="start center" md-whiteframe="6dp" style="z-index: 100">
@@ -88,42 +87,20 @@
 			<md-progress-circular md-mode="indeterminate" md-diameter="64"></md-progress-circular>
 		</div>
 	</body>
-	<!-- carregamento do angular 1.4.4 local --
-	<script src="js/angular/angular.min.js"></script>
-	<script src="js/angular/angular-route.min.js"></script>
-	<script src="js/angular/angular-cookies.min.js"></script>
-	<script src="js/angular/angular-resource.min.js"></script>
-	<!-- carregamento do angular 1.4.4 via CDN -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-cookies.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-resource.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
-	<!-- fim carregamento do angular via CDN -->
-	<!-- fim de carregamento do angular local -->
-	<!-- carregamento do angular 1.6.3 via CDN --
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-route.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-cookies.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-resource.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-animate.min.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-aria.min.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-messages.min.js"></script>
-	<!-- fim carregamento do angular via CDN -->
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
-  	<script src="js/angular/ng-currency.min.js"></script>
-	<script src="js/angular/angular-ui-mask.min.js"></script>
-	<script src="js/angular/ng-file-upload.min.js"></script>
-	<script src="js/angular/angular-material-sidemenu.js"></script>
-	<script src="js/angular/md-expansion-panel.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.2/ng-tags-input.min.js"></script>
-	<!-- Fim de Scripts externos -->
-	<!-- Scripts do app -->
-
-	<!-- Controllers -->
+	<script src="js/node_modules/angular/angular.min.js"></script>
+	<script src="js/node_modules/angular-animate/angular-animate.min.js"></script>
+	<script src="js/node_modules/angular-aria/angular-aria.min.js"></script>
+	<script src="js/node_modules/angular-cookies/angular-cookies.min.js"></script>
+	<script src="js/node_modules/angular-material/angular-material.min.js"></script>
+	<script src="js/node_modules/angular-material-expansion-panel/dist/md-expansion-panel.min.js"></script>
+	<script src="js/node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.js"></script>
+	<script src="js/node_modules/angular-messages/angular-messages.min.js"></script>
+	<script src="js/node_modules/angular-resource/angular-resource.min.js"></script>
+	<script src="js/node_modules/angular-route/angular-route.min.js"></script>
+	<script src="js/node_modules/angular-ui-mask/dist/mask.min.js"></script>
+	<script src="js/node_modules/ng-currency/dist/ng-currency.js"></script>
+	<script src="js/node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+	<script src="js/node_modules/ng-tags-input/build/ng-tags-input.min.js"></script>
 	<script src="app/modules/Cargos/CargosController.js"></script>
 	<script src="app/modules/Clientes/ClientesController.js"></script>
 	<script src="app/modules/Configuracoes/ConfiguracoesController.js"></script>
@@ -143,11 +120,9 @@
 	<script src="app/modules/Topo/TopoController.js"></script>
 	<script src="app/modules/Usuarios/UsuariosController.js"></script>
 	<script src="app/modules/VisaoGeral/VisaoGeralController.js"></script>
-	<!--/Controllers -->
 	<script src="app/services/constants.js"></script>
 	<script src="app/WebGDoks.js"></script>
 	<script src="app/services/Factory.js"></script>
 	<script src="app/directives/directives.js"></script>
 	<script src="app/directives/clickoutside.directives.js"></script>
-	<!-- Fim de Scripts do app -->
 </html>
