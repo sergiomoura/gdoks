@@ -1,6 +1,6 @@
 <?php
 	// Incluindo bloqueador de acesso externo a página.
-	require('../../includes/blocker.php');
+	require('blocker.php');
 
 	// Carregando informações do cookie
 	$user = json_decode($_COOKIE['user']);
@@ -17,7 +17,7 @@
 	$idsDeTelas = array_map(function($a){return $a['id_tela'];}, $db->query($sql,'i',$user->id));
 	
 	// Criando vetor de telas
-	require('../../includes/GDoks/Tela.php');
+	require('GDoks/Tela.php');
 	$telas = array_map(function($id){return Tela::CreateById($id,$GLOBALS['user']->id,$GLOBALS['db']);}, $idsDeTelas);
 ?>
 <!DOCTYPE html>
