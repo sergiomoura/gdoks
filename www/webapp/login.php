@@ -7,7 +7,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" href="css/normalizer.css">
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+		<link rel="stylesheet" href="js/node_modules/angular-material/angular-material.min.css">
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/login.css">
 	</head>
@@ -35,11 +35,11 @@
 			<div ng-if="getIddbFail" class="loginFail">Empresa Inexistente.</div>
 		</div>
 	</body>
-	<script src="js/angular/angular.min.js"></script>
-	<script src="js/angular/angular-cookies.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+	<script src="js/node_modules/angular/angular.min.js"></script>
+	<script src="js/node_modules/angular-animate/angular-animate.min.js"></script>
+	<script src="js/node_modules/angular-aria/angular-aria.min.js"></script>
+	<script src="js/node_modules/angular-cookies/angular-cookies.min.js"></script>
+	<script src="js/node_modules/angular-material/angular-material.min.js"></script>
 	<script src="app/services/constants.js"></script>
 	<script>
 		// Definindo o módulo
