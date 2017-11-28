@@ -87,6 +87,7 @@
 			<md-progress-circular md-mode="indeterminate" md-diameter="64"></md-progress-circular>
 		</div>
 	</body>
+	<!-- <script src="js/js.php"></script> -->
 	<script src="js/node_modules/angular/angular.min.js"></script>
 	<script src="js/node_modules/angular-animate/angular-animate.min.js"></script>
 	<script src="js/node_modules/angular-aria/angular-aria.min.js"></script>
