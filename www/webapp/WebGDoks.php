@@ -29,9 +29,7 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="shortcut icon" href="/favicon.ico" />
-		<link rel="stylesheet" href="css/normalizer.css">
-		<link rel="stylesheet" href="css/geral.css">
-		<link rel="stylesheet" href="css/WebGDoks.css">
+		<link rel="stylesheet" href="dist/styles.css">
 		<link rel="stylesheet" href="node_modules/ng-tags-input/build/ng-tags-input.min.css">
 		<link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css">
 		<link rel="stylesheet" href="node_modules/angular-material-expansion-panel/dist/md-expansion-panel.min.css">

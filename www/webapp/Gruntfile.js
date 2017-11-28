@@ -47,6 +47,23 @@ module.exports = function(grunt) {
 					'app/directives/clickoutside.directives.js'
 				],
 				dest: 'dist/scripts.js'
+			},
+			css: {
+				src:['css/*.css'],
+				dest: 'dist/styles.css'
+			}
+		},
+		sass: {
+			dist: {
+				files: [
+					{
+						expand: true,
+						cwd: 'scss',
+						src: ['*.scss'],
+						dest: 'css',
+						ext: '.css'
+					}
+				]
 			}
 		},
 		watch: {
@@ -55,15 +72,22 @@ module.exports = function(grunt) {
 				tasks:['concat:js'],
 			},
 			css:{
-				files:['css/**/*.js'],
+				files:['css/**/*.css'],
 				tasks:['concat:css'],
+			},
+			sass:{
+				files:['scss/*.scss'],
+				tasks:['makeSassAndConcatCss']
 			}
+
 		}
 	});
+	grunt.registerTask('makeSassAndConcatCss',['sass','concat:css']);
 
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.registerTask('default',['concat','watch']);
+	grunt.loadNpmTasks('grunt-contrib-sass');
+	grunt.registerTask('default',['makeSassAndConcatCss','concat:js','watch']);
 }
 
 	
