@@ -32,10 +32,10 @@
 		<link rel="stylesheet" href="css/normalizer.css">
 		<link rel="stylesheet" href="css/geral.css">
 		<link rel="stylesheet" href="css/WebGDoks.css">
-		<link rel="stylesheet" href="js/node_modules/ng-tags-input/build/ng-tags-input.min.css">
-		<link rel="stylesheet" href="js/node_modules/angular-material/angular-material.min.css">
-		<link rel="stylesheet" href="js/node_modules/angular-material-expansion-panel/dist/md-expansion-panel.min.css">
-		<link rel="stylesheet" href="js/node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.css">
+		<link rel="stylesheet" href="node_modules/ng-tags-input/build/ng-tags-input.min.css">
+		<link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css">
+		<link rel="stylesheet" href="node_modules/angular-material-expansion-panel/dist/md-expansion-panel.min.css">
+		<link rel="stylesheet" href="node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.css">
 	</head>
 	<body ng-controller="RootController" layout="column" ng-cloak>
 		<md-toolbar layout="row" layout-align="start center" md-whiteframe="6dp" style="z-index: 100">
@@ -87,7 +87,8 @@
 			<md-progress-circular md-mode="indeterminate" md-diameter="64"></md-progress-circular>
 		</div>
 	</body>
-	<!-- <script src="js/js.php"></script> -->
+	<script src="scripts.js"></script>
+	<!--
 	<script src="js/node_modules/angular/angular.min.js"></script>
 	<script src="js/node_modules/angular-animate/angular-animate.min.js"></script>
 	<script src="js/node_modules/angular-aria/angular-aria.min.js"></script>
@@ -126,4 +127,5 @@
 	<script src="app/services/Factory.js"></script>
 	<script src="app/directives/directives.js"></script>
 	<script src="app/directives/clickoutside.directives.js"></script>
+-->
 </html>
