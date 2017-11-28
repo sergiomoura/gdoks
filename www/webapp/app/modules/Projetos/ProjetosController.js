@@ -1,7 +1,7 @@
 angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 .controller('ProjetosController',ProjetosController)
 .controller('ProjetoController',ProjetoController)
-.controller('DashProjetoController',DashProjetoController)
+.controller('DashProjetoController',DashProjetoController);
 
 function ProjetosController($scope,GDoksFactory,$location){
 	// levantando projetos na base de dados local
@@ -56,7 +56,7 @@ function ProjetosController($scope,GDoksFactory,$location){
 
 	// Listando carregando os projetos
 	$scope.getProjetos(1);
-}
+};
 
 
 function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
@@ -359,4 +359,4 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 
 function DashProjetoController($scope){
 	$scope.teste = 'em desenvolvimento';
-}
+};

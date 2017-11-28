@@ -8,4 +8,4 @@ angular.module('Opcoes',[])
 		indexedDB.deleteDatabase('gdoks');
 		window.location = '/';
 	}
-})
+});
