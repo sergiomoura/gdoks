@@ -1,8 +1,8 @@
 ✔ No cadastro da GRD, filtrar documentos por área e disciplina @done (17-11-27 08:26)
-☐ Desenhar e Implementar Dashboard do Projeto
 ☐ Desenhar e Implementar Dashboard Home
 	- nº de documentos em revisão
 	- produtividade dos especialistas
+☐ Desenhar e Implementar Dashboard do Projeto
 ☐ Notificar o usuário na tela de documeto quando este for de uma disciplna sem validador ou especialista
 ☐ no cadastro de um documento no projeto, habilitar aba documento somente depois de subarea cadastrada
 ☐ Dar o documento como concluído
