@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 					'app/directives/directives.js',
 					'app/directives/clickoutside.directives.js'
 				],
-				dest: 'scripts.js'
+				dest: 'dist/scripts.js'
 			}
 		},
 		watch: {

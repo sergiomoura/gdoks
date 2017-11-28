@@ -87,45 +87,5 @@
 			<md-progress-circular md-mode="indeterminate" md-diameter="64"></md-progress-circular>
 		</div>
 	</body>
-	<script src="scripts.js"></script>
-	<!--
-	<script src="js/node_modules/angular/angular.min.js"></script>
-	<script src="js/node_modules/angular-animate/angular-animate.min.js"></script>
-	<script src="js/node_modules/angular-aria/angular-aria.min.js"></script>
-	<script src="js/node_modules/angular-cookies/angular-cookies.min.js"></script>
-	<script src="js/node_modules/angular-material/angular-material.min.js"></script>
-	<script src="js/node_modules/angular-material-expansion-panel/dist/md-expansion-panel.min.js"></script>
-	<script src="js/node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.js"></script>
-	<script src="js/node_modules/angular-messages/angular-messages.min.js"></script>
-	<script src="js/node_modules/angular-resource/angular-resource.min.js"></script>
-	<script src="js/node_modules/angular-route/angular-route.min.js"></script>
-	<script src="js/node_modules/angular-ui-mask/dist/mask.min.js"></script>
-	<script src="js/node_modules/ng-currency/dist/ng-currency.js"></script>
-	<script src="js/node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
-	<script src="js/node_modules/ng-tags-input/build/ng-tags-input.min.js"></script>
-	<script src="app/modules/Cargos/CargosController.js"></script>
-	<script src="app/modules/Clientes/ClientesController.js"></script>
-	<script src="app/modules/Configuracoes/ConfiguracoesController.js"></script>
-	<script src="app/modules/Documentos/DocumentosController.js"></script>
-	<script src="app/modules/Documentos/DocumentoController.js"></script>
-	<script src="app/modules/Disciplinas/DisciplinasController.js"></script>
-	<script src="app/modules/Grds/GrdsController.js"></script>
-	<script src="app/modules/Nav/NavController.js"></script>
-	<script src="app/modules/Log/LogController.js"></script>
-	<script src="app/modules/Opcoes/OpcoesController.js"></script>
-	<script src="app/modules/Projetos/ProjetosController.js"></script>
-	<script src="app/modules/Projetos/ProjetosAreasController.js"></script>
-	<script src="app/modules/Projetos/ProjetosSubareasController.js"></script>
-	<script src="app/modules/Projetos/ProjetosDAOsController.js"></script>
-	<script src="app/modules/Projetos/ProjetosDocumentosController.js"></script>
-	<script src="app/modules/Senha/SenhaController.js"></script>
-	<script src="app/modules/Topo/TopoController.js"></script>
-	<script src="app/modules/Usuarios/UsuariosController.js"></script>
-	<script src="app/modules/VisaoGeral/VisaoGeralController.js"></script>
-	<script src="app/services/constants.js"></script>
-	<script src="app/WebGDoks.js"></script>
-	<script src="app/services/Factory.js"></script>
-	<script src="app/directives/directives.js"></script>
-	<script src="app/directives/clickoutside.directives.js"></script>
--->
+	<script src="dist/scripts.js"></script>
 </html>
