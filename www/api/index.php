@@ -1631,85 +1631,86 @@
 							$tamanho = $_FILES['profiles']['size'][$i]['file'];
 							$nomeDao = $_POST['profiles'][$i]['nome'];
 
-							// Registrando informações na base
-							$registradoNaBase = false;
-							$sql = "INSERT INTO gdoks_daos (nome,nome_unico,nome_cliente,tipo,tamanho,id_projeto)
-									VALUES (?,?,?,?,?,?)";
-							try {
-								$db->query($sql,'ssssii',
-									$nomeDao,
-									$nomeUnico,
-									$nomeCliente,
-									$tipo,
-									$tamanho,
-									$id_projeto);
-								$registradoNaBase = true;
-							} catch (Exception $e1) {
-								// registrando falha na consulta no vetor de falhas.
-								$erro = new stdClass();
-								$erro->arquivo = $nomeCliente;
-								$erro->msg = $e1->getMessage();
-								$erro->codigo = $e1->getCode();
-								array_push($erros, $erro);
-							}
-
 							// Salvando arquivo no FS
 							$salvoNoFS = false;
-							if($registradoNaBase) {
-								try {
-									// verificando se existe uma pasta da empresa. Se não houver, tenta criar.
-									$caminho = UPLOAD_PATH.$id_empresa;
-									$pastaDaEmpresaExiste = file_exists($caminho);
-									if(!$pastaDaEmpresaExiste){
-										$pastaDaEmpresaExiste = @mkdir($caminho);
+							try {
+								// verificando se existe uma pasta da empresa. Se não houver, tenta criar.
+								$caminho = UPLOAD_PATH.$id_empresa;
+								$pastaDaEmpresaExiste = file_exists($caminho);
+								if(!$pastaDaEmpresaExiste){
+									$pastaDaEmpresaExiste = @mkdir($caminho);
+								}
+
+								if($pastaDaEmpresaExiste){
+									// Verificando se existe uma pasta do projeto.
+									// Se não houver, tenta criar.
+									$caminho = $caminho.'/'.$id_projeto;
+									$pastaDoProjetoExiste = file_exists($caminho);
+									if(!$pastaDoProjetoExiste){
+										$pastaDoProjetoExiste = mkdir($caminho);
 									}
+								}
 
-									if($pastaDaEmpresaExiste){
-										// Verificando se existe uma pasta do projeto. Se não houver, tenta criar.
-										$caminho = $caminho.'/'.$id_projeto;
-										$pastaDoProjetoExiste = file_exists($caminho);
-										if(!$pastaDoProjetoExiste){
-											$pastaDoProjetoExiste = mkdir($caminho);
-										}
-									}
+								if($pastaDoProjetoExiste){
+									// Salvando arquivo na pasta do cliente
+									$salvoNoFS = @move_uploaded_file($nomeTemporario, $caminho.'/'.$nomeUnico);	
+								}
 
-									if($pastaDoProjetoExiste){
-										// Salvando arquivo na pasta do cliente
-										$salvoNoFS = @move_uploaded_file($nomeTemporario, $caminho.'/'.$nomeUnico);	
-									}
+								if($salvoNoFS){
+									// Criando elemento de vetor de sucesso
+									$dao = new stdClass();
+									$dao->nome = $nomeDao;
+									$dao->nome_cliente = $nomeCliente;
+									$dao->tipo = $tipo;
+									$dao->tamanho = $tamanho;
+									$dao->id = $db->insert_id;
+									array_push($sucessos, $dao);
 
-									if($salvoNoFS){
-										// Criando elemento de vetor de sucesso
-										$dao = new stdClass();
-										$dao->nome = $nomeDao;
-										$dao->nome_cliente = $nomeCliente;
-										$dao->tipo = $tipo;
-										$dao->tamanho = $tamanho;
-										$dao->id = $db->insert_id;
-										array_push($sucessos, $dao);
-
-										// Registrando a ação
-										registrarAcao($db,$id_usuario,ACAO_CRIOU_DAO,implode(',', (array)$dao));
-									} else {
-										// registrando falha no processo de salvar no FS
+									// Registrando informações na base
+									$registradoNaBase = false;
+									$sql = "INSERT INTO gdoks_daos (nome,nome_unico,nome_cliente,tipo,tamanho,id_projeto)
+											VALUES (?,?,?,?,?,?)";
+									try {
+										$db->query($sql,'ssssii',
+											$nomeDao,
+											$nomeUnico,
+											$nomeCliente,
+											$tipo,
+											$tamanho,
+											$id_projeto);
+										$registradoNaBase = true;
+									} catch (Exception $e1) {
+										// registrando falha na consulta no vetor de falhas.
 										$erro = new stdClass();
 										$erro->arquivo = $nomeCliente;
 										$erro->msg = $e1->getMessage();
+										$erro->codigo = $e1->getCode();
 										array_push($erros, $erro);
-
-										// removendo registro na base de dados
-										$sql = "DELETE from gdoks_daos WHERE id=?";
-										$db->query($sql,'i',$db->insert_id);
 									}
-								} catch (Exception $e2) {
-									// registrando falha na consulta no vetor de falhas.
+									
+									// Registrando a ação
+									registrarAcao($db,$id_usuario,ACAO_CRIOU_DAO,implode(',', (array)$dao));
+								} else {
+									// registrando falha no processo de salvar no FS
 									$erro = new stdClass();
 									$erro->arquivo = $nomeCliente;
-									$erro->msg = $e2->getMessage();
-									$erro->codigo = -2;
+									$erro->msg = $e1->getMessage();
 									array_push($erros, $erro);
+
+									// removendo registro na base de dados
+									$sql = "DELETE from gdoks_daos WHERE id=?";
+									$db->query($sql,'i',$db->insert_id);
 								}
+							} catch (Exception $e2) {
+								// registrando falha na consulta no vetor de falhas.
+								$erro = new stdClass();
+								$erro->arquivo = $nomeCliente;
+								$erro->msg = $e2->getMessage();
+								$erro->codigo = -2;
+								array_push($erros, $erro);
 							}
+
+							
 						} else {
 							// Registrando falha no upload no vetor de falhas.
 							$erro = new stdClass();
