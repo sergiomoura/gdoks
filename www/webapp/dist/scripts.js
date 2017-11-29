@@ -3496,7 +3496,6 @@ function ProjetosController($scope,GDoksFactory,$location){
 	$scope.getProjetos(1);
 };
 
-
 function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
 
 	// Variáveis de controle sobre o conteúdo de clientes e usuários (se info já foi carregada da base);
@@ -3597,7 +3596,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 					// parsing subareas
 					var area;
 					for (var i = $scope.projeto.subareas.length - 1; i >= 0; i--) {
-						$scope.projeto.subareas[i].area = $scope.projeto.areas.find(function(a){return a.id== this},$scope.projeto.subareas[i].id_area);
+						$scope.projeto.subareas[i].area = $scope.projeto.areas.find(function(a){return a.id==this},$scope.projeto.subareas[i].id_area);
 						delete $scope.projeto.subareas[i].id_area;
 					}
 
@@ -3795,8 +3794,88 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 	}
 };
 
-function DashProjetoController($scope){
-	$scope.teste = 'em desenvolvimento';
+function DashProjetoController($scope,GDoksFactory,$location,$routeParams){
+	
+	// Definindo variável projeto
+	$scope.projeto = {};
+
+	// Flags de controle de carregamento
+	var dadosCarregados = false;
+	var docsCarregados = false;
+
+	// Carregando projeto	
+	GDoksFactory.getProjeto($routeParams.id)
+	.success(function(response){
+		if(response.error == 0){
+			dadosCarregados = true;
+			if(docsCarregados){
+				response.projeto.documentos = $scope.projeto.documentos;
+				parseAreas();
+			}
+			$scope.projeto = response.projeto;
+		} else {
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao tentar carregar dados do projeto: ' + response.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		}
+	})
+	.error(function(err){
+		// Retornando Toast para o usuário
+		$mdToast.show(
+			$mdToast.simple()
+			.textContent(err.msg)
+			.position('bottom left')
+			.hideDelay(5000)
+		);
+
+		// Imprimindo erro no console
+		console.warn(err);
+	})
+
+	// Carregando documentos do projeto
+	GDoksFactory.getDocumentosDoProjeto($routeParams.id)
+	.success(function(response){
+		if(response.error == 0){
+			docsCarregados = true;
+			$scope.projeto.documentos = response.documentos;
+			if(dadosCarregados) parseAreas();
+		} else {
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao tentar carregar documentos do projeto: ' + response.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		}
+	})
+	.error(function(err){
+		// Retornando Toast para o usuário
+		$mdToast.show(
+			$mdToast.simple()
+			.textContent(err.msg)
+			.position('bottom left')
+			.hideDelay(5000)
+		);
+
+		// Imprimindo erro no console
+		console.warn(err);
+	});
+
+	function parseAreas(){
+		var doc;
+		for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
+			doc = $scope.projeto.documentos[i];
+			doc.area = $scope.projeto.areas.find(function(a){return a.id==this}, doc.id_area);
+			doc.subarea = $scope.projeto.subareas.find(function(s){return s.id==this}, doc.id_subarea);
+			delete doc.id_subarea;
+			delete doc.id_area;
+		}
+	}
 };;angular.module('Projetos').controller('ProjetosAreasController',ProjetosAreasController);
 function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 	
