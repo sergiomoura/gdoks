@@ -70,6 +70,9 @@ module.exports = function(grunt) {
 			js:{
 				files:['app/**/*.js'],
 				tasks:['concat:js'],
+				options: {
+					livereload: true
+				}
 			},
 			css:{
 				files:['css/**/*.css'],
@@ -77,7 +80,16 @@ module.exports = function(grunt) {
 			},
 			sass:{
 				files:['scss/*.scss'],
-				tasks:['makeSassAndConcatCss']
+				tasks:['makeSassAndConcatCss'],
+				options: {
+					livereload: true
+				}
+			},
+			html:{
+				files:['./**/*.php','./**/*.html'],
+				options: {
+					livereload: true
+				}
 			}
 
 		}
