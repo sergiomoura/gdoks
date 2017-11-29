@@ -972,7 +972,7 @@ textarea {
   position: fixed;
   width: 100%;
   top: 0;
-  left: 5; }
+  left: 0; }
 
 #abreMenu {
   background-image: url(../img/menu.png);

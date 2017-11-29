@@ -65,6 +65,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 	var usuariosCarregados = false;
 	var disciplinasCarregadas = false;
 	var cargosCarregados = false;
+	var documentosCarregados = false;
 
 	// Carregando clientes da base local
 	$scope.clientes = {};
@@ -162,23 +163,13 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 						delete $scope.projeto.subareas[i].id_area;
 					}
 
-					// parsing dependencias dos documentos
-					var doc;
-					for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
-						doc = $scope.projeto.documentos[i];
-						if(doc.data_limite != null){
-							doc.data_limite = new Date(doc.data_limite);
-							doc.data_limite.setTime(doc.data_limite.getTime() + (3*60*60*1000)); // ajustando para o horário local do brasil!
-						}
-						for	(var j = doc.dependencias.length - 1; j >= 0; j--) {
-							doc.dependencias[j] = $scope.projeto.documentos.find(function(d){return d.id == this},1*doc.dependencias[j]);
-						}
-					}
+					// Carrega documentos
+					carregaDocumentos();
+					
 				})
 				.error(function(error){
 				})
 			}
-			carregaDocumentos();
 		}
 	}
 
@@ -221,6 +212,12 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 						docs[i].dependencias[j] = docs.find(function(a){return a.id==this},docs[i].dependencias[j]);
 					}
 
+					// Parsing data_limite
+					if(docs[i].data_limite != null){
+						docs[i].data_limite = new Date(docs[i].data_limite);
+						docs[i].data_limite.setTime(docs[i].data_limite.getTime() + (3*60*60*1000)); // ajustando para o horário local do brasil!
+					}
+					
 					// Parsing HHs
 					for (var j = docs[i].hhs.length - 1; j >= 0; j--) {
 						docs[i].hhs[j].cargo = $scope.cargos.find(function(a){return a.id == this},docs[i].hhs[j].id_cargo);

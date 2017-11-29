@@ -36,7 +36,7 @@ Bloqueio de Telas:
 	☐	Tela e-mails enviados
 
 	BUGS Avulsos:
-		☐  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.(liha 159 do ProjetoController)
+		✔  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.(liha 159 do ProjetoController) @done (17-11-29 12:44)
 		☐ Fazer mudar para tab de documentos depois de salvar GRD
 		☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
 		☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador

@@ -1206,7 +1206,7 @@
 					$sql = 'SELECT id,nome,nome_cliente,tipo,tamanho FROM gdoks_daos WHERE id_projeto=?';
 					$projeto->daos = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 
-					// Levantando documentos do projeto -> feita em outra requisição
+					// Levantando documentos do projeto -> feita em outra requisição a /projetos/:id_projeto/documentos/
 					$projeto->documentos = Array();
 
 					// Levantando dependências de cada documento
