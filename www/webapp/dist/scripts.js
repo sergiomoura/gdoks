@@ -3571,6 +3571,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 				$scope.projeto.ativo = true;
 				$scope.projeto.daos = [];
 				$scope.projeto.areas = [];
+				$scope.projeto.subareas = [];
 				$scope.projeto.documentos = [];
 				$scope.inicialmenteAtivo = true;
 			} else {
@@ -4051,7 +4052,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 										);
 									})
 									.error(function(err){
-										console.dir(err);
+										console.warn(err);
 										$mdToast.show(
 											$mdToast.simple()
 											.textContent('Um erro ocorreu. Não foi possível completar ação!')
@@ -4074,7 +4075,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 										);
 									})
 									.error(function(err){
-										console.dir(err);
+										console.warn(err);
 										$mdToast.show(
 											$mdToast.simple()
 											.textContent('Um erro ocorreu. Não foi possível completar ação!')
@@ -4456,18 +4457,20 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 																					},
 																					$scope.doc.subdisciplina.disciplina.id
 																				 ));
-
 			// Linkando doc.subdisciplina a um elemento de disciplinaSelecionada.subs
 			$scope.doc.subdisciplina = (doc.id==0 ? null : $scope.disciplinaSelecionada.subs.find(
 																			function(a){
 																				return a.id==this;
 																			},$scope.doc.subdisciplina.id
 																		));
+
+
 			// Determinando o valor da area selecionada
 			$scope.areaSelecionada = (doc.id==0 ? null : $scope.areas.find(
 													function(a){
 														return a.id == this
 													}, $scope.doc.subarea.area.id));
+			
 
 			// Construindo vertor de subareas de area selecionada
 			$scope.subareasDeAreaSelecionada = [{}];
@@ -4591,6 +4594,21 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 						documento.id = response.newId;
 						documento.rev_serial = 1;
 
+						// Parsing subdisciplina do documento
+						var achouSub = false;
+						var j = 0;
+						while(j<$scope.disciplinas.length && !achouSub){
+							k = 0;
+							while(k<$scope.disciplinas[j].subs.length && !achouSub){
+								achouSub = ($scope.disciplinas[j].subs[k].id == documento.subdisciplina.id);
+								if(achouSub){
+									documento.subdisciplina.disciplina = $scope.disciplinas[j];
+								}
+								k++;
+							}
+							j++;
+						}
+
 						// Adicionando novo documento ao vetor de documentos do projeto
 						parentScope.projeto.documentos.push(documento)
 
@@ -4677,6 +4695,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 				$scope.doc.hhs.splice(pos,1);
 			}
 		}
+
 	}
 })();angular.module('Senha',[]).controller('SenhaController',SenhaController)
 

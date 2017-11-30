@@ -1,4 +1,3 @@
-✔ No cadastro da GRD, filtrar documentos por área e disciplina @done (17-11-27 08:26)
 ☐ Desenhar e Implementar Dashboard Home
 	- nº de documentos em revisão
 	- produtividade dos especialistas
@@ -15,7 +14,9 @@
 ☐ Página de Busca de documentos retornar a páginação pág 1 antes da busca...(busque tudo, vá para página 4, altere parâmetros e busque restrito)
 ☐	Mostrar tna tela de documentos um select para alterar entre outros documentos do projeto
 ☐	Fazer com que acessos a endereços aleatórios da api não retornem nada...
-
+☐	Mostrar na tela de cadastro de documento de abertura de operações o tamanho máximo do upload e bloquear em clientside esse tamanho.
+☐	Poder fazer download de DOA a partir da tela de seu cadastro
+☐	Mostar tamanho de DAOS em formato legívelpara humano
 
 Bloqueio de Telas:
 		☐ usuários
@@ -34,9 +35,9 @@ Bloqueio de Telas:
 	☐	Quando for baixar um documento só, baixar sem zipar
 	☐	Número de revisões a serem guardadas é limitado e configurável
 	☐	Tela e-mails enviados
+	☐	Na tela de cadastro de projeto, mdInput messages show animation called on invalid messages element
 
 	BUGS Avulsos:
-		✔  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.(liha 159 do ProjetoController) @done (17-11-29 12:44)
 		☐ Fazer mudar para tab de documentos depois de salvar GRD
 		☐ Na tela de DAOs, mostrar progresso de upload e animação de carregando.
 		☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
@@ -55,7 +56,6 @@ Bloqueio de Telas:
 		☐ Primeira subárea de um projeto não aparece assim que é criada
 		☐ Tela Cadastro de Formatos de Papel
 		☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
-		Cannot read property 'find' of undefined at ProjetosController.js:159
 		☐ Mostrar Carregando para ações
 			☐ Inserir Cargo
 			☐ Atualizar Cargo
@@ -64,6 +64,9 @@ Bloqueio de Telas:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	Ao criar um projeto, criar área e subáreas, criar documento. Clicar no documento criado: Veja que Disciplina e Subáreas aparecem em branco. Ao clicar em editar o seguinte erro aparece 2 vezes (mesma linha)- Cannot read property 'id' of undefined at dialogController (ProjetosDocumentosController.js:134) @done (17-11-30 03:45) @project(Bloqueio de Telas / BUGS Avulsos)
+	✔  As vezes, $scope.projeto.subareas fica null ou undefined. Ele sempre tem que ser um vetor, ainda que vazio.(liha 159 do ProjetoController) @done (17-11-29 12:44) @project(Bloqueio de Telas / BUGS Avulsos)
+	✔ No cadastro da GRD, filtrar documentos por área e disciplina @done (17-11-27 08:26)
  ✔  Lista de documento com percentual e datas @done (17-09-28 10:41) @project(Bloqueio de Telas)
  ✔ Registrar corretamente no log a adiçao de um documento a um projeto @done (17-09-28 10:24)
  ✔ Baixar para revisão deve registrar no log @done (17-09-28 09:23)

@@ -48,7 +48,7 @@
 										);
 									})
 									.error(function(err){
-										console.dir(err);
+										console.warn(err);
 										$mdToast.show(
 											$mdToast.simple()
 											.textContent('Um erro ocorreu. Não foi possível completar ação!')
@@ -71,7 +71,7 @@
 										);
 									})
 									.error(function(err){
-										console.dir(err);
+										console.warn(err);
 										$mdToast.show(
 											$mdToast.simple()
 											.textContent('Um erro ocorreu. Não foi possível completar ação!')

@@ -133,6 +133,7 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 				$scope.projeto.ativo = true;
 				$scope.projeto.daos = [];
 				$scope.projeto.areas = [];
+				$scope.projeto.subareas = [];
 				$scope.projeto.documentos = [];
 				$scope.inicialmenteAtivo = true;
 			} else {
