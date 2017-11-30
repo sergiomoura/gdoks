@@ -50,7 +50,8 @@ Bloqueio de Telas:
 	☐	Na tela de cadastro de projeto, mdInput messages show animation called on invalid messages element
 
 BUGS Avulsos:
-	☐ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador
+	Alertar na tela de atualização de documentos quanto ao tamanho máximo de uploads
+	✔ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador @done (17-11-30 06:26)
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:

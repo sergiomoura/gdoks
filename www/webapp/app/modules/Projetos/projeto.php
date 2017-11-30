@@ -146,11 +146,23 @@
 				<h1 class="md-display-2">Documentos de Abertura de Operações</h1>
 				<form id="form_daos" name="form_daos">
 					<div layout="row" layout-align="space-between center">
-						<md-button class="md-raised md-primary" ngf-multiple="true" ngf-select ng-model="daoFiles" ng-disabled="daoFiles.length>0" aria-label="Selecione Documentos de Abertura de Operções">Selecione Documentos de Abertura de Operções ...</md-button>
+						<md-button
+							class="md-raised md-primary"
+							ngf-multiple="true"
+							ngf-select
+							ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
+							ngf-model-invalid="errorFiles"
+							ng-model="daoFiles"
+							ng-disabled="daoFiles.length>0"
+							aria-label="Selecione">Selecione (Máximo <?php echo(ini_get('upload_max_filesize').'B)'); ?></md-button>
 						<md-input-container>
 							<label>Busca</label>
 							<input type="text" ng-model="qDao.nome">
 						</md-input-container>
+					</div>
+					<div ng-if="errorFiles.length" class="alertaDeTamanho">
+						Foram selecionados arquivos com tamanho superior a {{errorFiles[0].$errorParam}}.<br>
+						Estes arquivos não serão enviados.
 					</div>
 					<table ng-if="daoFiles.length>0">
 						<thead>
