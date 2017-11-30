@@ -19,7 +19,7 @@
 		<tbody>
 			<tr ng-repeat="cargo in cargos|orderBy:nome|filter:q as result">
 				<td>{{cargo.nome}}</td>
-				<td>{{cargo.valor_hh|currency:'R$ '}}</td>
+				<td>{{cargo.valor_hh|currency}}</td>
 				<td>
 					<md-button class="md-icon-button" aria-label="Remover Cargo" ng-click="openConfirm($event,cargo.id)">
 						<md-icon class="material-icons step" aria-label="Remover Cargo">delete</md-icon>

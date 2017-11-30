@@ -8,6 +8,7 @@ module.exports = function(grunt) {
 			js: {
 				src: [
 					'node_modules/angular/angular.min.js',
+					'node_modules/angular-locale-pt-br/angular-locale_pt-br.js',
 					'node_modules/angular-animate/angular-animate.min.js',
 					'node_modules/angular-aria/angular-aria.min.js',
 					'node_modules/angular-cookies/angular-cookies.min.js',

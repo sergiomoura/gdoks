@@ -290,7 +290,131 @@ e.$validators.pattern=function(a){return e.$isEmpty(a)||y(f)||f.test(a)}}}}},Hc=
 c){return e.$isEmpty(c)||c.length>=f}}}}};O.angular.bootstrap?console.log("WARNING: Tried to load angular more than once."):(ce(),ee(aa),aa.module("ngLocale",[],["$provide",function(a){function c(a){a+="";var c=a.indexOf(".");return-1==c?0:a.length-c-1}a.value("$locale",{DATETIME_FORMATS:{AMPMS:["AM","PM"],DAY:"Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" "),ERANAMES:["Before Christ","Anno Domini"],ERAS:["BC","AD"],FIRSTDAYOFWEEK:6,MONTH:"January February March April May June July August September October November December".split(" "),
 SHORTDAY:"Sun Mon Tue Wed Thu Fri Sat".split(" "),SHORTMONTH:"Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" "),WEEKENDRANGE:[5,6],fullDate:"EEEE, MMMM d, y",longDate:"MMMM d, y",medium:"MMM d, y h:mm:ss a",mediumDate:"MMM d, y",mediumTime:"h:mm:ss a","short":"M/d/yy h:mm a",shortDate:"M/d/yy",shortTime:"h:mm a"},NUMBER_FORMATS:{CURRENCY_SYM:"$",DECIMAL_SEP:".",GROUP_SEP:",",PATTERNS:[{gSize:3,lgSize:3,maxFrac:3,minFrac:0,minInt:1,negPre:"-",negSuf:"",posPre:"",posSuf:""},{gSize:3,lgSize:3,
 maxFrac:2,minFrac:2,minInt:1,negPre:"-\u00a4",negSuf:"",posPre:"\u00a4",posSuf:""}]},id:"en-us",pluralCat:function(a,e){var f=a|0,g=e;t===g&&(g=Math.min(c(a),3));Math.pow(10,g);return 1==f&&0==g?"one":"other"}})}]),z(W).ready(function(){Zd(W,yc)}))})(window,document);!window.angular.$$csp().noInlineStyle&&window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-;/*
+;'use strict';
+angular.module("ngLocale", [], ["$provide", function($provide) {
+  var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
+  $provide.value("$locale", {
+    "DATETIME_FORMATS": {
+      "AMPMS": [
+      "AM",
+      "PM"
+      ],
+      "DAY": [
+      "domingo",
+      "segunda-feira",
+      "ter\u00e7a-feira",
+      "quarta-feira",
+      "quinta-feira",
+      "sexta-feira",
+      "s\u00e1bado"
+      ],
+      "ERANAMES": [
+      "Antes de Cristo",
+      "Ano do Senhor"
+      ],
+      "ERAS": [
+      "a.C.",
+      "d.C."
+      ],
+      "FIRSTDAYOFWEEK": 6,
+      "MONTH": [
+      "janeiro",
+      "fevereiro",
+      "mar\u00e7o",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro"
+      ],
+      "SHORTDAY": [
+      "dom",
+      "seg",
+      "ter",
+      "qua",
+      "qui",
+      "sex",
+      "s\u00e1b"
+      ],
+      "SHORTMONTH": [
+      "jan",
+      "fev",
+      "mar",
+      "abr",
+      "mai",
+      "jun",
+      "jul",
+      "ago",
+      "set",
+      "out",
+      "nov",
+      "dez"
+      ],
+      "STANDALONEMONTH": [
+      "janeiro",
+      "fevereiro",
+      "mar\u00e7o",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro"
+      ],
+      "WEEKENDRANGE": [
+      5,
+      6
+      ],
+      "fullDate": "EEEE, d 'de' MMMM 'de' y",
+      "longDate": "d 'de' MMMM 'de' y",
+      "medium": "d 'de' MMM 'de' y HH:mm:ss",
+      "mediumDate": "d 'de' MMM 'de' y",
+      "mediumTime": "HH:mm:ss",
+      "short": "dd/MM/yy HH:mm",
+      "shortDate": "dd/MM/yy",
+      "shortTime": "HH:mm"
+    },
+    "NUMBER_FORMATS": {
+      "CURRENCY_SYM": "R$ ",
+      "DECIMAL_SEP": ",",
+      "GROUP_SEP": ".",
+      "PATTERNS": [
+      {
+        "gSize": 3,
+        "lgSize": 3,
+        "maxFrac": 3,
+        "minFrac": 0,
+        "minInt": 1,
+        "negPre": "-",
+        "negSuf": "",
+        "posPre": "",
+        "posSuf": ""
+      },
+      {
+        "gSize": 3,
+        "lgSize": 3,
+        "maxFrac": 2,
+        "minFrac": 2,
+        "minInt": 1,
+        "negPre": "-\u00a4",
+        "negSuf": "",
+        "posPre": "\u00a4",
+        "posSuf": ""
+      }
+      ]
+    },
+    "id": "pt-br",
+    "localeID": "pt_BR",
+    "pluralCat": function(n, opt_precision) {  if (n >= 0 && n <= 2 && n != 2) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+  });
+}]);;/*
  AngularJS v1.4.4
  (c) 2010-2015 Google, Inc. http://angularjs.org
  License: MIT
