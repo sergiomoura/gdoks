@@ -5301,7 +5301,7 @@ WebGDoks.config(
 			'/visaogeral',
 			{
 				controller: 'VisaoGeralController',
-				templateUrl: 'app/modules/VisaoGeral/visaogeral.html'
+				templateUrl: 'app/modules/VisaoGeral/visaogeral.php'
 			}
 		)
 		.when(
