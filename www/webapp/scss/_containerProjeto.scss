@@ -43,7 +43,11 @@
 	right:15px;
 	bottom: 15px;
 }
-
+#form_daos > div.alertaDeTamanho{
+	text-align:center;
+	color:$laranja;
+	margin-bottom: 10px;
+}
 md-expansion-panel-collapsed{
 	cursor: pointer;
 	.md-expansion-panel-item{

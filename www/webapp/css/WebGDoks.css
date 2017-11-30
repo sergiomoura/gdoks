@@ -1039,6 +1039,11 @@
   right: 15px;
   bottom: 15px; }
 
+#form_daos > div.alertaDeTamanho {
+  text-align: center;
+  color: #ef6c00;
+  margin-bottom: 10px; }
+
 md-expansion-panel-collapsed {
   cursor: pointer; }
   md-expansion-panel-collapsed .md-expansion-panel-item {

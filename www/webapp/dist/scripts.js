@@ -5315,7 +5315,7 @@ WebGDoks.config(
 			'/projetos/:id',
 			{
 				controller: 'ProjetoController',
-				templateUrl: 'app/modules/Projetos/projeto.html'
+				templateUrl: 'app/modules/Projetos/projeto.php'
 			}
 		)
 		.when(
