@@ -26,13 +26,20 @@
 
 			$mdDialog.show(
 				{
-					controller: function($scope,cargo,parentCargo,parentCargos){
+					controller: function($scope,cargo,parentCargo,parentCargos,parentScope){
 						$scope.cargo = cargo;
 
 						$scope.salvar = function(cargo){
+							
+							// mostrar carregando
+							parentScope.root.carregando = true;
+
 							if(cargo.id == 0){
 								GDoksFactory.inserirCargo(cargo)
 								.success(function(response){
+									// Esconde carregando
+									parentScope.root.carregando = false;
+
 									cargo.id = response.newId;
 									parentCargos.push(cargo);
 									$mdToast.show(
@@ -41,9 +48,18 @@
 										.position('bottom left')
 										.hideDelay(5000)
 									);
+
+									// Escondendo o diálogo.
+									$mdDialog.hide();
 								})
 								.error(function(err){
-									console.dir(err);
+									// Esconde carregando
+									parentScope.root.carregando = false;
+
+									// imprimindo erro no console
+									console.warn(err);
+
+									// Retornando toast para o cliente
 									$mdToast.show(
 										$mdToast.simple()
 										.textContent('Um erro ocorreu. Não foi possível completar ação!')
@@ -54,6 +70,9 @@
 							} else {
 								GDoksFactory.atualizarCargo(cargo)
 								.success(function(response){
+									// Esconde carregando
+									parentScope.root.carregando = false;
+
 									parentCargo.valor_hh = cargo.valor_hh;
 									parentCargo.nome = cargo.nome;
 									$mdToast.show(
@@ -62,9 +81,18 @@
 										.position('bottom left')
 										.hideDelay(5000)
 									);
+
+									// Escondendo o diálogo.
+									$mdDialog.hide();
 								})
 								.error(function(err){
-									console.dir(err);
+									// Esconde carregando
+									parentScope.root.carregando = false;
+
+									// Imprimindo erro no console
+									console.warn(err);
+
+									// Retornando toast para o usuário
 									$mdToast.show(
 										$mdToast.simple()
 										.textContent('Um erro ocorreu. Não foi possível completar ação!')
@@ -73,9 +101,6 @@
 									);
 								});
 							}
-
-							// Escondendo o cargo.
-							$mdDialog.hide(cargo);
 						};
 
 						$scope.cancelar = function(cargo){
@@ -85,7 +110,8 @@
 					locals:{
 						cargo:angular.copy(cargoClicado),
 						parentCargo:cargoClicado,
-						parentCargos:$scope.cargos
+						parentCargos:$scope.cargos,
+						parentScope:$scope
 					},
 					templateUrl: './app/modules/Cargos/cargo-dialog.tmpl.html',
 					parent: angular.element(document.body),
