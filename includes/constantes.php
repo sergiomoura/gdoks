@@ -1,6 +1,7 @@
 <?php
 	define('UPLOAD_PATH','../../uploads/');
 	define('TMP_PATH','../../tmp/');
+	define('CLIENT_DATA_PATH',$_SERVER['DOCUMENT_ROOT'].'/client_data/');
 	define('AES_KEY','J237HDF9H99QEW78FGGF8VIBLAS893BDOU978B9A');
 	define('SENDGRID_KEY','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');
 	define('SENDGRID_DEFAULT_FROM','postmaster@gdoks.com.br');
