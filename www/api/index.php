@@ -48,9 +48,9 @@
 	}
 
 	// Definindo os nomes dos arquivos do cliente;
-	$FILE_DBKEY = '../../client_data/'.$empresa.'/dbkey.php';
-	$FILE_GRD = '../../client_data/'.$empresa.'/grd.php';
-	$FILE_LOGO = '../../client_data/'.$empresa.'/logo.jpg';
+	$FILE_DBKEY = CLIENT_DATA_PATH.$empresa.'/dbkey.php';
+	$FILE_GRD = CLIENT_DATA_PATH.$empresa.'/grd.php';
+	$FILE_LOGO = CLIENT_DATA_PATH.$empresa.'/logo.jpg';
 	
 	// criando a conexão
 	if(isset($empresa) && file_exists($FILE_DBKEY)){
@@ -1584,7 +1584,7 @@
 				}
 			});
 
-			$app->post('/projetos/:id_projeto/daos/',function($id_projeto) use ($app,$db,$token){
+			$app->post('/projetos/:id_projeto/daos/',function($id_projeto) use ($app,$db,$empresa,$token){
 				// lendo dados
 				$id_projeto = 1*$id_projeto;
 
@@ -1635,7 +1635,7 @@
 							$salvoNoFS = false;
 							try {
 								// verificando se existe uma pasta da empresa. Se não houver, tenta criar.
-								$caminho = UPLOAD_PATH.$id_empresa;
+								$caminho = CLIENT_DATA_PATH.'/'.$empresa.'/uploads/';
 								$pastaDaEmpresaExiste = file_exists($caminho);
 								if(!$pastaDaEmpresaExiste){
 									$pastaDaEmpresaExiste = @mkdir($caminho);
