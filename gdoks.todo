@@ -2,6 +2,8 @@
 	- nº de documentos em revisão
 	- produtividade dos especialistas
 ☐ Desenhar e Implementar Dashboard do Projeto
+☐	Programar rotina de backup
+☐	Mudar local da pasta de uploads: cada cliente vai ter a sua pasta dentro da pasta sua pasta client_data
 ☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
 ☐ Notificar o usuário na tela de documeto quando este for de uma disciplna sem validador ou especialista
 ☐ no cadastro de um documento no projeto, habilitar aba documento somente depois de subarea cadastrada
@@ -50,11 +52,11 @@ Bloqueio de Telas:
 	☐	Na tela de cadastro de projeto, mdInput messages show animation called on invalid messages element
 
 BUGS Avulsos:
-	Alertar na tela de atualização de documentos quanto ao tamanho máximo de uploads
-	✔ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador @done (17-11-30 06:26)
+	☐	Alertar na tela de atualização de documentos quanto ao tamanho máximo de uploads
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Na tela de DAOs, Settar MAX_FILE_SIZE do lado do navegador @done (17-11-30 06:26) @project(BUGS Avulsos)
 	✔ Separador de decimal e de grupo de milhar estão trocados. estudar filto currency e locale para conserto @done (17-11-30 04:43) @project(BUGS Avulsos)
 	✔ Mostrar Carregando para ações @done (17-11-30 04:15) @project(BUGS Avulsos)
 	✔ Inserir Cargo @done (17-11-30 04:12) @project(BUGS Avulsos)

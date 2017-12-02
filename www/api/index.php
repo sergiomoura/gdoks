@@ -36,7 +36,7 @@
 
 	// lendo informações no header
 	$headers = getallheaders();
-	if(isset($headers['Authorization']) || $headers['Authorization'] != '' || is_null($headers['Authorization'])){
+	if ( array_key_exists('Authorization', $headers) && $headers['Authorization'] != '' && !is_null($headers['Authorization']) ){
 		// definindo iddb e token a partir do header
 		$empresa =  explode('-', $headers['Authorization'])[0];
 		$token = explode('-', $headers['Authorization'])[1];
@@ -1768,7 +1768,7 @@
 				}
 			});
 
-			$app->delete('/projetos/:id_projeto/daos/:id_dao',function($id_projeto,$id_dao) use ($app,$db,$token){
+			$app->delete('/projetos/:id_projeto/daos/:id_dao',function($id_projeto,$id_dao) use ($app,$db,$token,$empresa){
 				// Lendo e saneando as informações da requisição
 				$id_projeto = 1*$id_projeto;
 				$id_dao = 1*$id_dao;
@@ -1818,7 +1818,7 @@
 					$removeuDoFS = false;
 					if($removeuDaBase){
 						// removendo do FS
-						$removeuDoFS = @unlink(UPLOAD_PATH.$id_empresa.'/'.$id_projeto.'/'.$dao->nome_unico);
+						$removeuDoFS = @unlink(CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/'.$dao->nome_unico);
 					} else {
 						$app->response->setStatus(401);
 						$response = new response(1,'Falha ao tentar remover registro do documento na base de dados.');
@@ -2210,140 +2210,7 @@
 		// FIM DE ROTAS DE PROJETOS
 
 		// ROTAS DE DOCUMENTOS
-
-			$app->post('/documentos/:idDoc/arquivos/',function($id_doc) use ($app,$db,$token){
-				// lendo dados
-				$id_doc = 1*$id_doc; 
-
-				// Verificando se o documento é da mesma empresa do usuário
-				$sql = 'SELECT
-							A.id,A.id_empresa,COUNT(*) as ok
-						FROM (
-							SELECT
-								id,id_empresa
-							FROM gdoks_usuarios
-							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
-								(
-									SELECT c.id_empresa
-									FROM gdoks_documentos a
-									INNER JOIN gdoks_areas b ON b.id=a.id_area
-									INNER JOIN gdoks_projetos c ON c.id=b.id_projeto
-									WHERE a.id = ?) B on A.id_empresa=B.id_empresa;';
-				$rs = $db->query($sql,'si',$token,$id_doc)[0];
-				$ok = $rs['ok'];
-				$id_usuario = $rs['id'];
-				$id_empresa = $rs['id_empresa'];
-
-
-				// Indo adiante
-				if($ok == 1) {
-
-					// verificando se há erro
-					if($_FILES['file']['error'] == 0){
-						// UPLOAD COM SUCESSO
-						// Organizando informações a serem salvas na base
-						$nomeUnico = uniqid(true);
-						$caminho = UPLOAD_PATH.$id_empresa.'/';
-						$nomeTemporario = $_FILES['file']['tmp_name'];
-						$nomeCliente = $_FILES['file']['name'];
-						$tipo = $_FILES['file']['type'];
-						$tamanho = $_FILES['file']['size'];
-						$progresso = 1*$_POST['progresso'];
-
-						// Registrando informações na base
-						$registradoNaBase = false;
-						$sql = "INSERT INTO gdoks_arquivos (caminho,nome_cliente,id_documento,datahora_upload,progresso_total,idu,tamanho)
-								VALUES (?,?,?,NOW(),?,?,?)";
-						$idInserido = null;
-						try {
-							$db->query($sql,'ssiiii',
-								$caminho.$nomeUnico,
-								$nomeCliente,
-								$id_doc,
-								$progresso,
-								$id_usuario,
-								$tamanho);
-							$id_inserido = $db->insert_id;
-						} catch (Exception $e1) {
-							// registrando falha na consulta no vetor de falhas.
-							$app->response->setStatus(401);
-							$response = new Response(1,$e1->getMessage());
-							$response->flush();
-							die();
-						}
-
-						// Salvando arquivo no FS
-						try {
-							// verificando se existe uma pasta da empresa. Se não houver, tenta criar.
-							$caminho = UPLOAD_PATH.$id_empresa;
-							$pastaDaEmpresaExiste = file_exists($caminho);
-							if(!$pastaDaEmpresaExiste){
-								$pastaDaEmpresaExiste = @mkdir($caminho);
-							}
-
-							if($pastaDaEmpresaExiste){
-								// Salvando arquivo na pasta do cliente
-								$salvoNoFS = @move_uploaded_file($nomeTemporario, $caminho.'/'.$nomeUnico);	
-							} else {
-								$salvoNoFS = false;
-							}
-
-							if($salvoNoFS){
-								// Registrando na tabela de documentos que este arquivo é um progresso a ser validado
-								$sql = 'UPDATE gdoks_documentos SET id_progresso_a_validar=? WHERE id=?';
-								$db->query($sql,'ii',$id_inserido,$id_doc);
-
-								// Criando elemento progresso
-								$progressoAValidar = new stdClass();
-								$progressoAValidar->id_doc = $id_doc;
-								$progressoAValidar->id = $id_inserido;
-								$progressoAValidar->idu = $id_usuario;
-								$progressoAValidar->progresso_total = $progresso;
-								$progressoAValidar->data = date('Y-m-dTH:i:s');
-								
-								// retornando;
-								$response = new response(0,'Arquivo processado.');
-								$response->progresso = $progressoAValidar;
-								$response->flush();
-
-								// Registrando a ação
-								unset($progressoAValidar->data);
-								unset($progressoAValidar->idu);
-								registrarAcao($db,$id_usuario,ACAO_ATUALIZOU_DOCUMENTO,implode(',', (array)$progressoAValidar));
-								die();
-							} else {
-								// registrando falha no processo de salvar no FS
-								$erro = new stdClass();
-								$erro->arquivo = $nomeCliente;
-								$erro->msg = $e1->getMessage();
-								array_push($erros, $erro);
-
-								// removendo registro na base de dados
-								$sql = "DELETE from gdoks_arquivos WHERE id=?";
-								$db->query($sql,'i',$id_inserido);
-							}
-						} catch (Exception $e2) {
-							// registrando falha na consulta no vetor de falhas.
-							$app->response->setStatus(401);
-							$response = new Response(1,$e2->getMessage());
-							$response->flush();
-							die();
-						}
-					} else {
-						// Respondendo falha no upload.
-						$app->response->setStatus(401);
-						$response = new Response(1,'Upload falhou. Erro: '.$_FILES['file']['error']);
-						$response->flush();
-						die();
-					}
-				} else {
-					$app->response->setStatus(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
-					$response->flush();
-					die();
-				}
-			});
-			
+						
 			$app->get('/documentos',function() use ($app,$db,$token){
 				// Lendo o token
 
@@ -2654,7 +2521,8 @@
 				}
 			});
 
-			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db,$token) {
+			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db,$token,$empresa) {
+
 				// Lendo dados
 				$id_doc = 1*$id_doc;
 				$itens = array_map(function($a){return (object)$a['dados'];}, $_POST['profiles']);
@@ -2724,14 +2592,14 @@
 					if($item->tipo == 'novo' || $item->tipo == 'antigoParaAtualizar'){ // mesmos passos do $item->tipo == 'antigoParaAtualizar'
 						// determinando o nome local
 						$filename = uniqid(true);
-						$caminho = $id_empresa.'/'.$id_projeto.'/';
+						$caminho = CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/';
 						$caminho_completo = $caminho.$filename;
 
 						// criando pasta caso ela não exista
-						@mkdir(UPLOAD_PATH.$caminho);
+						@mkdir($caminho);
 
 						// salvando no fs
-						move_uploaded_file($_FILES['profiles']['tmp_name'][$i]['file'], UPLOAD_PATH.$caminho_completo);
+						move_uploaded_file($_FILES['profiles']['tmp_name'][$i]['file'], $caminho_completo);
 
 						// criando registro na gdoks_arquivos
 						$sql = "INSERT INTO gdoks_arquivos (caminho,nome_cliente,datahora_upload,idu,tamanho,tamanho_do_papel,nPaginas) VALUES (?,?,NOW(),?,?,?,?)";
@@ -3771,7 +3639,7 @@
 		// FIM DE ROTAS DE TAMANHOS DE PAPEL
 
 		// ROTAS DE PDAS
-			$app->get('/pdas/:id',function($id) use ($app,$db,$token){
+			$app->get('/pdas/:id',function($id) use ($app,$db,$token,$empresa){
 				// Lendo o token
 				$id_pda = 1*$id;
 
@@ -3782,14 +3650,14 @@
 						WHERE token=? AND validade_do_token>NOW()';
 				$rs = $db->query($sql,'s',$token);
 
-				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
+				// Se recset voltar vazio, manda erro para o cliente. O token dele deve ter expirado
 				if(sizeof($rs) == 0){
 					$app->response->setStatus(401);
 					$response = new response(1,'Token expirado');
 					$response->flush();
 					return;
 				} else {
-					// Levantando todos os documentos do pda
+					// Levantando todos os arquivos do pda
 					$sql = 'SELECT caminho,nome_cliente
 							FROM gdoks_pdas_x_arquivos a
 							INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
@@ -3798,7 +3666,7 @@
 					$caminhos = $rs;
 
 					// Definindo nome do arquivo zip
-					$filename = UPLOAD_PATH.'pda_'.$id_pda.'.zip';
+					$filename = TMP_PATH.'pda_'.$id_pda.'.zip';
 
 					// Criando arquivo zip
 					$zip = new ZipArchive();
@@ -3813,8 +3681,8 @@
 					$arquivosOk = true;
 					$inexistentes = Array();
 					foreach ($caminhos as $c) {
-						if(!file_exists(UPLOAD_PATH.$c['caminho'])){
-							array_push($inexistentes, UPLOAD_PATH.$c['caminho']);
+						if(!file_exists($c['caminho'])){
+							array_push($inexistentes, $c['caminho']);
 						}
 					}
 					$arquivosOk = (sizeof($inexistentes) == 0);
@@ -3822,11 +3690,10 @@
 					if(!$arquivosOk){
 						echo("Um ou mais arquivos inexistente.");
 						die();
-
 					} else {
 						$arquivosOk = true;
 						foreach ($caminhos as $c) {
-							$arquivosOk = $arquivosOk && $zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+							$arquivosOk = $arquivosOk && $zip->addFile($c['caminho'],trim($c['nome_cliente']));
 						}
 						if(!$arquivosOk){
 							die("Um ou mais arquivos não adicionados ao zip.");
@@ -3875,18 +3742,32 @@
 							INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
 							WHERE a.id_pda=?';
 					$rs = $db->query($sql,'s',$id_pda);
-					$caminhos = $rs;
+					$arquivos = $rs;
 					
 					// Definindo nome do arquivo zip
-					$filename = UPLOAD_PATH.'pda_'.$id_pda.'.zip';
+					$filename = TMP_PATH.'pda_'.$id_pda.'.zip';
 
 					// Criando arquivo zip
 					$zip = new ZipArchive();
-					$zip->open($filename,ZipArchive::CREATE);
+					$abriu_ok = $zip->open($filename,ZipArchive::CREATE);
+					if(!$abriu_ok) {
+						die('Erro ao criar arquivo zip: '. $abriu_ok);
+					}
+
+					// Testando existência dos arquivos
+					$inexistentes = Array();
+					for ($i=0; $i < sizeof($arquivos); $i++) { 
+						if(!file_exists($arquivos[$i]['caminho'])){
+							array_push($inexistentes, $arquivos[$i]['caminho']);
+						}
+					}
+					if(sizeof($inexistentes) > 0){
+						die('Erro: Um ou mais arquivos não consta no servidor.');
+					}
 					
 					// Adicionando arquivos ao zip
-					foreach ($caminhos as $c) {
-						$zip->addFile(UPLOAD_PATH.$c['caminho'],trim($c['nome_cliente']));
+					foreach ($arquivos as $c) {
+						$zip->addFile($c['caminho'],trim($c['nome_cliente']));
 					}
 
 					// Fechando o arquivo zip
