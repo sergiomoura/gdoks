@@ -10,7 +10,6 @@
     "require": {
         "php": ">=7.0",
         "sendgrid/sendgrid": "~6.0",
-        "slim/slim": "~2.0",
-        "tedivm/jshrink": "~1.0"
+        "slim/slim": "~2.0"
     }
 }

@@ -33,13 +33,6 @@ class ComposerStaticInit5c6c0aac8912ed69443575fd9320c1e0
                 0 => __DIR__ . '/..' . '/slim/slim',
             ),
         ),
-        'J' => 
-        array (
-            'JShrink' => 
-            array (
-                0 => __DIR__ . '/..' . '/tedivm/jshrink/src',
-            ),
-        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
