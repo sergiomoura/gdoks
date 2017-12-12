@@ -4478,7 +4478,7 @@
 				}
 			});
 
-			$app->post('/grds/:id_grd/obs',function($id_grd) use ($app,$db,$token){
+			$app->post('/grds/:id_grd/obs',function($id_grd) use ($app,$db,$token,$empresa){
 				
 				// Lendo dados nas variáveis
 				$id_grd = 1*$id_grd;
@@ -4528,8 +4528,8 @@
 
 					// removendo arquivos
 					foreach ($paraRemover as $file) {
-						if(file_exists(UPLOAD_PATH.$file->caminho)){
-							unlink(UPLOAD_PATH.$file->caminho);
+						if(file_exists($file->caminho)){
+							unlink($file->caminho);
 						}
 					}
 					
@@ -4541,7 +4541,7 @@
 					$upload_results = Array();
 
 					// Verificando se a pasta destino existe, se não existe, tenta criar
-					$pasta_destino = UPLOAD_PATH.'/'.$id_empresa.'/'.$id_projeto;
+					$pasta_destino = CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/';
 					if(!file_exists($pasta_destino)){
 						if(!@mkdir($pasta_destino)){
 							$app->response->setStatus(401);
@@ -4605,10 +4605,10 @@
 							if($erros[$i] == 0){
 								// gerando nome unico do arquivo
 								$uniq_name = uniqid();
-								$caminho = '/'.$id_empresa.'/'.$id_projeto.'/'.$uniq_name;
+								$caminho = $pasta_destino.$uniq_name;
 
 								// salvando o arquivo
-								if(!@move_uploaded_file($tmp_names[$i], UPLOAD_PATH.$caminho)){
+								if(!@move_uploaded_file($tmp_names[$i], $caminho)){
 									$result->error = -1;
 									$result->msg = 'Impossível salvar arquivo no servidor. Verifique existência/permissão da pasta destino.';
 									$result->newId = 0;
@@ -4644,7 +4644,7 @@
 					$upload_results = Array();
 
 					// Verificando se a pasta destino existe, se não existe, tenta criar
-					$pasta_destino = UPLOAD_PATH.'/'.$id_empresa.'/'.$id_projeto;
+					$pasta_destino = CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/';
 					if(!file_exists($pasta_destino)){
 						if(!@mkdir($pasta_destino)){
 							$app->response->setStatus(401);
@@ -4708,17 +4708,16 @@
 							if($erros[$i] == 0){
 								// gerando nome unico do arquivo
 								$uniq_name = uniqid();
-								$caminho = '/'.$id_empresa.'/'.$id_projeto.'/'.$uniq_name;
 
 								// salvando o arquivo
-								if(!@move_uploaded_file($tmp_names[$i], UPLOAD_PATH.$caminho)){
+								if(!@move_uploaded_file($tmp_names[$i], $pasta_destino.$uniq_name)){
 									$result->error = -1;
 									$result->msg = 'Impossível salvar arquivo no servidor. Verifique existência/permissão da pasta destino.';
 									$result->newId = 0;
 								} else {
 									// inserindo na base
 									$sql = 'INSERT INTO gdoks_observacoes_arquivos (caminho,nome_cliente,id_observacao) VALUES (?,?,?)';
-									$db->query($sql,'ssi',$caminho,$file,$newId);
+									$db->query($sql,'ssi',$pasta_destino.$uniq_name,$file,$newId);
 									$result->newId = $db->insert_id;
 								}
 							}
