@@ -60,6 +60,77 @@
 		$grd->sendZip($nome_usuario);
 	});
 
+	$app->post('/ext/esqueci',function() use($app) {
+
+		// Interpretando conteudo da requisição
+		$data = json_decode($app->request->getBody());
+
+		// Verificando se interpretou a requisição com sucesso
+		if(json_last_error() != JSON_ERROR_NONE) {
+			http_response_code(401);
+			die('{"error":1,"msg":"Requisição mal feita."}');
+		}
+
+		// Carregando o dbkey da empresa
+		try {
+			include(CLIENT_DATA_PATH.$data->empresa.'/dbkey.php');
+		} catch (Exception $e) {
+			http_response_code(401);
+			die('{"error":1, "msg":"Empresa inexistente."}');
+		}
+
+		// Conectando-se a base de dados
+		$db = new DB($dbkey);
+		
+		// Verificando um usuário que esteja cadastrado com o email fornecido
+		$sql = 'SELECT id,nome FROM gdoks_usuarios WHERE email=?';
+		$rs = $db->query($sql,'s',$data->email);
+		if(sizeof($rs) == 0){
+			http_response_code(401);
+			die('{"error":1, "msg":"Email não cadastrado."}');
+		}
+
+		// Criando o arquivo com o token na pasta tmp
+		$uniqid = md5(uniqid('',true));
+		$file = TMP_PATH.$data->empresa.'/'.$data->email.'_'.$uniqid;
+		touch($file);
+		file_put_contents($file, $rs[0]['id']);
+
+		// Definindo o from
+		$sgFrom = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
+
+		// Definindo o top
+		$sgTo = new SendGrid\Email($rs[0]['nome'],$data->email);
+
+		// Definindo url de reconfiguração de senha
+		$url = 'http://'.$_SERVER['SERVER_NAME'].'/ext/esqueci/'.$uniqid;
+
+		// Definindo o texto
+		$texto  = 'Clique no link abaixo para ir até a página onde você poderá ';
+		$texto .= 'configurar uma nova senha.<br><br>';
+		$texto .= '<a href="'.$url.'">';
+		$texto .= $url.'</a>';
+		$content = new SendGrid\Content("text/html", $texto);
+
+		// Definindo o assunto
+		$subject = "Reconfigurar a sua senha";
+
+		// Criando email
+		$sgEmail = new SendGrid\Mail($sgFrom, $subject, $sgTo, $content);
+
+		// Enviando o email
+		$sendgrid = new \SendGrid(SENDGRID_KEY);
+		$sendResult = $sendgrid->client->mail()->send()->post($sgEmail);
+
+		if($sendResult->statusCode() == 202){
+			http_response_code(200);
+			die('{"error":0, "msg":"Link enviado por email"}');
+		} else {
+			http_response_code(500);
+			die('{"error":1, "msg":"Falha no envio do email. Por favor, entre em contato com o suporte."}');
+		}
+	});
+
 	// Running the app
 	$app->run();
 ?>

@@ -21,13 +21,13 @@
 			<form name="esqueci" class="login" layout="column" md-whiteframe="1dp">
 				<md-input-container>
 					<label>Qual a sua empresa?</label>
-					<input type="text" ng-model="empresa" id="empresa" required="required">
+					<input type="text" ng-model="data.empresa" id="empresa" required="required">
 				</md-input-container>
 				<md-input-container>
 					<label>Digite o seu e-mail cadastrado</label>
-					<input type="email" ng-model="email" id="email" required="required">
+					<input type="email" ng-model="data.email" id="email" required="required">
 				</md-input-container>
-				<md-button ng-click="sendEmail()" class="md-raised md-primary" ng-disabled="!esqueci.$valid" aria-label="Entrar em empresa">Enviar link para nova senha</md-button>
+				<md-button ng-click="send()" class="md-raised md-primary" ng-disabled="!esqueci.$valid" aria-label="Entrar em empresa">Enviar link para nova senha</md-button>
 				<button type="submit"></button>
 			</form>
 		</div>
@@ -43,10 +43,24 @@
 
 		// Definindo controller
 		mod.controller('controller',
-			function($scope){
+			function($scope,$http){
+
+				// Iniciando parâmetros
 				$scope.carregando = false;
-				$scope.email = '';
-				$scope.empresa = '';
+				$scope.data = {email: '',empresa:''};
+
+				// Definindo função que submete dados
+				$scope.send = function(){
+					$http.post('/ext/esqueci',$scope.data)
+					.success(function(response){
+						console.warn("sucesso");
+						console.dir(response);
+					})
+					.error(function(error){
+						console.warn("erro");
+						console.dir(error);
+					})
+				}
 			}
 		);
 
