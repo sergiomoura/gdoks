@@ -250,19 +250,27 @@
 			$pdf->Output('F',$caminhoPdf);
 
 			// listando arquivos mais recentes da grd
-			$sql = 'SELECT caminho,
-					       nome_cliente
-					FROM gdoks_pdas_x_arquivos a
-					INNER JOIN gdoks_arquivos b ON a.id_arquivo=b.id
-					INNER JOIN
-					  (SELECT max(pdas.id) AS id_pda
+			$sql = 'SELECT O.caminho,
+					       O.nome_cliente
+					FROM
+					  (SELECT R.id,
+					          max(S.id) AS id_pda
 					   FROM
-					     (SELECT max(id_revisao) AS id
-					      FROM gdoks_grds_x_revisoes
-					      WHERE id_grd=?) R
-					   INNER JOIN gdoks_pdas pdas ON pdas.id_revisao=R.id) c ON c.id_pda=a.id_pda';
+					     (SELECT x.id_revisao AS id
+					      FROM
+					        (SELECT a.id AS id_documento,
+					                max(b.id) AS id_revisao
+					         FROM gdoks_documentos a
+					         INNER JOIN gdoks_revisoes b ON a.id=b.id_documento
+					         GROUP BY a.id) x
+					      INNER JOIN gdoks_grds_x_revisoes y ON x.id_revisao=y.id_revisao
+					      WHERE y.id_grd=?) R
+					   INNER JOIN gdoks_pdas S ON R.id=S.id_revisao
+					   GROUP BY R.id) M
+					INNER JOIN gdoks_pdas_x_arquivos N ON M.id_pda=N.id_pda
+					INNER JOIN gdoks_arquivos O ON N.id_arquivo=O.id';
 			$arquivos = array_map(function($a){return (object)$a;}, $this->db->query($sql,'i',$this->_id));
-			
+
 			// Criando o arquivo zip na pasta raíz da empresa
 			$zip = new ZipArchive();
 			$caminhoZip = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.zip';
@@ -282,7 +290,7 @@
 			
 			// Adicionando os arquivos da GRD
 			foreach ($arquivos as $f) {
-				$zip->addFile(UPLOAD_PATH.$f->caminho,$pastaDeArquivos.'/'.$f->nome_cliente);
+				$zip->addFile($f->caminho,$pastaDeArquivos.'/'.$f->nome_cliente);
 			}
 
 			// Fechando o zip
