@@ -28,7 +28,10 @@
 					<label>Senha</label>
 					<input type="password" ng-model="loginData.senha" id="senha" >
 				</md-input-container>
-				<md-button ng-click="getToken()" class="md-raised md-primary" ng-disabled="empresa=='' || login=='' || senha==''" aria-label="Entrar em empresa">Entrar</md-button>
+				<div layout="row">
+					<md-button ng-click="esqueceuSenha()" class="md-primary" aria-label="Esqueci minha senha">Esqueci minha senha</md-button>
+					<md-button ng-click="getToken()" flex class="md-raised md-primary" ng-disabled="empresa=='' || login=='' || senha==''" aria-label="Entrar em empresa">Entrar</md-button>
+				</div>
 				<button type="submit"></button>
 			</form>
 			<div ng-if="loginFail" class="loginFail">Login/Senha inválidos.</div>
@@ -103,6 +106,11 @@
 						$scope.carregando = false;
 						$scope.loginFail = true;
 					});
+				}
+
+				// Definindo função que vai para a tela de esqueci minha senha
+				$scope.esqueceuSenha = function(){
+					window.location = "/esqueci";
 				}
 			}
 		);
