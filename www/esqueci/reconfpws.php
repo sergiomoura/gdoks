@@ -1,3 +1,32 @@
+<?php
+
+	// Inclusões
+	include('constantes.php');
+
+	// Verificando se GET[id] está configurado
+	if(!array_key_exists('uid', $_GET) || !array_key_exists('e', $_GET) || !array_key_exists('email', $_GET)){die();}
+
+	// Lendo dados no $_GET
+	$uid = $_GET['uid'];
+	$email = $_GET['email'];
+	$empresa = $_GET['e'];
+
+	// Definindo o nome do arquivo temporário
+	$file = TMP_PATH.$empresa.'/'.$email.'_'.$uid;
+	
+
+	// Verificando existência do arquivo
+	if(!file_exists($file)){die();}
+
+	// Determinando a idade do arquivo em minutos
+	$idade = (time() - filemtime($file))/60;
+	if($idade > VALIDADE_DO_PEDIDO_RECONFPWS){
+		die('Seu pedido para reconfigurar seu login/senha tem mais de '. VALIDADE_DO_PEDIDO_RECONFPWS.' minutos. Tente novamente.');
+	}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br" ng-app="GDoksEsqueci">
 	<head>
@@ -16,18 +45,19 @@
 			<img src="../webapp/img/logo.png" alt="GDoks">
 			<md-progress-linear md-mode="indeterminate" ng-if="carregando"></md-progress-linear>
 			<form name="esqueci" class="login" layout="column" md-whiteframe="1dp">
-				<div style="text-align:center;">
-					Esqueceu sua senha?
-				</div>
 				<md-input-container>
-					<label>Qual a sua empresa?</label>
-					<input type="text" ng-model="data.empresa" id="empresa" required="required">
+					<label>Novo Login</label>
+					<input type="text" ng-model="data.login" id="login" required="required">
 				</md-input-container>
 				<md-input-container>
-					<label>Digite o seu e-mail cadastrado</label>
-					<input type="email" ng-model="data.email" id="email" required="required">
+					<label>Nova Senha</label>
+					<input type="password" ng-model="data.pass1" id="pass1" required="required">
 				</md-input-container>
-				<md-button ng-click="send()" class="md-raised md-primary" ng-disabled="!esqueci.$valid" aria-label="Entrar em empresa">Enviar link para nova senha</md-button>
+				<md-input-container>
+					<label>Confirme Nova Senha</label>
+					<input type="password" ng-model="data.pass2" id="pass2" required="required">
+				</md-input-container>
+				<md-button ng-click="send()" class="md-raised md-primary" ng-disabled="!esqueci.$valid || data.pass1!=data.pass2" aria-label="Entrar em empresa">{{data.pass1!=data.pass2?'Confirme sua nova senha corretamente':'Alterar informações de login'}}</md-button>
 				<button type="submit"></button>
 			</form>
 		</div>
@@ -43,7 +73,7 @@
 
 		// Definindo controller
 		mod.controller('controller',
-			function($scope,$http,$mdToast){
+			function($scope,$http,$location,$mdToast){
 
 				// Iniciando parâmetros
 				$scope.carregando = false;
@@ -53,9 +83,14 @@
 				$scope.send = function(){
 					// Mostrando o carregando
 					$scope.carregando = true;
+					var search = $location.search();
+
+					$scope.data.email = search.email;
+					$scope.data.empresa = search.e;
+					$scope.data.uid = search.uid;
 
 					// Enviando requisição
-					$http.post('/ext/esqueci',$scope.data)
+					$http.post('/ext/reconfpws',$scope.data)
 					.success(function(response){
 						// Esconde Carregando
 						$scope.carregando = false;
@@ -63,19 +98,14 @@
 						// Retornando Toast para o usuário
 						$mdToast.show(
 							$mdToast.simple()
-							.textContent('Siga as instruções enviadas no email para reconfigurar a sua senha.')
+							.textContent('Logni/senha reconfigurado com sucesso!.')
 							.position('top right')
 							.hideDelay(5000)
 						);
 
-						// Redirecionando para a tela de login
-						//setTimeout(function(){window.location = "/webapp/login.php"},6000);
-
+						setTimeout(function(){window.location = '/webapp/login.php'},5000);
 					})
 					.error(function(error){
-						// Esconde Carregando
-						$scope.carregando = false;
-
 						// Retornando Toast para o usuário
 						$mdToast.show(
 							$mdToast.simple()
@@ -83,7 +113,7 @@
 							.position('bottom left')
 							.hideDelay(0)
 						);
-					});
+					})
 				}
 			}
 		);
@@ -94,6 +124,10 @@
 			.primaryPalette('blue')
 			.accentPalette('orange',{'default':'800'});
 		})
+
+		mod.config(['$locationProvider', function($locationProvider) {
+			$locationProvider.html5Mode({'enabled': true,'requireBase':false});
+		}]);
 	</script>
 
 </html>
