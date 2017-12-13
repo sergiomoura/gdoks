@@ -10,12 +10,14 @@
 	require('response.php');
 	require('GDoks/Grd.php');
 	require('GDoks/Crypter.php');
+	
 
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
 
 	// definindo rota para download de grd
 	$app->get('/ext/grds/:data',function($data){
+
 		
 		// Destrocando caracteres '-' volta a ser '-', '_' volta a ser '/' e '|' volta a ser '='
 		$data = str_replace('-','+', $data);
@@ -39,9 +41,9 @@
 		$nome_usuario = $data[2];
 
 		// Definindo os nomes dos arquivos do cliente;
-		$FILE_DBKEY = '../../client_data/'.$empresa.'/dbkey.php';
-		$FILE_GRD = '../../client_data/'.$empresa.'/grd.php';
-		$FILE_LOGO = '../../client_data/'.$empresa.'/logo.jpg';
+		$FILE_DBKEY = CLIENT_DATA_PATH.$empresa.'/dbkey.php';
+		$FILE_GRD = CLIENT_DATA_PATH.$empresa.'/grd.php';
+		$FILE_LOGO = CLIENT_DATA_PATH.$empresa.'/logo.jpg';
 
 		// verificando se os arquivos existem
 		if(!(file_exists($FILE_DBKEY) && file_exists($FILE_GRD) && file_exists($FILE_LOGO))){
