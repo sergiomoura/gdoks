@@ -69,7 +69,7 @@
 						);
 
 						// Redirecionando para a tela de login
-						//setTimeout(function(){window.location = "/webapp/login.php"},6000);
+						setTimeout(function(){window.location = "/webapp/login.php"},6000);
 
 					})
 					.error(function(error){
