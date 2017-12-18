@@ -251,18 +251,21 @@
 
 			// listando arquivos mais recentes da grd
 			$sql = 'SELECT O.caminho,
-					       O.nome_cliente
+					       O.nome_cliente,
+                           M.nome_subdisciplina
 					FROM
 					  (SELECT R.id,
+					  		  R.nome_subdisciplina,
 					          max(S.id) AS id_pda
 					   FROM
-					     (SELECT x.id_revisao AS id
+					     (SELECT x.id_revisao AS id,nome_subdisciplina
 					      FROM
-					        (SELECT a.id AS id_documento,
-					                max(b.id) AS id_revisao
-					         FROM gdoks_documentos a
-					         INNER JOIN gdoks_revisoes b ON a.id=b.id_documento
-					         GROUP BY a.id) x
+					        (SELECT a.id AS id_documento,c.nome as nome_subdisciplina, 
+									max(b.id) AS id_revisao
+							 FROM gdoks_documentos a
+							 INNER JOIN gdoks_revisoes b ON a.id=b.id_documento
+							 INNER JOIN gdoks_subdisciplinas c ON a.id_subdisciplina=c.id
+							 GROUP BY a.id,c.nome) x
 					      INNER JOIN gdoks_grds_x_revisoes y ON x.id_revisao=y.id_revisao
 					      WHERE y.id_grd=?) R
 					   INNER JOIN gdoks_pdas S ON R.id=S.id_revisao
@@ -271,9 +274,14 @@
 					INNER JOIN gdoks_arquivos O ON N.id_arquivo=O.id';
 			$arquivos = array_map(function($a){return (object)$a;}, $this->db->query($sql,'i',$this->_id));
 
+			// Definindo nome do arquivo zip
+			$caminhoZip = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.zip';
+
+			// Removendo arquivo zip caso ele exista
+			if(file_exists($caminhoZip)){unlink($caminhoZip);}
+
 			// Criando o arquivo zip na pasta raíz da empresa
 			$zip = new ZipArchive();
-			$caminhoZip = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.zip';
 			$zip->open($caminhoZip,ZipArchive::CREATE);
 
 			// Adicionando o pdf ao zip;
@@ -284,13 +292,10 @@
 				die();
 			}
 
-			// Criando pasta para por os arquivos da GRD
-			$pastaDeArquivos = 'arquivos';
-			$zip->addEmptyDir($pastaDeArquivos);
-			
 			// Adicionando os arquivos da GRD
 			foreach ($arquivos as $f) {
-				$zip->addFile($f->caminho,$pastaDeArquivos.'/'.$f->nome_cliente);
+				$pasta = str_replace(' ', '_', $f->nome_subdisciplina);
+				$zip->addFile($f->caminho,$pasta.'/'.$f->nome_cliente);
 			}
 
 			// Fechando o zip
