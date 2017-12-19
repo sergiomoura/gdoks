@@ -5421,7 +5421,7 @@ WebGDoks.config(
 			'/configuracoes',
 			{
 				controller: 'ConfiguracoesController',
-				templateUrl: 'app/modules/Configuracoes/configuracoes.html'
+				templateUrl: 'app/modules/Configuracoes/configuracoes.php'
 			}
 		)
 		.otherwise({redirectTo:'/visaogeral'});
