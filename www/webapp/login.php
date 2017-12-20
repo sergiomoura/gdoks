@@ -51,12 +51,15 @@
 		// Definindo Controladores do módulo.
 		WebGDoks.controller(
 			'LoginController',
-			function($scope,$http,$cookies){
+			function($scope,$http,$cookies,$location){
 				// Limpando variáveis do scope. (anula auto complete)
 				$scope.loginData = {};
 				$scope.loginData.login = '';
 				$scope.loginData.senha = '';
 				$scope.loginData.empresa = '';
+
+				// Defininfo tela inicial
+				var screen = $location.search().screen?$location.search().screen:'';
 
 				// dando foco nos campos na tora.
 				// focus directive não funciona com o ng-cloak e para funcionar o posicionamento dos labels
@@ -94,7 +97,12 @@
 							var deleteRequest = indexedDB.deleteDatabase("gdoks");
 							deleteRequest.onsuccess = function(evt){
 								// indo para a página principal do aplicativo
-								window.location = "WebGDoks.php";
+								if(screen == ''){
+									window.location = "WebGDoks.php";
+								} else {
+									window.location = "WebGDoks.php#"+screen;
+								}
+								
 							}
 							
 							deleteRequest.onerror = function(evt){
@@ -120,7 +128,12 @@
 			$mdThemingProvider.theme('default')
 			.primaryPalette('blue')
 			.accentPalette('orange',{'default':'800'});
-		})
+		});
+
+		// Configurando location provider
+		WebGDoks.config(['$locationProvider', function($locationProvider) {
+  			$locationProvider.html5Mode({'enabled': true,'requireBase':false});
+  		}]);
 
 	</script>
 	<script src="app/directives/directives.js"></script>
