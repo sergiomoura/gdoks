@@ -362,7 +362,7 @@
 							$response->flush();
 						} catch (Exception $e) {
 							$app->response->setStatus(401);
-							$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla.');
+							$response = new response(1,'Já existe um usuário cadastrado com este login, email ou sigla.');
 							$response->flush();
 							return;
 						}
