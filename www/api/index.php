@@ -12,6 +12,7 @@
 	require('db.php');
 	require('definicoes_de_acoes.php');
 	require('response.php');
+	require('GDoks/GDoks.php');
 	require('GDoks/Grd.php');
 	require('GDoks/Crypter.php');
 
@@ -63,8 +64,6 @@
 		// salvando o id_empresa
 		$id_empresa = $dbkey->ID_EMPRESA;
 
-		// Removendo conteúdos de $dbkey;
-		unset($dbkey);
 	} else {
 		// Arquivo não existe. Sem Autorização
 		sleep(1);
@@ -2657,6 +2656,9 @@
 				// retornando mensagem para o usuário
 				$response = new response(0,'ok');
 				$response->flush();
+
+				// disparando ações pós atualização de documento
+				GDoks::onDocumentUpdate($id_doc,$empresa);
 			});
 
 			$app->post('/documentos/:id_doc/validacaoDeProgresso',function($id_doc) use ($app,$db,$token){
