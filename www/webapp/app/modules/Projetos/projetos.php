@@ -4,7 +4,7 @@
 ?>
 <div id="projetos_container" class="container_80">
 	<div layout="row" layout-align="space-between center">
-		<md-button ng-click="goToAddProjeto()" class="md-raised md-primary" ng-disabled="!<?=$opcoes['CadastrarNovoPrj']?>" aria-label="Cadastrar Novo Projeto">Cadastrar Novo Projeto</md-button>
+		<md-button ng-click="goToAddProjeto()" class="md-raised md-primary" ng-disabled="!<?=$opcoes_de_tela['CadastrarNovoPrj']?>" aria-label="Cadastrar Novo Projeto">Cadastrar Novo Projeto</md-button>
 		<md-input-container>
 			<label>Buscar Projeto</label>
 			<md-icon class="material-icons step" aria-label="Buscar Projeto">search</md-icon>
@@ -46,7 +46,7 @@
 				<td>{{p.nome_cliente}}</td>
 				<td>{{p.progresso_total}} %</td>
 				<td>
-					<?php if($opcoes['AcessarPrj']): ?>
+					<?php if($opcoes_de_tela['AcessarPrj']): ?>
 					<md-button
 						class="md-raised md-fab md-mini md-primary"
 						ng-click="editProjeto(p.id,$event)"
