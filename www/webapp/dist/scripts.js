@@ -891,23 +891,8 @@ function ConfiguracoesController($scope){};
 	module.filter('daysFromNow',daysFromNow);
 	
 	// Definindo função controller
-	function DocumentosController($scope,GDoksFactory,$mdToast,$location){
-
-		// Definindo valores iniciais para filtros
-		$scope.busca = {
-			nome:'',
-			ordem:'nome',
-			id_cliente:undefined,
-			id_projeto:undefined,
-			id_area:undefined,
-			id_subarea:undefined,
-			id_disciplina:undefined,
-			id_subdisciplina:undefined,
-			completude: 3,
-			validacao: 3,
-			pagAtual:1
-		};
-
+	function DocumentosController($scope,GDoksFactory,$mdToast,$location,$cookies){
+		
 		// Definindo 'agora'
 		$scope.agora = new Date();
 
@@ -1008,7 +993,7 @@ function ConfiguracoesController($scope){};
 			}
 		}
 
-		// HANDLERS : : : : : : : : : : :
+		// HANDLERS : : : : : : : : : : : : : : : : : : : : : : : : : : : : :
 		$scope.onClienteChange = function(){
 			if($scope.busca.id_cliente == undefined){
 				$scope.projetos = projetos;
@@ -1075,6 +1060,10 @@ function ConfiguracoesController($scope){};
 
 		// Função de busca
 		$scope.buscarDocumentos = function(){
+			
+			// Salvando busca num cookie
+			$cookies.putObject('busca',$scope.busca,{'expires':new Date((new Date()).getTime() + DURACAO_DA_BUSCA)});
+
 			// Mostra carregando
 			$scope.root.carregando = true;
 
@@ -1100,6 +1089,28 @@ function ConfiguracoesController($scope){};
 				// Esconde Carregando
 				$scope.root.carregando = false;
 			});
+		}
+
+		// Verificando se o cookie da busca está definido
+		if($cookies.getObject('busca') == undefined){
+			// sem cookie de busca. definindo valores padrão na mão
+			$scope.busca = {
+				nome:'',
+				ordem:'nome',
+				id_cliente:undefined,
+				id_projeto:undefined,
+				id_area:undefined,
+				id_subarea:undefined,
+				id_disciplina:undefined,
+				id_subdisciplina:undefined,
+				completude: 3,
+				validacao: 3,
+				pagAtual:1
+			};
+		} else {
+			// Busca no cookie. Carregando
+			$scope.busca = $cookies.getObject('busca');
+			$scope.buscarDocumentos();
 		}
 	}
 
@@ -5390,7 +5401,8 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 
 
 ;var API_ROOT = '../api/v1';
-var TOKEN_REFRESH_IN = 600000; //10 MINUTOS;// Definindo Module WebGDoks
+var TOKEN_REFRESH_IN = 600000; //10 MINUTOS
+var DURACAO_DA_BUSCA = 1800000; //30 MINUTOS;// Definindo Module WebGDoks
 var WebGDoks = angular.module('WebGDoks',
 								['ngRoute',
 								'ngCookies',

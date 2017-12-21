@@ -2828,24 +2828,23 @@
 
 				// retornando para o usuário
 				$response = new response(0,'ok');
-
 			});
 
 			$app->get('/documentos/search/q',function() use ($app,$db,$token){
 				
 				// Extraindo valores do get montando o objeto de busca q
 				$q = new stdClass();
-				$q->nome				 = $_GET['nome'];
-				$q->ordem				 = $_GET['ordem'];
-				$q->id_cliente			 = $_GET['id_cliente'];
-				$q->id_projeto			 = $_GET['id_projeto'];
-				$q->id_area				 = $_GET['id_area'];
-				$q->id_subarea			 = $_GET['id_subarea'];
-				$q->id_disciplina		 = $_GET['id_disciplina'];
-				$q->id_subdisciplina	 = $_GET['id_subdisciplina'];
-				$q->validacao			 = $_GET['validacao'];
-				$q->completude			 = $_GET['completude'];
-				$q->pagAtual			 = $_GET['pagAtual'];
+				$q->nome				= (array_key_exists('nome',				$_GET) && $_GET['nome'] 			!= 'undefined') ? $_GET['nome']:null;
+				$q->ordem				= (array_key_exists('ordem',			$_GET) && $_GET['ordem'] 			!= 'undefined') ? $_GET['ordem']:null;
+				$q->id_cliente			= (array_key_exists('id_cliente',		$_GET) && $_GET['id_cliente'] 		!= 'undefined') ? $_GET['id_cliente']:null;
+				$q->id_projeto			= (array_key_exists('id_projeto',		$_GET) && $_GET['id_projeto'] 		!= 'undefined') ? $_GET['id_projeto']:null;
+				$q->id_area				= (array_key_exists('id_area',			$_GET) && $_GET['id_area'] 			!= 'undefined') ? $_GET['id_area']:null;
+				$q->id_subarea			= (array_key_exists('id_subarea',		$_GET) && $_GET['id_subarea'] 		!= 'undefined') ? $_GET['id_subarea']:null;
+				$q->id_disciplina		= (array_key_exists('id_disciplina',	$_GET) && $_GET['id_disciplina'] 	!= 'undefined') ? $_GET['id_disciplina']:null;
+				$q->id_subdisciplina	= (array_key_exists('id_subdisciplina',	$_GET) && $_GET['id_subdisciplina'] != 'undefined') ? $_GET['id_subdisciplina']:null;
+				$q->validacao			= (array_key_exists('validacao',		$_GET) && $_GET['validacao'] 		!= 'undefined') ? $_GET['validacao']:null;
+				$q->completude			= (array_key_exists('completude',		$_GET) && $_GET['completude'] 		!= 'undefined') ? $_GET['completude']:null;
+				$q->pagAtual			= (array_key_exists('pagAtual',			$_GET) && $_GET['pagAtual'] 		!= 'undefined') ? $_GET['pagAtual']:null;
 
 				// monstando as restricoes no obj restrict
 				$restrict = new stdClass();
@@ -2858,25 +2857,25 @@
 				}
 				
 				// Restrição de subarea,area,projeto,cliente
-				if($q->id_subarea!='undefined'){
-					$restrict->cliente = 'trueFromInt(?)';
-					$restrict->projeto = 'trueFromInt(?)';
-					$restrict->area 	  = 'trueFromInt(?)';
-					$restrict->subarea = 'b.id=?';
+				if(!is_null($q->id_subarea)){
+					$restrict->cliente  = 'trueFromInt(?)';
+					$restrict->projeto  = 'trueFromInt(?)';
+					$restrict->area 	= 'trueFromInt(?)';
+					$restrict->subarea  = 'b.id=?';
 				} else {
-					if($q->id_area!='undefined'){
+					if(!is_null($q->id_area)){
 						$restrict->cliente = 'trueFromInt(?)';
 						$restrict->projeto = 'trueFromInt(?)';
 						$restrict->area    = 'c.id=?';
 						$restrict->subarea = 'trueFromInt(?)';
-					} else {
-						if($q->id_projeto!='undefined'){
+					} else { 
+						if(!is_null($q->id_projeto)){
 							$restrict->cliente = 'trueFromInt(?)';
 							$restrict->projeto = 'd.id=?';
 							$restrict->area    = 'trueFromInt(?)';
 							$restrict->subarea = 'trueFromInt(?)';
 						} else {
-							if($q->id_cliente!='undefined'){
+							if(is_null($q->id_cliente)){
 								$restrict->cliente = 'e.id=?';
 								$restrict->projeto = 'trueFromInt(?)';
 								$restrict->area    = 'trueFromInt(?)';
@@ -2892,11 +2891,11 @@
 				}
 
 				// restricao de subdisciplina e disciplina
-				if($q->id_subdisciplina!='undefined'){
+				if(!is_null($q->id_subdisciplina)){
 					$restrict->disciplina    = 'trueFromInt(?)';
 					$restrict->subdisciplina = 'f.id=?';
 				} else {
-					if($q->id_disciplina!='undefined'){
+					if(!is_null($q->id_disciplina)){
 						$restrict->disciplina    = 'g.id=?';
 						$restrict->subdisciplina = 'trueFromInt(?)';
 					} else {
@@ -2929,7 +2928,6 @@
 				} else {
 					$ordem = 'data_limite';
 				}
-
 
 				// Montando colunas
 				$colunas = 'a.id,
@@ -3117,7 +3115,6 @@
 				$response->flush();
 				return;
 			});
-
 		// FIM DE ROTAS DE DOCUMENTOS
 
 		// ROTAS DE ARQUIVOS
