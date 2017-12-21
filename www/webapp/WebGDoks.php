@@ -1,4 +1,7 @@
 <?php
+	// incluindo constantes do sistema
+	include('constantes.php');
+	
 	// Incluindo bloqueador de acesso externo a página.
 	require('blocker.php');
 
@@ -6,7 +9,7 @@
 	$user = json_decode($_COOKIE['user']);
 
 	// Carregando dbkey
-	include('../../client_data/'.$user->empresa.'/dbkey.php');
+	include(CLIENT_DATA_PATH.$user->empresa.'/dbkey.php');
 
 	// Criando conexaão com base de dados
 	$db = new DB($dbkey);
