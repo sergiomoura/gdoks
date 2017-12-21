@@ -20,6 +20,11 @@
 	    margin: 0 0 30px 0;
 	    display: inline-block;
 	    width: 100%;
+	    cursor:pointer;
+	    outline:none;
+	    &:hover{
+	    	background-color:$azulClaro;
+	    }
 		.titulo{
 			margin: 10px;
 			font-size: 20px;
@@ -29,8 +34,8 @@
 			top:5px;
 		}
 		.info{
-			width: 100%;
-			background-color: $azulClaro;
+			width: calc(100% + 1px);
+			background-color: $cinzaMaisClaro;
 			color:$azul;
 			td{
 				padding: 0px 10px;

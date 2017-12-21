@@ -151,12 +151,9 @@
 			</md-button>
 		</div>
 				
-		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos track by doc.id">
+		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos track by doc.id" ng-click="onOpenClick(doc.id)">
 			<div layout="row">
 				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.nome}} ({{doc.codigo}})</div>
-				<md-button ng-click="onOpenClick(doc.id)" class="md-icon-button md-primary" aria-label="Visualizar Documento">
-					<md-icon class="material-icons step" aria-label="Visualizar Documento">open_in_new</md-icon>
-				</md-button>
 			</div>
 			<table class="info">
 				<tbody>
