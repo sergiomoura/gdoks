@@ -2324,6 +2324,65 @@
 
 				}
 			});
+
+			$app->get('/documentos/paraValidar',function() use ($app,$db,$token){
+				// Verificando se o token é válido
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs)==0){
+					// Token expirou
+					$app->response->setStatus(401);
+					$response = new response(1,'Token expirou.');	
+					$response->flush();
+					die();
+				}
+
+				// Lendo o id do usuário para idu
+				$idu = $rs[0]['id'];
+
+				// Levantando dados dos documentos que aguardam validação do usuário logado
+				$sql = 'SELECT b.id AS id_disciplina,
+						       b.nome AS nome_disciplina,
+						       b.sigla AS sigla_disciplina,
+						       c.id AS id_subdisciplina,
+						       c.nome AS nome_subdisciplina,
+						       d.id,
+						       d.codigo,
+						       d.nome,
+						       e.id AS id_revisao,
+						       e.progresso_a_validar,
+						       e.progresso_validado,
+						       max(f.id) AS id_pda,
+						       f.idu AS id_especialista,
+						       g.sigla as sigla_especialista
+						FROM gdoks_validadores a
+						INNER JOIN gdoks_disciplinas b ON a.id_disciplina=b.id
+						INNER JOIN gdoks_subdisciplinas c ON c.id_disciplina=b.id
+						INNER JOIN gdoks_documentos d ON d.id_subdisciplina=c.id
+						INNER JOIN gdoks_revisoes e ON e.id_documento=d.id
+						INNER JOIN gdoks_pdas f ON f.id_revisao=e.id
+						INNER JOIN gdoks_usuarios g ON f.idu=g.id
+						WHERE a.id_usuario=?
+						  AND e.progresso_a_validar>0
+						GROUP BY b.id,
+						         b.nome,
+						         b.sigla,
+						         c.id,
+						         c.nome,
+						         d.id,
+						         d.codigo,
+						         d.nome,
+						         e.id,
+						         e.progresso_a_validar,
+						         e.progresso_validado,
+						         f.idu';
+				$documentos = array_map(function($d){return (object)$d;}, $db->query($sql,'i',$idu));
+
+				// Retornando documentos
+				$response = new response(0,'Ok');
+				$response->documentos = $documentos;
+				$response->flush();
+			});
 			
 			$app->get('/documentos/:id',function($id) use ($app,$db,$token){
 				// Lendo o token
@@ -2727,6 +2786,51 @@
 				$response->flush();
 			});
 
+			$app->post('/documentos/validarProgressos',function() use ($app,$db,$token){
+				// Verificando se o token é válido
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs)==0){
+					// Token expirou
+					$app->response->setStatus(401);
+					$response = new response(1,'Token expirou.');	
+					$response->flush();
+					die();
+				}
+
+				// Lendo id do usuário para a variável idu
+				$idu = $rs[0]['id'];
+
+				// Lendo dados
+				$documentos = json_decode($app->request->getBody());
+				
+				// Atualizando documentos
+				foreach ($documentos as $doc) {
+					// Atualizando pda
+					$sql = 'UPDATE gdoks_pdas
+							SET progresso_total=?,
+				                idu_validador=?,
+				                datahora_validacao=NOW()
+							WHERE id=?;';
+					$db->query($sql,'iii',$doc->progresso_a_validar+$doc->progresso_validado,$idu,$doc->id_pda);
+
+					// Atualizando revisão
+					$sql = 'UPDATE gdoks_revisoes
+							SET progresso_a_validar=0,
+							    progresso_validado=?,
+							    ua=now()
+							WHERE id=?';
+					$db->query($sql,'ii',$doc->progresso_a_validar+$doc->progresso_validado,$doc->id_revisao);
+
+					// registrando a ação no log
+					registrarAcao($db,$idu,ACAO_VALIDOU_PROGRESSO,$doc->progresso_validado.','.$doc->id);
+				}
+
+				// retornando para o usuário
+				$response = new response(0,'ok');
+
+			});
+
 			$app->get('/documentos/search/q',function() use ($app,$db,$token){
 				
 				// Extraindo valores do get montando o objeto de busca q
@@ -3013,6 +3117,7 @@
 				$response->flush();
 				return;
 			});
+
 		// FIM DE ROTAS DE DOCUMENTOS
 
 		// ROTAS DE ARQUIVOS

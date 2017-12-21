@@ -2135,5 +2135,43 @@ md-expansion-panel-expanded .md-expansion-panel-item {
     color: rgba(0, 0, 0, 0.54);
     width: 100%; }
 
+#validacao_container {
+  padding-top: 30px; }
+  #validacao_container table {
+    width: 100%;
+    border-collapse: collapse; }
+    #validacao_container table td:nth-child(1) {
+      width: 20px;
+      padding-top: 14px; }
+    #validacao_container table td:nth-child(3) {
+      width: 130px;
+      text-align: center; }
+    #validacao_container table td:nth-child(4) {
+      width: 130px;
+      text-align: center; }
+    #validacao_container table td:nth-child(5) {
+      width: 130px;
+      text-align: center; }
+    #validacao_container table td:nth-child(6) {
+      width: 110px; }
+    #validacao_container table thead {
+      color: #2196F3;
+      font-size: 18px; }
+    #validacao_container table tbody td {
+      border-top: 1px solid rgba(0, 0, 0, 0.12); }
+    #validacao_container table tbody input[type=number] {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      padding: 5px;
+      font-size: 18px;
+      width: 50px;
+      color: rgba(0, 0, 0, 0.54); }
+      #validacao_container table tbody input[type=number]:disabled {
+        background-color: transparent;
+        border: none; }
+    #validacao_container table tbody .naoValidar {
+      color: rgba(0, 0, 0, 0.12); }
+      #validacao_container table tbody .naoValidar input[type=number] {
+        color: rgba(0, 0, 0, 0.12); }
+
 
 /*# sourceMappingURL=styles.css.map */

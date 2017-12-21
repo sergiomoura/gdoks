@@ -24,7 +24,8 @@ var WebGDoks = angular.module('WebGDoks',
 								'Senha',
 								'Topo',
 								'Usuarios',
-								'VisaoGeral']);
+								'VisaoGeral',
+								'Validacao']);
 
 // Definindo Rotas
 WebGDoks.config(
@@ -162,6 +163,13 @@ WebGDoks.config(
 			{
 				controller: 'ConfiguracoesController',
 				templateUrl: 'app/modules/Configuracoes/configuracoes.php'
+			}
+		)
+		.when(
+			'/validacao',
+			{
+				controller: 'ValidacaoController',
+				templateUrl: 'app/modules/Validacao/validacao.php'
 			}
 		)
 		.otherwise({redirectTo:'/visaogeral'});

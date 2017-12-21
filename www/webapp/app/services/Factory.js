@@ -220,6 +220,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/documentos/'+idDocumento+'/validacaoDeProgresso', progresso,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.validarProgressos = function(progressos){
+				return $http.post(API_ROOT+'/documentos/validarProgressos', progressos,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.lockDoc = function(idDoc){
 				return $http.get(API_ROOT+'/documentos/'+idDoc+'/lock',buildHeaders());	
 			}
