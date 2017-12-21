@@ -82,7 +82,7 @@
 				// Definindo conteúdo do email
 				$texto  = 'O documento '.$doc->codigo.' foi atualizado e requer validção de um ';
 				$texto .= 'validador da disciplina '.$doc->nome_disciplina.'. <br>';
-				$texto .= 'Clique <a href="'.$_SERVER['SERVER_NAME'].'/validacoes">aqui</a> para ';
+				$texto .= 'Clique <a href="'.$_SERVER['SERVER_NAME'].'/webapp/login.php?screen=/validacao">aqui</a> para ';
 				$texto .= 'ir a página de validação de documentos';
 				$content = new SendGrid\Content("text/html", $texto);
 

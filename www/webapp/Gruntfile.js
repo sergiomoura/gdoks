@@ -41,6 +41,7 @@ module.exports = function(grunt) {
 					'app/modules/Topo/TopoController.js',
 					'app/modules/Usuarios/UsuariosController.js',
 					'app/modules/VisaoGeral/VisaoGeralController.js',
+					'app/modules/Validacao/validacaoController.js',
 					'app/services/constants.js',
 					'app/WebGDoks.js',
 					'app/services/Factory.js',

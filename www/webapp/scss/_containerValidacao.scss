@@ -1,0 +1,67 @@
+#validacao_container {
+	padding-top:30px;
+	table {
+		
+		width:100%;
+		border-collapse:collapse;
+
+		// checkbox
+		td:nth-child(1){
+			width:20px;padding-top:14px
+		}; 
+
+		// codigo
+		td:nth-child(2){};
+
+		// progresso
+		td:nth-child(3){
+			width:130px;
+			text-align:center;
+		}
+
+		// progresso
+		td:nth-child(4){
+			width:130px;
+			text-align:center;
+		}
+
+		// especialista
+		td:nth-child(5){
+			width:130px;
+			text-align:center;
+		}
+		
+		// ações
+		td:nth-child(6){
+			width:110px
+		}
+
+		thead{
+			color:$azul;
+			font-size: 18px;
+		}
+
+		tbody{
+			td{
+				border-top:1px solid $cinzaClaro;
+			}
+			input[type=number]{
+				border: 1px solid $cinzaClaro;
+				padding: 5px;
+				font-size: 18px;
+				width: 50px;
+				color: $cinza;
+				&:disabled{
+					background-color: transparent;
+					border:none;
+				}
+			}
+			.naoValidar{
+				color:$cinzaClaro;
+				input[type=number] {
+					color: $cinzaClaro;
+				}
+			}
+		}
+	}
+}
