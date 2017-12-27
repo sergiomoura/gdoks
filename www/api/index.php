@@ -3759,7 +3759,7 @@
 					$app->response->setStatus(401);
 					$response = new response(1,'Token expirado');
 					$response->flush();
-					return;
+					die();
 				} else {
 					// Levantando todos os arquivos do pda
 					$sql = 'SELECT caminho,nome_cliente
@@ -3768,7 +3768,7 @@
 							WHERE a.id_pda=?';
 					$rs = $db->query($sql,'s',$id_pda);
 					$caminhos = $rs;
-
+					
 					// Definindo nome do arquivo zip
 					$filename = TMP_PATH.'pda_'.$id_pda.'.zip';
 
@@ -3805,7 +3805,11 @@
 					}
 
 					// Fechando o arquivo zip
-					$zip->close();
+					$fechou_ok = $zip->close();
+					if($fechou_ok !== true){
+						echo('Erro ao fechar arquivo zip: '.$fechou_ok);
+						die();
+					}
 
 					// enviando para o cliente
 					header("Content-Type: application/zip");
@@ -3814,7 +3818,7 @@
 					header("Content-Transfer-Encoding: binary");
 					readfile($filename);
 					unlink($filename);
-					exit;
+					die();
 				}
 			});
 
@@ -4917,4 +4921,3 @@
 
 	// running the app
 	$app->run();
-?>

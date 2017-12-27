@@ -19,5 +19,3 @@
 		$dbkey->DB_SOCKET = null;
 		$dbkey->ID_EMPRESA = 1;
 	}
-	
-?>
