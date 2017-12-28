@@ -1058,6 +1058,11 @@ function ConfiguracoesController($scope){};
 			}
 		}
 
+		$scope.onBuscarDocumentoClick = function(){
+			$scope.busca.pagAtual = 1;
+			$scope.buscarDocumentos();
+		}
+
 		// Função de busca
 		$scope.buscarDocumentos = function(){
 			

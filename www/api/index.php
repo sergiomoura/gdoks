@@ -2856,6 +2856,7 @@
 					$restrict->nome = 'a.nome like ? OR a.codigo like ? OR codigo_alternativo like ? OR codigo_cliente like ?';
 				}
 				
+				
 				// Restrição de subarea,area,projeto,cliente
 				if(!is_null($q->id_subarea)){
 					$restrict->cliente  = 'trueFromInt(?)';
@@ -2875,7 +2876,7 @@
 							$restrict->area    = 'trueFromInt(?)';
 							$restrict->subarea = 'trueFromInt(?)';
 						} else {
-							if(is_null($q->id_cliente)){
+							if(!is_null($q->id_cliente)){
 								$restrict->cliente = 'e.id=?';
 								$restrict->projeto = 'trueFromInt(?)';
 								$restrict->area    = 'trueFromInt(?)';
