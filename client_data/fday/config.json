@@ -1,1 +1,10 @@
-{}
+{
+	"NOTIFICA_VALIDADOR_POR_EMAIL":{
+		"valor":true,
+		"tipo":"bool"
+	},
+	"NOTIFICA_ESPECIALISTA_POR_EMAIL":{
+		"valor":false,
+		"tipo":"bool"
+	}
+}
