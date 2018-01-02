@@ -70,40 +70,37 @@ function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFac
 	// Carregando clientes da base local
 	$scope.clientes = {};
 	$scope.clientes.dados = [];
-	indexedDB.open("gdoks").onsuccess = function(evt){
-		evt.target.result.transaction("clientes").objectStore("clientes").getAll().onsuccess = function(evt){
-			$scope.$apply(function(){
-				$scope.clientes.dados = evt.target.result;
-				clientesCarregados = true;
-				carregaProjeto();
-			});
-		}
-	}
+	GDoksFactory.getClientes()
+	.success(function(response){
+		$scope.clientes.dados = response.clientes;
+		clientesCarregados = true;
+ 		carregaProjeto();
+	})
+	.error(function(error){});
 
 	// Carregando usuarios da base local
 	$scope.usuarios = {};
 	$scope.usuarios.dados = [];
-	indexedDB.open("gdoks").onsuccess = function(evt){
-		evt.target.result.transaction("usuarios").objectStore("usuarios").getAll().onsuccess = function(evt){
-			$scope.$apply(function(){
-				$scope.usuarios.dados = evt.target.result;
-				usuariosCarregados = true;
-				carregaProjeto();
-			});
+	GDoksFactory.loadUsuarios()
+	.success(function(response){
+			// Carregando usuários
+			$scope.usuarios.dados = response.usuarios;
+			usuariosCarregados = true;
+			carregaProjeto();
 		}
-	}
+	)
+	.error(function(error){});
+
 
 	// Carregando disciplinas da base local
 	$scope.disciplinas = [];
-	indexedDB.open("gdoks").onsuccess = function(evt){
-		evt.target.result.transaction("disciplinas").objectStore("disciplinas").getAll().onsuccess = function(evt){
-			$scope.$apply(function(){
-				$scope.disciplinas = evt.target.result;
-				disciplinasCarregadas = true;
-				carregaProjeto();
-			});
-		}
-	}
+	GDoksFactory.getDisciplinas()
+	.success(function(response){
+		$scope.disciplinas = response.disciplinas;
+		disciplinasCarregadas = true;
+		carregaProjeto();
+	})
+	.error(function(error){});
 
 	// Carregando cargos do servidor
 	$scope.cargos = [];
