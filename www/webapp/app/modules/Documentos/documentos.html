@@ -150,29 +150,26 @@
 					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
 			</md-button>
 		</div>
-				
+					
 		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos track by doc.id" ng-click="onOpenClick(doc.id)">
 			<div layout="row">
-				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.nome}} ({{doc.codigo}})</div>
+				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.codigo}}</div>
 			</div>
 			<table class="info">
 				<tbody>
 					<tr>
-						<td colspan="2">Cliente: {{doc.cliente_nome}}</td>
+						<td colspan="4">Nome: {{doc.nome}}</td>
+					</tr>
+					<tr>
 						<td colspan="2">Projeto: {{doc.projeto_nome}}</td>
+						<td colspan="2">Cliente: {{doc.cliente_nome}}</td>
 					</tr>
 					<tr>
-						<td colspan="2">Área: {{doc.area_nome}}</td>
-						<td colspan="2" ng-if="doc.subarea_nome!=null">Sub-área: {{doc.subarea_nome}}</td>
-						<td colspan="2" ng-if="doc.subarea_nome==null"></td>
-					</tr>
-					<tr>
-					</tr>
-					<tr>
-						<td colspan="4">Disciplina: {{doc.disciplina_nome}}</td>
-					</tr>
-					<tr>
-						<td colspan="4">Subdisciplina: {{doc.subdisciplina_nome}}</td>
+						<td colspan="1">Área: {{doc.area_nome}}</td>
+						<td colspan="1" ng-if="doc.subarea_nome!=null">Sub-área: {{doc.subarea_nome}}</td>
+						<td colspan="1" ng-if="doc.subarea_nome==null"></td>
+						<td colspan="1">Disciplina: {{doc.disciplina_nome}}</td>
+						<td colspan="1">Subdisciplina: {{doc.subdisciplina_nome}}</td>
 					</tr>
 					<tr>
 						
