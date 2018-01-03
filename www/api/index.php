@@ -4052,7 +4052,7 @@
 					$grd->sendPdf($user->nome);
 				} elseif (isset($_GET['view']) && $_GET['view']=='zip'){
 					// Aumentando o max_execution_time para 2min... isso pode demorar
-					ini_set('max_execution_time', 120);
+					ini_set('max_execution_time', 240);
 
 					// Enviando GRD em ZIP
 					$grd->sendZip($user->nome);
