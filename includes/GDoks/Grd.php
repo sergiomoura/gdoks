@@ -236,6 +236,8 @@
 
 		// Função que cria o zip com a grd e os arquivos que ela contem
 		public function gerarZip($nome_do_emissor){
+			$tic = microtime(true);
+
 			// Gerando pdf da grd
 			$pdf = $this->pdf($nome_do_emissor);
 
@@ -282,24 +284,52 @@
 
 			// Criando o arquivo zip na pasta raíz da empresa
 			$zip = new ZipArchive();
-			$zip->open($caminhoZip,ZipArchive::CREATE);
+			if(!$zip->open($caminhoZip,ZipArchive::CREATE)){
+				die('Falha ao criar o zip.');
+			}
 
 			// Adicionando o pdf ao zip;
 			try {
 				$zip->addFile($caminhoPdf,$this->_codigo.'.pdf');
 			} catch (Exception $e) {
-				echo($e->getMessage());
-				die();
+				die($e->getMessage());
 			}
 
-			// Adicionando os arquivos da GRD
+
+			// Adicionando os arquivos da GRD ao zip
+			$erros = Array();
+			$i = 1;
 			foreach ($arquivos as $f) {
+
+				// Substituindo espaços no nome da subdisciplina para nomear a subpasta
 				$pasta = str_replace(' ', '_', $f->nome_subdisciplina);
-				$zip->addFile($f->caminho,$pasta.'/'.$f->nome_cliente);
+
+				// Adicionando arquivo
+				if(!$zip->addFile($f->caminho,$pasta.'/'.$f->nome_cliente)){
+
+					// Gravando erro em caso de falha
+				 	array_push($erros, $pasta.'/'.$f->nome_cliente);
+
+				} 
+
+				// fechando e abrindo o zip para não estourar o número de arquivos abertos
+				if($i == 100){
+					$zip->close();
+					$zip->open($caminhoZip,ZipArchive::CREATE);
+					$i=0;
+				}
+				$i++;
+			}
+
+			// verificando erros
+			if(sizeof($erros) > 0){
+				die('Erro ao tentar adicionar alguns arquivos ao zip');
 			}
 
 			// Fechando o zip
-			$zip->close();
+			if(!$zip->close()){
+				die("Erro ao fechar o arquivo zip");
+			}
 
 			// apagando o pdf
 			unlink($caminhoPdf);

@@ -58,6 +58,9 @@
 		// criando GRD a pargir do uniquelink
 		$grd = Grd::CreateByUniqueLink($unique_link,$empresa);
 
+		// Aumentando o max_execution_time para 2min... isso pode demorar
+		ini_set('max_execution_time', 120);
+
 		// Mandando zip da grd
 		$grd->sendZip($nome_usuario);
 	});

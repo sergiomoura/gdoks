@@ -4048,9 +4048,13 @@
 
 				// Vendo se é para mandar os dados ou o PDF
 				if(isset($_GET['view']) && $_GET['view']=='pdf'){
-					// Enviando GRD
+					// Enviando GRD em PDF
 					$grd->sendPdf($user->nome);
 				} elseif (isset($_GET['view']) && $_GET['view']=='zip'){
+					// Aumentando o max_execution_time para 2min... isso pode demorar
+					ini_set('max_execution_time', 120);
+
+					// Enviando GRD em ZIP
 					$grd->sendZip($user->nome);
 				} else {
 					// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
