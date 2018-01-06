@@ -50,10 +50,10 @@
 					<md-icon class="material-icons step" aria-label="menu">history</md-icon>
 				</md-button>
 				<md-menu-content ng-controller="HistoricoController">
-					<md-menu-item ng-repeat="doc in historico">
-						<md-button ng-click="goToDoc(doc.id)">
+					<md-menu-item ng-repeat="doc in root.historico">
+						<md-button ng-click="goToDoc(doc.i)">
 							<md-icon class="material-icons step" aria-label="Ir para documento {{doc.nome}}">insert_drive_file</md-icon>
-							{{doc.codigo}}
+							{{doc.c}}
 						</md-button>
 					</md-menu-item>
 				</md-menu-content>

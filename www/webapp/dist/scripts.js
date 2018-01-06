@@ -3606,16 +3606,7 @@ function NavController($scope){
 		indexedDB.deleteDatabase('gdoks');
 		window.location = '/';
 	}
-});;(function(){
-	angular.module('Historico',[])
-	.controller('HistoricoController',HistoricoController);
-
-	// Defininfo função controller
-	function HistoricoController($scope,$cookies){
-		$scope.historico = $cookies.getObject('historico');
-		console.dir($scope.historico);
-	}
-})();;angular.module('Projetos',['ngFileUpload','ngTagsInput'])
+});;angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 .controller('ProjetosController',ProjetosController)
 .controller('ProjetoController',ProjetoController)
 .controller('DashProjetoController',DashProjetoController);
@@ -5418,7 +5409,7 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 ;var API_ROOT = '../api/v1';
 var TOKEN_REFRESH_IN = 600000; //10 MINUTOS
 var DURACAO_DA_BUSCA = 1800000; //30 MINUTOS
-var HISTORICO_MAX_SIZE = 50;
+var HISTORICO_MAX_SIZE = 5;
 var COOKIE_KEY_HISTORICO = 'historico';;// Definindo Module WebGDoks
 var WebGDoks = angular.module('WebGDoks',
 								['ngRoute',
@@ -5646,7 +5637,7 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 	// Carregando cookie de histórico se ele existir. Se não existir, cria com vetor vazio.
 	$scope.root.historico = $cookies.getObject(COOKIE_KEY_HISTORICO);
 	if($scope.root.historico == undefined){
-		$cookies.putObject([]);
+		$cookies.putObject(COOKIE_KEY_HISTORICO,[]);
 		$scope.root.historico = [];
 	}
 
@@ -5925,24 +5916,35 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		$mdSidenav('menu_principal').toggle();
 	}
 
-	$scope.root.addDocumentoAoHistorico = function(doc){
-		// buscando se o doc em questão já está no vetor histórico
-		var pos = $scope.root.historico.find(function(a){return a.id = this},doc.id);
-		if(pos > -1){
-			// doc está no histórico na posição pos. Reposicionando ele a frente
-			$scope.root.historico.unshift($scope.root.historico.splice(pos,1)[0]);
-		} else {
-			// doc não está no histórico. Adicionando ele a frente
-			$scope.root.historico.unshift(doc);
-		}
+	$scope.root.addDocumentoAoHistorico = function(documento){
 
-		// Removendo o último se o tamanho do histórico for maior que o máximo
-		if($scope.root.histórico.length > HISTORICO_MAX_SIZE){
-			$scope.root.histórico.pop();
-		}
+		//Executando ações dentro de um timeout para que as movimentações não sejam exibidas no menu
+		setTimeout(500,function(){
+			
+			// separando somente dados de interesse para manter no histórico
+			var doc = {'i':documento.id, 'c':documento.codigo};
 
-		// Atualizando o cookie para uso futuro
-		$cookies.putObject(COOKIE_KEY_HISTORICO,$scope.root.historico);
+			// Carregando histórico do cookie
+			$scope.root.historico = $cookies.getObject(COOKIE_KEY_HISTORICO);
+
+			// buscando se o doc em questão já está no vetor histórico
+			var pos = $scope.root.historico.findIndex(function(a){return a.i == this},doc.i);
+			if(pos > -1){
+				// doc está no histórico na posição pos. Reposicionando ele a frente
+				$scope.root.historico.unshift($scope.root.historico.splice(pos,1)[0]);
+			} else {
+				// doc não está no histórico. Adicionando ele a frente
+				$scope.root.historico.unshift(doc);
+			}
+			
+			// Removendo o último se o tamanho do histórico for maior que o máximo
+			if($scope.root.historico.length > HISTORICO_MAX_SIZE){
+				$scope.root.historico.pop();
+			}
+			
+			// Atualizando o cookie para uso futuro
+			$cookies.putObject(COOKIE_KEY_HISTORICO,$scope.root.historico);
+		});
 	}
 }
 ;WebGDoks.factory('GDoksFactory',
@@ -6585,5 +6587,15 @@ WebGDoks.directive('capitalize', function() {
             }
         };
     }
+})();;(function(){
+	angular.module('Historico',[])
+	.controller('HistoricoController',HistoricoController);
+
+	// Defininfo função controller
+	function HistoricoController($scope,$cookies,$location){
+		$scope.goToDoc = function(idDoc){
+			$location.url('/documentos/'+idDoc);
+		}
+	}
 })();
 //# sourceMappingURL=scripts.js.map

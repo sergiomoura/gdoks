@@ -32,7 +32,6 @@ module.exports = function(grunt) {
 					'app/modules/Nav/NavController.js',
 					'app/modules/Log/LogController.js',
 					'app/modules/Opcoes/OpcoesController.js',
-					'app/modules/Historico/HistoricoController.js',
 					'app/modules/Projetos/ProjetosController.js',
 					'app/modules/Projetos/ProjetosAreasController.js',
 					'app/modules/Projetos/ProjetosSubareasController.js',
@@ -47,7 +46,8 @@ module.exports = function(grunt) {
 					'app/WebGDoks.js',
 					'app/services/Factory.js',
 					'app/directives/directives.js',
-					'app/directives/clickoutside.directives.js'
+					'app/directives/clickoutside.directives.js',
+					'app/modules/Historico/HistoricoController.js',
 				],
 				dest: 'dist/scripts.js'
 			},

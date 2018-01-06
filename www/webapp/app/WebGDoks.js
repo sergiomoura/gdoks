@@ -225,7 +225,7 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 	// Carregando cookie de histórico se ele existir. Se não existir, cria com vetor vazio.
 	$scope.root.historico = $cookies.getObject(COOKIE_KEY_HISTORICO);
 	if($scope.root.historico == undefined){
-		$cookies.putObject([]);
+		$cookies.putObject(COOKIE_KEY_HISTORICO,[]);
 		$scope.root.historico = [];
 	}
 
@@ -504,23 +504,34 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 		$mdSidenav('menu_principal').toggle();
 	}
 
-	$scope.root.addDocumentoAoHistorico = function(doc){
-		// buscando se o doc em questão já está no vetor histórico
-		var pos = $scope.root.historico.find(function(a){return a.id = this},doc.id);
-		if(pos > -1){
-			// doc está no histórico na posição pos. Reposicionando ele a frente
-			$scope.root.historico.unshift($scope.root.historico.splice(pos,1)[0]);
-		} else {
-			// doc não está no histórico. Adicionando ele a frente
-			$scope.root.historico.unshift(doc);
-		}
+	$scope.root.addDocumentoAoHistorico = function(documento){
 
-		// Removendo o último se o tamanho do histórico for maior que o máximo
-		if($scope.root.histórico.length > HISTORICO_MAX_SIZE){
-			$scope.root.histórico.pop();
-		}
+		//Executando ações dentro de um timeout para que as movimentações não sejam exibidas no menu
+		setTimeout(500,function(){
+			
+			// separando somente dados de interesse para manter no histórico
+			var doc = {'i':documento.id, 'c':documento.codigo};
 
-		// Atualizando o cookie para uso futuro
-		$cookies.putObject(COOKIE_KEY_HISTORICO,$scope.root.historico);
+			// Carregando histórico do cookie
+			$scope.root.historico = $cookies.getObject(COOKIE_KEY_HISTORICO);
+
+			// buscando se o doc em questão já está no vetor histórico
+			var pos = $scope.root.historico.findIndex(function(a){return a.i == this},doc.i);
+			if(pos > -1){
+				// doc está no histórico na posição pos. Reposicionando ele a frente
+				$scope.root.historico.unshift($scope.root.historico.splice(pos,1)[0]);
+			} else {
+				// doc não está no histórico. Adicionando ele a frente
+				$scope.root.historico.unshift(doc);
+			}
+			
+			// Removendo o último se o tamanho do histórico for maior que o máximo
+			if($scope.root.historico.length > HISTORICO_MAX_SIZE){
+				$scope.root.historico.pop();
+			}
+			
+			// Atualizando o cookie para uso futuro
+			$cookies.putObject(COOKIE_KEY_HISTORICO,$scope.root.historico);
+		});
 	}
 }
