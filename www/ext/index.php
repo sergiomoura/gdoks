@@ -62,7 +62,7 @@
 		ini_set('max_execution_time', 120);
 
 		// Mandando zip da grd
-		$grd->sendZip($nome_usuario);
+		$grd->sendZip($nome_usuario,true); // true => SEM COMPRESSÃO;
 	});
 
 	$app->post('/ext/esqueci',function() use($app) {

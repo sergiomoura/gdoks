@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Slim' => array($vendorDir . '/slim/slim'),
+    'FtpClient' => array($vendorDir . '/nicolab/php-ftp-client/src'),
 );

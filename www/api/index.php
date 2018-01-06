@@ -4055,7 +4055,7 @@
 					ini_set('max_execution_time', 240);
 
 					// Enviando GRD em ZIP
-					$grd->sendZip($user->nome);
+					$grd->sendZip($user->nome,true); // (true => SEM COMPRESSÃO)
 				} else {
 					// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
 					$sql = 'SELECT c.id,
@@ -4271,7 +4271,7 @@
 					$grd = Grd::CreateById($id_grd,$codigo_empresa);
 
 					// Criando o zip da Grd
-					$caminhoDoZip = $grd->gerarZip($nome_usuario);
+					$caminhoDoZip = $grd->gerarZip($nome_usuario,true); // (true => Sem compreessão)
 
 					// Setting From:
 					$from = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
@@ -4487,26 +4487,74 @@
 					if($ftp_keys['ftp_configurado']==1){
 						
 						// Servidor configurado. Abrindo conexão;
-						$ftp = @ftp_connect($ftp_keys['host']);
-						if($ftp === false){
+						$ftp = new \FtpClient\FtpClient();
+
+						// Conectando ao servidor
+						try {
+							$ftp->connect($ftp_keys['host']);
+						} catch (Exception $e) {
 							$app->response->setStatus(401);
 							$response = new response(1,'Não foi possível conectar ao servidor');
 							$response->flush();
-							return;
-						}
-
-						// Efetuando login
-						$loginResult = @ftp_login($ftp, $ftp_keys['login'], $ftp_keys['senha']);
-						if($loginResult === false){
-							$app->response->setStatus(401);
-							$response = new response(1,'Não foi possível efetuar login no servidor do cliente');
-							$response->flush();
-							return;
+							die();
 						}
 						
-						// Configurando para ftp Passivo
-						ftp_pasv($ftp, true);
+						// Fazendo login
+						try {
+							$ftp->login($ftp_keys['login'], $ftp_keys['senha']);
+						} catch (Exception $e) {
+							$app->response->setStatus(401);
+							$response = new response(1,'Falha no login do FTP');
+							$response->flush();
+							die();	
+						}
+						
+						// Configurando FTP para PASV
+						$ftp->pasv(true);
+						
+						// OPERAÇÕES NO SERVIDOR DO CLIENTE = = = = = = = = = = =
+						// Removendo diretório de mesmo nome caso ele exista
+						try {
+							$ftp->rmdir($grd->codigo,true);
+						} catch (Exception $e) {}
+						
 
+						// Criando pasta da GRD no servidor do cliente
+						try{
+							$ftp->mkdir($grd->codigo);
+						} catch  (Exception $e) {
+							// Pasta da grd criada. Entrando nela.
+							$app->response->setStatus(401);
+							$response = new response(1,'Não foi possível criar pasta de GRD no servidor do cliente');
+							$response->flush();
+							die();
+						}
+
+						// Entrando na pasta criada
+						$ftp->chdir($grd->codigo);
+
+						// Gerando o pdf com nome do usuário requisitante como emissor
+						$caminhoDoPdf = $grd->gerarPdf($nome_usuario);
+
+						// Subindo o pdf
+						$ftp->put($grd->codigo.'.pdf', $caminhoDoPdf, FTP_BINARY);
+						
+						// Gerando lista de arquivos
+						$arquivos = $grd->listarArquivos();
+
+
+						// Subindo os arquivos
+						foreach ($arquivos as $doc) {
+							// Cria o diretório da subdisciplina se ele não existir
+							if(!$ftp->isDir($doc->nome_subdisciplina)){
+								$ftp->mkdir($doc->nome_subdisciplina,true);
+							}
+
+							// Subindo...
+							$ftp->put($doc->nome_subdisciplina.'/'.$doc->nome_cliente,$doc->caminho,FTP_BINARY);
+						}
+
+						/*
 						// Criando o zip da Grd
 						$caminhoDoZip = $grd->gerarZip($nome_usuario);
 
@@ -4532,6 +4580,7 @@
 
 						// removendo arquivo zip criado
 						unlink($caminhoDoZip);
+						*/
 					} else {
 						$app->response->setStatus(401);
 						$response = new response(1,'Servidor FTP não configurado para este cliente.');

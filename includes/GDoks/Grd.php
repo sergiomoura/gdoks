@@ -234,23 +234,8 @@
 			}
 		}
 
-		// Função que cria o zip com a grd e os arquivos que ela contem
-		public function gerarZip($nome_do_emissor){
-			$tic = microtime(true);
-
-			// Gerando pdf da grd
-			$pdf = $this->pdf($nome_do_emissor);
-
-			// criando a pata temp da empresa caso ela não exista
-			if(!is_dir(TMP_PATH.$this->_codigo_empresa)) {
-				mkdir(TMP_PATH.$this->_codigo_empresa);
-			}
-
-			// salvando pdf na pasta temp da empresa
-			$caminhoPdf = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.pdf';
-			
-			$pdf->Output('F',$caminhoPdf);
-
+		// Função que lista arquivos da GRD
+		public function listarArquivos(){
 			// listando arquivos mais recentes da grd
 			$sql = 'SELECT O.caminho,
 					       O.nome_cliente,
@@ -274,7 +259,28 @@
 					   GROUP BY R.id) M
 					INNER JOIN gdoks_pdas_x_arquivos N ON M.id_pda=N.id_pda
 					INNER JOIN gdoks_arquivos O ON N.id_arquivo=O.id';
-			$arquivos = array_map(function($a){return (object)$a;}, $this->db->query($sql,'i',$this->_id));
+			return array_map(function($a){return (object)$a;}, $this->db->query($sql,'i',$this->_id));
+		}
+
+		// Função que cria o zip com a grd e os arquivos que ela contem
+		public function gerarZip($nome_do_emissor,$sem_compressao=false){
+			$tic = microtime(true);
+
+			// Gerando pdf da grd
+			$pdf = $this->pdf($nome_do_emissor);
+
+			// criando a pata temp da empresa caso ela não exista
+			if(!is_dir(TMP_PATH.$this->_codigo_empresa)) {
+				mkdir(TMP_PATH.$this->_codigo_empresa);
+			}
+
+			// salvando pdf na pasta temp da empresa
+			$caminhoPdf = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.pdf';
+			
+			$pdf->Output('F',$caminhoPdf);
+
+			// Gerando lista de arquivos
+			$arquivos = $this->listarArquivos();
 
 			// Definindo nome do arquivo zip
 			$caminhoZip = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.zip';
@@ -298,8 +304,11 @@
 
 			// Adicionando os arquivos da GRD ao zip
 			$erros = Array();
-			$i = 1;
-			foreach ($arquivos as $f) {
+			$j = 1;
+			for ($i=0; $i < sizeof($arquivos); $i++) { 
+				
+				// Lendo o arquivo
+				$f = $arquivos[$i];
 
 				// Substituindo espaços no nome da subdisciplina para nomear a subpasta
 				$pasta = str_replace(' ', '_', $f->nome_subdisciplina);
@@ -310,15 +319,18 @@
 					// Gravando erro em caso de falha
 				 	array_push($erros, $pasta.'/'.$f->nome_cliente);
 
-				} 
+				} elseif ($sem_compressao) {
+					// setando ocmpressão para zip_entry_open(zip, zip_entry)
+					$zip->setCompressionIndex($i, ZipArchive::CM_STORE);
+				}
 
 				// fechando e abrindo o zip para não estourar o número de arquivos abertos
-				if($i == 100){
+				if($j == 100){
 					$zip->close();
 					$zip->open($caminhoZip,ZipArchive::CREATE);
-					$i=0;
+					$j=0;
 				}
-				$i++;
+				$j++;
 			}
 
 			// verificando erros
@@ -338,9 +350,9 @@
 		}
 
 		// Função que envia o zip para o cliente
-		public function sendZip($nome_do_emissor){
+		public function sendZip($nome_do_emissor,$sem_compressao=false){
 			// Gerando o zip
-			$caminhoDoZip = $this->gerarZip($nome_do_emissor);
+			$caminhoDoZip = $this->gerarZip($nome_do_emissor,$sem_compressao);
 
 			// Enviando headers
 			header('HTTP/1.0 200 OK');
@@ -357,5 +369,24 @@
 			
 			// apagando o zip
 			unlink($caminhoDoZip);
+		}
+
+		public function gerarPdf($nome_do_emissor){
+			// Gerando o pdf
+			$pdf = $this->pdf($nome_do_emissor);
+
+			// criando a pata temp da empresa caso ela não exista
+			if(!is_dir(TMP_PATH.$this->_codigo_empresa)) {
+				mkdir(TMP_PATH.$this->_codigo_empresa);
+			}
+
+			// Definindo o caminho para o pdf
+			$caminhoPdf = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.pdf';
+			
+			// salvando pdf na pasta temp da empresa
+			$pdf->Output('F',$caminhoPdf);
+
+			// Retornando o caminho do pdf
+			return $caminhoPdf;
 		}
 	}
