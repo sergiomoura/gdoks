@@ -4236,103 +4236,6 @@
 				$response->flush();
 			});
 			
-			// $app->post('/grds/:id_grd/mail',function($id_grd) use ($app,$db,$token){
-			// 	// Lendo conteúdo da requisição
-			// 	$mail = json_decode($app->request->getBody());
-			// 	$id_grd = 1*$id_grd;
-
-			// 	// verificando se a grd é da mesma empresa do usuário
-			// 	$sql = 'SELECT
-			// 				a.id,
-			// 				a.nome
-			// 			FROM gdoks_usuarios a
-			// 			INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
-			// 			INNER JOIN gdoks_grds c ON c.id_projeto=b.id
-			// 			WHERE token=?
-			// 			  AND validade_do_token>now()
-			// 			  AND c.id=?';
-			// 	$rs = $db->query($sql,'si',$token,$id_grd);
-			// 	if(sizeof($rs) == 0){
-			// 		// Retornando erro
-			// 		$app->response->setStatus(401);
-			// 		$response = new response(1,'GRD inexistente ou token expirado.');
-			// 		$response->flush();
-			// 		return;
-			// 	} else {
-
-			// 		// Salvando o id e nome do usuário
-			// 		$id_usuario = $rs[0]['id'];
-			// 		$nome_usuario = $rs[0]['nome'];
-
-			// 		// Recuperando o nome da empresa a partir do header
-			// 		$codigo_empresa = explode('-',getallheaders()['Authorization'])[0];
-
-			// 		// Criando objeto da grd
-			// 		$grd = Grd::CreateById($id_grd,$codigo_empresa);
-
-			// 		// Criando o zip da Grd
-			// 		$caminhoDoZip = $grd->gerarZip($nome_usuario,true); // (true => Sem compreessão)
-
-			// 		// Setting From:
-			// 		$from = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
-
-			// 		// Setting to
-			// 		$to = new SendGrid\Email($mail->destinatarios[0]->nome,$mail->destinatarios[0]->email);
-
-			// 		// Setting content
-			// 		$content = new SendGrid\Content("text/html", ($mail->msg==''?'-':$mail->msg));
-
-			// 		// Setting Mail object
-			// 		$sgMail = new SendGrid\Mail($from, $mail->assunto, $to, $content);
-
-			// 		// Setting CCs
-			// 		for ($i=1; $i < sizeof($mail->destinatarios); $i++) { 
-			// 			$d = new SendGrid\Email($mail->destinatarios[$i]->nome,$mail->destinatarios[$i]->email);
-			// 		 	$sgMail->personalization[0]->addCC($d);
-			// 		}
-
-			// 		// Criando anexo
-			// 		$file_encoded = base64_encode(file_get_contents(realpath($caminhoDoZip)));
-			// 		$attachment = new SendGrid\Attachment();
-			// 		$attachment->setContent($file_encoded);
-			// 		$attachment->setType("application/zip");
-			// 		$attachment->setDisposition("attachment");
-			// 		$attachment->setFileName(basename($caminhoDoZip));
-
-			// 		// Anexando o arquivo da GRD
-			// 		$sgMail->addAttachment($attachment);
-
-			// 		// Definindo o SendGrid sender
-			// 		$sendgrid = new SendGrid(SENDGRID_KEY);
-
-			// 		// Enviando
-			// 		$response = $sendgrid->client->mail()->send()->post($sgMail);
-
-			// 		// Verificando se obteve sucesso ou não
-			// 		if($response->statusCode() == 202){
-
-			// 			// Registrando a datahora do envio
-			// 			$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
-			// 			$db->query($sql,'i',$grd->id);
-
-			// 			// Retornando sucesso
-			// 			$response = new response(0,'ok');
-			// 			$response->datahora_enviada = date('Y-m-d H:i:s');
-			// 			$response->flush();
-
-			// 			// Registrando no log
-			// 			registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
-
-			// 		} else {
-			// 			// Retornando erro
-			// 			$app->response->setStatus(401);
-			// 			$response = new response(1,'Falha no envio: '.$response->statusCode());
-			// 			$response->flush();
-			// 			die();
-			// 		}
-			// 	}
-			// });
-
 			$app->post('/grds/:id_grd/link',function($id_grd) use ($app,$db,$token){
 				
 				// Lendo conteúdo da requisição
@@ -4493,7 +4396,7 @@
 						try {
 							$ftp->connect($ftp_keys['host']);
 						} catch (Exception $e) {
-							$app->response->setStatus(401);
+							http_response_code(401);
 							$response = new response(1,'Não foi possível conectar ao servidor');
 							$response->flush();
 							die();
@@ -4503,7 +4406,7 @@
 						try {
 							$ftp->login($ftp_keys['login'], $ftp_keys['senha']);
 						} catch (Exception $e) {
-							$app->response->setStatus(401);
+							http_response_code(401);
 							$response = new response(1,'Falha no login do FTP');
 							$response->flush();
 							die();	
@@ -4512,77 +4415,35 @@
 						// Configurando FTP para PASV
 						$ftp->pasv(true);
 						
-						// OPERAÇÕES NO SERVIDOR DO CLIENTE = = = = = = = = = = =
-						// Removendo diretório de mesmo nome caso ele exista
-						try {
-							$ftp->rmdir($grd->codigo,true);
-						} catch (Exception $e) {}
-						
+						// Criando o zip da Grd
+						$caminhoDoZip = $grd->gerarZip($nome_usuario,true);
 
-						// Criando pasta da GRD no servidor do cliente
-						try{
-							$ftp->mkdir($grd->codigo);
-						} catch  (Exception $e) {
-							// Pasta da grd criada. Entrando nela.
-							$app->response->setStatus(401);
-							$response = new response(1,'Não foi possível criar pasta de GRD no servidor do cliente');
+						// Fazendo upload
+						try {
+							$ftp->put(basename($caminhoDoZip), $caminhoDoZip, FTP_BINARY);
+						} catch (Exception $e) {
+							http_response_code(401);
+							$response = new response(1,'Não foi possível fazer upload no servidor do cliente');
 							$response->flush();
 							die();
 						}
 
-						// Entrando na pasta criada
-						$ftp->chdir($grd->codigo);
+						// Registrando a datahora do envio
+						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
+						$db->query($sql,'i',$grd->id);
 
-						// Gerando o pdf com nome do usuário requisitante como emissor
-						$caminhoDoPdf = $grd->gerarPdf($nome_usuario);
+						// Retornando sucesso
+						$response = new response(0,'ok');
+						$response->datahora_enviada = date('Y-m-d H:i:s');
+						$response->flush();
 
-						// Subindo o pdf
-						$ftp->put($grd->codigo.'.pdf', $caminhoDoPdf, FTP_BINARY);
+						// Registrando no log
+						registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_FTP,$grd->id);
 						
-						// Gerando lista de arquivos
-						$arquivos = $grd->listarArquivos();
-
-
-						// Subindo os arquivos
-						foreach ($arquivos as $doc) {
-							// Cria o diretório da subdisciplina se ele não existir
-							if(!$ftp->isDir($doc->nome_subdisciplina)){
-								$ftp->mkdir($doc->nome_subdisciplina,true);
-							}
-
-							// Subindo...
-							$ftp->put($doc->nome_subdisciplina.'/'.$doc->nome_cliente,$doc->caminho,FTP_BINARY);
-						}
-
-						/*
-						// Criando o zip da Grd
-						$caminhoDoZip = $grd->gerarZip($nome_usuario);
-
-						// Fazendo upload
-						if(!ftp_put($ftp, basename($caminhoDoZip), $caminhoDoZip, FTP_BINARY)){
-							$app->response->setStatus(401);
-							$response = new response(1,'Não foi possível fazer upload no servidor do cliente');
-							$response->flush();
-							return;	
-						} else {
-							// Registrando a datahora do envio
-							$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
-							$db->query($sql,'i',$grd->id);
-
-							// Retornando sucesso
-							$response = new response(0,'ok');
-							$response->datahora_enviada = date('Y-m-d H:i:s');
-							$response->flush();
-
-							// Registrando no log
-							registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_FTP,$grd->id);
-						}
-
 						// removendo arquivo zip criado
 						unlink($caminhoDoZip);
-						*/
 					} else {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Servidor FTP não configurado para este cliente.');
 						$response->flush();
 						return;
