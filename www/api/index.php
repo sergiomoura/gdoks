@@ -150,7 +150,7 @@
 				} else {
 					// Não! usuário não é válido.
 					// Preparando resposta negativa
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Login falhou');
 				}
 
@@ -162,7 +162,7 @@
 			$app->get('/refresh',function() use ($app,$db,$token){
 				$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
 				if(sizeof($rs) == 0){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não renovou token: '.$token);
 					$response->flush();
 					return;
@@ -192,7 +192,7 @@
 				$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
 				if(sizeof($rs)==0){
 					// Retonando não autorizado
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não autorizado.');
 					$response->flush();
 					return;
@@ -279,7 +279,7 @@
 					$response->telas = $telas;
 					$response->flush();
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não pode acessar os dados de outras empresas.');
 					$response->flush();
 					return;
@@ -319,7 +319,7 @@
 					$response = new response(0,'ok');
 					$response->flush();
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não pode acessar os dados de outras empresas.');
 					$response->flush();
 					return;
@@ -360,7 +360,7 @@
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
 						} catch (Exception $e) {
-							$app->response->setStatus(401);
+							http_response_code(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login, email ou sigla.');
 							$response->flush();
 							return;
@@ -375,7 +375,7 @@
 							$response = new response(0,'Usuário alterado com sucesso.');
 							$response->flush();
 						} catch (Exception $e) {
-							$app->response->setStatus(401);
+							http_response_code(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla');
 							$response->flush();
 							return;
@@ -384,7 +384,7 @@
 						registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
 					}
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -412,7 +412,7 @@
 					$response->newId = $db->insert_id;
 					$response->flush();
 				} catch (Exception $e) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla.:'.$e->getMessage());
 					$response->flush();
 					return;
@@ -545,7 +545,7 @@
 						$response = new response(0,'Disciplina alterada com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Já existe uma disciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
 						return;
@@ -553,7 +553,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa == true?1:0));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -581,7 +581,7 @@
 					$response->newId = $db->insert_id;
 					$response->flush();
 				} catch (Exception $e) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Já existe uma disciplina cadastrado com este nome ou sigla. '.$e->getMessage());
 					$response->flush();
 					return;
@@ -664,7 +664,7 @@
 					$response->disciplina = $disciplina;
 					
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não carrega dados de outra empresa.');	
 				}
 
@@ -681,7 +681,7 @@
 
 				// parando caso haja inconscistência entre o id_disciplina vindo no corpo da requisição e o da url
 				if($id_sub != $subdisciplina->id) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'inconscistência nas informações fornecidas');
 					$response.flush();
 					die();
@@ -712,7 +712,7 @@
 						$response = new response(0,'Subdisciplina alterada com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Verifique se já não existe uma subdisciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
 						return;
@@ -720,7 +720,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -754,7 +754,7 @@
 						$response->newId = $db->insert_id;
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Já existe uma subdisciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
 						return;
@@ -762,7 +762,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -807,7 +807,7 @@
 						$response = new response(0,'Subdisciplina removida com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -815,7 +815,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_REMOVEU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -856,7 +856,7 @@
 						$response = new response(0,'Especialistas adicionados com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -865,7 +865,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_ESPECIALISTAS,$id_disciplina.',['.implode('|', $ids_especialistas).']');
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -903,7 +903,7 @@
 						$response = new response(0,'Especialista adicionado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -911,7 +911,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -949,7 +949,7 @@
 						$response = new response(0,'Especialista removido com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage);
 						$response->flush();
 						return;
@@ -957,7 +957,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -998,7 +998,7 @@
 						$response = new response(0,'Validadores adicionados com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -1007,7 +1007,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_VALIDADORES,$id_disciplina.',['.implode('|', $ids_validadores).']');
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1046,7 +1046,7 @@
 						$response = new response(0,'Validador adicionado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -1054,7 +1054,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina);
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1092,7 +1092,7 @@
 						$response = new response(0,'Validador removido com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -1100,7 +1100,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina);
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1219,7 +1219,7 @@
 					$response = new response(0,'Ok');
 					$response->projeto = $projeto;
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 
@@ -1286,7 +1286,7 @@
 						die();
                     }
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 					die();
 				}
@@ -1346,7 +1346,7 @@
 						die();
                     }
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 					die();
 				}
@@ -1368,7 +1368,7 @@
 
 				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
 				if($id_area != $area->id) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'inconscistência nas informações fornecidas');
 					$response.flush();
 					die();
@@ -1399,7 +1399,7 @@
 						$response = new response(0,'Área alterada com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -1407,7 +1407,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_AREA,implode(',', (array)$area));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1441,7 +1441,7 @@
 						$response->newId = $db->insert_id;
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -1449,7 +1449,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_AREA,implode(',', (array)$area));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1481,13 +1481,13 @@
 						$response->areas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
 					}
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não lê dados de outra empresa.');	
 				}
 			});
@@ -1520,13 +1520,13 @@
 						$response->subareas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_area));
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
 					}
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não lê dados de outra empresa.');	
 				}
 			});
@@ -1570,7 +1570,7 @@
 						$response = new response(0,'Área removida com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -1578,7 +1578,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_REMOVEU_AREA,implode(',',$area));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1761,7 +1761,7 @@
 					$response->sucessos = $sucessos;
 					$response->flush();
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 					die();
 				}
@@ -1808,7 +1808,7 @@
 						$db->query($sql,'i',$id_dao);
 						$removeuDaBase = true;
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -1819,7 +1819,7 @@
 						// removendo do FS
 						$removeuDoFS = @unlink(CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/'.$dao->nome_unico);
 					} else {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Falha ao tentar remover registro do documento na base de dados.');
 						$response->flush();
 						return;	
@@ -1836,7 +1836,7 @@
 					}
 					
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1851,7 +1851,7 @@
 
 				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
 				if($id_documento != $documento->id) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'inconscistência nas informações fornecidas');
 					$response.flush();
 					die();
@@ -1885,7 +1885,7 @@
 						$response = new response(0,'Documento alterado com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -1921,7 +1921,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DOCUMENTO,implode(',', (array)$documento));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -1981,7 +1981,7 @@
 						$response->newId = $newId;
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -1994,7 +1994,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,implode(',', (array)$documento));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -2040,7 +2040,7 @@
 						$response = new response(0,'Documento removido com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -2048,7 +2048,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_REMOVEU_DOCUMENTO,implode(',',$documento));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -2202,7 +2202,7 @@
 					$response->documentos = $documentos;
 					$response->flush();
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não lê dados de outra empresa.');
 				}
 			});
@@ -2221,7 +2221,7 @@
 
 				if(sizeof($rs) == 0){
 					// Respondendo para um token inválido
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Refresh failed!');
 					$response->flush();
 					return;
@@ -2311,7 +2311,7 @@
 					try {
 						$rs = $db->query($sql,'iii',$idu,$idu,$idu);	
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro ao tentar listar documentos: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -2331,7 +2331,7 @@
 				$rs = $db->query($sql,'s',$token);
 				if(sizeof($rs)==0){
 					// Token expirou
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Token expirou.');	
 					$response->flush();
 					die();
@@ -2396,7 +2396,7 @@
 
 				if(sizeof($rs) == 0){
 					// Respondendo para um token inválido
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Refresh failed!');
 					$response->flush();
 					return;
@@ -2449,7 +2449,7 @@
 					try {
 						$rs = $db->query($sql,'i',$id_doc);	
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro ao tentar carregar documento: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -2474,7 +2474,7 @@
 					try {
 						$rs = $db->query($sql,'iiii',$idu,$doc->id_disciplina,$idu,$doc->id_disciplina);
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro ao ao executar consulta: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -2482,7 +2482,7 @@
 
 					// Se não consulta não retornar nenhuma linha usuário não é nem especialista nem validador
 					if(sizeof($rs)==0){
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Usuário não é validador ou especialista da disciplina do documento');
 						$response->flush();
 						return;	
@@ -2505,7 +2505,7 @@
 					try {
 						$revisoes = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_doc));
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro ao tentar carregar revisões documento: '.$e->getMessage());
 						$response->flush();
 						return;	
@@ -2592,7 +2592,7 @@
 				$rs = $db->query($sql,'s',$token);
 				if(sizeof($rs) == 0){
 					// Token expirou
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Token expirou.');	
 					$response->flush();
 					die();
@@ -2614,7 +2614,7 @@
 
 					if($rs[0]['nPdas'] != 0){
 						// Não é o primeiro pda e usuário não fez checkout do último pda
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Usuário não realizou checkout.');
 						$response->flush();
 						die();
@@ -2730,7 +2730,7 @@
 				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>NOW()';
 				$rs = $db->query($sql,'s',$token);
 				if(sizeof($rs) == 0){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Token expirou.');	
 					die();
 				} else {
@@ -2746,7 +2746,7 @@
 						  AND c.id_usuario=?';
 				$rs = $db->query($sql,'ii',$id_doc,$idu);
 				if($rs[0]['ehValidador'] != 1){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Usuário não é um validador da disciplina deste documento.');	
 					die();
 				}
@@ -2792,7 +2792,7 @@
 				$rs = $db->query($sql,'s',$token);
 				if(sizeof($rs)==0){
 					// Token expirou
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Token expirou.');	
 					$response->flush();
 					die();
@@ -3078,7 +3078,7 @@
 							$db->query($sql,'si',$endereco,$id_rev);
 						}
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -3087,7 +3087,7 @@
 					$response->flush();
 					
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Inconsistência nos dados');
 					$response->flush();
 					return;
@@ -3130,7 +3130,7 @@
 				$rs = $db->query($sql,'s',$token);
 
 				if(sizeof($rs) == 0){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Refresh failed!');
 					$response->flush();
 					return;
@@ -3302,7 +3302,7 @@
 						}
 					}
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 					die();
 				}
@@ -3348,7 +3348,7 @@
 						$response->newId = $db->insert_id;
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -3362,7 +3362,7 @@
 						$response->newId = $db->insert_id;
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -3485,7 +3485,7 @@
 						die();
                     }
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 					die();
 				}
@@ -3521,7 +3521,7 @@
 					$response->newId = $db->insert_id;
 					$response->flush();
 				} catch (Exception $e) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,$e->getMessage());
 					$response->flush();
 					return;
@@ -3562,7 +3562,7 @@
 						die();
                     }
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 					die();
 				}
@@ -3584,7 +3584,7 @@
 
 				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
 				if($id_subarea != $subarea->id) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'inconscistência nas informações fornecidas');
 					$response.flush();
 					die();
@@ -3616,7 +3616,7 @@
 						$response = new response(0,'Área alterada com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -3624,7 +3624,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_SUBAREA,$subarea->id.','.$subarea->nome.','.$subarea->codigo.','.$subarea->area->id);
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -3659,7 +3659,7 @@
 						$response->newId = $db->insert_id;
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
@@ -3667,7 +3667,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_SUBAREA,$subarea->id.','.$subarea->nome.','.$subarea->codigo.','.$subarea->area->id);
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -3711,7 +3711,7 @@
 						$response = new response(0,'Sub-área removida com sucesso.');
 						$response->flush();
 					} catch (Exception $e) {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
@@ -3719,7 +3719,7 @@
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_REMOVEU_SUBAREA,implode(',',$subarea));
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
 				}
 			});
@@ -3757,7 +3757,7 @@
 
 				// Se recset voltar vazio, manda erro para o cliente. O token dele deve ter expirado
 				if(sizeof($rs) == 0){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Token expirado');
 					$response->flush();
 					die();
@@ -3837,7 +3837,7 @@
 				
 				// Se recset voltar vazio, manda erro para o cliente. o token dele deve ter expirado
 				if(sizeof($rs) == 0){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Token expirado');
 					$response->flush();
 					return;
@@ -3927,7 +3927,7 @@
 				$sql = 'SELECT count(*) as ok FROM gdoks_projetos WHERE id=? AND id_empresa=?';
 				$rs = $db->query($sql,'ii',$grd->id_projeto,$id_empresa);
 				if($rs[0]['ok'] == 0){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');
 					$response->flush();
 					return;
@@ -3948,7 +3948,7 @@
 					$db->query($sql,'iss',$grd->id_projeto,$newCodigo,$grd->obs);
 					$newId = $db->insert_id;
 				} catch (Exception $e) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,$e->getMessage());
 					$response->flush();
 					return;
@@ -3976,7 +3976,7 @@
 
 				// verificando se os dados da requisição são consistentes
 				if($grd->id != $id){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Dados da requisição são inconsistentes');
 					$response->flush();
 					return;
@@ -3997,7 +3997,7 @@
 				$sql = 'SELECT count(*) as ok FROM gdoks_projetos WHERE id=? AND id_empresa=?';
 				$rs = $db->query($sql,'ii',$grd->id_projeto,$id_empresa);
 				if($rs[0]['ok'] == 0){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');
 					$response->flush();
 					return;
@@ -4011,7 +4011,7 @@
 				try {
 					$db->query($sql,'isi',$grd->id_projeto,$grd->obs,$grd->id);
 				} catch (Exception $e) {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,$e->getMessage());
 					$response->flush();
 					return;
@@ -4099,7 +4099,7 @@
 						$response->flush();
 						return;
 					} else {
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'GRD inexistente ou token expirado.');
 						$response->flush();
 						return;
@@ -4245,7 +4245,7 @@
 
 				// verificando se mail->msg possui link
 				if(@preg_match('/\[link\].+\[\/link\]/', $mail->msg)!=1){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Texto da mensagem sem link para download.');
 					$response->flush();
 					return;
@@ -4262,7 +4262,7 @@
 				$rs = $db->query($sql,'si',$token,$id_grd);
 				if(sizeof($rs) == 0){
 					// Retornando erro
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'GRD inexistente ou token expirado.');
 					$response->flush();
 					return;
@@ -4336,7 +4336,7 @@
 						registrarAcao($db,$id_usuario,ACAO_ENVIOU_LINK_DE_GRD_VIA_EMAIL,$grd->id);
 					} else {
 						// Retornando erro
-						$app->response->setStatus(401);
+						http_response_code(401);
 						$response = new response(1,'Falha no envio: '.$response->statusCode());
 						$response->flush();
 						die();
@@ -4359,7 +4359,7 @@
 				$rs = $db->query($sql,'si',$token,$id_grd);
 				if(sizeof($rs) == 0){
 					// Retornando erro
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'GRD inexistente ou token expirado.');
 					$response->flush();
 					return;
@@ -4494,7 +4494,7 @@
 					$response->observacoes = $observacoes;
 					$response->flush();
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Levantando dados de outra empresa ou token expirado.');
 					$response->flush();
 					return;
@@ -4526,7 +4526,7 @@
 
 				// retornando erro se usuário logado não for da empresa da grd
 				if(!$ok){
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,'Não pode inserir ou alterar observações de GRDs de outra empresa.');
 					$response->flush();
 					return;
@@ -4567,7 +4567,7 @@
 					$pasta_destino = CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/';
 					if(!file_exists($pasta_destino)){
 						if(!@mkdir($pasta_destino)){
-							$app->response->setStatus(401);
+							http_response_code(401);
 							$response = new response(1,'Pasta destino inexistente. Não foi possível criar uma pasta destino.');
 							$response->flush();
 							return;
@@ -4670,7 +4670,7 @@
 					$pasta_destino = CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/';
 					if(!file_exists($pasta_destino)){
 						if(!@mkdir($pasta_destino)){
-							$app->response->setStatus(401);
+							http_response_code(401);
 							$response = new response(1,'Pasta destino inexistente. Não foi possível criar uma pasta destino.');
 							$response->flush();
 							return;
@@ -4777,7 +4777,7 @@
 					$response->codigosEmi = $rs;
 					$response->flush();
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,"Nenhum código cadastrado ou token expirado");
 					$response->flush();
 				}
@@ -4799,7 +4799,7 @@
 					$response->tiposDeDocumento = $rs;
 					$response->flush();
 				} else {
-					$app->response->setStatus(401);
+					http_response_code(401);
 					$response = new response(1,"Nenhum tipo de documento cadastrado ou token expirado");
 					$response->flush();
 				}
