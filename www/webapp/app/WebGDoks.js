@@ -20,6 +20,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'Log',
 								'Nav',
 								'Opcoes',
+								'Historico',
 								'Projetos',
 								'Senha',
 								'Topo',
@@ -221,6 +222,12 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 	// atribuindo telas
 	$scope.root.telasDoUsuario = $cookies.getObject('user').telas;
 
+	// Carregando cookie de histórico se ele existir. Se não existir, cria com vetor vazio.
+	$scope.root.historico = $cookies.getObject(COOKIE_KEY_HISTORICO);
+	if($scope.root.historico == undefined){
+		$cookies.putObject([]);
+		$scope.root.historico = [];
+	}
 
 	// Flag para mostrar se está carregando ou não
 	$scope.root.carregando = false;
@@ -495,5 +502,25 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 	
 	$scope.toggleMenu = function(){
 		$mdSidenav('menu_principal').toggle();
+	}
+
+	$scope.root.addDocumentoAoHistorico = function(doc){
+		// buscando se o doc em questão já está no vetor histórico
+		var pos = $scope.root.historico.find(function(a){return a.id = this},doc.id);
+		if(pos > -1){
+			// doc está no histórico na posição pos. Reposicionando ele a frente
+			$scope.root.historico.unshift($scope.root.historico.splice(pos,1)[0]);
+		} else {
+			// doc não está no histórico. Adicionando ele a frente
+			$scope.root.historico.unshift(doc);
+		}
+
+		// Removendo o último se o tamanho do histórico for maior que o máximo
+		if($scope.root.histórico.length > HISTORICO_MAX_SIZE){
+			$scope.root.histórico.pop();
+		}
+
+		// Atualizando o cookie para uso futuro
+		$cookies.putObject(COOKIE_KEY_HISTORICO,$scope.root.historico);
 	}
 }

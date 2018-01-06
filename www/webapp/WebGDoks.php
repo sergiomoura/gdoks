@@ -45,8 +45,21 @@
 			</md-button>
 			<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
 			<span flex></span>
+			<md-menu>
+				<md-button ng-click="$mdMenu.open()" aria-label="Abre Histórico" class="md-icon-button">
+					<md-icon class="material-icons step" aria-label="menu">history</md-icon>
+				</md-button>
+				<md-menu-content ng-controller="HistoricoController">
+					<md-menu-item ng-repeat="doc in historico">
+						<md-button ng-click="goToDoc(doc.id)">
+							<md-icon class="material-icons step" aria-label="Ir para documento {{doc.nome}}">insert_drive_file</md-icon>
+							{{doc.codigo}}
+						</md-button>
+					</md-menu-item>
+				</md-menu-content>
+			</md-menu>
 			<md-menu ng-controller="OpcoesController">
-				<md-button ng-click="$mdOpenMenu()" aria-label="Abre Menu de Oções" class="md-icon-button">
+				<md-button ng-click="$mdMenu.open()" aria-label="Abre Menu de Oções" class="md-icon-button">
 					<md-icon class="material-icons step" aria-label="menu">more_vert</md-icon>
 				</md-button>
 				<md-menu-content width="4">

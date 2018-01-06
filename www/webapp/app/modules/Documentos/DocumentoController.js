@@ -270,9 +270,13 @@
 				// Esconde carregando
 				$scope.root.carregando = false;
 
-				// Parsings...
+				// Lendo resposta
 				var doc = response.documento;
+
+				// Salvando no histórico
+				$scope.root.addDocumentoAoHistorico(doc);
 				
+				// Parsings...
 				for (var i = doc.revisoes.length - 1; i >= 0; i--) {
 					doc.revisoes[i].data_limite = new Date(doc.revisoes[i].data_limite+'T00:00:00');
 					doc.revisoes[i].ua = new Date(doc.revisoes[i].ua);

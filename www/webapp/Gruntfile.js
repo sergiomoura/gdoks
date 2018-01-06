@@ -32,6 +32,7 @@ module.exports = function(grunt) {
 					'app/modules/Nav/NavController.js',
 					'app/modules/Log/LogController.js',
 					'app/modules/Opcoes/OpcoesController.js',
+					'app/modules/Historico/HistoricoController.js',
 					'app/modules/Projetos/ProjetosController.js',
 					'app/modules/Projetos/ProjetosAreasController.js',
 					'app/modules/Projetos/ProjetosSubareasController.js',
