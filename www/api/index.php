@@ -4236,102 +4236,102 @@
 				$response->flush();
 			});
 			
-			$app->post('/grds/:id_grd/mail',function($id_grd) use ($app,$db,$token){
-				// Lendo conteúdo da requisição
-				$mail = json_decode($app->request->getBody());
-				$id_grd = 1*$id_grd;
+			// $app->post('/grds/:id_grd/mail',function($id_grd) use ($app,$db,$token){
+			// 	// Lendo conteúdo da requisição
+			// 	$mail = json_decode($app->request->getBody());
+			// 	$id_grd = 1*$id_grd;
 
-				// verificando se a grd é da mesma empresa do usuário
-				$sql = 'SELECT
-							a.id,
-							a.nome
-						FROM gdoks_usuarios a
-						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
-						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
-						WHERE token=?
-						  AND validade_do_token>now()
-						  AND c.id=?';
-				$rs = $db->query($sql,'si',$token,$id_grd);
-				if(sizeof($rs) == 0){
-					// Retornando erro
-					$app->response->setStatus(401);
-					$response = new response(1,'GRD inexistente ou token expirado.');
-					$response->flush();
-					return;
-				} else {
+			// 	// verificando se a grd é da mesma empresa do usuário
+			// 	$sql = 'SELECT
+			// 				a.id,
+			// 				a.nome
+			// 			FROM gdoks_usuarios a
+			// 			INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+			// 			INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+			// 			WHERE token=?
+			// 			  AND validade_do_token>now()
+			// 			  AND c.id=?';
+			// 	$rs = $db->query($sql,'si',$token,$id_grd);
+			// 	if(sizeof($rs) == 0){
+			// 		// Retornando erro
+			// 		$app->response->setStatus(401);
+			// 		$response = new response(1,'GRD inexistente ou token expirado.');
+			// 		$response->flush();
+			// 		return;
+			// 	} else {
 
-					// Salvando o id e nome do usuário
-					$id_usuario = $rs[0]['id'];
-					$nome_usuario = $rs[0]['nome'];
+			// 		// Salvando o id e nome do usuário
+			// 		$id_usuario = $rs[0]['id'];
+			// 		$nome_usuario = $rs[0]['nome'];
 
-					// Recuperando o nome da empresa a partir do header
-					$codigo_empresa = explode('-',getallheaders()['Authorization'])[0];
+			// 		// Recuperando o nome da empresa a partir do header
+			// 		$codigo_empresa = explode('-',getallheaders()['Authorization'])[0];
 
-					// Criando objeto da grd
-					$grd = Grd::CreateById($id_grd,$codigo_empresa);
+			// 		// Criando objeto da grd
+			// 		$grd = Grd::CreateById($id_grd,$codigo_empresa);
 
-					// Criando o zip da Grd
-					$caminhoDoZip = $grd->gerarZip($nome_usuario,true); // (true => Sem compreessão)
+			// 		// Criando o zip da Grd
+			// 		$caminhoDoZip = $grd->gerarZip($nome_usuario,true); // (true => Sem compreessão)
 
-					// Setting From:
-					$from = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
+			// 		// Setting From:
+			// 		$from = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
 
-					// Setting to
-					$to = new SendGrid\Email($mail->destinatarios[0]->nome,$mail->destinatarios[0]->email);
+			// 		// Setting to
+			// 		$to = new SendGrid\Email($mail->destinatarios[0]->nome,$mail->destinatarios[0]->email);
 
-					// Setting content
-					$content = new SendGrid\Content("text/html", ($mail->msg==''?'-':$mail->msg));
+			// 		// Setting content
+			// 		$content = new SendGrid\Content("text/html", ($mail->msg==''?'-':$mail->msg));
 
-					// Setting Mail object
-					$sgMail = new SendGrid\Mail($from, $mail->assunto, $to, $content);
+			// 		// Setting Mail object
+			// 		$sgMail = new SendGrid\Mail($from, $mail->assunto, $to, $content);
 
-					// Setting CCs
-					for ($i=1; $i < sizeof($mail->destinatarios); $i++) { 
-						$d = new SendGrid\Email($mail->destinatarios[$i]->nome,$mail->destinatarios[$i]->email);
-					 	$sgMail->personalization[0]->addCC($d);
-					}
+			// 		// Setting CCs
+			// 		for ($i=1; $i < sizeof($mail->destinatarios); $i++) { 
+			// 			$d = new SendGrid\Email($mail->destinatarios[$i]->nome,$mail->destinatarios[$i]->email);
+			// 		 	$sgMail->personalization[0]->addCC($d);
+			// 		}
 
-					// Criando anexo
-					$file_encoded = base64_encode(file_get_contents(realpath($caminhoDoZip)));
-					$attachment = new SendGrid\Attachment();
-					$attachment->setContent($file_encoded);
-					$attachment->setType("application/zip");
-					$attachment->setDisposition("attachment");
-					$attachment->setFileName(basename($caminhoDoZip));
+			// 		// Criando anexo
+			// 		$file_encoded = base64_encode(file_get_contents(realpath($caminhoDoZip)));
+			// 		$attachment = new SendGrid\Attachment();
+			// 		$attachment->setContent($file_encoded);
+			// 		$attachment->setType("application/zip");
+			// 		$attachment->setDisposition("attachment");
+			// 		$attachment->setFileName(basename($caminhoDoZip));
 
-					// Anexando o arquivo da GRD
-					$sgMail->addAttachment($attachment);
+			// 		// Anexando o arquivo da GRD
+			// 		$sgMail->addAttachment($attachment);
 
-					// Definindo o SendGrid sender
-					$sendgrid = new SendGrid(SENDGRID_KEY);
+			// 		// Definindo o SendGrid sender
+			// 		$sendgrid = new SendGrid(SENDGRID_KEY);
 
-					// Enviando
-					$response = $sendgrid->client->mail()->send()->post($sgMail);
+			// 		// Enviando
+			// 		$response = $sendgrid->client->mail()->send()->post($sgMail);
 
-					// Verificando se obteve sucesso ou não
-					if($response->statusCode() == 202){
+			// 		// Verificando se obteve sucesso ou não
+			// 		if($response->statusCode() == 202){
 
-						// Registrando a datahora do envio
-						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
-						$db->query($sql,'i',$grd->id);
+			// 			// Registrando a datahora do envio
+			// 			$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
+			// 			$db->query($sql,'i',$grd->id);
 
-						// Retornando sucesso
-						$response = new response(0,'ok');
-						$response->datahora_enviada = date('Y-m-d H:i:s');
-						$response->flush();
+			// 			// Retornando sucesso
+			// 			$response = new response(0,'ok');
+			// 			$response->datahora_enviada = date('Y-m-d H:i:s');
+			// 			$response->flush();
 
-						// Registrando no log
-						registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
+			// 			// Registrando no log
+			// 			registrarAcao($db,$id_usuario,ACAO_ENVIOU_GRD_VIA_EMAIL,$grd->id);
 
-					} else {
-						// Retornando erro
-						$app->response->setStatus(401);
-						$response = new response(1,'Falha no envio: '.$response->statusCode());
-						$response->flush();
-						die();
-					}
-				}
-			});
+			// 		} else {
+			// 			// Retornando erro
+			// 			$app->response->setStatus(401);
+			// 			$response = new response(1,'Falha no envio: '.$response->statusCode());
+			// 			$response->flush();
+			// 			die();
+			// 		}
+			// 	}
+			// });
 
 			$app->post('/grds/:id_grd/link',function($id_grd) use ($app,$db,$token){
 				

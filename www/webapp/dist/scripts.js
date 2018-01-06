@@ -2965,106 +2965,106 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 			GDoksFactory.downloadGRD($scope.grd.id);
 		}
 
-		$scope.openDialogDeEnviarEmail = function(evt){
-			$mdDialog.show(
-				{
-					controller: enviarEmailDialogController,
-					locals:{
-						parentScope:$scope,
-					},
-					templateUrl: './app/modules/Grds/enviarEmail.dialog.tmpl.html',
-					parent: angular.element(document.body),
-					targetEvent: evt,
-					clickOutsideToClose:false
-				})
-				.then(function(answer) {
-				$scope.status = 'You said the information was "' + answer + '".';
-				}, function() {
-				$scope.status = 'You cancelled the dialog.';
-				});
-		}
+		// $scope.openDialogDeEnviarEmail = function(evt){
+		// 	$mdDialog.show(
+		// 		{
+		// 			controller: enviarEmailDialogController,
+		// 			locals:{
+		// 				parentScope:$scope,
+		// 			},
+		// 			templateUrl: './app/modules/Grds/enviarEmail.dialog.tmpl.html',
+		// 			parent: angular.element(document.body),
+		// 			targetEvent: evt,
+		// 			clickOutsideToClose:false
+		// 		})
+		// 		.then(function(answer) {
+		// 		$scope.status = 'You said the information was "' + answer + '".';
+		// 		}, function() {
+		// 		$scope.status = 'You cancelled the dialog.';
+		// 		});
+		// }
 
-		function enviarEmailDialogController($scope,parentScope,GDoksFactory){
-			// Amarrando a grd deste scope com o parentScope
-			$scope.grd = parentScope.grd;
+		// function enviarEmailDialogController($scope,parentScope,GDoksFactory){
+		// 	// Amarrando a grd deste scope com o parentScope
+		// 	$scope.grd = parentScope.grd;
 
-			// Definindo mensagem
-			$scope.mail = {
-				destinatarios:[
-					{
-						nome:$scope.grd.cliente.contato_nome,
-						email:$scope.grd.cliente.contato_email
-					}
-				],
-				assunto:'',
-				msg:''
-			}
+		// 	// Definindo mensagem
+		// 	$scope.mail = {
+		// 		destinatarios:[
+		// 			{
+		// 				nome:$scope.grd.cliente.contato_nome,
+		// 				email:$scope.grd.cliente.contato_email
+		// 			}
+		// 		],
+		// 		assunto:'',
+		// 		msg:''
+		// 	}
 
-			// Definindo função que adiciona um destinatário
-			$scope.addDestinatario = function(){
-				$scope.mail.destinatarios.push({nome:'','email':''});
-			}
+		// 	// Definindo função que adiciona um destinatário
+		// 	$scope.addDestinatario = function(){
+		// 		$scope.mail.destinatarios.push({nome:'','email':''});
+		// 	}
 
-			$scope.removeDestinatario = function(index){
-				$scope.mail.destinatarios.splice(index,1);	
-			}
+		// 	$scope.removeDestinatario = function(index){
+		// 		$scope.mail.destinatarios.splice(index,1);	
+		// 	}
 
-			$scope.cancelar = function(){
-				$mdDialog.hide();
-			}
+		// 	$scope.cancelar = function(){
+		// 		$mdDialog.hide();
+		// 	}
 
-			$scope.enviar = function(){
+		// 	$scope.enviar = function(){
 				
-				// mostra carregando
-				parentScope.root.carregando == true;
+		// 		// mostra carregando
+		// 		parentScope.root.carregando == true;
 
-				GDoksFactory.mailGRD($scope.grd.id,$scope.mail)
-				.success(function(response){
-					// Esconde carregando
-					parentScope.root.carregando = false;
+		// 		GDoksFactory.mailGRD($scope.grd.id,$scope.mail)
+		// 		.success(function(response){
+		// 			// Esconde carregando
+		// 			parentScope.root.carregando = false;
 
-					if(response.error == 0){
-						// Alterando a datahora enviada da GRD
-						$scope.grd.datahora_enviada = new Date(response.datahora_enviada)
+		// 			if(response.error == 0){
+		// 				// Alterando a datahora enviada da GRD
+		// 				$scope.grd.datahora_enviada = new Date(response.datahora_enviada)
 
-						// Retornando Toast para o usuário
-						$mdToast.show(
-							$mdToast.simple()
-							.textContent('GRD enviada com successo!')
-							.position('bottom left')
-							.hideDelay(5000)
-						);
-					} else {
-							// Retornando Toast para o usuário
-							$mdToast.show(
-								$mdToast.simple()
-								.textContent(response.msg)
-								.position('bottom left')
-								.hideDelay(5000)
-							);
-					}
+		// 				// Retornando Toast para o usuário
+		// 				$mdToast.show(
+		// 					$mdToast.simple()
+		// 					.textContent('GRD enviada com successo!')
+		// 					.position('bottom left')
+		// 					.hideDelay(5000)
+		// 				);
+		// 			} else {
+		// 					// Retornando Toast para o usuário
+		// 					$mdToast.show(
+		// 						$mdToast.simple()
+		// 						.textContent(response.msg)
+		// 						.position('bottom left')
+		// 						.hideDelay(5000)
+		// 					);
+		// 			}
 
 
-					// Escondendo dialogo
-					$mdDialog.hide();
-				})
-				.error(function(error){
-					// Esconde carregando
-					parentScope.root.carregando = false;
+		// 			// Escondendo dialogo
+		// 			$mdDialog.hide();
+		// 		})
+		// 		.error(function(error){
+		// 			// Esconde carregando
+		// 			parentScope.root.carregando = false;
 
-					// Retornando Toast para o usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Falha no envio da GRD')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
+		// 			// Retornando Toast para o usuário
+		// 			$mdToast.show(
+		// 				$mdToast.simple()
+		// 				.textContent('Falha no envio da GRD')
+		// 				.position('bottom left')
+		// 				.hideDelay(5000)
+		// 			);
 
-					// imprimindo erro no console
-					console.warn(error);
-				});
-			}
-		}
+		// 			// imprimindo erro no console
+		// 			console.warn(error);
+		// 		});
+		// 	}
+		// }
 
 		$scope.confirmFtpUploadController = function(evt){
 			var confirm = $mdDialog.confirm()
