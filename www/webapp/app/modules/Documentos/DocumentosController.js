@@ -168,7 +168,6 @@
 			}
 		}
 
-
 		$scope.onLastPageClick = function(){
 			if($scope.busca.pagAtual < $scope.totPaginas){
 				$scope.busca.pagAtual=$scope.totPaginas;

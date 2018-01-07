@@ -505,10 +505,8 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 	}
 
 	$scope.root.addDocumentoAoHistorico = function(documento){
-
 		//Executando ações dentro de um timeout para que as movimentações não sejam exibidas no menu
-		setTimeout(500,function(){
-			
+		setTimeout(function(){			
 			// separando somente dados de interesse para manter no histórico
 			var doc = {'i':documento.id, 'c':documento.codigo};
 
@@ -532,6 +530,6 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			
 			// Atualizando o cookie para uso futuro
 			$cookies.putObject(COOKIE_KEY_HISTORICO,$scope.root.historico);
-		});
+		},500);
 	}
 }

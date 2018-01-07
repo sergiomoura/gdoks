@@ -46,7 +46,7 @@
 			<img src="img/logo_peq_clara.png" alt="GDoks" id="logo">
 			<span flex></span>
 			<md-menu>
-				<md-button ng-click="$mdMenu.open()" aria-label="Abre Histórico" class="md-icon-button">
+				<md-button ng-disabled="root.historico.length==0" ng-click="$mdMenu.open()" aria-label="Abre Histórico" class="md-icon-button">
 					<md-icon class="material-icons step" aria-label="menu">history</md-icon>
 				</md-button>
 				<md-menu-content ng-controller="HistoricoController">
