@@ -2246,6 +2246,9 @@ md-expansion-panel-expanded .md-expansion-panel-item {
       display: block;
       font-size: 12px;
       color: rgba(0, 0, 0, 0.54); }
+#dashprojeto_container .aviso {
+  text-align: center;
+  margin-bottom: 50px; }
 
 
 /*# sourceMappingURL=styles.css.map */
