@@ -48,6 +48,9 @@
 			<md-menu>
 				<md-button ng-disabled="root.historico.length==0" ng-click="$mdMenu.open()" aria-label="Abre Histórico" class="md-icon-button">
 					<md-icon class="material-icons step" aria-label="menu">history</md-icon>
+					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+						Histórico de Documentos
+					</md-tooltip>
 				</md-button>
 				<md-menu-content ng-controller="HistoricoController">
 					<md-menu-item ng-repeat="doc in root.historico">
