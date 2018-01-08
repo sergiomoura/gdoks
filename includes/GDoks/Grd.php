@@ -291,14 +291,16 @@
 			// Criando o arquivo zip na pasta raíz da empresa
 			$zip = new ZipArchive();
 			if(!$zip->open($caminhoZip,ZipArchive::CREATE)){
-				die('Falha ao criar o zip.');
+				throw new Exception('Falha ao criar o zip.', 1);
+				return;
 			}
 
 			// Adicionando o pdf ao zip;
 			try {
 				$zip->addFile($caminhoPdf,$this->_codigo.'.pdf');
 			} catch (Exception $e) {
-				die($e->getMessage());
+				throw $e;
+				return;
 			}
 
 
@@ -316,8 +318,8 @@
 				// Adicionando arquivo
 				if(!$zip->addFile($f->caminho,$pasta.'/'.$f->nome_cliente)){
 
-					// Gravando erro em caso de falha
-				 	array_push($erros, $pasta.'/'.$f->nome_cliente);
+					throw new Exception('Erro ao tentar adicionar '.$f->caminho.' ao zip', 1);
+					return;
 
 				} elseif ($sem_compressao) {
 					// setando ocmpressão para zip_entry_open(zip, zip_entry)
@@ -333,14 +335,10 @@
 				$j++;
 			}
 
-			// verificando erros
-			if(sizeof($erros) > 0){
-				die('Erro ao tentar adicionar alguns arquivos ao zip');
-			}
-
 			// Fechando o zip
 			if(!$zip->close()){
-				die("Erro ao fechar o arquivo zip");
+				throw new Exception('Erro ao fechar o arquivo zip', 1);
+				return;
 			}
 
 			// apagando o pdf
@@ -352,7 +350,12 @@
 		// Função que envia o zip para o cliente
 		public function sendZip($nome_do_emissor,$sem_compressao=false){
 			// Gerando o zip
-			$caminhoDoZip = $this->gerarZip($nome_do_emissor,$sem_compressao);
+			try {
+				$caminhoDoZip = $this->gerarZip($nome_do_emissor,$sem_compressao);
+			} catch (Exception $e) {
+				throw $e;
+				return;
+			}
 
 			// Enviando headers
 			header('HTTP/1.0 200 OK');

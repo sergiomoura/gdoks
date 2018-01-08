@@ -183,6 +183,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/documentos/',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getGrdsDoProjeto = function(id_projeto){
+				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/grds/',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDocumentos = function(id_projeto){
 				return $http.get(API_ROOT+'/documentos',buildHeaders());
 			}

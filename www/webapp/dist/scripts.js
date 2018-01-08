@@ -3110,7 +3110,10 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 							.textContent(error.msg)
 							.position('bottom left')
 							.hideDelay(5000)
-						);	
+						);
+
+						// Imprimindo erro no console
+						console.warn(error);
 					})
 				}
 			);
@@ -3605,442 +3608,475 @@ function NavController($scope){
 		indexedDB.deleteDatabase('gdoks');
 		window.location = '/';
 	}
-});;angular.module('Projetos',['ngFileUpload','ngTagsInput'])
-.controller('ProjetosController',ProjetosController)
-.controller('ProjetoController',ProjetoController)
-.controller('DashProjetoController',DashProjetoController);
+});;(function(){
+	angular.module('Projetos',['ngFileUpload','ngTagsInput'])
+	.controller('ProjetosController',ProjetosController)
+	.controller('ProjetoController',ProjetoController)
+	.controller('DashProjetoController',DashProjetoController);
 
-function ProjetosController($scope,GDoksFactory,$location){
-	// levantando projetos na base de dados local
-	$scope.projetos = [];
+	function ProjetosController($scope,GDoksFactory,$location){
+		// levantando projetos na base de dados local
+		$scope.projetos = [];
 
-	// definindo critério padrão de ordem
-	$scope.o = 'nome';
-	
-	$scope.getProjetos = function(){
-		GDoksFactory.getProjetosDetalhados()
+		// definindo critério padrão de ordem
+		$scope.o = 'nome';
+		
+		$scope.getProjetos = function(){
+			GDoksFactory.getProjetosDetalhados()
+			.success(function(response){
+				$scope.projetos = response.projetos;
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Não foi possível carregar os projetos do servidor.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.log(error);
+			})
+		}	
+
+		// função que leva para a tela de adicionar projeto
+		$scope.goToAddProjeto = function(){
+			$location.url('/projetos/0');
+		}
+
+		// Função que leva a tela de edição de projeto
+		$scope.editProjeto = function(id,evt){
+			evt.stopPropagation();
+			$location.url('/projetos/'+id);
+		}
+
+		// Função que leva a dashboard do projeto
+		$scope.gotoProjeto = function(id){
+			$location.url('/projetos/'+id+'/dashboard');
+		}
+
+		// Função que altera a ordem de exibição dos projetos
+		$scope.setOrderBy = function(ordem){
+			if($scope.o == ordem){
+				$scope.o = '-' + ordem;
+			} else {
+				$scope.o = ordem;
+			}
+		}
+
+		// Listando carregando os projetos
+		$scope.getProjetos(1);
+	};
+
+	function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
+
+		// Variáveis de controle sobre o conteúdo de clientes e usuários (se info já foi carregada da base);
+		var clientesCarregados = false;
+		var usuariosCarregados = false;
+		var disciplinasCarregadas = false;
+		var cargosCarregados = false;
+		var documentosCarregados = false;
+
+		// Carregando clientes da base local
+		$scope.clientes = {};
+		$scope.clientes.dados = [];
+		GDoksFactory.getClientes()
 		.success(function(response){
-			$scope.projetos = response.projetos;
+			$scope.clientes.dados = response.clientes;
+			clientesCarregados = true;
+	 		carregaProjeto();
 		})
-		.error(function(error){
+		.error(function(error){});
+
+		// Carregando usuarios da base local
+		$scope.usuarios = {};
+		$scope.usuarios.dados = [];
+		GDoksFactory.loadUsuarios()
+		.success(function(response){
+				// Carregando usuários
+				$scope.usuarios.dados = response.usuarios;
+				usuariosCarregados = true;
+				carregaProjeto();
+			}
+		)
+		.error(function(error){});
+
+
+		// Carregando disciplinas da base local
+		$scope.disciplinas = [];
+		GDoksFactory.getDisciplinas()
+		.success(function(response){
+			$scope.disciplinas = response.disciplinas;
+			disciplinasCarregadas = true;
+			carregaProjeto();
+		})
+		.error(function(error){});
+
+		// Carregando cargos do servidor
+		$scope.cargos = [];
+		GDoksFactory.getCargos().success(function(response){
+			$scope.cargos = response.cargos;
+			cargosCarregados = true;
+			carregaProjeto();
+		});
+
+		// Função a ser executada depois de carregados clientes e usuários da base
+		function carregaProjeto(){
+			// Só executa quando clientes e usuários foram carregados.
+			if(clientesCarregados && usuariosCarregados && disciplinasCarregadas && cargosCarregados){
+				$scope.projeto = {};
+				$scope.projeto.id = $routeParams.id;
+				
+				// Criando o projeto em questão
+				if($scope.projeto.id == 0 || $scope.projeto.id == undefined) {
+					// Projeto novo
+					$scope.projeto.id = 0
+					$scope.projeto.nome = '';
+					$scope.projeto.codigo = '';
+					$scope.projeto.id_cliente = 0;
+					$scope.projeto.id_responsavel = 0;
+					$scope.projeto.data_inicio_p = new Date();
+					$scope.projeto.data_final_p = new Date();
+					$scope.projeto.ativo = true;
+					$scope.projeto.daos = [];
+					$scope.projeto.areas = [];
+					$scope.projeto.subareas = [];
+					$scope.projeto.documentos = [];
+					$scope.inicialmenteAtivo = true;
+				} else {
+					GDoksFactory.getProjeto($scope.projeto.id)
+					.success(function(response){
+						$scope.projeto = response.projeto;
+						$scope.projeto.id_responsavel = ($scope.projeto.id_responsavel==null)?0:$scope.projeto.id_responsavel;
+						$scope.projeto.id_cliente = ($scope.projeto.id_cliente==null)?0:$scope.projeto.id_cliente;
+						$scope.clientes.selecionado = $scope.clientes.dados.filter(function(a){return a.id==this},$scope.projeto.id_cliente)[0];
+						$scope.usuarios.selecionado = $scope.usuarios.dados.filter(function(a){return a.id==this},$scope.projeto.id_responsavel)[0];
+						$scope.projeto.ativo = ($scope.projeto.ativo == 1);
+						$scope.inicialmenteAtivo = $scope.projeto.ativo;
+
+						// parsing dates
+						if($scope.projeto.data_inicio_p != null){
+							$scope.projeto.data_inicio_p = new Date($scope.projeto.data_inicio_p);
+							$scope.projeto.data_inicio_p.setTime($scope.projeto.data_inicio_p.getTime() + (3*60*60*1000)) // ajustando para horário local do Brasil
+						}
+						if($scope.projeto.data_final_p != null){
+							$scope.projeto.data_final_p = new Date($scope.projeto.data_final_p);
+							$scope.projeto.data_final_p.setTime($scope.projeto.data_final_p.getTime() + (3*60*60*1000)) // ajustando para horário local do Brasil
+						}
+
+						// parsing subareas
+						var area;
+						for (var i = $scope.projeto.subareas.length - 1; i >= 0; i--) {
+							$scope.projeto.subareas[i].area = $scope.projeto.areas.find(function(a){return a.id==this},$scope.projeto.subareas[i].id_area);
+							delete $scope.projeto.subareas[i].id_area;
+						}
+
+						// Carrega documentos
+						carregaDocumentos();
+						
+					})
+					.error(function(error){
+					})
+				}
+			}
+		}
+
+		function carregaDocumentos(){
+			if ($scope.projeto.id != 0) {
+				GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
+				.success(function(response){
+					var docs = response.documentos;
+					var achouSub,j,k;
+					for (var i = docs.length - 1; i >= 0; i--) {
+						// parsing data_limite
+						docs[i].data_limite = new Date(docs[i].data_limite+'T00:00:00');
+
+						// Corrigindo fuso
+						docs[i].data_limite.setMinutes(docs[i].data_limite.getMinutes() + docs[i].data_limite.getTimezoneOffset());
+						
+						// parsing subarea
+						docs[i].subarea = $scope.projeto.subareas.find(function(a){return a.id == this},docs[i].id_subarea);
+						delete docs[i].id_subarea;
+
+						// parsing subdisciplinas
+						achouSub = false;
+						j = 0;
+						while(j<$scope.disciplinas.length && !achouSub){
+							k = 0;
+							while(k<$scope.disciplinas[j].subs.length && !achouSub){
+								achouSub = ($scope.disciplinas[j].subs[k].id == docs[i].id_subdisciplina);
+								if(achouSub){
+									docs[i].subdisciplina = $scope.disciplinas[j].subs[k];
+									docs[i].subdisciplina.disciplina = $scope.disciplinas[j];
+									delete docs[i].id_subdisciplina;
+								}
+								k++;
+							}
+							j++;
+						}
+
+						// parsing dependências
+						for (var j = docs[i].dependencias.length - 1; j >= 0; j--) {
+							docs[i].dependencias[j] = docs.find(function(a){return a.id==this},docs[i].dependencias[j]);
+						}
+
+						// Parsing data_limite
+						if(docs[i].data_limite != null){
+							docs[i].data_limite = new Date(docs[i].data_limite);
+							docs[i].data_limite.setTime(docs[i].data_limite.getTime() + (3*60*60*1000)); // ajustando para o horário local do brasil!
+						}
+						
+						// Parsing HHs
+						for (var j = docs[i].hhs.length - 1; j >= 0; j--) {
+							docs[i].hhs[j].cargo = $scope.cargos.find(function(a){return a.id == this},docs[i].hhs[j].id_cargo);
+							delete docs[i].hhs[j].id_cargo;
+						}
+					}
+					$scope.projeto.documentos = docs;
+				})
+				.error(function(err){});
+			}
+		}
+
+		// definindo função Cancel
+		$scope.cancel = function(){
+			window.location = '/webapp/WebGDoks.php#/projetos';
+		}
+
+		// Definindo função que salva o projeto
+		$scope.salvarProjeto = function(){
+
+			// Mostra carregando
+			$scope.root.carregando = true;+'T00:00:00'
+
+			// copiando o objeto projeto
+			var projeto = angular.copy($scope.projeto);
+			projeto.id_cliente = $scope.clientes.selecionado.id;
+			projeto.id_responsavel = $scope.usuarios.selecionado.id;
+			
+			// removendo campos que não serão enviados
+			delete projeto.daos;
+			delete projeto.areas;
+			delete projeto.documentos;
+			delete projeto.subareas;
+
+			if(projeto.id == 0){
+				GDoksFactory.adicionarProjeto(projeto)
+				.success(
+					function(response){
+
+						// Esconde Carregando
+						$scope.root.carregando = false;
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Dados do projeto inseridos com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						$scope.projeto.id = 1*response.newId;
+						projeto.id = response.newId;
+
+						// Adicionando projeto na base local
+						indexedDB.open('gdoks').onsuccess = function(evt){
+							// limpando dados para armazenamento na base local.
+							delete projeto.id_responsavel;
+							delete projeto.data_inicio_p;
+							delete projeto.data_final_p;
+
+							// armazenando
+							var reqAdd = evt.target.result.transaction('projetos','readwrite').objectStore('projetos').add(projeto);
+							reqAdd.onsuccess = function(evt){}
+							reqAdd.onerror = function(evt){}
+						}
+
+						// Alterando url para que fique condizente com o do id do projeto recém criado
+						$location.url('/projetos/'+$scope.projeto.id);
+					}
+				)
+				.error(
+					function(error){
+						// Esconde Carregando
+						$scope.root.carregando = false;
+
+						// Exibindo mensagem de erro no console
+						console.warn(error);
+
+						// Retornando Toast para usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Não foi possível completar ação.')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					}
+				);
+			} else {
+				GDoksFactory.atualizarProjeto(projeto)
+				.success(
+					function(response){
+						// Esconde Carregando
+						$scope.root.carregando = false;
+
+						// Retornando toast para usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Dados do projeto alterados com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Atualizando projeto na base local
+						indexedDB.open('gdoks').onsuccess = function(evt){
+							// limpando dados para armazenamento.
+							delete projeto.id_responsavel;
+							delete projeto.data_inicio_p;
+							delete projeto.data_final_p;
+
+							// armazenando.
+							evt.target.result.transaction('projetos','readwrite').objectStore('projetos').put(projeto);
+						}
+					}
+				)
+				.error(
+					function(error){
+						// Esconde Carregando
+						$scope.root.carregando = false;
+
+						// Exibindo mensagem de erro no console
+						console.warn(error);
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Não foi possível completar a ação!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					}
+				);
+			}
+		}
+	};
+
+	function DashProjetoController($scope,GDoksFactory,$location,$routeParams){
+		
+		// Definindo variável projeto
+		$scope.projeto = {};
+		$scope.documentos = [];
+		$scope.grds = [];
+
+		// Carregando projeto	
+		GDoksFactory.getProjeto($routeParams.id)
+		.success(function(response){
+			if(response.error == 0){
+				// Parsing datas do projeto
+				response.projeto.data_inicio_p = new Date(response.projeto.data_inicio_p+'T00:00:00');
+				response.projeto.data_final_p = new Date(response.projeto.data_final_p+'T00:00:00');
+				$scope.projeto = response.projeto;
+			} else {
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar carregar dados do projeto: ' + response.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			}
+		})
+		.error(function(err){
 			// Retornando Toast para o usuário
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent('Não foi possível carregar os projetos do servidor.')
+				.textContent(err.msg)
 				.position('bottom left')
 				.hideDelay(5000)
 			);
 
 			// Imprimindo erro no console
-			console.log(error);
+			console.warn(err);
 		})
-	}	
 
-	// função que leva para a tela de adicionar projeto
-	$scope.goToAddProjeto = function(){
-		$location.url('/projetos/0');
-	}
-
-	// Função que leva a tela de edição de projeto
-	$scope.editProjeto = function(id,evt){
-		evt.stopPropagation();
-		$location.url('/projetos/'+id);
-	}
-
-	// Função que leva a dashboard do projeto
-	$scope.gotoProjeto = function(id){
-		$location.url('/projetos/'+id+'/dashboard');
-	}
-
-	// Função que altera a ordem de exibição dos projetos
-	$scope.setOrderBy = function(ordem){
-		if($scope.o == ordem){
-			$scope.o = '-' + ordem;
-		} else {
-			$scope.o = ordem;
-		}
-	}
-
-	// Listando carregando os projetos
-	$scope.getProjetos(1);
-};
-
-function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
-
-	// Variáveis de controle sobre o conteúdo de clientes e usuários (se info já foi carregada da base);
-	var clientesCarregados = false;
-	var usuariosCarregados = false;
-	var disciplinasCarregadas = false;
-	var cargosCarregados = false;
-	var documentosCarregados = false;
-
-	// Carregando clientes da base local
-	$scope.clientes = {};
-	$scope.clientes.dados = [];
-	GDoksFactory.getClientes()
-	.success(function(response){
-		$scope.clientes.dados = response.clientes;
-		clientesCarregados = true;
- 		carregaProjeto();
-	})
-	.error(function(error){});
-
-	// Carregando usuarios da base local
-	$scope.usuarios = {};
-	$scope.usuarios.dados = [];
-	GDoksFactory.loadUsuarios()
-	.success(function(response){
-			// Carregando usuários
-			$scope.usuarios.dados = response.usuarios;
-			usuariosCarregados = true;
-			carregaProjeto();
-		}
-	)
-	.error(function(error){});
-
-
-	// Carregando disciplinas da base local
-	$scope.disciplinas = [];
-	GDoksFactory.getDisciplinas()
-	.success(function(response){
-		$scope.disciplinas = response.disciplinas;
-		disciplinasCarregadas = true;
-		carregaProjeto();
-	})
-	.error(function(error){});
-
-	// Carregando cargos do servidor
-	$scope.cargos = [];
-	GDoksFactory.getCargos().success(function(response){
-		$scope.cargos = response.cargos;
-		cargosCarregados = true;
-		carregaProjeto();
-	});
-
-	// Função a ser executada depois de carregados clientes e usuários da base
-	function carregaProjeto(){
-		// Só executa quando clientes e usuários foram carregados.
-		if(clientesCarregados && usuariosCarregados && disciplinasCarregadas && cargosCarregados){
-			$scope.projeto = {};
-			$scope.projeto.id = $routeParams.id;
-			
-			// Criando o projeto em questão
-			if($scope.projeto.id == 0 || $scope.projeto.id == undefined) {
-				// Projeto novo
-				$scope.projeto.id = 0
-				$scope.projeto.nome = '';
-				$scope.projeto.codigo = '';
-				$scope.projeto.id_cliente = 0;
-				$scope.projeto.id_responsavel = 0;
-				$scope.projeto.data_inicio_p = new Date();
-				$scope.projeto.data_final_p = new Date();
-				$scope.projeto.ativo = true;
-				$scope.projeto.daos = [];
-				$scope.projeto.areas = [];
-				$scope.projeto.subareas = [];
-				$scope.projeto.documentos = [];
-				$scope.inicialmenteAtivo = true;
+		// Carregando documentos do projeto
+		GDoksFactory.getDocumentosDoProjeto($routeParams.id)
+		.success(function(response){
+			if(response.error == 0){
+				// parsing datas limites dos documentos
+				response.documentos.data_limite = new Date(response.documentos.data_limite+'T00:00:00');
+				$scope.documentos = response.documentos;
 			} else {
-				GDoksFactory.getProjeto($scope.projeto.id)
-				.success(function(response){
-					$scope.projeto = response.projeto;
-					$scope.projeto.id_responsavel = ($scope.projeto.id_responsavel==null)?0:$scope.projeto.id_responsavel;
-					$scope.projeto.id_cliente = ($scope.projeto.id_cliente==null)?0:$scope.projeto.id_cliente;
-					$scope.clientes.selecionado = $scope.clientes.dados.filter(function(a){return a.id==this},$scope.projeto.id_cliente)[0];
-					$scope.usuarios.selecionado = $scope.usuarios.dados.filter(function(a){return a.id==this},$scope.projeto.id_responsavel)[0];
-					$scope.projeto.ativo = ($scope.projeto.ativo == 1);
-					$scope.inicialmenteAtivo = $scope.projeto.ativo;
-
-					// parsing dates
-					if($scope.projeto.data_inicio_p != null){
-						$scope.projeto.data_inicio_p = new Date($scope.projeto.data_inicio_p);
-						$scope.projeto.data_inicio_p.setTime($scope.projeto.data_inicio_p.getTime() + (3*60*60*1000)) // ajustando para horário local do Brasil
-					}
-					if($scope.projeto.data_final_p != null){
-						$scope.projeto.data_final_p = new Date($scope.projeto.data_final_p);
-						$scope.projeto.data_final_p.setTime($scope.projeto.data_final_p.getTime() + (3*60*60*1000)) // ajustando para horário local do Brasil
-					}
-
-					// parsing subareas
-					var area;
-					for (var i = $scope.projeto.subareas.length - 1; i >= 0; i--) {
-						$scope.projeto.subareas[i].area = $scope.projeto.areas.find(function(a){return a.id==this},$scope.projeto.subareas[i].id_area);
-						delete $scope.projeto.subareas[i].id_area;
-					}
-
-					// Carrega documentos
-					carregaDocumentos();
-					
-				})
-				.error(function(error){
-				})
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar carregar documentos do projeto: ' + response.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
 			}
-		}
-	}
-
-	function carregaDocumentos(){
-		if ($scope.projeto.id != 0) {
-			GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
-			.success(function(response){
-				var docs = response.documentos;
-				var achouSub,j,k;
-				for (var i = docs.length - 1; i >= 0; i--) {
-					// parsing data_limite
-					docs[i].data_limite = new Date(docs[i].data_limite+'T00:00:00');
-
-					// Corrigindo fuso
-					docs[i].data_limite.setMinutes(docs[i].data_limite.getMinutes() + docs[i].data_limite.getTimezoneOffset());
-					
-					// parsing subarea
-					docs[i].subarea = $scope.projeto.subareas.find(function(a){return a.id == this},docs[i].id_subarea);
-					delete docs[i].id_subarea;
-
-					// parsing subdisciplinas
-					achouSub = false;
-					j = 0;
-					while(j<$scope.disciplinas.length && !achouSub){
-						k = 0;
-						while(k<$scope.disciplinas[j].subs.length && !achouSub){
-							achouSub = ($scope.disciplinas[j].subs[k].id == docs[i].id_subdisciplina);
-							if(achouSub){
-								docs[i].subdisciplina = $scope.disciplinas[j].subs[k];
-								docs[i].subdisciplina.disciplina = $scope.disciplinas[j];
-								delete docs[i].id_subdisciplina;
-							}
-							k++;
-						}
-						j++;
-					}
-
-					// parsing dependências
-					for (var j = docs[i].dependencias.length - 1; j >= 0; j--) {
-						docs[i].dependencias[j] = docs.find(function(a){return a.id==this},docs[i].dependencias[j]);
-					}
-
-					// Parsing data_limite
-					if(docs[i].data_limite != null){
-						docs[i].data_limite = new Date(docs[i].data_limite);
-						docs[i].data_limite.setTime(docs[i].data_limite.getTime() + (3*60*60*1000)); // ajustando para o horário local do brasil!
-					}
-					
-					// Parsing HHs
-					for (var j = docs[i].hhs.length - 1; j >= 0; j--) {
-						docs[i].hhs[j].cargo = $scope.cargos.find(function(a){return a.id == this},docs[i].hhs[j].id_cargo);
-						delete docs[i].hhs[j].id_cargo;
-					}
-				}
-				$scope.projeto.documentos = docs;
-			})
-			.error(function(err){});
-		}
-	}
-
-	// definindo função Cancel
-	$scope.cancel = function(){
-		window.location = '/webapp/WebGDoks.php#/projetos';
-	}
-
-	// Definindo função que salva o projeto
-	$scope.salvarProjeto = function(){
-
-		// Mostra carregando
-		$scope.root.carregando = true;
-
-		// copiando o objeto projeto
-		var projeto = angular.copy($scope.projeto);
-		projeto.id_cliente = $scope.clientes.selecionado.id;
-		projeto.id_responsavel = $scope.usuarios.selecionado.id;
-		
-		// removendo campos que não serão enviados
-		delete projeto.daos;
-		delete projeto.areas;
-		delete projeto.documentos;
-		delete projeto.subareas;
-
-		if(projeto.id == 0){
-			GDoksFactory.adicionarProjeto(projeto)
-			.success(
-				function(response){
-
-					// Esconde Carregando
-					$scope.root.carregando = false;
-
-					// Retornando Toast para o usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Dados do projeto inseridos com sucesso!')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-
-					$scope.projeto.id = 1*response.newId;
-					projeto.id = response.newId;
-
-					// Adicionando projeto na base local
-					indexedDB.open('gdoks').onsuccess = function(evt){
-						// limpando dados para armazenamento na base local.
-						delete projeto.id_responsavel;
-						delete projeto.data_inicio_p;
-						delete projeto.data_final_p;
-
-						// armazenando
-						var reqAdd = evt.target.result.transaction('projetos','readwrite').objectStore('projetos').add(projeto);
-						reqAdd.onsuccess = function(evt){}
-						reqAdd.onerror = function(evt){}
-					}
-
-					// Alterando url para que fique condizente com o do id do projeto recém criado
-					$location.url('/projetos/'+$scope.projeto.id);
-				}
-			)
-			.error(
-				function(error){
-					// Esconde Carregando
-					$scope.root.carregando = false;
-
-					// Exibindo mensagem de erro no console
-					console.warn(error);
-
-					// Retornando Toast para usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Não foi possível completar ação.')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-				}
-			);
-		} else {
-			GDoksFactory.atualizarProjeto(projeto)
-			.success(
-				function(response){
-					// Esconde Carregando
-					$scope.root.carregando = false;
-
-					// Retornando toast para usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Dados do projeto alterados com sucesso!')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-
-					// Atualizando projeto na base local
-					indexedDB.open('gdoks').onsuccess = function(evt){
-						// limpando dados para armazenamento.
-						delete projeto.id_responsavel;
-						delete projeto.data_inicio_p;
-						delete projeto.data_final_p;
-
-						// armazenando.
-						evt.target.result.transaction('projetos','readwrite').objectStore('projetos').put(projeto);
-					}
-				}
-			)
-			.error(
-				function(error){
-					// Esconde Carregando
-					$scope.root.carregando = false;
-
-					// Exibindo mensagem de erro no console
-					console.warn(error);
-
-					// Retornando Toast para o usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Não foi possível completar a ação!')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-				}
-			);
-		}
-	}
-};
-
-function DashProjetoController($scope,GDoksFactory,$location,$routeParams){
-	
-	// Definindo variável projeto
-	$scope.projeto = {};
-
-	// Flags de controle de carregamento
-	var dadosCarregados = false;
-	var docsCarregados = false;
-
-	// Carregando projeto	
-	GDoksFactory.getProjeto($routeParams.id)
-	.success(function(response){
-		if(response.error == 0){
-			dadosCarregados = true;
-			if(docsCarregados){
-				response.projeto.documentos = $scope.projeto.documentos;
-				parseAreas();
-			}
-			$scope.projeto = response.projeto;
-		} else {
+		})
+		.error(function(err){
 			// Retornando Toast para o usuário
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent('Falha ao tentar carregar dados do projeto: ' + response.msg)
+				.textContent(err.msg)
 				.position('bottom left')
 				.hideDelay(5000)
 			);
-		}
-	})
-	.error(function(err){
-		// Retornando Toast para o usuário
-		$mdToast.show(
-			$mdToast.simple()
-			.textContent(err.msg)
-			.position('bottom left')
-			.hideDelay(5000)
-		);
 
-		// Imprimindo erro no console
-		console.warn(err);
-	})
+			// Imprimindo erro no console
+			console.warn(err);
+		});
 
-	// Carregando documentos do projeto
-	GDoksFactory.getDocumentosDoProjeto($routeParams.id)
-	.success(function(response){
-		if(response.error == 0){
-			docsCarregados = true;
-			$scope.projeto.documentos = response.documentos;
-			if(dadosCarregados) parseAreas();
-		} else {
+		// Carregando GRDs do projeto
+		GDoksFactory.getGrdsDoProjeto($routeParams.id)
+		.success(function(response){
+			if(response.error == 0){
+				// Parsing datahora
+				var grd;
+				for (var i = response.grds.length - 1; i >= 0; i--) {
+					grd = response.grds[i];
+					grd.datahora_registro = new Date(grd.datahora_registro);
+					grd.datahora_enviada = (grd.datahora_enviada==null?null:(new Date(grd.datahora_enviada)));
+				}
+				$scope.grds = response.grds;
+			} else {
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar carregar GRDs do projeto: ' + response.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			}
+		})
+		.error(function(err){
 			// Retornando Toast para o usuário
 			$mdToast.show(
 				$mdToast.simple()
-				.textContent('Falha ao tentar carregar documentos do projeto: ' + response.msg)
+				.textContent(err.msg)
 				.position('bottom left')
 				.hideDelay(5000)
 			);
-		}
-	})
-	.error(function(err){
-		// Retornando Toast para o usuário
-		$mdToast.show(
-			$mdToast.simple()
-			.textContent(err.msg)
-			.position('bottom left')
-			.hideDelay(5000)
-		);
 
-		// Imprimindo erro no console
-		console.warn(err);
-	});
+			// Imprimindo erro no console
+			console.warn(err);
+		});
 
-	function parseAreas(){
-		var doc;
-		for (var i = $scope.projeto.documentos.length - 1; i >= 0; i--) {
-			doc = $scope.projeto.documentos[i];
-			doc.area = $scope.projeto.areas.find(function(a){return a.id==this}, doc.id_area);
-			doc.subarea = $scope.projeto.subareas.find(function(s){return s.id==this}, doc.id_subarea);
-			delete doc.id_subarea;
-			delete doc.id_area;
+		// Função que leva a página do documento
+		$scope.goToDoc = function(idDoc){
+			$location.url('/documentos/'+idDoc);
 		}
-	}
-};;angular.module('Projetos').controller('ProjetosAreasController',ProjetosAreasController);
+
+		// Função que leva a página da GRD
+		$scope.goToGrd = function(idGrd){
+			$location.url('/grds/'+idGrd);
+		}
+	};
+
+})();;angular.module('Projetos').controller('ProjetosAreasController',ProjetosAreasController);
 function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 	
 	$scope.openAreaDialog = function(ev,idArea){
@@ -6127,6 +6163,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDocumentosDoProjeto = function(id_projeto){
 				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/documentos/',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getGrdsDoProjeto = function(id_projeto){
+				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/grds/',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDocumentos = function(id_projeto){

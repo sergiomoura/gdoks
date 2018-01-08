@@ -1,3 +1,109 @@
-<pre>
-{{projeto|json}}
-</pre>
+<div id="dashprojeto_container" class="container_80">
+	<h2>{{projeto.nome}} [{{projeto.codigo}}]</h1>
+	<div class="cabecalho" layout="row" layout-align="space-between start">
+		<item>
+			<label>Cliente</label>
+			<value>{{projeto.nome_cliente}}</value>
+		</item>
+		<item>
+			<label>Responsável</label>
+			<value>{{projeto.nome_responsavel}}</value>
+		</item>
+		<item>
+			<label>Data de Início</label>
+			<value>{{projeto.data_inicio_p|date:'dd/MM/yyyy'}}</value>
+		</item>
+		<item>
+			<label>Data do Final</label>
+			<value>{{projeto.data_final_p|date:'dd/MM/yyyy'}}</value>
+		</item>
+		<item>
+			<label>Status</label>
+			<value>{{projeto.ativo==1?'Ativo':'Inativo'}}</value>
+		</item>
+	</div>
+
+	<h3>Documentos</h3>
+	<table class="documentos">
+		<thead>
+			<tr>
+				<td>Documento</td>
+				<td>Revisão</td>
+				<td>Disciplina</td>
+				<td>Área</td>
+				<td>Data Limite</td>
+				<td>Progresso</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="doc in documentos">
+				<td>
+					{{doc.codigo}}
+					<span>{{doc.nome}}</span>
+				</td>
+				<td>Rev {{doc.rev_serial}}</td>
+				<td>
+					{{doc.sigla_disciplina}}
+					<md-tooltip md-visible="false" md-delay="400" md-direction="bottom" md-autohide="true">
+						{{doc.nome_subdisciplina}}
+					</md-tooltip>
+				</td>
+				<td>
+					{{doc.cod_area}}
+					<span>{{doc.cod_subarea}}</span>
+				</td>
+				<td>
+					{{doc.data_limite|date:"dd/MM/yyyy"}}
+				</td>
+				<td>{{doc.progresso}}%</td>
+				<td>
+					<md-button
+						class="md-icon-button"
+						aria-label="Ir para documento"
+						ng-click="goToDoc(doc.id)">
+						<md-icon
+							class="material-icons step"
+							aria-label="Ir para documento">open_in_new</md-icon>
+						<md-tooltip md-direction="bottom">Ir para Página do Documento</md-tooltip>
+					</md-button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>GRD's</h3>
+	<table class="grds">
+		<thead>
+			<tr>
+				<td>Código</td>
+				<td>Data de Registro</td>
+				<td>Data de Envio</td>
+				<td>N de Doc's</td>
+				<td>Enviada Por</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="grd in grds">
+				<td>{{grd.codigo}}</td>
+				<td>{{grd.datahora_registro|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_registro|date:'hh:mm'}}</span></td>
+				<td ng-if="grd.datahora_enviada!=null">{{grd.datahora_enviada|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_enviada|date:'hh:mm'}}</span></td>
+				<td ng-if="grd.datahora_enviada==null"><span>Não enviada</span></td>
+				<td>{{grd.nDocs}}</td>
+				<td>{{grd.sigla_remetente}}</td>
+				<td>
+					<md-button
+						class="md-icon-button"
+						aria-label="Ir para GRD"
+						ng-click="goToGrd(grd.id)">
+						<md-icon
+							class="material-icons step"
+							aria-label="Ir para GRD">open_in_new</md-icon>
+						<md-tooltip md-direction="bottom">Ir para Página da GRD</md-tooltip>
+					</md-button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

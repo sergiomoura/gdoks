@@ -855,7 +855,10 @@
 							.textContent(error.msg)
 							.position('bottom left')
 							.hideDelay(5000)
-						);	
+						);
+
+						// Imprimindo erro no console
+						console.warn(error);
 					})
 				}
 			);

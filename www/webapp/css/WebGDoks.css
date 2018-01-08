@@ -1205,4 +1205,78 @@ md-expansion-panel-expanded .md-expansion-panel-item {
       #validacao_container table tbody .naoValidar input[type=number] {
         color: rgba(0, 0, 0, 0.12); }
 
+#dashprojeto_container .cabecalho {
+  margin-bottom: 50px; }
+  #dashprojeto_container .cabecalho item {
+    float: left;
+    padding: 0 20px 20px 0; }
+    #dashprojeto_container .cabecalho item label {
+      display: block;
+      font-size: 10px;
+      color: rgba(0, 0, 0, 0.54); }
+    #dashprojeto_container .cabecalho item value {
+      display: block; }
+#dashprojeto_container .documentos {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 50px;
+  cursor: default; }
+  #dashprojeto_container .documentos td {
+    padding: 10px 0; }
+    #dashprojeto_container .documentos td:nth-child(1) {
+      width: 400px; }
+    #dashprojeto_container .documentos td:nth-child(2) {
+      text-align: center; }
+    #dashprojeto_container .documentos td:nth-child(3) {
+      text-align: center; }
+    #dashprojeto_container .documentos td:nth-child(5) {
+      text-align: center; }
+    #dashprojeto_container .documentos td:nth-child(6) {
+      text-align: center; }
+    #dashprojeto_container .documentos td:nth-child(7) {
+      width: 40px; }
+  #dashprojeto_container .documentos thead {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px; }
+  #dashprojeto_container .documentos tbody tr:last-child td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  #dashprojeto_container .documentos tbody tr:hover td {
+    background-color: #FFF; }
+  #dashprojeto_container .documentos tbody td {
+    border-top: 1px solid rgba(0, 0, 0, 0.12); }
+    #dashprojeto_container .documentos tbody td span {
+      display: block;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.54); }
+#dashprojeto_container .grds {
+  border-collapse: collapse;
+  width: 100%;
+  cursor: default; }
+  #dashprojeto_container .grds td {
+    padding: 10px 0; }
+    #dashprojeto_container .grds td:nth-child(2) {
+      text-align: center; }
+    #dashprojeto_container .grds td:nth-child(3) {
+      text-align: center; }
+    #dashprojeto_container .grds td:nth-child(4) {
+      text-align: center; }
+    #dashprojeto_container .grds td:nth-child(5) {
+      text-align: center; }
+    #dashprojeto_container .grds td:nth-child(6) {
+      text-align: center;
+      width: 40px; }
+  #dashprojeto_container .grds thead {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px; }
+  #dashprojeto_container .grds tbody tr:last-child td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  #dashprojeto_container .grds tbody tr:hover td {
+    background-color: #FFF; }
+  #dashprojeto_container .grds tbody td {
+    border-top: 1px solid rgba(0, 0, 0, 0.12); }
+    #dashprojeto_container .grds tbody td span {
+      display: block;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.54); }
+
 /*# sourceMappingURL=WebGDoks.css.map */

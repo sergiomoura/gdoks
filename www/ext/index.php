@@ -62,7 +62,13 @@
 		ini_set('max_execution_time', 120);
 
 		// Mandando zip da grd
-		$grd->sendZip($nome_usuario,true); // true => SEM COMPRESSÃO;
+		try {
+			$grd->sendZip($nome_usuario,true); // true => SEM COMPRESSÃO;
+		} catch (Exception $e) {
+			http_response_code(401);
+			echo('{"error":1,"msg":"'.$e->getMessage.'"}');
+			exit(1);
+		}
 	});
 
 	$app->post('/ext/esqueci',function() use($app) {
@@ -73,7 +79,8 @@
 		// Verificando se interpretou a requisição com sucesso
 		if(json_last_error() != JSON_ERROR_NONE) {
 			http_response_code(401);
-			die('{"error":1,"msg":"Requisição mal feita."}');
+			echo('{"error":1,"msg":"Requisição mal feita."}');
+			exit(1);
 		}
 
 		// Carregando o dbkey da empresa
@@ -81,7 +88,8 @@
 			include(CLIENT_DATA_PATH.$data->empresa.'/dbkey.php');
 		} catch (Exception $e) {
 			http_response_code(401);
-			die('{"error":1, "msg":"Empresa inexistente."}');
+			echo('{"error":1, "msg":"Empresa inexistente."}');
+			exit(1);
 		}
 
 		// Conectando-se a base de dados

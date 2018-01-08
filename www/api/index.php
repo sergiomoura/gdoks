@@ -70,7 +70,7 @@
 		http_response_code(403);
 		$response = new response(1,'Sem autorização');
 		$response->flush();
-		die();
+		exit(1);
 	}
 	
 	// definindo função que realiza log
@@ -684,7 +684,7 @@
 					http_response_code(401);
 					$response = new response(1,'inconscistência nas informações fornecidas');
 					$response.flush();
-					die();
+					exit(1);
 				}
 
 				// verificando se o usário enviado é do mesmo cliente da subdisciplina atual
@@ -950,7 +950,7 @@
 						$response->flush();
 					} catch (Exception $e) {
 						http_response_code(401);
-						$response = new response(1,$e->getMessage);
+						$response = new response(1,$e->getMessage());
 						$response->flush();
 						return;
 					}
@@ -1190,7 +1190,22 @@
 				if($ok == 1){
 
 					// levantando informações do projeto
-					$sql = "SELECT id,codigo,nome,id_cliente,id_responsavel,data_inicio_p,data_final_p,ativo FROM gdoks_projetos WHERE id=?";
+					$sql = "SELECT
+								a.id,
+							    a.codigo,
+							    a.nome,
+							    a.id_cliente,
+							    b.nome as nome_cliente,
+							    a.id_responsavel,
+							    c.nome as nome_responsavel,
+							    a.data_inicio_p,
+							    a.data_final_p,
+							    a.ativo
+							FROM
+								gdoks_projetos a
+								INNER JOIN gdoks_clientes b on a.id_cliente=b.id
+							    INNER JOIN gdoks_usuarios c on a.id_responsavel=c.id
+							WHERE a.id=?";
 					$projeto = (object)$db->query($sql,'i',$id_projeto)[0];
 					
 					// Levantando áreas do projeto
@@ -1207,13 +1222,6 @@
 
 					// Levantando documentos do projeto -> feita em outra requisição a /projetos/:id_projeto/documentos/
 					$projeto->documentos = Array();
-
-					// Levantando dependências de cada documento
-					$sql = 'SELECT id_dependencia from gdoks_documentos_x_dependencias where id_documento=?';
-					foreach ($projeto->documentos as $doc) {
-						$doc->dependencias = Array();
-						$doc->dependencias = array_map(function($a){return $a['id_dependencia'];}, $db->query($sql,'i',$doc->id));
-					}
 
 					// Criando o objeto response 
 					$response = new response(0,'Ok');
@@ -1238,7 +1246,7 @@
 				if($projeto->id != $id){
 					$response = new response(1,'Dados inconsistentes.');
 					$response->flush();
-					die();
+					exit(1);
 				}
 
 				// Verificando se o projeto é da mesma empresa do usuário
@@ -2080,9 +2088,13 @@
 							       M.codigo,
 							       M.codigo_cliente,
 							       M.codigo_alternativo,
+							       M.nome_subdisciplina,
 							       M.id_subdisciplina,
+							       M.cod_subarea,
 							       M.id_subarea,
+							       M.sigla_disciplina,
 							       M.id_disciplina,
+							       M.cod_area,
 							       M.id_area,
 							       rev_serial,
 							       rev_id,
@@ -2097,8 +2109,12 @@
 							          a.codigo_cliente,
 							          a.codigo_alternativo,
 							          b.id AS id_subdisciplina,
+							          b.nome AS nome_subdisciplina,
+							          d.codigo AS cod_subarea,
 							          d.id AS id_subarea,
+							          c.sigla AS sigla_disciplina,
 							          c.id AS id_disciplina,
+							          e.codigo AS cod_area,
 							          e.id AS id_area
 							   FROM gdoks_documentos a
 							   INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
@@ -2197,9 +2213,63 @@
 					}
 
 					// Ajeitando resposta para o cliente
-
 					$response = new response(0,'ok');
 					$response->documentos = $documentos;
+					$response->flush();
+
+				} else {
+					http_response_code(401);
+					$response = new response(1,'Não lê dados de outra empresa.');
+				}
+			});
+
+			$app->get('/projetos/:id_projeto/grds/',function($id_projeto) use ($app,$db,$token){
+				// Lendo e saneando as informações da requisição
+				$id_projeto = 1*$id_projeto;
+				
+				// Verificando se projeto é do mesmo cliente do usuário atual
+				$sql = 'SELECT COUNT(*) AS ok
+						FROM
+						  ( SELECT id,
+						           id_empresa
+						   FROM gdoks_usuarios
+						   WHERE token=?
+						     AND validade_do_token>now()) A
+						INNER JOIN
+						  ( SELECT id_empresa
+						   FROM gdoks_projetos
+						   WHERE id=?) B ON A.id_empresa=B.id_empresa;';
+			
+				$ok = $db->query($sql,'si',$token,$id_projeto)[0]['ok'];
+
+				// Segiundo em frente
+				if($ok){
+					$sql = 'SELECT
+								a.id,
+							    a.codigo,
+							    a.datahora_registro,
+							    a.datahora_enviada,
+							    c.sigla as sigla_remetente,
+							    c.email as email_remetente,
+							    count(*) as nDocs
+							    
+							FROM
+								gdoks_grds a
+							    INNER JOIN gdoks_grds_x_revisoes b on a.id=b.id_grd
+							    LEFT JOIN gdoks_usuarios c on c.id=a.idu_remetente
+							WHERE a.id_projeto=?
+							GROUP BY
+								a.id,
+							    a.codigo,
+							    a.datahora_registro,
+							    a.datahora_enviada,
+							    c.sigla,
+							    c.email;';
+					$grds = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
+
+					// Ajeitando resposta para o cliente
+					$response = new response(0,'ok');
+					$response->grds = $grds;
 					$response->flush();
 				} else {
 					http_response_code(401);
@@ -4281,7 +4351,7 @@
 					// Gerando unique_link
 					$unique_link = md5(uniqid(rand(), true));
 
-					// Settando o unique link da grd na base
+					// Settando o unique link da grd na base e idu_remetente
 					$sql = 'UPDATE gdoks_grds SET unique_link=? WHERE id=?';
 					$db->query($sql,'si',$unique_link,$grd->id);
 
@@ -4323,9 +4393,9 @@
 					$response = $sendgrid->client->mail()->send()->post($sgEmail);
 
 					if($response->statusCode() == 202){
-						// Registrando a datahora do envio
-						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
-						$db->query($sql,'i',$grd->id);
+						// Registrando a datahora do envio e idu_remetente
+						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW(),idu_remetente=? WHERE id=?';
+						$db->query($sql,'ii',$id_usuario,$grd->id);
 
 						// Retornando sucesso
 						$response = new response(0,'ok');
@@ -4399,7 +4469,7 @@
 							http_response_code(401);
 							$response = new response(1,'Não foi possível conectar ao servidor');
 							$response->flush();
-							die();
+							exit(1);
 						}
 						
 						// Fazendo login
@@ -4409,14 +4479,21 @@
 							http_response_code(401);
 							$response = new response(1,'Falha no login do FTP');
 							$response->flush();
-							die();	
+							exit(1);
 						}
 						
 						// Configurando FTP para PASV
 						$ftp->pasv(true);
 						
 						// Criando o zip da Grd
-						$caminhoDoZip = $grd->gerarZip($nome_usuario,true);
+						try {
+							$caminhoDoZip = $grd->gerarZip($nome_usuario,true);
+						} catch (Exception $e) {
+							http_response_code(401);
+							$response = new response(1,$e->getMessage());
+							$response->flush();
+							exit(1);
+						}
 
 						// Fazendo upload
 						try {
@@ -4425,12 +4502,12 @@
 							http_response_code(401);
 							$response = new response(1,'Não foi possível fazer upload no servidor do cliente');
 							$response->flush();
-							die();
+							exit(1);
 						}
 
 						// Registrando a datahora do envio
-						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW() WHERE id=?';
-						$db->query($sql,'i',$grd->id);
+						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW(),idu_remetente=? WHERE id=?';
+						$db->query($sql,'ii',$id_usuario,$grd->id);
 
 						// Retornando sucesso
 						$response = new response(0,'ok');
