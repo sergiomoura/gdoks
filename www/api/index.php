@@ -1979,7 +1979,7 @@
 						}
 
 						// Criando a primeira revisão do documento
-						$sql = "insert into gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) values (1,?,?,0,0,null)";
+						$sql = "insert into gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) values (0,?,?,0,0,null)";
 						$db->query($sql,'is',$newId,$documento->data_limite);
 
 						// registrando no log

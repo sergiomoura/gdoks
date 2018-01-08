@@ -1,5 +1,5 @@
 ✔ (DASHBOARD PROJETO) Verificar na aba e projetos pois ao clicar em qualquer projeto não vizualiza o dashboard; @done (18-01-08 08:15)
-- Remover código do cliente da tela de cadastro de documento.
+✔ Remover código do cliente da tela de cadastro de documento. @done (18-01-08 08:23)
 - Começar sequencial de revisão de 0... e avançar 1,2,3...
 - Criar sequencial de revisão em paralelo, que pode ser alterado manualmente.
 - nos documentos só esta podendo excluir arquivos caso subimos de revisão. na verdade isso so pode acontecer se o arquivo estiver emitido por alguma GRD, devemos criar um vinculo dentro do documento para o executante ou avalista saber em qual grd foi emitida.
