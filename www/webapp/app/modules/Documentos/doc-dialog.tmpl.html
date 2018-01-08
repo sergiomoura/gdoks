@@ -7,10 +7,6 @@
 					<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo" required>
 				</md-input-container>
 				<md-input-container>
-					<label>Código Cliente</label>
-					<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_cliente">
-				</md-input-container>
-				<md-input-container>
 					<label>Código Alternativo</label>
 					<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_alternativo">
 				</md-input-container>
@@ -44,6 +40,8 @@
 						<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{opt.codigo}}{{(opt.nome!=null && opt.nome!='') ? (' - '+opt.nome):''}}</md-option>
 					</md-select>
 				</md-input-container>
+			</div>
+			<div layout="column" flex="33">
 				<md-input-container>
 					<label>Data Limite</label>
 					<md-datepicker
@@ -52,8 +50,6 @@
 							md-hide-icons="calendar"
 							required></md-datepicker>
 				</md-input-container>
-			</div>
-			<div layout="column" flex="33">
 				<md-input-container>
 					<label>Dependências</label>
 					<md-select

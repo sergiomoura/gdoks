@@ -1,4 +1,4 @@
-- (DASHBOARD PROJETO) Verificar na aba e projetos pois ao clicar em qualquer projeto não vizualiza o dashboard;
+✔ (DASHBOARD PROJETO) Verificar na aba e projetos pois ao clicar em qualquer projeto não vizualiza o dashboard; @done (18-01-08 08:15)
 - Remover código do cliente da tela de cadastro de documento.
 - Começar sequencial de revisão de 0... e avançar 1,2,3...
 - Criar sequencial de revisão em paralelo, que pode ser alterado manualmente.
