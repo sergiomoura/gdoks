@@ -32,7 +32,7 @@
 			tr{
 				cursor:pointer;
 				td {
-					border-top: 1px solid #CCC;
+					border-top: 1px solid $cinzaClaro;
 				}
 				&:hover>td {
 					background-color: #FFF;

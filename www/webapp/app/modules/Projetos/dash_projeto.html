@@ -38,7 +38,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="doc in documentos">
+			<tr ng-repeat="doc in documentos" ng-click="goToDoc(doc.id)">
 				<td>
 					{{doc.codigo}}
 					<span>{{doc.nome}}</span>
@@ -87,7 +87,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="grd in grds">
+			<tr ng-repeat="grd in grds" ng-click="goToGrd(grd.id)">
 				<td>{{grd.codigo}}</td>
 				<td>{{grd.datahora_registro|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_registro|date:'hh:mm'}}</span></td>
 				<td ng-if="grd.datahora_enviada!=null">{{grd.datahora_enviada|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_enviada|date:'hh:mm'}}</span></td>

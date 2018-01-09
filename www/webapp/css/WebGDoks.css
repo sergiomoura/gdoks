@@ -1099,7 +1099,7 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   #projetos_container table tbody tr {
     cursor: pointer; }
     #projetos_container table tbody tr td {
-      border-top: 1px solid #CCC; }
+      border-top: 1px solid rgba(0, 0, 0, 0.12); }
     #projetos_container table tbody tr:hover > td {
       background-color: #FFF; }
     #projetos_container table tbody tr:focus {
@@ -1221,6 +1221,8 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   width: 100%;
   margin-bottom: 50px;
   cursor: default; }
+  #dashprojeto_container .documentos tr {
+    outline: none; }
   #dashprojeto_container .documentos td {
     padding: 10px 0; }
     #dashprojeto_container .documentos td:nth-child(1) {
@@ -1238,16 +1240,18 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   #dashprojeto_container .documentos thead {
     color: rgba(0, 0, 0, 0.54);
     font-size: 12px; }
-  #dashprojeto_container .documentos tbody tr:last-child td {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-  #dashprojeto_container .documentos tbody tr:hover td {
-    background-color: #FFF; }
-  #dashprojeto_container .documentos tbody td {
-    border-top: 1px solid rgba(0, 0, 0, 0.12); }
-    #dashprojeto_container .documentos tbody td span {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.54); }
+  #dashprojeto_container .documentos tbody {
+    cursor: pointer; }
+    #dashprojeto_container .documentos tbody tr:last-child td {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    #dashprojeto_container .documentos tbody tr:hover td {
+      background-color: #FFF; }
+    #dashprojeto_container .documentos tbody td {
+      border-top: 1px solid rgba(0, 0, 0, 0.12); }
+      #dashprojeto_container .documentos tbody td span {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.54); }
 #dashprojeto_container .grds {
   border-collapse: collapse;
   width: 100%;
@@ -1268,16 +1272,20 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   #dashprojeto_container .grds thead {
     color: rgba(0, 0, 0, 0.54);
     font-size: 12px; }
-  #dashprojeto_container .grds tbody tr:last-child td {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-  #dashprojeto_container .grds tbody tr:hover td {
-    background-color: #FFF; }
-  #dashprojeto_container .grds tbody td {
-    border-top: 1px solid rgba(0, 0, 0, 0.12); }
-    #dashprojeto_container .grds tbody td span {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.54); }
+  #dashprojeto_container .grds tbody {
+    cursor: pointer; }
+    #dashprojeto_container .grds tbody tr {
+      outline: none; }
+      #dashprojeto_container .grds tbody tr:last-child td {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+      #dashprojeto_container .grds tbody tr:hover td {
+        background-color: #FFF; }
+    #dashprojeto_container .grds tbody td {
+      border-top: 1px solid rgba(0, 0, 0, 0.12); }
+      #dashprojeto_container .grds tbody td span {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.54); }
 #dashprojeto_container .aviso {
   text-align: center;
   margin-bottom: 50px; }

@@ -20,6 +20,9 @@
 		width:100%;
 		margin-bottom: 50px;
 		cursor: default;
+		tr{
+			outline:none;
+		}
 		td {
 			padding: 10px 0;
 			&:nth-child(1){
@@ -46,6 +49,7 @@
 			font-size: 12px;
 		}
 		tbody{
+			cursor:pointer;
 			tr{
 				&:last-child{
 					td{
@@ -99,7 +103,9 @@
 			font-size: 12px;
 		}
 		tbody{
+			cursor: pointer;
 			tr{
+				outline: none;
 				&:last-child{
 					td{
 						border-bottom: 1px solid $cinzaClaro;
