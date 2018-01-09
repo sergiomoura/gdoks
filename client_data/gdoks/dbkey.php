@@ -6,7 +6,7 @@
 		$dbkey->DB_HOST = 'localhost';
 		$dbkey->DB_USER = 'root';
 		$dbkey->DB_PASS = 'vaiplaneta';
-		$dbkey->DB_BASE = 'gdoks_000';
+		$dbkey->DB_BASE = 'gdoks000';
 		$dbkey->DB_PORT = null;
 		$dbkey->DB_SOCKET = null;
 		$dbkey->ID_EMPRESA = 1;
