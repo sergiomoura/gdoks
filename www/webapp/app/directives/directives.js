@@ -79,3 +79,61 @@ WebGDoks.directive('capitalize', function() {
       }
     };
   });
+
+WebGDoks.directive("progressBar", function (){
+		return {
+			restrict: 'E',
+			scope: {
+				progress: '=',
+				width: '=',
+				height:'=',
+				colors:'=',
+				fcolors:'='
+			},
+			template: "<canvas />",
+			link: function(scope, element, attrs) {
+				scope.canvas = element.find('canvas')[0];
+				scope.context = scope.canvas.getContext('2d');
+				scope.$watch('progress', function(values) {
+					
+					// determinando dimensões do canvas
+					scope.canvas.width = attrs.width;
+					scope.canvas.height = attrs.height;
+
+					// Pintando o fundo
+					scope.context.fillStyle = "#DDD";
+					scope.context.fillRect(0, 0, scope.canvas.width, scope.canvas.height);
+
+					// Lendo as cores
+					var colors = eval(attrs.colors);
+					var fcolors = eval(attrs.fcolors);
+
+					// Preparando para pintar barras
+					var barWidth;
+					var text;
+					var nextX = 0;
+					var previousX = 0;
+
+					// determinando fonte da numeração
+					scope.context.font = '12px sans-serif';
+					scope.context.textBaseline = 'middle';
+					for (var i = 0;i < values.length; i++) {
+						// Desenhando a barra
+						barWidth = Math.ceil(values[i] / 100 * scope.canvas.width);
+						scope.context.fillStyle = colors[i];
+						scope.context.fillRect(nextX, 0, barWidth, scope.canvas.height);
+						previousX = nextX;
+						nextX += barWidth;
+
+						// Desenhando o texto
+						scope.context.fillStyle = fcolors[i];
+						text = values[i]+'%';
+						textX = nextX - scope.context.measureText(text).width - 3;
+						if(textX>previousX){
+							scope.context.fillText(text,textX,scope.canvas.height/2);
+						}
+					}
+				});
+			}        
+		}
+	})

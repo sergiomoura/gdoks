@@ -1,12 +1,10 @@
-- Na tela do cadastro da GRD, mostrar o código do documento e com o título menor embaixo
-- Fazer com que qualquer linha das tabelas do dashboard, ao serem clicadas, encaminhem para a página do doc/grd
+- Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto
 - Fazer visão geral no dashboard de projeto:
 	- Gráfico de barras com total de documentos com percentuais...
 	- Percentuais no prazo e percentuais em dia
 	- Dias restante para o final do prazo do projeto
-- Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto
-- Fazer com que não apareça por padrão projetos inativos
 - Por gráficos em barra no progresso do documento (dashboard projeto)
+- Fazer com que não apareça por padrão projetos inativos
 - Pensar área do cliente
 
 - Fazer com que projetos inativos
@@ -76,6 +74,8 @@ BUGS Avulsos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Fazer com que qualquer linha das tabelas do dashboard, ao serem clicadas, encaminhem para a página do doc/grd @done (18-01-11 12:07)
+	✔ Na tela do cadastro da GRD, mostrar o código do documento e com o título menor embaixo @done (18-01-11 12:05)
 	✔	Programar rotina de backup @done (18-01-09 11:52)
 	✔	Mudar local da pasta de uploads: cada cliente vai ter a sua pasta dentro da pasta sua pasta client_data @done (18-01-08 09:05)
 	✔ Desenhar e Implementar Dashboard do Projeto @done (18-01-08 08:40)

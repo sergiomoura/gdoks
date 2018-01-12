@@ -34,7 +34,6 @@
 				<td>Área</td>
 				<td>Data Limite</td>
 				<td>Progresso</td>
-				<td></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -57,17 +56,8 @@
 				<td>
 					{{doc.data_limite|date:"dd/MM/yyyy"}}
 				</td>
-				<td>{{doc.progresso}}%</td>
 				<td>
-					<md-button
-						class="md-icon-button"
-						aria-label="Ir para documento"
-						ng-click="goToDoc(doc.id)">
-						<md-icon
-							class="material-icons step"
-							aria-label="Ir para documento">open_in_new</md-icon>
-						<md-tooltip md-direction="bottom">Ir para Página do Documento</md-tooltip>
-					</md-button>
+					<progress-bar progress="[doc.progresso]" colors="['#2196F3']" fcolors="['#FFF']" width="100" height="20"></progress-bar>
 				</td>
 			</tr>
 		</tbody>
