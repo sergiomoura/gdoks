@@ -745,6 +745,9 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 			$scope.cliente.ftp_host = '';
 			$scope.cliente.ftp_usuario = '';
 			$scope.cliente.ftp_senha = '';
+			$scope.cliente.login = '';
+			$scope.cliente.senha1 = '';
+			$scope.cliente.senha2 = '';
 		} else {
 			// Carregando informações do cliente a partir da base
 			GDoksFactory.getCliente(id)
@@ -771,8 +774,14 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 			// Mostra carregando
 			$scope.root.carregando = true;
 
+			var cliente = angular.copy($scope.cliente);
+			cliente.senha = $scope.cliente.senha1;
+			delete cliente.senha1;
+			delete cliente.senha2;
+
 			if($scope.cliente.id == 0){
-				GDoksFactory.adicionarCliente($scope.cliente)
+
+				GDoksFactory.adicionarCliente(cliente)
 				.success(
 					function(response){
 						// Esconde carregando
@@ -794,10 +803,12 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 													cliente.ftp_host != null &&
 													cliente.ftp_usuario != null &&
 													cliente.ftp_senha != null);
-
+						delete cliente.senha1;
+						delete cliente.senha2;
 						delete cliente.ftp_host;
 						delete cliente.ftp_usuario;
 						delete cliente.ftp_senha;
+
 						indexedDB.open('gdoks').onsuccess = function(evt){
 							evt.target.result.transaction('clientes','readwrite').objectStore('clientes').add(cliente);
 						}
@@ -832,7 +843,7 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 					}
 				);
 			} else {
-				GDoksFactory.atualizarCliente($scope.cliente)
+				GDoksFactory.atualizarCliente(cliente)
 				.success(
 					function(response){
 						// Esconde carregando

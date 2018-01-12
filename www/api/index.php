@@ -3249,7 +3249,7 @@
 						       a.contato_nome,
 						       a.contato_email,
 						       a.contato_telefone,
-						       a.endereco,
+						       a.endereco
                                (!isnull(ftp_host) and !isnull(ftp_usuario) and !isnull(ftp_senha)) as ftp_configurado
 						FROM gdoks_clientes a
 						INNER JOIN
@@ -3273,6 +3273,7 @@
 						       a.contato_telefone,
 						       a.ftp_host,
 						       a.ftp_usuario,
+						       a.login,
 						       a.endereco
 						FROM gdoks_clientes a
 						INNER JOIN
@@ -3327,55 +3328,119 @@
 					// Verificando se o cliente está com a senha do ftp setada
 					if(empty($cliente->ftp_senha) || is_null($cliente->ftp_senha) || $cliente->ftp_senha==''){
 
-						// Fazendo alteração sem alteração de senha FTP
-						$sql = "UPDATE gdoks_clientes
-								SET	
-									nome=?,
-	         						nome_fantasia=?,
-			                       	cpf=?,
-									cnpj=?,
-	                                contato_nome=?,
-	                                contato_email=?,
-	                                contato_telefone=?,
-	                                endereco=?,
-	                                ftp_host=?,
-	                                ftp_usuario=?
-	                            WHERE id=?";
-	                    try {
-	                    	$db->query($sql,'ssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$id);
-	                    } catch (Exception $e) {
-	                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
-							$response->flush();
-							die();
+						// Verificando se o cliente está com a senha de login setada
+						if(empty($cliente->senha) || is_null($cliente->senha) || $cliente->senha==''){
+							// Fazendo alteração sem alteração de senha FTP nem login
+							$sql = "UPDATE gdoks_clientes
+									SET	
+										nome=?,
+		         						nome_fantasia=?,
+				                       	cpf=?,
+										cnpj=?,
+		                                contato_nome=?,
+		                                contato_email=?,
+		                                contato_telefone=?,
+		                                endereco=?,
+		                                ftp_host=?,
+		                                ftp_usuario=?,
+		                                login=?
+		                            WHERE id=?";
+		                    try {
+		                    	$db->query($sql,'sssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->login,$id);
+		                    } catch (Exception $e) {
+		                    	http_response_code(401);
+		                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+								$response->flush();
+								exit(1);
+							}
+						} else {
+							// Fazendo alteração sem alteração de senha FTP mas alterando login
+							$sql = "UPDATE gdoks_clientes
+									SET	
+										nome=?,
+		         						nome_fantasia=?,
+				                       	cpf=?,
+										cnpj=?,
+		                                contato_nome=?,
+		                                contato_email=?,
+		                                contato_telefone=?,
+		                                endereco=?,
+		                                ftp_host=?,
+		                                ftp_usuario=?,
+		                                senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512))),
+		                                login=?
+		                            WHERE id=?";
+		                    try {
+		                    	$db->query($sql,'sssssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->senha,AES_KEY,$cliente->login,$id);
+		                    } catch (Exception $e) {
+		                    	http_response_code(401);
+		                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+								$response->flush();
+								exit(1);
+							}
 						}
+
 					} else {
-						// Fazendo alteração da senha FTP inclusive
-						$sql = "UPDATE gdoks_clientes
-								SET	
-									nome=?,
-	         						nome_fantasia=?,
-			                       	cpf=?,
-									cnpj=?,
-	                                contato_nome=?,
-	                                contato_email=?,
-	                                contato_telefone=?,
-	                                endereco=?,
-	                                ftp_host=?,
-	                                ftp_usuario=?,
-	                                ftp_senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512)))
-	                            WHERE id=?";
-	                    try {
-	                    	$db->query($sql,'ssssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY,$id);
-	                    } catch (Exception $e) {
-	                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
-							$response->flush();
-							die();
+
+						// Verificando se o cliente está com a senha de login setada
+						if(empty($cliente->senha) || is_null($cliente->senha) || $cliente->senha==''){
+							// Fazendo alteração da senha FTP inclusive, mas não altera senha de acesso
+							$sql = "UPDATE gdoks_clientes
+									SET	
+										nome=?,
+		         						nome_fantasia=?,
+				                       	cpf=?,
+										cnpj=?,
+		                                contato_nome=?,
+		                                contato_email=?,
+		                                contato_telefone=?,
+		                                endereco=?,
+		                                ftp_host=?,
+		                                ftp_usuario=?,
+		                                ftp_senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512))),
+		                                login=?
+		                            WHERE id=?";
+		                    try {
+		                    	$db->query($sql,'sssssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY,$cliente->login,$id);
+		                    } catch (Exception $e) {
+		                    	http_response_code(401);
+		                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+								$response->flush();
+								exit(1);
+							}
+
+						} else {
+							$sql = "UPDATE gdoks_clientes
+									SET	
+										nome=?,
+		         						nome_fantasia=?,
+				                       	cpf=?,
+										cnpj=?,
+		                                contato_nome=?,
+		                                contato_email=?,
+		                                contato_telefone=?,
+		                                endereco=?,
+		                                ftp_host=?,
+		                                ftp_usuario=?,
+		                                ftp_senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512))),
+		                                senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512))),
+		                                login=?
+		                            WHERE id=?";
+		                    try {
+		                    	$db->query($sql,'sssssssssssssssi',$cliente->nome,$cliente->nome_fantasia,$cliente->cpf,$cliente->cnpj,$cliente->contato_nome,$cliente->contato_email,$cliente->contato_telefone,$cliente->endereco,$cliente->ftp_host,$cliente->ftp_usuario,$cliente->ftp_senha,AES_KEY,$cliente->senha,AES_KEY,$cliente->login,$id);
+		                    } catch (Exception $e) {
+		                    	http_response_code(401);
+		                    	$response = new response(1,'Erro na consulta: '.$e->getMessage());
+								$response->flush();
+								exit(1);
+							}
 						}
 					}
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
-					die();
+					$response = new response(1,'Não altera dados de outra empresa.');
+					$response->flush();
+					exit(1);
 				}
 
 				// retornando
