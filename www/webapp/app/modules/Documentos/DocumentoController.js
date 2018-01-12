@@ -95,6 +95,7 @@
 		}
 
 		$scope.enviarArquivos = function(){
+
 			// Mostrando o carregando
 			$scope.root.carregando = true;
 
@@ -144,6 +145,22 @@
 	            			// Recarregando documento da base
 	            			carregaDocumento($scope.documento.id);
 	            		}
+	            	},
+	            	function(error){
+
+	            		// Escondendo o carregando
+	            		$scope.root.carregando = false;
+
+	            		// Retornando Toast para o usuário
+	            		$mdToast.show(
+	            			$mdToast.simple()
+	            			.textContent(error.data.msg)
+	            			.position('bottom left')
+	            			.hideDelay(0)
+	            		);
+
+	            		// Imprimindo o erro no console
+	            		console.warn(error);
 	            	}
 	            );
 	        }

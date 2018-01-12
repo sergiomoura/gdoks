@@ -2685,7 +2685,7 @@
 					if($rs[0]['nPdas'] != 0){
 						// Não é o primeiro pda e usuário não fez checkout do último pda
 						http_response_code(401);
-						$response = new response(1,'Usuário não realizou checkout.');
+						$response = new response(1,'Usuário não baixou arquivo para revisão.');
 						$response->flush();
 						die();
 					}
