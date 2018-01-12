@@ -3249,7 +3249,7 @@
 						       a.contato_nome,
 						       a.contato_email,
 						       a.contato_telefone,
-						       a.endereco
+						       a.endereco,
                                (!isnull(ftp_host) and !isnull(ftp_usuario) and !isnull(ftp_senha)) as ftp_configurado
 						FROM gdoks_clientes a
 						INNER JOIN
