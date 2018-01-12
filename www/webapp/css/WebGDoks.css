@@ -304,6 +304,9 @@
     text-align: right;
     font-size: 12px; }
 
+#documento_container progresso {
+  position: relative;
+  top: 6px; }
 #documento_container .header_table {
   font-size: 14px;
   width: 100%; }

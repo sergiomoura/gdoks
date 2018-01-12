@@ -140,7 +140,7 @@
 	            			// limpando dados
 	            			$scope.updateFiles = [];
 	            			$scope.update = {};
-							$scope.formUploadItems = [];
+							$scope.formcoUploadItems = [];
 							
 	            			// Recarregando documento da base
 	            			carregaDocumento($scope.documento.id);
@@ -156,7 +156,7 @@
 	            			$mdToast.simple()
 	            			.textContent(error.data.msg)
 	            			.position('bottom left')
-	            			.hideDelay(0)
+	            			.hideDelay(5000)
 	            		);
 
 	            		// Imprimindo o erro no console

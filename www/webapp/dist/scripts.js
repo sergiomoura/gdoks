@@ -1308,7 +1308,7 @@ function ConfiguracoesController($scope){};
 	            			// limpando dados
 	            			$scope.updateFiles = [];
 	            			$scope.update = {};
-							$scope.formUploadItems = [];
+							$scope.formcoUploadItems = [];
 							
 	            			// Recarregando documento da base
 	            			carregaDocumento($scope.documento.id);
@@ -1324,7 +1324,7 @@ function ConfiguracoesController($scope){};
 	            			$mdToast.simple()
 	            			.textContent(error.data.msg)
 	            			.position('bottom left')
-	            			.hideDelay(0)
+	            			.hideDelay(5000)
 	            		);
 
 	            		// Imprimindo o erro no console
@@ -6551,7 +6551,7 @@ WebGDoks.directive('capitalize', function() {
     };
   });
 
-WebGDoks.directive("progressBar", function (){
+WebGDoks.directive("progresso", function (){
 		return {
 			restrict: 'E',
 			scope: {

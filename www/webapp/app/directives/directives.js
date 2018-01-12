@@ -80,7 +80,7 @@ WebGDoks.directive('capitalize', function() {
     };
   });
 
-WebGDoks.directive("progressBar", function (){
+WebGDoks.directive("progresso", function (){
 		return {
 			restrict: 'E',
 			scope: {

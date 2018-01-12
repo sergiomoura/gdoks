@@ -34,60 +34,57 @@
 			</md-button>
 		</div>
 	</div>
+	
 	<table class="header_table">
 		<tr>
-			<td colspan="3">
+			<td colspan="4">
 				<label>Título</label> {{documento.nome}}
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td colspan="4">
 				<label>Projeto</label> {{documento.nome_projeto}}
 			</td>
+		</tr>
+		<tr>
 			<td>
 				<label>Área</label> {{documento.nome_area}}
 			</td>
 			<td>
-				<label>Sub-área</label> {{documento.nome_subarea}}
+				<label>Sub-área</label> {{documento.cod_subarea}}
 			</td>
-		</tr>
-		<tr>
 			<td>
 				<label>Disciplina</label> {{documento.nome_disciplina}}
 			</td>
 			<td>
 				<label>Subdisciplina</label> {{documento.nome_subdisciplina}}
 			</td>
-			<td>
+		</tr>
+		<tr>
+			<td colspan="2">
 				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
+			</td>
+			<td colspan="2">
+				<label>Trabalho Estimado</label> {{documento.trabalho_estimado}} hh
 			</td>
 		</tr>
 		<tr>
-			<td>
-				<label>Trabalho Estimado</label> {{documento.trabalho_estimado}} hh
-			</td>
-			<td>
+			<td colspan="2">
 				<label>Última Atualização</label> {{documento.revisoes[0].ua|date:"dd/MM/yyyy à's' hh:mm"}}
 			</td>
-			<td>
+			<td colspan="2">
 				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="4">
 				<label style="display: inline-block; width: 75px;">Progresso</label>
-				<div class="hbar" style-"display: inline-block; width: calc(100% - 80px); vertical-align: top;">
-					<div ng-if="documento.revisoes[0].progresso_validado>0"
-						class="prgValidado"
-						style="width: calc({{documento.revisoes[0].progresso_validado}}% - 2px)">
-						{{documento.revisoes[0].progresso_validado}}%
-					</div
-					><div ng-if="documento.revisoes[0].progresso_a_validar>0"
-						class="prgAValidar"
-						style="width: calc({{documento.revisoes[0].progresso_a_validar}}% - 2px)">
-						{{documento.revisoes[0].progresso_a_validar}}%
-					</div>
-				</div>
+				<progresso
+					progress="[documento.revisoes[0].progresso_validado,documento.revisoes[0].progresso_a_validar]"
+					colors="['#2196F3','#6DD900']"
+					fcolors="['#FFF','#FFF']"
+					width="800"
+					height="20"></progresso>
 			</td>
 		</tr>
 	</table>
@@ -103,19 +100,12 @@
 								<div>Revisão: {{rev.serial}}</div>
 								<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
 							</div>
-							
-							<div class="hbar">
-								<div ng-if="rev.progresso_validado>0"
-									class="prgValidado"
-									style="width: calc({{rev.progresso_validado}}% - 2px)">
-									{{rev.progresso_validado}}%
-								</div
-								><div ng-if="rev.progresso_a_validar>0"
-									class="prgAValidar"
-									style="width: calc({{rev.progresso_a_validar}}% - 2px)">
-									{{rev.progresso_a_validar}}%
-								</div>
-							</div>
+							<progresso
+								progress="[rev.progresso_validado,rev.progresso_a_validar]"
+								colors="['#2196F3','#6DD900']"
+								fcolors="['#FFF','#FFF']"
+								width="1000"
+								height="20"></progresso>
 						</md-expansion-panel-collapsed>
 						<md-expansion-panel-expanded>
 							<md-expansion-panel-content layout="column">
@@ -123,22 +113,16 @@
 									<div>Revisão: {{rev.serial}}</div>
 									<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
 								</div>
-								
-								<div class="hbar">
-									<div ng-if="rev.progresso_validado>0"
-										class="prgValidado"
-										style="width: calc({{rev.progresso_validado}}% - 2px)">
-										{{rev.progresso_validado}}%
-									</div
-									><div ng-if="rev.progresso_a_validar>0"
-										class="prgAValidar"
-										style="width: calc({{rev.progresso_a_validar}}% - 2px)">
-										{{rev.progresso_a_validar}}%
-									</div>
-								</div>
+								<progresso
+									progress="[rev.progresso_validado,rev.progresso_a_validar]"
+									colors="['#2196F3','#6DD900']"
+									fcolors="['#FFF','#FFF']"
+									width="780"
+									height="20"></progresso>
 								<div ng-if="rev.pdas.length==0">Nenhum progresso anterior registrado.</div>
 								<div ng-if="rev.pdas.length>0">Progresso</div>
 								<div ng-repeat="pda in rev.pdas">
+									
 									<div class="hbar short">
 										<!-- se for o primeiro pda -->
 										<div ng-if="$first && rev.progresso_validado>0"

@@ -2487,6 +2487,7 @@
 							    c.nome as nome_disciplina,
 								d.id as id_subarea,
 							    d.nome as nome_subarea,
+							    d.codigo as cod_subarea,
 							    e.id as id_area,
 							    e.nome as nome_area,
 							    g.id as id_projeto,
