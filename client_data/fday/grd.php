@@ -40,7 +40,11 @@
 		    $this->Cell(65,5,utf8_decode('GRD Nº: '.$this->grd->codigo),0);
 		    $this->Ln(5);
 		    $this->Cell(125,5,utf8_decode('Resp. Envio: '.$this->resp_envio),0);
-		    $this->Cell(65,5,utf8_decode('Data: '.date('d/m/Y')),0);
+
+		    // Determinando a string de datahora do envio
+		    $envio = new DateTime($this->grd->datahora_enviada);
+
+		    $this->Cell(65,5,utf8_decode('Envio: '.$envio->format('d/m/Y à\s h:i')),0);
 		    $this->Ln(5);
 		    $this->Cell(125,5,utf8_decode('Projeto: '.$this->grd->projeto_nome),0);
 		    $this->Cell(65,5,utf8_decode('Destinatário: '.$this->grd->cliente_contato_nome),0);
