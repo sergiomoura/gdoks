@@ -60,3 +60,10 @@ form button{
 form button:hover{
 	background-color: #CCC;
 }
+
+form .erro{
+	text-align: center;
+	margin: 30px 0 0 0;
+	color: #AAA;
+	font-size: 18px;
+}

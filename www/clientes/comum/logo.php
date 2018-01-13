@@ -1,6 +1,6 @@
 <?php
 	// Determinando se a pasta do cliente existe
-	$pasta = '../../client_data/'.$_GET['e'];
+	$pasta = '../../../client_data/'.$_GET['e'];
 
 	if(file_exists($pasta)){
 		
