@@ -13,14 +13,10 @@
 <html lang="pt-br">
 <head>
 	<meta charset="UTF-8">
-	<title>Área do Cliente - <?php echo($cliente->nome_empresa); ?></title>
+	<title><?php echo($cliente->nome_empresa); ?> - Área do Cliente</title>
+	<link rel="stylesheet" href="../comum/areaDoCliente.css">
 </head>
 <body>
-	<?php 
-		echo('<pre>');
-		print_r($cliente);
-		echo('</pre>');
-		die();
-	 ?>
+	
 </body>
 </html>
