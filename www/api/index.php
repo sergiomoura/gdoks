@@ -18,10 +18,7 @@
 
 	// Definindo o timezone padrão
 	date_default_timezone_set('America/Sao_Paulo');
-	
-	// constants - - - - - - - - - - - - - - - - - - - - - -
-	define('TOKEN_DURARION', 3600); //in seconds: 6 horas	
-	
+		
 	// definindo função getallheaders caso ela não exista (caso NGINX)
 	if (!function_exists('getallheaders')){ 
 		function getallheaders(){ 
