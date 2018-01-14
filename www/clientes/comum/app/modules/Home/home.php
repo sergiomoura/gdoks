@@ -1,7 +1,8 @@
 <div id="homeContainer">
+	{{x}}
 	<div layout="row" layout-align="space-between start">
 		<h3>Últimas Remessas de Documento</h3>
-		<md-button class="md-raised md-primary" aria-label="ver todas grds">Ver todas anteriores</md-button>
+		<md-button class="md-raised md-primary" aria-label="ver todas grds" ng-click="refreshToken()">Ver todas anteriores</md-button>
 	</div>
 	<table class="grds">
 		<thead>

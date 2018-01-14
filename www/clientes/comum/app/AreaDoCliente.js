@@ -18,8 +18,26 @@
 	module.controller('AreaDoClienteController',AreaDoClienteController);
 
 	// Definição do controller
-	function AreaDoClienteController($scope){
-		$scope.x = 1;
+	function AreaDoClienteController($scope,$cookies,$interval,ClientesFactory){
+		// Definindo funções que renovam o token
+		$scope.refreshToken = function(){
+			ClientesFactory.refreshToken()
+			.success(
+				function(response){
+					$cookies.put('token',response.newToken);
+				}
+			)
+			.error(
+				function(error){
+					console.warn('Token não foi renovado!');
+					console.warn(error);
+					window.location="/";
+				}
+			);
+		}
+
+		// Acionando timer que renova o token de tempo em tempo
+		$interval($scope.refreshToken,TOKEN_REFRESH_IN);
 	}
 
 	// Definindo Rotas

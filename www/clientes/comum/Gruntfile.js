@@ -25,7 +25,9 @@ module.exports = function(grunt) {
 					'app/AreaDoCliente.js',
 					'app/modules/Home/HomeController.js',
 					'app/modules/Grds/GrdsController.js',
-					'app/modules/Documentos/DocumentosController.js'
+					'app/modules/Documentos/DocumentosController.js',
+					'app/services/Factory.js',
+					'app/services/Constants.js'
 				],
 				dest: 'bin/scripts.js'
 			},

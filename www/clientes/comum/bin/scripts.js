@@ -569,8 +569,26 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 	module.controller('AreaDoClienteController',AreaDoClienteController);
 
 	// Definição do controller
-	function AreaDoClienteController($scope){
-		$scope.x = 1;
+	function AreaDoClienteController($scope,$cookies,$interval,ClientesFactory){
+		// Definindo funções que renovam o token
+		$scope.refreshToken = function(){
+			ClientesFactory.refreshToken()
+			.success(
+				function(response){
+					$cookies.put('token',response.newToken);
+				}
+			)
+			.error(
+				function(error){
+					console.warn('Token não foi renovado!');
+					console.warn(error);
+					window.location="/";
+				}
+			);
+		}
+
+		// Acionando timer que renova o token de tempo em tempo
+		$interval($scope.refreshToken,TOKEN_REFRESH_IN);
 	}
 
 	// Definindo Rotas
@@ -617,7 +635,7 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 	module.controller('HomeController',HomeController);
 	
 	// Definição da função controller
-	function HomeController($scope){
+	function HomeController($scope,ClientesFactory){
 		
 	}
 })();(function(){
@@ -646,5 +664,37 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 
 	// Definição da função GrdsController
 	function DocumentoController($scope){}
-})()
+})();(function(){
+	// Carregando o módulo
+	var module = angular.module('AreaDoCliente');
+
+	// Definindo Factory
+	module.factory('ClientesFactory',
+		[
+			'$http','$cookies',
+			function($http,$cookies){
+				var factory = {};
+
+				// Função auxiliar que retorna headers baseada no cooke user = = = = = = = = = = = = = = = = = = = = = = = = =
+				var buildHeaders = function(){
+					return {headers: {'Authorization': $cookies.getObject('cliente').codigo_empresa + '-' + $cookies.get('token')}};
+				}
+
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+				// Faz requisição para carregar últimas grds
+				factory.refreshToken = function(){
+					return $http.get(API_CLIENTE_ROOT+'refresh',buildHeaders());
+				}
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+				// Faz requisição para carregar últimas grds
+				factory.getUltimasGrds = function(){
+					return $http.get(API_CLIENTE_ROOT+'grds/ultimas',buildHeaders());
+				}
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+				return factory;
+			}
+		]
+	);
+})();;API_CLIENTE_ROOT = '../api/v1/';
+TOKEN_REFRESH_IN = 600000; // em microsegundos
 //# sourceMappingURL=scripts.js.map

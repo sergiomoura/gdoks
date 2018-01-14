@@ -6,7 +6,7 @@
 	module.controller('HomeController',HomeController);
 	
 	// Definição da função controller
-	function HomeController($scope){
+	function HomeController($scope,ClientesFactory){
 		
 	}
 })()
