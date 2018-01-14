@@ -54,7 +54,7 @@
 	// Configurando padrão de cores
 	module.config(function($mdThemingProvider) {
 		$mdThemingProvider.theme('default')
-		.primaryPalette('light-blue',{'default':'700'})
+		.primaryPalette('blue')
 		.accentPalette('orange',{'default':'800'});
 	})
 

@@ -1,0 +1,46 @@
+body {
+  font-family: "Poppins", sans-serif; }
+
+body > md-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0; }
+
+body > .viewContainer {
+  position: relative;
+  top: 70px;
+  padding: 10px; }
+
+.marcadagua {
+  width: 200px;
+  opacity: 0.3;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  filter: gray;
+  /* IE6-9 */
+  -webkit-filter: grayscale(1);
+  /* Google Chrome, Safari 6+ & Opera 15+ */
+  filter: grayscale(1);
+  /* Microsoft Edge and Firefox 35+ */ }
+
+#homeContainer {
+  padding-top: 30px; }
+  #homeContainer h3 {
+    color: #2196F3; }
+  #homeContainer table {
+    border-collapse: collapse;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.54);
+    margin-top: 20px; }
+    #homeContainer table td {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      padding: 5px; }
+    #homeContainer table thead td {
+      font-size: 12px; }
+    #homeContainer table tbody td {
+      cursor: pointer; }
+    #homeContainer table tbody tr:hover td {
+      background-color: #FFF; }
+
+/*# sourceMappingURL=main.css.map */

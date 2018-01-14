@@ -7,12 +7,8 @@
 	module.controller('GrdController',GrdController);
 	
 	// Definição da função GrdsController
-	function GrdsController($scope){
-		
-	}
+	function GrdsController($scope){}
 
 	// Definição da função GrdsController
-	function GrdController($scope){
-
-	}
+	function GrdController($scope){}
 })()

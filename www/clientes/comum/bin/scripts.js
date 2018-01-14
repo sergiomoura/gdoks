@@ -605,7 +605,7 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 	// Configurando padrão de cores
 	module.config(function($mdThemingProvider) {
 		$mdThemingProvider.theme('default')
-		.primaryPalette('light-blue',{'default':'700'})
+		.primaryPalette('blue')
 		.accentPalette('orange',{'default':'800'});
 	})
 
@@ -629,14 +629,10 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 	module.controller('GrdController',GrdController);
 	
 	// Definição da função GrdsController
-	function GrdsController($scope){
-		
-	}
+	function GrdsController($scope){}
 
 	// Definição da função GrdsController
-	function GrdController($scope){
-
-	}
+	function GrdController($scope){}
 })();(function(){
 	// Definição de módulo
 	var module = angular.module('Documentos',[]);

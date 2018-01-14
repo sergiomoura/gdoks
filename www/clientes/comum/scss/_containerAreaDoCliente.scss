@@ -1,11 +1,19 @@
-body>md-toolbar{
-	position:fixed;
+body {
+	font-family:$fontFamily
 }
-body>.viewContainer{
+
+body > md-toolbar{
+	position:fixed;
+	top:0;
+	left:0;
+}
+
+body > .viewContainer{
 	position: relative;
 	top: 70px;
-
+	padding:10px;
 }
+
 .marcadagua {
 	width:200px;
 	opacity: 0.3;

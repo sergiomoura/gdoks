@@ -1,0 +1,30 @@
+#homeContainer {
+	padding-top:30px;
+	h3{
+		color:$azul;
+	}
+	table {
+		border-collapse: collapse;
+		width: 100%;
+		color: $cinza;
+		margin-top: 20px;
+		td{
+			border-bottom: 1px solid $cinzaClaro;
+			padding: 5px;
+		} 
+		thead {
+			td{
+				font-size: 12px;
+			}
+		}
+		tbody{
+			td {
+				cursor: pointer;
+			}
+			tr:hover td{
+				background-color: #FFF;
+			}
+
+		}
+	}
+}
