@@ -558,6 +558,8 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 			'ngAnimate',
 			'ngMaterial',
 			'Home',
+			'Grds',
+			'Documentos'
 		];
 	
 	// Definição  do módulo Area do Cliente
@@ -582,10 +584,23 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 					templateUrl: '../comum/app/modules/Home/home.php'
 				}
 			)
+			.when(
+				'/grds',
+				{
+					controller: 'GrdsController',
+					templateUrl: '../comum/app/modules/Grds/grds.php'
+				}
+			)
+			.when(
+				'/documentos',
+				{
+					controller: 'DocumentosController',
+					templateUrl: '../comum/app/modules/Documentos/documentos.php'
+				}
+			)
 			.otherwise({redirectTo:'/home'});
 		}
 	)
-
 
 	// Configurando padrão de cores
 	module.config(function($mdThemingProvider) {
@@ -605,5 +620,35 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 	function HomeController($scope){
 		
 	}
+})();(function(){
+	// Definição de módulo
+	var module = angular.module('Grds',[]);
+
+	// Atricuição de controllers a módulo
+	module.controller('GrdsController',GrdsController);
+	module.controller('GrdController',GrdController);
+	
+	// Definição da função GrdsController
+	function GrdsController($scope){
+		
+	}
+
+	// Definição da função GrdsController
+	function GrdController($scope){
+
+	}
+})();(function(){
+	// Definição de módulo
+	var module = angular.module('Documentos',[]);
+
+	// Atricuição de controllers a módulo
+	module.controller('DocumentosController',DocumentosController);
+	module.controller('DocumentoController',DocumentoController);
+	
+	// Definição da função DocumentosController
+	function DocumentosController($scope){}
+
+	// Definição da função GrdsController
+	function DocumentoController($scope){}
 })()
 //# sourceMappingURL=scripts.js.map

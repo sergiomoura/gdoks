@@ -23,7 +23,9 @@ module.exports = function(grunt) {
 					'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
 					'node_modules/ng-tags-input/build/ng-tags-input.min.js',
 					'app/AreaDoCliente.js',
-					'app/modules/Home/HomeController.js'
+					'app/modules/Home/HomeController.js',
+					'app/modules/Grds/GrdsController.js',
+					'app/modules/Documentos/DocumentosController.js'
 				],
 				dest: 'bin/scripts.js'
 			},
