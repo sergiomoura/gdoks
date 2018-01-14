@@ -4438,7 +4438,7 @@
 					$key = str_replace('/', '_', $key);
 					$key = str_replace('=', '|', $key);
 
-					$url = $_SERVER['HTTP_ORIGIN'].'/ext/grds/'.$key;
+					$url = 'http://'.$_SERVER['HTTP_HOST'].'/ext/grds/'.$key;
 					$mail->msg = str_replace('[link]', '<a href="'.$url.'">', $mail->msg);
 					$mail->msg = str_replace('[/link]', '</a>', $mail->msg);
 					$content = new SendGrid\Content("text/html", ($mail->msg==''?'-':$mail->msg));
