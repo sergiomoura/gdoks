@@ -24,27 +24,27 @@
 				<md-icon class="material-icons step" aria-label="menu">list</md-icon>
 			</md-button> -->
 			<span flex></span>
-			<!--
+			
 			<md-menu ng-controller="OpcoesController">
 				<md-button ng-click="$mdMenu.open()" aria-label="Abre Menu de Oções" class="md-icon-button">
 					<md-icon class="material-icons step" aria-label="menu">more_vert</md-icon>
 				</md-button>
 				<md-menu-content width="4">
-					<md-menu-item>
+					<!-- <md-menu-item>
 						<md-button ng-click="onTrocarSenhaClick()">
 							<md-icon class="material-icons step" aria-label="Trocar Senha">lock_outline</md-icon>
 							Trocar Senha
 						</md-button>
-					</md-menu-item>
+					</md-menu-item> -->
 					<md-menu-item>
 						<md-button ng-click="logout()">
-							<md-icon class="material-icons step" aria-label="Sair do GDoks">exit_to_app</md-icon>
+							<md-icon class="material-icons step" aria-label="Sair">exit_to_app</md-icon>
 							Sair
 						</md-button>
 					</md-menu-item>
 				</md-menu-content>
 			</md-menu>
-		-->
+
 		</md-toolbar>
 		<div class="viewContainer">
 			<ng-view>

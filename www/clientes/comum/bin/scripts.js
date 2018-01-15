@@ -559,7 +559,8 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 			'ngMaterial',
 			'Home',
 			'Grds',
-			'Documentos'
+			'Documentos',
+			'Opcoes'
 		];
 	
 	// Definição  do módulo Area do Cliente
@@ -752,5 +753,26 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 		]
 	);
 })();;API_CLIENTE_ROOT = '../api/v1/';
-TOKEN_REFRESH_IN = 600000; // em microsegundos
+TOKEN_REFRESH_IN = 600000; // em microsegundos;
+(function(){
+	// Definição do módulo
+	var module = angular.module('Opcoes',[]);
+
+	// Atricbuição de controllers ao módulo
+	module.controller('OpcoesController',OpcoesController);
+
+	// Definição da função controller
+	function OpcoesController($scope,$cookies,$location){
+
+		// // Função que direciona para a página de trocar senha
+		// $scope.onTrocarSenhaClick  = function(){
+		// 	$location.url("/senha");
+		// }
+
+		// Função que sai
+		$scope.logout = function(){
+			$scope.die();
+		}
+	}
+})();
 //# sourceMappingURL=scripts.js.map

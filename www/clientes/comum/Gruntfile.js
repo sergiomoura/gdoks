@@ -27,7 +27,8 @@ module.exports = function(grunt) {
 					'app/modules/Grds/GrdsController.js',
 					'app/modules/Documentos/DocumentosController.js',
 					'app/services/Factory.js',
-					'app/services/Constants.js'
+					'app/services/Constants.js',
+					'app/modules/Opcoes/OpcoesController.js',
 				],
 				dest: 'bin/scripts.js'
 			},

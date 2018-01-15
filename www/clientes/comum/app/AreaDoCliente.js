@@ -8,7 +8,8 @@
 			'ngMaterial',
 			'Home',
 			'Grds',
-			'Documentos'
+			'Documentos',
+			'Opcoes'
 		];
 	
 	// Definição  do módulo Area do Cliente
