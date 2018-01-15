@@ -64,7 +64,7 @@
 					FROM gdoks_grds a
 					INNER JOIN gdoks_projetos b ON a.id_projeto = b.id
 					INNER JOIN gdoks_clientes c ON b.id_cliente = c.id
-					INNER JOIN gdoks_usuarios d ON a.idu_remetente = d.id
+					LEFT JOIN gdoks_usuarios d ON a.idu_remetente = d.id
 					WHERE a.id=?';
 			$rs = $db->query($sql,'i',$id)['0'];
 
