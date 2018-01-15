@@ -560,7 +560,8 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 			'Home',
 			'Grds',
 			'Documentos',
-			'Opcoes'
+			'Opcoes',
+			'Senha'
 		];
 	
 	// Definição  do módulo Area do Cliente
@@ -609,6 +610,13 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 				{
 					controller: 'HomeController',
 					templateUrl: '../comum/app/modules/Home/home.php'
+				}
+			)
+			.when(
+				'/senha',
+				{
+					controller: 'SenhaController',
+					templateUrl: '../comum/app/modules/Senha/senha.php'
 				}
 			)
 			.when(
@@ -721,16 +729,14 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 				}
 
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				// Faz requisição para carregar últimas grds
 				ClientesFactory.refreshToken = function(){
 					return $http.get(API_CLIENTE_ROOT+'refresh',buildHeaders());
 				}
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				// Faz requisição para carregar últimas grds
 				ClientesFactory.getUltimasGrds = function(){
 					return $http.get(API_CLIENTE_ROOT+'grds/ultimas',buildHeaders());
 				}
-
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 				ClientesFactory.downloadGrd = function(id_grd){
 					// Criando um formulário para enviar a requisição pelo arquivo
 					var form = document.createElement("form");
@@ -746,6 +752,10 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 
 					// removendo o form da dom
 					form.parentNode.removeChild(form);
+				}
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+				ClientesFactory.mudarSenha = function(novaSenha){
+					return $http.post(API_CLIENTE_ROOT+'mudarSenha',{'novaSenha':novaSenha},buildHeaders());
 				}
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 				return ClientesFactory;
@@ -764,15 +774,59 @@ TOKEN_REFRESH_IN = 600000; // em microsegundos;
 	// Definição da função controller
 	function OpcoesController($scope,$cookies,$location){
 
-		// // Função que direciona para a página de trocar senha
-		// $scope.onTrocarSenhaClick  = function(){
-		// 	$location.url("/senha");
-		// }
+		// Função que direciona para a página de trocar senha
+		$scope.onTrocarSenhaClick  = function(){
+			$location.url("/senha");
+		}
 
 		// Função que sai
 		$scope.logout = function(){
 			$scope.die();
 		}
 	}
-})();
+})();;(function(){
+	// Definição de módulo
+	var module = angular.module('Senha',[]);
+
+
+	// Atribuindo controller ao módulo
+	module.controller('SenhaController',SenhaController)
+
+
+	// Definindo a função controller
+	function SenhaController($scope,$mdToast,ClientesFactory,$location){
+		// Inicializando o objeto data;
+		$scope.senha1 = '';
+		$scope.senha2 = '';
+
+		$scope.mudarSenha = function(novaSenha){
+			ClientesFactory.mudarSenha(novaSenha)
+				.success(
+					function(response){
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Alterações realizadas com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+						$location.url('/home');
+					}
+				)
+				.error(
+					function(error){
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent(error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					}
+				);
+		}
+
+		$scope.cancel = function(){
+			$location.url('/home');
+		}
+	}
+})()
 //# sourceMappingURL=scripts.js.map

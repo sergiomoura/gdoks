@@ -115,6 +115,23 @@
 				});
 			# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+			# ROTAS PARA ALTERAÇÃO DE SENHA:::::::::::::::::::::::::::::
+				$app->post('/mudarSenha',function() use ($app,$db,$id_cliente){
+					$novaSenha = json_decode($app->request->getBody())->novaSenha;
+					try {
+						$sql = 'UPDATE gdoks_clientes SET senha=AES_ENCRYPT(?, UNHEX(SHA2(?,512))) WHERE id=?';
+						$db->query($sql,'ssi',AES_KEY,$novaSenha,$id_cliente);
+					} catch (Exception $e) {
+						http_response_code(401);
+						$response = new response(1,$e->getMessage());
+						$response->flush();
+						exit(1);
+					}
+					$response = new response(0,'ok');
+					$response->flush();
+				});
+			# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 			# ROTAS DE GRD::::::::::::::::::::::::::::::::::::::::::::::
 				# : : : : : : : : : : : : : : : : : : : : : : : : : : :
 				$app->get('/grds/ultimas',function() use ($app,$db,$id_cliente){

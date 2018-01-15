@@ -9,7 +9,8 @@
 			'Home',
 			'Grds',
 			'Documentos',
-			'Opcoes'
+			'Opcoes',
+			'Senha'
 		];
 	
 	// Definição  do módulo Area do Cliente
@@ -58,6 +59,13 @@
 				{
 					controller: 'HomeController',
 					templateUrl: '../comum/app/modules/Home/home.php'
+				}
+			)
+			.when(
+				'/senha',
+				{
+					controller: 'SenhaController',
+					templateUrl: '../comum/app/modules/Senha/senha.php'
 				}
 			)
 			.when(

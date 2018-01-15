@@ -9,10 +9,10 @@
 	// Definição da função controller
 	function OpcoesController($scope,$cookies,$location){
 
-		// // Função que direciona para a página de trocar senha
-		// $scope.onTrocarSenhaClick  = function(){
-		// 	$location.url("/senha");
-		// }
+		// Função que direciona para a página de trocar senha
+		$scope.onTrocarSenhaClick  = function(){
+			$location.url("/senha");
+		}
 
 		// Função que sai
 		$scope.logout = function(){

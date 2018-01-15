@@ -1,4 +1,25 @@
 @import 'includeColors';
 @import 'includeFonts';
+html,body{
+	height:100%;
+}
+.bloco_central_50{
+	width: 50%;
+	top: 50px;
+	left: 25%;
+	position: relative;
+	padding: 20px;
+	margin-bottom: 50px;
+}
+
+.bloco_central_80{
+	width: 80%;
+	top: 50px;
+	left: 10%;
+	position: relative;
+	margin-bottom: 50px;
+	padding-bottom: 15px;
+}
+
 @import 'containerAreaDoCliente';
 @import 'containerHome';

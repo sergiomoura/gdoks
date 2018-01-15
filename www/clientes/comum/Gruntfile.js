@@ -29,6 +29,7 @@ module.exports = function(grunt) {
 					'app/services/Factory.js',
 					'app/services/Constants.js',
 					'app/modules/Opcoes/OpcoesController.js',
+					'app/modules/Senha/SenhaController.js',
 				],
 				dest: 'bin/scripts.js'
 			},

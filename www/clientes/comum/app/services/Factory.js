@@ -15,16 +15,14 @@
 				}
 
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				// Faz requisição para carregar últimas grds
 				ClientesFactory.refreshToken = function(){
 					return $http.get(API_CLIENTE_ROOT+'refresh',buildHeaders());
 				}
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				// Faz requisição para carregar últimas grds
 				ClientesFactory.getUltimasGrds = function(){
 					return $http.get(API_CLIENTE_ROOT+'grds/ultimas',buildHeaders());
 				}
-
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 				ClientesFactory.downloadGrd = function(id_grd){
 					// Criando um formulário para enviar a requisição pelo arquivo
 					var form = document.createElement("form");
@@ -40,6 +38,10 @@
 
 					// removendo o form da dom
 					form.parentNode.removeChild(form);
+				}
+				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+				ClientesFactory.mudarSenha = function(novaSenha){
+					return $http.post(API_CLIENTE_ROOT+'mudarSenha',{'novaSenha':novaSenha},buildHeaders());
 				}
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 				return ClientesFactory;
