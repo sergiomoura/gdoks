@@ -24,7 +24,7 @@
 		// Page header
 		function Header(){
 		    // Logo
-		    $this->Image('../../client_data/'.$this->empresa.'/logo.jpg',10,10,45);
+		    $this->Image(CLIENT_DATA_PATH.$this->empresa.'/logo.jpg',10,10,45);
 
 		    // Título
 		    $this->SetFont('helvetica','B',16);

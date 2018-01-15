@@ -49,8 +49,8 @@
 			$cliente = (object)(($db->query($sql,'s',$token))[0]);
 			
 			// Mandando o cookie do token e do cliente
-			setcookie('token',$token);
-			setcookie('cliente',json_encode($cliente));
+			setcookie('token',$token,0,'/');
+			setcookie('cliente',json_encode($cliente),0,'/');
 
 			// Mandando o browser recarregar a página
 			header("Refresh:0");

@@ -24,7 +24,7 @@
 			ClientesFactory.refreshToken()
 			.success(
 				function(response){
-					$cookies.put('token',response.newToken);
+					$cookies.put('token',response.newToken,{path:'/'});
 				}
 			)
 			.error(
@@ -34,6 +34,14 @@
 					window.location="/";
 				}
 			);
+		}
+
+		$scope.die = function(){
+			// Se erro for de token expirado, limpa os cookies de cliente e token e redireciona para login
+			var empresa = $cookies.getObject('cliente').nome_empresa.toLowerCase();
+			$cookies.remove('cliente',{path:'/'});
+			$cookies.remove('token',{path:'/'});
+			window.location = '/clientes/'+empresa;
 		}
 
 		// Acionando timer que renova o token de tempo em tempo

@@ -28,8 +28,15 @@
 
 		// Função estática que retorna insância de Grd a partir de id e db
 		public static function CreateById(int $id, $codigo_empresa){
+			
+			// verificando se o arquivo de constantes foi incluido
+			$constantes_incluidas = in_array('constantes.php', array_map(function($f){return basename($f);}, get_included_files()));
+			if(!$constantes_incluidas){
+				include_once('constantes.php');
+			}
+
 			// Incluindo dbkey da empresa
-			include('../../client_data/'.$codigo_empresa.'/dbkey.php');
+			include(CLIENT_DATA_PATH.$codigo_empresa.'/dbkey.php');
 
 			// Estabelecendo conexão com banco e apagando dbkey
 			$db = new DB($dbkey);
@@ -174,6 +181,12 @@
 
 		// Função que retorna o objeto pdf da Grd
 		public function pdf($nome_do_emissor){
+			// verificando se o arquivo de constantes foi incluido
+			$constantes_incluidas = in_array('constantes.php', array_map(function($f){return basename($f);}, get_included_files()));
+			if(!$constantes_incluidas){
+				include_once('constantes.php');
+			}
+
 			// Levantando códigos EMI para compor o rodapé da GRD
 			$sql = 'SELECT simbolo,nome FROM gdoks_codigos_emi WHERE id_empresa=?';
 			$codigosEmi = array_map(function($a){return (object)($a);}, $this->db->query($sql,'i',$this->_id_empresa));
@@ -187,12 +200,13 @@
 			$codigo_empresa = $this->db->query($sql,'i',$this->_id_empresa)[0]['codigo'];
 
 			// Incluindo classe FPdf
-			include('../../includes/FPDF/fpdf.php');
-			include('../../includes/FPDF/xfpdf.php');
-			set_include_path('../../includes/FPDF/fonts/');
+			include('FPDF/fpdf.php');
+			include('FPDF/xfpdf.php');
+
+			set_include_path(get_include_path() . PATH_SEPARATOR . FPDF_FONT_PATH);
 
 			// Incluindo arquivo que seta a classe PDFGrd para a empresa
-			include('../../client_data/'.$codigo_empresa.'/grd.php');
+			include(CLIENT_DATA_PATH.$codigo_empresa.'/grd.php');
 
 			// Instanciation of inherited class
 			$pdf = new PDFGrd($codigo_empresa,$this,$nome_do_emissor,$codigosEmi,$tiposDeDocumento);

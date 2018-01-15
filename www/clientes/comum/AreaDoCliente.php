@@ -20,9 +20,9 @@
 	</head>
 	<body ng-controller="AreaDoClienteController" ng-cloak>
 		<md-toolbar layout="row" layout-align="start center" md-whiteframe="6dp" style="z-index: 100">
-			<md-button class="md-icon-button" aria-label="Settings" ng-click="toggleMenu()">
+<!-- 			<md-button class="md-icon-button" aria-label="Settings" ng-click="toggleMenu()">
 				<md-icon class="material-icons step" aria-label="menu">list</md-icon>
-			</md-button>
+			</md-button> -->
 			<span flex></span>
 			<!--
 			<md-menu ng-controller="OpcoesController">

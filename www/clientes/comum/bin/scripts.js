@@ -575,7 +575,7 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 			ClientesFactory.refreshToken()
 			.success(
 				function(response){
-					$cookies.put('token',response.newToken);
+					$cookies.put('token',response.newToken,{path:'/'});
 				}
 			)
 			.error(
@@ -585,6 +585,14 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 					window.location="/";
 				}
 			);
+		}
+
+		$scope.die = function(){
+			// Se erro for de token expirado, limpa os cookies de cliente e token e redireciona para login
+			var empresa = $cookies.getObject('cliente').nome_empresa.toLowerCase();
+			$cookies.remove('cliente',{path:'/'});
+			$cookies.remove('token',{path:'/'});
+			window.location = '/clientes/'+empresa;
 		}
 
 		// Acionando timer que renova o token de tempo em tempo
@@ -635,8 +643,39 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 	module.controller('HomeController',HomeController);
 	
 	// Definição da função controller
-	function HomeController($scope,ClientesFactory){
+	function HomeController($scope,$cookies,ClientesFactory){
 		
+		// Definindo as grds do scope
+		$scope.grds = [];
+
+		// Carregando as grds
+		ClientesFactory.getUltimasGrds()
+		.success(function(response){
+			for (var i = response.grds.length - 1; i >= 0; i--) {
+				response.grds[i].datahora_enviada = new Date(response.grds[i].datahora_enviada);
+				response.grds[i].datahora_registro = new Date(response.grds[i].datahora_registro);
+			}
+			$scope.grds = response.grds;
+		})
+		.error(function(error){
+			if(error.error == 100){
+				$scope.die();
+			} else {
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent(error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			}
+
+		});
+
+		// Definindo as funções do scope
+		$scope.downloadGrd = function(id){
+			ClientesFactory.downloadGrd(id);
+		}
 	}
 })();(function(){
 	// Definição de módulo
@@ -673,7 +712,7 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 		[
 			'$http','$cookies',
 			function($http,$cookies){
-				var factory = {};
+				var ClientesFactory = {};
 
 				// Função auxiliar que retorna headers baseada no cooke user = = = = = = = = = = = = = = = = = = = = = = = = =
 				var buildHeaders = function(){
@@ -682,16 +721,33 @@ v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",
 
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 				// Faz requisição para carregar últimas grds
-				factory.refreshToken = function(){
+				ClientesFactory.refreshToken = function(){
 					return $http.get(API_CLIENTE_ROOT+'refresh',buildHeaders());
 				}
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 				// Faz requisição para carregar últimas grds
-				factory.getUltimasGrds = function(){
+				ClientesFactory.getUltimasGrds = function(){
 					return $http.get(API_CLIENTE_ROOT+'grds/ultimas',buildHeaders());
 				}
+
+				ClientesFactory.downloadGrd = function(id_grd){
+					// Criando um formulário para enviar a requisição pelo arquivo
+					var form = document.createElement("form");
+					form.setAttribute('action',API_CLIENTE_ROOT+'grds/'+id_grd+'/download');
+					form.setAttribute('method','GET');
+					form.setAttribute('style','display:none');
+
+					// adicionando form a dom
+					document.body.appendChild(form);
+
+					// submetendo o form
+					form.submit();
+
+					// removendo o form da dom
+					form.parentNode.removeChild(form);
+				}
 				// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-				return factory;
+				return ClientesFactory;
 			}
 		]
 	);
