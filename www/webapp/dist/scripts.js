@@ -3022,107 +3022,6 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 			GDoksFactory.downloadGRD($scope.grd.id);
 		}
 
-		// $scope.openDialogDeEnviarEmail = function(evt){
-		// 	$mdDialog.show(
-		// 		{
-		// 			controller: enviarEmailDialogController,
-		// 			locals:{
-		// 				parentScope:$scope,
-		// 			},
-		// 			templateUrl: './app/modules/Grds/enviarEmail.dialog.tmpl.html',
-		// 			parent: angular.element(document.body),
-		// 			targetEvent: evt,
-		// 			clickOutsideToClose:false
-		// 		})
-		// 		.then(function(answer) {
-		// 		$scope.status = 'You said the information was "' + answer + '".';
-		// 		}, function() {
-		// 		$scope.status = 'You cancelled the dialog.';
-		// 		});
-		// }
-
-		// function enviarEmailDialogController($scope,parentScope,GDoksFactory){
-		// 	// Amarrando a grd deste scope com o parentScope
-		// 	$scope.grd = parentScope.grd;
-
-		// 	// Definindo mensagem
-		// 	$scope.mail = {
-		// 		destinatarios:[
-		// 			{
-		// 				nome:$scope.grd.cliente.contato_nome,
-		// 				email:$scope.grd.cliente.contato_email
-		// 			}
-		// 		],
-		// 		assunto:'',
-		// 		msg:''
-		// 	}
-
-		// 	// Definindo função que adiciona um destinatário
-		// 	$scope.addDestinatario = function(){
-		// 		$scope.mail.destinatarios.push({nome:'','email':''});
-		// 	}
-
-		// 	$scope.removeDestinatario = function(index){
-		// 		$scope.mail.destinatarios.splice(index,1);	
-		// 	}
-
-		// 	$scope.cancelar = function(){
-		// 		$mdDialog.hide();
-		// 	}
-
-		// 	$scope.enviar = function(){
-				
-		// 		// mostra carregando
-		// 		parentScope.root.carregando == true;
-
-		// 		GDoksFactory.mailGRD($scope.grd.id,$scope.mail)
-		// 		.success(function(response){
-		// 			// Esconde carregando
-		// 			parentScope.root.carregando = false;
-
-		// 			if(response.error == 0){
-		// 				// Alterando a datahora enviada da GRD
-		// 				$scope.grd.datahora_enviada = new Date(response.datahora_enviada)
-
-		// 				// Retornando Toast para o usuário
-		// 				$mdToast.show(
-		// 					$mdToast.simple()
-		// 					.textContent('GRD enviada com successo!')
-		// 					.position('bottom left')
-		// 					.hideDelay(5000)
-		// 				);
-		// 			} else {
-		// 					// Retornando Toast para o usuário
-		// 					$mdToast.show(
-		// 						$mdToast.simple()
-		// 						.textContent(response.msg)
-		// 						.position('bottom left')
-		// 						.hideDelay(5000)
-		// 					);
-		// 			}
-
-
-		// 			// Escondendo dialogo
-		// 			$mdDialog.hide();
-		// 		})
-		// 		.error(function(error){
-		// 			// Esconde carregando
-		// 			parentScope.root.carregando = false;
-
-		// 			// Retornando Toast para o usuário
-		// 			$mdToast.show(
-		// 				$mdToast.simple()
-		// 				.textContent('Falha no envio da GRD')
-		// 				.position('bottom left')
-		// 				.hideDelay(5000)
-		// 			);
-
-		// 			// imprimindo erro no console
-		// 			console.warn(error);
-		// 		});
-		// 	}
-		// }
-
 		$scope.confirmFtpUploadController = function(evt){
 			var confirm = $mdDialog.confirm()
 				.title('Enviar GRD via FTP')
@@ -3150,6 +3049,56 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 						$mdToast.show(
 							$mdToast.simple()
 							.textContent('GRD foi enviada com sucesso para o servidor do cliente.')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					})
+					.error(function(error){
+						// Esconde carregando
+						$scope.root.carregando = false;
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent(error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Imprimindo erro no console
+						console.warn(error);
+					})
+				}
+			);
+		}
+
+		$scope.confirmPublicarController = function(evt){
+			var confirm = $mdDialog.confirm()
+				.title('Publicar GRD na área do cliente')
+				.textContent('Tem certeza que deseja ublicar a GRD na área do cliente?')
+				.ariaLabel('Publicar GRD na área do cliente')
+				.targetEvent(evt)
+				.ok('Sim')
+				.cancel('Não');
+			$mdDialog.show(confirm)
+			.then(
+				function() {
+					// Mostra carregando
+					$scope.root.carregando = true;
+
+					// Fazendo requisição de envio
+					GDoksFactory.publicarGRD($scope.grd.id)
+					.success(function(response){
+						// Esconde carregando
+						$scope.root.carregando = false;
+
+						// Marcando a grd como enviada
+						$scope.grd.datahora_enviada = new Date(response.datahora_enviada);
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('GRD foi publicada com sucesso.')
 							.position('bottom left')
 							.hideDelay(5000)
 						);
@@ -6453,6 +6402,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.ftpGRD = function(id_grd){
 				return $http.post(API_ROOT+'/grds/'+id_grd+'/ftp',null,buildHeaders());	
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.publicarGRD = function(id_grd){
+				return $http.post(API_ROOT+'/grds/'+id_grd+'/publicar',null,buildHeaders());	
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.buscarDocumentos = function(query){

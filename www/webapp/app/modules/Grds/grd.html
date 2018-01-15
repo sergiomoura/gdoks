@@ -16,8 +16,14 @@
 				Baixar GRD em ZIP
 			</md-button>
 			<div class="sendActions">
+				<md-button class="md-fab md-mini" ng-click="confirmPublicarController($event)" ng-disabled="grd.docs.length == 0 || grd.docs==undefined">
+					<md-icon class="material-icons step" aria-label="Publicar na área do cliente">public</md-icon>
+					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+						Publicar na área do cliente
+					</md-tooltip>
+				</md-button>
 				<md-button class="md-fab md-mini" ng-click="openDialogDeEnviarLinkPorEmail($event)" ng-disabled="grd.docs.length == 0 || grd.docs==undefined">
-					<md-icon class="material-icons step" aria-label="Enviar link por email">link</md-icon>
+					<md-icon class="material-icons step" aria-label="Enviar link por email">email</md-icon>
 					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 						Enviar LINK por email
 					</md-tooltip>

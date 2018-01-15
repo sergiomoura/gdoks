@@ -4591,6 +4591,50 @@
 				}
 			});
 
+
+			$app->post('/grds/:id_grd/publicar',function($id_grd) use ($app,$db,$token){
+				// Lendo conteúdo da requisição
+				$id_grd = 1*$id_grd;
+
+				// verificando se a grd é da mesma empresa do usuário
+				$sql = 'SELECT a.id
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
+						INNER JOIN gdoks_grds c ON c.id_projeto=b.id
+						WHERE token=?
+						  AND validade_do_token>now()
+						  AND c.id=?';
+				$rs = $db->query($sql,'si',$token,$id_grd);
+				if(sizeof($rs) == 0){
+					// Retornando erro
+					http_response_code(401);
+					$response = new response(1,'GRD inexistente ou token expirado.');
+					$response->flush();
+					exit(1);
+				} else {
+
+					// Salvando o id do usuário
+					$id_usuario = $rs[0]['id'];
+
+					// Lendo empresa a partir de Authorization
+					$codigo_empresa = explode('-',getallheaders()['Authorization'])[0];
+
+					// Marcando GRD como enviada pelo usuário
+					try {
+						$sql = 'UPDATE gdoks_grds SET datahora_enviada=NOW(),idu_remetente=? WHERE id=?';
+						$db->query($sql,'ii',$id_usuario,$id_grd);
+					} catch (Exception $e) {
+						http_response_code(401);
+						$response = new response(1,$e->getMessage);
+						$response->flush();
+						exit(1);
+					}
+					$response = new response(0,'ok');
+					$response->datahora_enviada = date('Y-m-d H:i:s');
+					$response->flush();
+				}
+			});
+
 			$app->get('/grds/:id_grd/obs',function($id_grd) use ($app,$db,$token){
 				// Lendo dados nas variáveis
 				$id_grd = 1*$id_grd;
