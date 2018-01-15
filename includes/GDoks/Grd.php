@@ -19,6 +19,8 @@
 				$_id_empresa,
 				$_codigo_empresa,
 				$_documentos,
+				$_id_remetente,
+				$_nome_remetente,
 				$db;
 
 		// Construtor privado... sim.
@@ -56,10 +58,13 @@
 					       a.unique_link,
 					       c.id_empresa,
 					       a.datahora_enviada,
-					       a.datahora_registro
+					       a.datahora_registro,
+					       a.idu_remetente as id_remetente,
+					       d.nome as nome_remetente
 					FROM gdoks_grds a
-					INNER JOIN gdoks_projetos b ON a.id_projeto=b.id
+					INNER JOIN gdoks_projetos b ON a.id_projeto = b.id
 					INNER JOIN gdoks_clientes c ON b.id_cliente = c.id
+					INNER JOIN gdoks_usuarios d ON a.idu_remetente = d.id
 					WHERE a.id=?';
 			$rs = $db->query($sql,'i',$id)['0'];
 
@@ -81,6 +86,8 @@
 			$instance->_datahora_enviada		= $rs['datahora_enviada'];
 			$instance->_unique_link				= $rs['unique_link'];
 			$instance->_id_empresa 				= $rs['id_empresa'];
+			$instance->_id_remetente 			= $rs['id_remetente'];
+			$instance->_nome_remetente 			= $rs['nome_remetente'];
 			$instance->_codigo_empresa 			= $codigo_empresa;
 
 			// Levantando dados dos documentos desta grd

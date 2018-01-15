@@ -195,8 +195,9 @@
 					}
 
 					$grd = Grd::CreateById($id_grd, $empresa);
+					
 					try {
-						$grd->sendZip('???',true);
+						$grd->sendZip($grd->nome_remetente,true);
 					} catch (Exception $e) {
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
