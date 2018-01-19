@@ -1,4 +1,5 @@
 <md-content id="documento_container" class="container_80" layout="column" layout-padding>
+
 	<div layout="row" layout-align="space-between center">
 		<h3>{{documento.codigo}}</h3>
 		<div layout="row" layout-align="end center">
@@ -37,12 +38,15 @@
 	
 	<table class="header_table">
 		<tr>
-			<td colspan="4">
+			<td colspan="3">
 				<label>Título</label> {{documento.nome}}
+			</td>
+			<td rowspan="6">
+				<img src="img/status-{{documento.status}}.svg" alt="Status do documento: {{documento.status}}" width="120" height="195">
 			</td>
 		</tr>
 		<tr>
-			<td colspan="4">
+			<td colspan="3">
 				<label>Projeto</label> {{documento.nome_projeto}}
 			</td>
 		</tr>
@@ -54,40 +58,45 @@
 				<label>Sub-área</label> {{documento.cod_subarea}}
 			</td>
 			<td>
+				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
+			</td>
+			<td>
+				
+			</td>
+		</tr>
+		<tr>
+			<td>
 				<label>Disciplina</label> {{documento.nome_disciplina}}
 			</td>
 			<td>
 				<label>Subdisciplina</label> {{documento.nome_subdisciplina}}
 			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
-			</td>
-			<td colspan="2">
+			<td>
 				<label>Trabalho Estimado</label> {{documento.trabalho_estimado}} hh
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td>
 				<label>Última Atualização</label> {{documento.revisoes[0].ua|date:"dd/MM/yyyy à's' hh:mm"}}
 			</td>
-			<td colspan="2">
+			<td>
 				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
 			</td>
+			<td></td>
 		</tr>
 		<tr>
-			<td colspan="4">
+			<td colspan="3">
 				<label style="display: inline-block; width: 75px;">Progresso</label>
 				<progresso
 					progress="[documento.revisoes[0].progresso_validado,documento.revisoes[0].progresso_a_validar]"
 					colors="['#2196F3','#6DD900']"
 					fcolors="['#FFF','#FFF']"
-					width="800"
+					width="780"
 					height="20"></progresso>
 			</td>
 		</tr>
 	</table>
+
 	<md-tabs md-dynamic-height md-border-bottom md-whiteframe="1dp">
 		<md-tab label="Histórico">
 			<md-content layout-padding layout-wrap>

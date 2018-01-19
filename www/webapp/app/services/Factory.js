@@ -297,6 +297,16 @@ WebGDoks.factory('GDoksFactory',
 				form.setAttribute('method','GET');
 				form.setAttribute('style','display:none');
 
+				// Criando um input field do tipo hidden com um token
+				var token = Math.round(Math.pow(10,10)*Math.random());
+				var input = document.createElement("input");
+				input.setAttribute('name','downloadToken');
+				input.setAttribute('type','hidden');
+				input.setAttribute('value',token);
+
+				// Adicionando input no form
+				form.appendChild(input);
+
 				// adicionando form a dom
 				document.body.appendChild(form);
 
@@ -305,6 +315,8 @@ WebGDoks.factory('GDoksFactory',
 
 				// removendo o form da dom
 				form.parentNode.removeChild(form);
+
+				return token;
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarGrd = function(grd){

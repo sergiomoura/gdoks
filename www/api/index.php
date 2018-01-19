@@ -4023,6 +4023,9 @@
 
 					// Fechando o arquivo zip
 					$zip->close();
+
+					// setando o cookie de volta
+					setcookie('downloadCookie',$_GET['downloadToken'],0,'/');
 					
 					// Enviando para o cliente
 					header("Content-Type: application/zip");

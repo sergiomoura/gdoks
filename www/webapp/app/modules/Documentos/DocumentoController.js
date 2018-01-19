@@ -6,7 +6,7 @@
 	module.controller('DocumentoController', DocumentoController);
 
 	// Defininfo controller
-	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies,$mdDialog){
+	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies,$mdDialog,$interval){
 
 		// Pedindo para carregar usuários. Documento é carregado em seguida.
 		carregaUsuarios();
@@ -79,15 +79,23 @@
 		$scope.baixarParaRevisao = function(){
 			if($scope.documento.revisoes[0].pdas.length == 0) {
 				if($scope.documento.revisoes.length > 1){
-					GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[1].pdas[0].id);
+					var token = GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[1].pdas[0].id);
 				} else {
 				}
 			} else {
-				GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[0].pdas[0].id);	
+				var token = GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[0].pdas[0].id);	
 			}
 			
-			$scope.documento.idu_checkout = $cookies.getObject('user').id;
-			$scope.documento.datahora_do_checkout = new Date();
+			var promise = $interval(function(){
+				if($cookies.get('downloadCookie') == token){
+					$interval.cancel(promise);
+					$scope.documento.idu_checkout = $cookies.getObject('user').id;
+					$scope.documento.datahora_do_checkout = new Date();
+					$scope.documento.status = statusDeDocumento($scope.documento);
+					$cookies.remove('downloadCookie',{path:'/'});
+				}
+			},500);
+
 		}
 
 		$scope.baixar = function(){
@@ -154,7 +162,7 @@
 	            		// Retornando Toast para o usuário
 	            		$mdToast.show(
 	            			$mdToast.simple()
-	            			.textContent(error.data.msg)
+	            			.textContent('Falha ao enviar arquivo; '+ error.data.msg)
 	            			.position('bottom left')
 	            			.hideDelay(5000)
 	            		);
@@ -240,7 +248,6 @@
 					})
 				}
 			);
-
 		}
 
 		// FUNÇÕES AUXILIARES = = = = = = = = = = = = = = = = = = = =
@@ -261,6 +268,9 @@
 					parentScope.documento.revisoes[0].pdas[0].validador = parentScope.usuarios.find(function(u){return u.id == this},$cookies.getObject('user').id);
 					parentScope.documento.revisoes[0].pdas[0].idu_validador = parentScope.documento.revisoes[0].pdas[0].validador.id;
 					parentScope.documento.revisoes[0].pdas[0].datahora_validacao = new Date();
+
+					// Atualizando status do documento
+					parentScope.documento.status = statusDeDocumento(parentScope.documento);
 
 					// escondendo caixa de diálogo
 					$mdDialog.hide();
@@ -312,6 +322,9 @@
 						}
 					}
 				}
+
+				// Definindo o status do documento;
+				doc.status = statusDeDocumento(doc);
 
 				// Carrega documento no scope
 				$scope.documento = doc;
@@ -365,6 +378,47 @@
 					carregaDocumento($routeParams.id)
 				}
 			}
+		}
+
+		function statusDeDocumento(doc){
+			// Possíveis status de documento:
+			// - DOCSTATUS_INVALIDO = 0;
+			// - DOCSTATUS_VIRGEM = 1;
+			// - DOCSTATUS_CHECKOUT = 2;
+			// - DOCSTATUS_AGUARDANDO_VALIDACAO = 3;
+			// - DOCSTATUS_VALIDADO = 4;
+			// - DOCSTATUS_CONCLUIDO = 5;
+
+			// Definindo o valor padrão do estado
+			var status = DOCSTATUS_INVALIDO;
+
+			// Caso ele esteja com checkout
+			if(doc.idu_checkout == null && doc.revisoes[0].pdas == undefined ){
+				status = DOCSTATUS_VIRGEM;
+				return status;
+			}
+
+			if(doc.idu_checkout == null && doc.revisoes[0].progresso_a_validar>0){
+				status = DOCSTATUS_AGUARDANDO_VALIDACAO;
+				return status;
+			}
+
+			if(doc.idu_checkout == null && doc.revisoes[0].progresso_a_validar == 0 && doc.revisoes[0].progresso_validado == 100){
+				status = DOCSTATUS_CONCLUIDO;
+				return status;
+			}
+
+			if(doc.idu_checkout == null && doc.revisoes[0].progresso_a_validar == 0 && doc.revisoes[0].progresso_validado < 100){
+				status = DOCSTATUS_VALIDADO;
+				return status;
+			}
+
+			if(doc.idu_checkout != null && doc.revisoes.length > 0 && doc.revisoes[0].progresso_a_validar == 0){
+				status = DOCSTATUS_CHECKOUT;
+				return status;
+			}
+
+			return status;
 		}
 	}
 
