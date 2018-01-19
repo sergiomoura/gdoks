@@ -1307,7 +1307,7 @@
 				registrarAcao($db,$id_usuario,ACAO_ALTEROU_PROJETO,implode(',',(array)$projeto));
 			});
 
-			$app->post('/projetos',function() use ($app,$db,$token){
+			$app->post('/projetos',function() use ($app,$db,$token,$empresa){
 				
 				// Lendo dados
 				$projeto = json_decode($app->request->getBody());
@@ -1356,9 +1356,21 @@
 					die();
 				}
 
+				// Guardando o id do projeto criado
+				$id_projeto = $db->insert_id;
+
+				// Criando pasta de upload do projeto
+				$caminho = CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/';
+
+				// criando pasta caso ela não exista
+				if(@mkdir($caminho)){
+					// Alterando permissão da pasta recém criada para 777
+					chmod($caminho, 0777);
+				}
+				
 				// retornando
 				$response = new response(0,'Projeto cadastrado com sucesso.');
-				$response->newId = $db->insert_id;
+				$response->newId = $id_projeto;
 				$response->flush();
 
 				// registrando alteração
@@ -2720,9 +2732,6 @@
 						$filename = uniqid(true);
 						$caminho = CLIENT_DATA_PATH.$empresa.'/uploads/'.$id_projeto.'/';
 						$caminho_completo = $caminho.$filename;
-
-						// criando pasta caso ela não exista
-						@mkdir($caminho);
 
 						// salvando no fs
 						move_uploaded_file($_FILES['profiles']['tmp_name'][$i]['file'], $caminho_completo);
