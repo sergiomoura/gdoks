@@ -1,6 +1,11 @@
 
 - Fazer com que componentes da tela de atualizar documento se comportem com base no status do documento
-- Travar atualização de documento quando ele for validado em 100%
+- Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
+- Travar atualização da revisão quando esta estiver em uma grd enviada
+- Exibir GRDs das quais aquele documento participou e em que revisão.
+- Tratar caso de atualização de documento sem aumentar progresso.
+
+
 - Fazer visão geral no dashboard de projeto:
 	- Gráfico de barras com total de documentos com percentuais...
 	- Percentuais no prazo e percentuais em dia

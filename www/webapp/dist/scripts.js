@@ -1274,7 +1274,6 @@ function ConfiguracoesController($scope){};
 					$cookies.remove('downloadCookie',{path:'/'});
 				}
 			},500);
-
 		}
 
 		$scope.baixar = function(){
@@ -1286,6 +1285,7 @@ function ConfiguracoesController($scope){};
 			// Mostrando o carregando
 			$scope.root.carregando = true;
 
+			// Fazendo upload de arquivos se tiver algo para subir.
 			if ($scope.updateFiles && $scope.updateFiles.length) {
 				// Criando pacote a enviar
 				var packToSend = [];
@@ -1350,7 +1350,17 @@ function ConfiguracoesController($scope){};
 	            		console.warn(error);
 	            	}
 	            );
+	        } else {
+	        	$scope.root.carregando = false;
+	        	// Retornando Toast para o usuário
+	        	$mdToast.show(
+	        		$mdToast.simple()
+	        		.textContent('Erro desconhecido. Entrar em contato com o suporte técnico.')
+	        		.position('bottom left')
+	        		.hideDelay(5000)
+	        	);
 	        }
+	        
 		}
 
 		$scope.openValidarProgressoDialog  = function(evt){

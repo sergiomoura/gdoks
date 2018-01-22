@@ -2684,6 +2684,7 @@
 				// Verificando se quem fez o checkout foi o mesmo usuário que está tentando atualizar agora
 				$sql = "SELECT idu_checkout FROM gdoks_documentos WHERE id=?";
 				$rs = $db->query($sql,'i',$id_doc);
+
 				if($rs[0]['idu_checkout'] != $idu){
 					// Verificando se é o primeiro PDA do documento
 					$sql = 'SELECT count(*) AS nPdas

@@ -1,5 +1,4 @@
 <md-content id="documento_container" class="container_80" layout="column" layout-padding>
-
 	<div layout="row" layout-align="space-between center">
 		<h3>{{documento.codigo}}</h3>
 		<div layout="row" layout-align="end center">
@@ -7,13 +6,15 @@
 				class="md-raised md-primary"
 				ng-click="avancarRevisao($event)"
 				aria-label="Avançar Revisão">
-					<md-icon class="material-icons step" aria-label="Avançar revisão">skip_next</md-icon>Avançar Revisão
+					<md-icon
+						class="material-icons step"
+						aria-label="Avançar revisão">skip_next</md-icon>Avançar Revisão
 			</md-button>
 
 			<md-button
 				class="md-raised md-primary"
 				ng-click="baixarParaRevisao()"
-				ng-disabled="!(documento.ehEspecialista && documento.idu_checkout==null && documento.revisoes[0].pdas!=undefined && documento.revisoes[0].progresso_a_validar==0)"
+				ng-disabled="!(documento.ehEspecialista && documento.status=='validado')"
 				aria-label="Baixar Para Revisão">
 					<md-icon class="material-icons step" aria-label="Baixar para revisão">archive</md-icon>Baixar para Revisão
 			</md-button>
@@ -29,7 +30,7 @@
 			<md-button
 				class="md-raised md-primary"
 				ng-click="openValidarProgressoDialog($event)"
-				ng-disabled="!(documento.revisoes[0].progresso_a_validar>0 && documento.ehValidador)"
+				ng-disabled="!(documento.status == 'paravalidacao' && documento.ehValidador)"
 				aria-label="Validar Progresso">
 					<md-icon class="material-icons step" aria-label="Validar Progresso">done</md-icon>Validar Progresso
 			</md-button>
@@ -171,7 +172,7 @@
 			</md-content>
 		</md-tab>
 
-		<md-tab label="Atualizar Revisão" ng-disabled="documento.idu_checkout!=idu && documento.revisoes[0].pdas!=undefined">
+		<md-tab label="Atualizar Revisão" ng-disabled="!(documento.status == 'virgem' || documento.status == 'checkout')">
 			<md-content class="md-padding" layout="column">
 				<form name="form_atualizarRevisao">
 					<h3>Atualizar Revisão</h3>
