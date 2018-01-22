@@ -1401,8 +1401,7 @@ function ConfiguracoesController($scope){};
 								ua:null,
 								serial:response.newSerial,
 								progresso_a_validar: 0,
-								progresso_validado:0,
-								pdas:[]
+								progresso_validado:0
 							};
 							$scope.documento.revisoes.unshift(rev);
 
@@ -1585,7 +1584,7 @@ function ConfiguracoesController($scope){};
 			var status = DOCSTATUS_INVALIDO;
 
 			// Caso ele esteja com checkout
-			if(doc.idu_checkout == null && doc.revisoes[0].pdas == undefined ){
+			if(doc.idu_checkout == null && (doc.revisoes[0].pdas == undefined || doc.revisoes[0].pdas.length ==0)){
 				status = DOCSTATUS_VIRGEM;
 				return status;
 			}
