@@ -150,7 +150,45 @@
 					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
 			</md-button>
 		</div>
-					
+		
+		<table class="documentos" ng-if="documentos.length>0">
+			<thead>
+				<tr>
+					<td>Documento</td>
+					<td>Revisão</td>
+					<td>Disciplina</td>
+					<td>Área</td>
+					<td>Data Limite</td>
+					<td>Progresso</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="doc in documentos" ng-click="goToDoc(doc.id)">
+					<td>
+						{{doc.codigo}}
+						<span>{{doc.nome}}</span>
+					</td>
+					<td>Rev {{doc.rev_serial}}</td>
+					<td>
+						{{doc.sigla_disciplina}}
+						<md-tooltip md-visible="false" md-delay="400" md-direction="bottom" md-autohide="true">
+							{{doc.nome_subdisciplina}}
+						</md-tooltip>
+					</td>
+					<td>
+						{{doc.cod_area}}
+						<span>{{doc.cod_subarea}}</span>
+					</td>
+					<td>
+						{{doc.data_limite|date:"dd/MM/yyyy"}}
+					</td>
+					<td>
+						<progresso progress="[doc.progresso]" colors="['#2196F3']" fcolors="['#FFF']" width="100" height="20"></progresso>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
 		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos track by doc.id" ng-click="onOpenClick(doc.id)">
 			<div layout="row">
 				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.codigo}}</div>
