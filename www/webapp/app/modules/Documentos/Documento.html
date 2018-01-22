@@ -42,7 +42,7 @@
 			<td colspan="3">
 				<label>Título</label> {{documento.nome}}
 			</td>
-			<td rowspan="6">
+			<td rowspan="7">
 				<img src="img/status-{{documento.status}}.svg" alt="Status do documento: {{documento.status}}" width="120" height="195">
 			</td>
 		</tr>
@@ -84,6 +84,13 @@
 				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
 			</td>
 			<td></td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<label>GRDs contendo este documento</label>
+				<span ng-if="documento.grds.length==0">Nenhuma</span>
+				<span ng-repeat="grd in documento.grds"><a href="#/grds/{{grd.id}}">{{grd.codigo}} (rev {{grd.serial_rev}})</a></span>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="3">

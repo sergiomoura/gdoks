@@ -2651,6 +2651,22 @@
 					// Associando revisoes a documento
 					$doc->revisoes = $revisoes;
 
+					// Levantando as grds nas quais o documento estava presente e com que revisão ele estava presente
+					$sql = 'SELECT c.id,
+							       c.codigo,
+							       a.id AS id_rev,
+       								a.serial AS serial_rev
+							FROM gdoks_revisoes a
+							INNER JOIN gdoks_grds_x_revisoes b ON b.id_revisao = a.id
+							INNER JOIN gdoks_grds c ON c.id = b.id_grd
+							WHERE a.id_documento=?
+							ORDER BY c.id DESC';
+					$grds = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_doc));
+
+					// Associando GRDs nas quais este documento consta
+					$doc->grds = $grds;
+
+					// Enviando resposta ao usuário
 					$response = new response(0,'ok');
 					$response->documento = $doc;
 					$response->flush();

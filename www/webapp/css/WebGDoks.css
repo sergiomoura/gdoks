@@ -316,6 +316,13 @@
       font-weight: bold; }
     #documento_container .header_table tr td label:after {
       content: ": "; }
+  #documento_container .header_table span a {
+    display: inline-block;
+    padding: 2px 5px;
+    color: #2196F3; }
+    #documento_container .header_table span a:hover {
+      background-color: #e3f2fd;
+      color: #2196F3; }
 #documento_container .files_table {
   font-size: 14px;
   width: 100%;
