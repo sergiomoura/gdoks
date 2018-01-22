@@ -150,57 +150,44 @@
 					<md-icon class="material-icons step" aria-label="">skip_next</md-icon>
 			</md-button>
 		</div>
-					
-		<div class="md-whiteframe-2dp docCard" layout="column" ng-repeat="doc in documentos track by doc.id" ng-click="onOpenClick(doc.id)">
-			<div layout="row">
-				<div class="titulo" flex md-colors="{color:'primary'}">{{doc.codigo}}</div>
-			</div>
-			<table class="info">
-				<tbody>
-					<tr>
-						<td colspan="4">Nome: {{doc.nome}}</td>
-					</tr>
-					<tr>
-						<td colspan="2">Projeto: {{doc.projeto_nome}}</td>
-						<td colspan="2">Cliente: {{doc.cliente_nome}}</td>
-					</tr>
-					<tr>
-						<td colspan="1">Área: {{doc.area_nome}}</td>
-						<td colspan="1" ng-if="doc.subarea_nome!=null">Sub-área: {{doc.subarea_nome}}</td>
-						<td colspan="1" ng-if="doc.subarea_nome==null"></td>
-						<td colspan="1">Disciplina: {{doc.disciplina_nome}}</td>
-						<td colspan="1">Subdisciplina: {{doc.subdisciplina_nome}}</td>
-					</tr>
-					<tr>
-						
-						<td>Data Limite: {{doc.data_limite==null?"Não há":(doc.data_limite|date:'dd/MM/yyyy')}}</td>
-						<td>{{doc.data_limite|daysFromNow}}</td>
-						<td>Revisão: {{doc.revisao_serial==null?0:doc.revisao_serial}}</td>
-						<td><span md-colors={color:'orange-800'}>{{(doc.data_limite < agora && doc.data_limite !=null) ? 'Atrasado' : ''}}</span></td>
-					</tr>
-
-				</tbody>
-			</table>
-			<div>
-				<div class="progresso">
-					<span class="validado">{{doc.progresso_validado}}%</span>
-					<span class="aValidar" ng-if="doc.progresso_a_validar>0">{{doc.progresso_a_validar}}%</span>
-				</div>
-				<div class="hbar">
-					<div ng-if="doc.progresso_validado>0"
-						class="prgValidado"
-						style="width: calc({{doc.progresso_validado}}% - 2px)">
-						{{doc.progresso_validado}}%
-					</div
-					><div ng-if="doc.progresso_a_validar>0"
-						class="prgAValidar"
-						style="width: calc({{doc.progresso_a_validar}}% - 2px)">
-						{{doc.progresso_a_validar}}%
-					</div>
-				</div>
-			</div>
-			<div class="ua">{{doc.ua==null ? 'Documento nunca foi atualizado.' : (doc.ua|date:"Últi'ma' Atu'al'iz'a'ção: dd/MM/yyyy à's' HH:mm:ss")}}</div>
-		</div>
+		
+		<table class="documentos" ng-if="documentos.length>0">
+			<thead>
+				<tr>
+					<td>Documento</td>
+					<td>Revisão</td>
+					<td>Disciplina</td>
+					<td>Área</td>
+					<td>Data Limite</td>
+					<td>Progresso</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="doc in documentos track by doc.id" ng-click="onOpenClick(doc.id)">
+					<td>
+						{{doc.codigo}}
+						<span>{{doc.nome}}</span>
+					</td>
+					<td>Rev {{doc.serial}}</td>
+					<td>
+						{{doc.disciplina_nome}}
+						<md-tooltip md-visible="false" md-delay="400" md-direction="bottom" md-autohide="true">
+							{{doc.subdisciplina_nome}}
+						</md-tooltip>
+					</td>
+					<td>
+						{{doc.area_codigo}}
+						<span>{{doc.subarea_codigo}}</span>
+					</td>
+					<td>
+						{{doc.data_limite|date:"dd/MM/yyyy"}}
+					</td>
+					<td>
+						<progresso progress="[doc.progresso_validado,doc.progresso_a_validar]" colors="['#2196F3','#6DD900']" fcolors="['#FFF','#FFF']" width="100" height="20"></progresso>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
 		<div class="paginacao" layout="row" flex="none" ng-if="totPaginas>1">
 			<md-button

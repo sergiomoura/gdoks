@@ -9,7 +9,6 @@
 	- Percentuais no prazo e percentuais em dia
 	- Dias restante para o final do prazo do projeto
 - Por gráficos em barra no progresso do documento (dashboard projeto)
-- Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto
 - Fazer com que não apareça por padrão projetos inativos
 
 - Fazer com que projetos inativos
@@ -80,6 +79,7 @@ BUGS Avulsos:
 Archive:
 	✔ Exibir GRDs das quais aquele documento participou e em que revisão. @done (18-01-22 14:33)
 	✔ Fazer com que componentes da tela de atualizar documento se comportem com base no status do documento @done (18-01-22 12:28)
+	✔ Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto @done (18-01-22 15:17)
 	✔ Calcular e definir o status do documento. @done (18-01-19 16:07)
 	✔ Quando criar uma pasta de upload alterar a permissão dela para 777 @done (18-01-19 16:06)
 	✔ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes. @done (18-01-19 08:10) @project(Bloqueio de Telas)
