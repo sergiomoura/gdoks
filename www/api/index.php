@@ -2681,27 +2681,31 @@
 					$id_empresa = 	$rs[0]['id_empresa'];
 				}
 				
-				// Verificando se quem fez o checkout foi o mesmo usuário que está tentando atualizar agora
-				$sql = "SELECT idu_checkout FROM gdoks_documentos WHERE id=?";
-				$rs = $db->query($sql,'i',$id_doc);
+				// Verificando se o documento pode ser atualiado pelo usuário atual.
+				$sql = "SELECT a.id,
+						       a.codigo,
+						       a.idu_checkout,
+						       b.id as id_revisao,
+						       count(c.id) AS nAtualizacoes
+						FROM gdoks_documentos a
+						INNER JOIN gdoks_revisoes b ON a.id=b.id_documento
+						LEFT JOIN gdoks_pdas c ON b.id = c.id_revisao
+						WHERE a.id=?
+						GROUP BY a.id,
+						         a.codigo,
+						         b.id,
+						         c.id
+						ORDER BY b.id
+						DESC LIMIT 0,1";
+				$docinfo = (object)(($db->query($sql,'i',$id_doc))[0]);
 
-				if($rs[0]['idu_checkout'] != $idu){
-					// Verificando se é o primeiro PDA do documento
-					$sql = 'SELECT count(*) AS nPdas
-							FROM gdoks_pdas a
-							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
-							WHERE id_documento=?';
-					$rs = $db->query($sql,'i',$id_doc);
-
-					if($rs[0]['nPdas'] != 0){
-						// Não é o primeiro pda e usuário não fez checkout do último pda
-						http_response_code(401);
-						$response = new response(1,'Usuário não baixou arquivo para revisão.');
-						$response->flush();
-						die();
-					}
+				if($docinfo->idu_checkout!=$idu && $docinfo->nAtualizacoes != 0) {
+					http_response_code(401);
+					$response = new response(1,'Usuário não baixou arquivo para revisão.');
+					$response->flush();
+					exit(1);
 				}
-
+				
 				// Determinando a revisão a ser atualizada (última), progresso validado e id do projeto
 				$sql = 'SELECT
 							a.id,

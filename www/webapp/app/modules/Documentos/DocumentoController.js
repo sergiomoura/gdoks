@@ -227,6 +227,9 @@
 							};
 							$scope.documento.revisoes.unshift(rev);
 
+							// recalculando o status do documento
+							$scope.documento.status = statusDeDocumento($scope.documento);
+
 							$mdToast.show(
 								// Retornando toast para usuário
 								$mdToast.simple()
