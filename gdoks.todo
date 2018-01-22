@@ -1,4 +1,3 @@
-- Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto
 
 - Fazer com que componentes da tela de atualizar documento se comportem com base no status do documento
 - Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
@@ -80,6 +79,7 @@ BUGS Avulsos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto @done (18-01-22 15:17)
 	✔ Calcular e definir o status do documento. @done (18-01-19 16:07)
 	✔ Quando criar uma pasta de upload alterar a permissão dela para 777 @done (18-01-19 16:06)
 	✔ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes. @done (18-01-19 08:10) @project(Bloqueio de Telas)
