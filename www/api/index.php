@@ -2159,8 +2159,30 @@
 							$a = (object)$a;
 							$a->dependencias = Array();
 							$a->hhs = Array();
+							$a->revisoes = Array();
 							return $a;
 						}, $db->query($sql,'i',$id_projeto));
+
+					// Carregando revisões da base
+					$sql = 'SELECT
+						a.id,a.serial, a.id_documento
+					FROM 
+						gdoks_revisoes a
+					    inner join gdoks_documentos b on a.id_documento=b.id
+					    inner join gdoks_subareas c on b.id_subarea=c.id
+					    inner join gdoks_areas d on c.id_area=d.id
+					WHERE d.id_projeto=?
+					ORDER BY id_documento';
+					$revisoes = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
+
+					// Associonado revisões aos documentos
+					foreach ($revisoes as $rev) {
+						$pos = array_search($rev->id_documento, array_column($documentos, 'id'));
+						$aux = new stdClass();
+						$aux->id = $rev->id;
+						$aux->serial = $rev->serial;
+						array_push($documentos[$pos]->revisoes, $aux);
+					}					
 
 					// Carregando dependencias da base
 					$sql = 'SELECT
@@ -4073,6 +4095,93 @@
 			});
 		// FIM DE ROTAS DE PDAS
 
+		// ROTAS DE REVISOES
+			$app->get('/revisoes/:id',function($id) use ($app,$db,$token,$empresa){
+
+				// Lendo o token
+				$id_revisao = 1*$id;
+
+				// verificando se o token é valido e lendo o idu do usuário
+				$sql = 'SELECT
+							id
+						FROM gdoks_usuarios
+						WHERE token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+
+				// Se recset voltar vazio, manda erro para o cliente. O token dele deve ter expirado
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Token expirado');
+					$response->flush();
+					exit(1);
+				} else {
+					// Levantando todos os arquivos do pda mais recente da revisão
+					$sql = 'SELECT caminho,
+							       nome_cliente
+							FROM
+							  ( SELECT id
+							   FROM gdoks_pdas a
+							   WHERE a.id_revisao=?
+							   ORDER BY id DESC LIMIT 0,1) X
+							INNER JOIN gdoks_pdas_x_arquivos Y ON X.id=Y.id_pda
+							INNER JOIN gdoks_arquivos Z ON Y.id_arquivo=Z.id';
+					$rs = $db->query($sql,'i',$id_revisao);
+					$caminhos = $rs;
+					
+					// Definindo nome do arquivo zip
+					$filename = TMP_PATH.'revisao_'.$id_revisao.'.zip';
+
+					// Criando arquivo zip
+					$zip = new ZipArchive();
+					$abriu_ok = $zip->open($filename,ZipArchive::CREATE);
+					if($abriu_ok !== true){
+						echo('Erro ao criar arquivo zip: '.$abriu_ok);
+						die();
+					}
+					
+
+					// Adicionando arquivos ao zip
+					$arquivosOk = true;
+					$inexistentes = Array();
+					foreach ($caminhos as $c) {
+						if(!file_exists($c['caminho'])){
+							array_push($inexistentes, $c['caminho']);
+						}
+					}
+					$arquivosOk = (sizeof($inexistentes) == 0);
+
+					if(!$arquivosOk){
+						echo("Um ou mais arquivos inexistente.");
+						die();
+					} else {
+						$arquivosOk = true;
+						foreach ($caminhos as $c) {
+							$arquivosOk = $arquivosOk && $zip->addFile($c['caminho'],trim($c['nome_cliente']));
+						}
+						if(!$arquivosOk){
+							die("Um ou mais arquivos não adicionados ao zip.");
+						}
+					}
+
+					// Fechando o arquivo zip
+					$fechou_ok = $zip->close();
+					if($fechou_ok !== true){
+						echo('Erro ao fechar arquivo zip: '.$fechou_ok);
+						die();
+					}
+
+					// enviando para o cliente
+					header("Content-Type: application/zip");
+					header('Content-Disposition: attachment; filename=revisao_'.$id_revisao.'.zip');
+					header("Content-Length: " . filesize(realpath($filename))); 
+					header("Content-Transfer-Encoding: binary");
+					readfile($filename);
+					unlink($filename);
+					die();
+				}
+			});
+		// FIM DE ROTAS DE PDAS
+
 		// ROTAS DE GRDS
 			$app->post('/grds',function() use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
@@ -4244,21 +4353,21 @@
 						$grd = (object)$rs[0];
 
 						// levantando as revisões que já estão anexadas a esta grd
-						$sql = 'SELECT id_revisao,
-								       id_codEMI,
-								       id_tipo,
-								       nFolhas,
-								       nVias
-								FROM gdoks_grds_x_revisoes
+						$sql = 'SELECT a.id_revisao,
+									   a.id_codEMI,
+									   a.id_tipo,
+									   a.nFolhas,
+									   a.nVias,
+								       b.id_documento,
+       								   b.serial as serial_revisao
+								FROM
+									gdoks_grds_x_revisoes a
+								    INNER JOIN gdoks_revisoes b on b.id=a.id_revisao
 								WHERE id_grd=?';
-						$rs = $db->query($sql,'i',$grd->id);
 						
 						// Atribuindo revisões a grd
-						$grd->docs = Array();
-						foreach ($rs as $rev) {
-							array_push($grd->docs, $rev);
-						}
-
+						$grd->docs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$grd->id));
+						
 						// Enviando resposta para cliente
 						$response = new response(0,'ok');
 						$response->grd = $grd;

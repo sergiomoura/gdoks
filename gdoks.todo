@@ -1,4 +1,3 @@
-- BUGFIX - mOSTRAR O DOCUMENTO QUE CONSTA NA grd NA REVISÃO NA QUAL ELE FOI INCLUÍDO NA grd E NÃO NA REVISÃO MAIS ATUAL
 - Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
 - Travar atualização da revisão quando esta estiver em uma grd enviada
 - Tratar caso de atualização de documento sem aumentar progresso.
@@ -77,9 +76,10 @@ BUGS Avulsos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ BUGFIX - mOSTRAR O DOCUMENTO QUE CONSTA NA grd NA REVISÃO NA QUAL ELE FOI INCLUÍDO NA grd E NÃO NA REVISÃO MAIS ATUAL @done (18-01-23 09:49)
+	✔ Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto @done (18-01-22 15:17)
 	✔ Exibir GRDs das quais aquele documento participou e em que revisão. @done (18-01-22 14:33)
 	✔ Fazer com que componentes da tela de atualizar documento se comportem com base no status do documento @done (18-01-22 12:28)
-	✔ Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto @done (18-01-22 15:17)
 	✔ Calcular e definir o status do documento. @done (18-01-19 16:07)
 	✔ Quando criar uma pasta de upload alterar a permissão dela para 777 @done (18-01-19 16:06)
 	✔ Arquivo zip baixado não pode ser criado na raiz da pasta de uploads. A pasta é compartilhada por mais clientes. @done (18-01-19 08:10) @project(Bloqueio de Telas)

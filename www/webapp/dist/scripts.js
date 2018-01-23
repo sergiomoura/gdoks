@@ -2678,6 +2678,11 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 			GDoksFactory.baixarPDA(id_pda);
 		}
 
+		// Baixa último pda de uma revisão
+		$scope.baixarRevisaoAtualizada = function(id_revisao){
+			GDoksFactory.baixarRevisaoAtualizada(id_revisao);
+		}
+
 		// Função que abre diálogo para alterar observações de uma grd
 		$scope.openObservacaoDeGRD = function(evt,obs){
 			if(obs==undefined){
@@ -3439,35 +3444,47 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 			function loadDocumentosDeProjeto(id_projeto){
 				GDoksFactory.getDocumentosDoProjeto(id_projeto)
 				.success(function(response){
+					
+					// Declarando variáveis locais
 					var documentos = response.documentos;
-
+					var doc;
+					
 					// Parsing documentos
 					for (var i = documentos.length - 1; i >= 0; i--) {
+
+						// Lendo o documento da vez para a variável doc
+						doc = documentos[i];
+
 						//verificando se documento está adicionado a grd
 						if($scope.grd.docs != undefined){
-							var grdDoc = $scope.grd.docs.find(function(a){return a.id_revisao==this},documentos[i].rev_id);
+
+							// Buscando o documento na GRD
+							var grdDoc = $scope.grd.docs.find(function(a){return a.id_documento==this},doc.id);
+
 							if(grdDoc == undefined){
 								// Documento não foi adicionado a grd. Mantendo valores padrão
-								documentos[i].added = false;
-								documentos[i].nVias = 1;
-								documentos[i].nFolhas = 1;
-								documentos[i].tipo = $scope.tipoDeDocumentoPadrao;
-								documentos[i].codEMI = $scope.codigoEmiPadrao;
+								doc.added = false;
+								doc.nVias = 1;
+								doc.nFolhas = 1;
+								doc.tipo = $scope.tipoDeDocumentoPadrao;
+								doc.codEMI = $scope.codigoEmiPadrao;
 							} else {
 								// Documento já foi adicionado a grd. Carregando os valores dele
-								documentos[i].added = true;
-								documentos[i].nVias = grdDoc.nVias;
-								documentos[i].nFolhas = grdDoc.nFolhas;
-								documentos[i].tipo = $scope.tiposDeDocumento.find(function(a){return a.id == this},grdDoc.id_tipo);
-								documentos[i].codEMI = $scope.codigosEmi.find(function(a){return a.id == this},grdDoc.id_codEMI);
+								doc.added = true;
+								doc.rev_id = grdDoc.id_revisao;
+								doc.rev_serial = grdDoc.serial_revisao;
+								doc.nVias = grdDoc.nVias;
+								doc.nFolhas = grdDoc.nFolhas;
+								doc.tipo = $scope.tiposDeDocumento.find(function(a){return a.id == this},grdDoc.id_tipo);
+								doc.codEMI = $scope.codigosEmi.find(function(a){return a.id == this},grdDoc.id_codEMI);
 							}
 						} else {
-							// Documento não foi adicionado a grd. Mantendo valores padrão
-							documentos[i].added = false;
-							documentos[i].nVias = 1;
-							documentos[i].nFolhas = 1;
-							documentos[i].tipo = $scope.tipoDeDocumentoPadrao;
-							documentos[i].codEMI = $scope.codigoEmiPadrao;
+							// Nenhum documento não foi adicionado a grd. Mantendo valores padrão
+							doc.added = false;
+							doc.nVias = 1;
+							doc.nFolhas = 1;
+							doc.tipo = $scope.tipoDeDocumentoPadrao;
+							doc.codEMI = $scope.codigoEmiPadrao;
 						}
 					}
 					$scope.documentos = documentos;
@@ -6376,6 +6393,23 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 				form.parentNode.removeChild(form);
 
 				return token;
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.baixarRevisaoAtualizada = function(id_revisao){
+				// Criando um formulário para enviar a requisição pelo arquivo
+				var form = document.createElement("form");
+				form.setAttribute('action',API_ROOT+'/revisoes/'+id_revisao);
+				form.setAttribute('method','GET');
+				form.setAttribute('style','display:none');
+
+				// adicionando form a dom
+				document.body.appendChild(form);
+
+				// submetendo o form
+				form.submit();
+
+				// removendo o form da dom
+				form.parentNode.removeChild(form);
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.adicionarGrd = function(grd){

@@ -80,10 +80,9 @@
 							<input type="text" ng-model="grd.obs">
 						</md-input-container>
 					</div>
-					
 					<div class="documentos" layout="column" ng-if="grd.projeto!=undefined">
 						<div layout="row" layout-align="start center" class="controles_documentos">
-							<md-button class="md-icon-button md-mini" ng-click="selecionarTodos()">
+							<md-button class="md-icon-button md-mini" ng-click="selecionarTodos()" ng-disabled="grd.datahora_enviada!=null">
 								<md-icon class="material-icons step" aria-label="description">done_all</md-icon>
 								<md-tooltip md-direction="bottom">Selecionar Todos</md-tooltip>
 							</md-button>
@@ -107,6 +106,7 @@
 									{{grd.datahora_enviada!=null?'Esta GRD foi já enviada para o cliente. Ela não pode mais ser alterada.':'Salvar GRD'}}
 							</md-button>
 						</div>
+
 						<div class="doc" layout="row" layout-align="start center" ng-repeat="doc in documentos|filter:qEsq|orderBy:'-progresso'" ng-class="{selecionado_dir:doc.chk_dir}">
 							<div flex>
 								<md-checkbox
@@ -114,6 +114,7 @@
 									ng-disabled="!(doc.progresso==100 && grd.datahora_enviada==null)"
 									ng-click="grd.alterada=true"
 									class="md-primary doc-checkbox"
+									ng-false-value="5"
 									flex aria-label="{{doc.nome}}"><span>{{doc.codigo}}</span><span>{{doc.nome}}</span>
 								</md-checkbox>
 							</div>
@@ -160,11 +161,11 @@
 								<md-button
 									class="md-icon-button"
 									aria-label="Download"
-									ng-click="baixarPda(doc.ultimo_pda)">
+									ng-click="baixarRevisaoAtualizada(doc.rev_id)">
 									<md-icon
 										class="material-icons step"
 										aria-label="Download">file_download</md-icon>
-										<md-tooltip md-direction="bottom">Baixar Documento</md-tooltip>
+										<md-tooltip md-direction="bottom">Baixar Revisão Atualizada</md-tooltip>
 								</md-button>
 							</span>
 						</div>
