@@ -1,23 +1,22 @@
-- Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
-- Travar atualização da revisão quando esta estiver em uma grd enviada
-- Tratar caso de atualização de documento sem aumentar progresso.
 
-
-- Fazer visão geral no dashboard de projeto:
-	- Gráfico de barras com total de documentos com percentuais...
-	- Percentuais no prazo e percentuais em dia
-	- Dias restante para o final do prazo do projeto
-- Por gráficos em barra no progresso do documento (dashboard projeto)
 - Fazer com que não apareça por padrão projetos inativos
-
 - Fazer com que projetos inativos
 	- Não altera documento
 	- não emite grd
 	- aparece só quando liberada a visualização de projetos inativos
 
+- Fazer visão geral no dashboard de projeto:
+	- Gráfico de barras com total de documentos com percentuais...
+	- Percentuais no prazo e percentuais em dia
+	- Dias restante para o final do prazo do projeto
+
+- Travar atualização da revisão quando esta estiver em uma grd enviada
+- Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
+- Tratar caso de atualização de documento sem aumentar progresso.
+
 
 - Criar sequencial de revisão em paralelo, que pode ser alterado manualmente.
-☐	Exibir os últimos projetos abertos no topo da lista da página de projetos.
+-	Exibir os últimos projetos abertos no topo da lista da página de projetos.
 - nos documentos só esta podendo excluir arquivos caso subimos de revisão. na verdade isso so pode acontecer se o arquivo estiver emitido por alguma GRD, devemos criar um vinculo dentro do documento para o executante ou avalista saber em qual grd foi emitida.
 - 
 
@@ -76,6 +75,7 @@ BUGS Avulsos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ Por gráficos em barra no progresso do documento (dashboard projeto) @done (18-01-24 07:07)
 	✔ BUGFIX - mOSTRAR O DOCUMENTO QUE CONSTA NA grd NA REVISÃO NA QUAL ELE FOI INCLUÍDO NA grd E NÃO NA REVISÃO MAIS ATUAL @done (18-01-23 09:49)
 	✔ Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto @done (18-01-22 15:17)
 	✔ Exibir GRDs das quais aquele documento participou e em que revisão. @done (18-01-22 14:33)

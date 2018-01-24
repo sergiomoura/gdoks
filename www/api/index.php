@@ -142,17 +142,27 @@
 					// Adicionando as informações do usuário no response
 					$response->user = $user;
 					
+					// Enviando resposta.	
+					$response->flush();
+
 					// registrando a ação no log
 					registrarAcao($db,$user->id,ACAO_LOGOU);
+
+					// Finalizando com sucesso
+					exit(0);
+
 				} else {
 					// Não! usuário não é válido.
 					// Preparando resposta negativa
 					http_response_code(401);
-					$response = new response(1,'Login falhou');
-				}
+					$response = new response(1,'Login falhou!!!');
 
-				// Enviando resposta.
-				$response->flush();
+					// Enviando resposta.	
+					$response->flush();
+
+					// Finalizando com falha
+					exit(1);
+				}
 			});
 		
 		// LOGIN REFRESH ROUTE DEFINITION - - - - - - - - -
