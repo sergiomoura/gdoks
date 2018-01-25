@@ -2038,11 +2038,11 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   margin-top: 50px; }
 #projetos_container table {
   border-collapse: collapse;
-  width: 100%; }
+  width: 100%;
+  margin-bottom: 50px; }
   #projetos_container table td {
     padding: 5px 30px; }
   #projetos_container table thead td {
-    color: #2196F3;
     font-size: 14px;
     cursor: pointer;
     position: relative; }
@@ -2060,6 +2060,13 @@ md-expansion-panel-expanded .md-expansion-panel-item {
       background-color: #FFF; }
     #projetos_container table tbody tr:focus {
       outline: none; }
+#projetos_container .projetos thead td {
+  color: #2196F3; }
+#projetos_container .historico {
+  background-color: rgba(0, 0, 0, 0.06); }
+  #projetos_container .historico thead td {
+    color: rgba(0, 0, 0, 0.54);
+    padding: 14px 30px; }
 
 #senha_container {
   padding: 20px; }

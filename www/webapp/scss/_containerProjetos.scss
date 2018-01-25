@@ -7,12 +7,12 @@
 	table{
 		border-collapse: collapse;
 		width:100%;
+		margin-bottom: 50px;
 		td {
 			padding: 5px 30px;
 		}
 		thead{
 			td{
-				color:$azul;
 				font-size: 14px;
 				cursor: pointer;
 				position: relative;
@@ -42,5 +42,20 @@
 				}
 			}
 		}
+	}
+
+	.projetos {
+		thead td {
+			color:$azul;
+		}
+	}
+
+	.historico {
+		thead td {
+			color:$cinza;
+			padding:14px 30px;
+		}
+
+		background-color: $cinzaMaisClaro;
 	}
 }

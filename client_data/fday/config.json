@@ -6,5 +6,9 @@
 	"NOTIFICA_ESPECIALISTA_POR_EMAIL":{
 		"valor":false,
 		"tipo":"bool"
+	},
+	"MAX_HIST_PRJS":{
+		"valor":5,
+		"tipo":"int[0,10]"
 	}
 }

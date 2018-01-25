@@ -49,6 +49,7 @@
 	$FILE_DBKEY = CLIENT_DATA_PATH.$empresa.'/dbkey.php';
 	$FILE_GRD = CLIENT_DATA_PATH.$empresa.'/grd.php';
 	$FILE_LOGO = CLIENT_DATA_PATH.$empresa.'/logo.jpg';
+	$FILE_CONFIG = CLIENT_DATA_PATH.$empresa.'/config.json';
 	
 	// criando a conexão
 	if(isset($empresa) && file_exists($FILE_DBKEY)){
@@ -83,6 +84,26 @@
 			$result = $db->query($sql,'iis',$idUsuario,$idAcao,substr($parametros, 0,$param_maxlen));
 		}
 	}
+
+	// Definindo função que registra acesso ao projeto no histórico
+	function addInHistProj($id_projeto,$id_usuario,$db,$config){
+
+		// Diminuindo um na ordem de todos os do histórico de projetos
+		$sql = 'UPDATE gdoks_hist_prjs SET ordem=ordem-1 WHERE id_usuario=?';
+		$db->query($sql,'i',$id_usuario);
+
+		// Deletando todos os registro do histórico que tenham ordem menor que 1
+		$sql = 'DELETE FROM gdoks_hist_prjs WHERE ordem<1 AND id_usuario=?';
+		$db->query($sql,'i',$id_usuario);
+
+		// Pondo o novo elemento no histórico com ordem MAX_HIST_PRJS
+		$sql = 'REPLACE INTO gdoks_hist_prjs (id_projeto,id_usuario,ordem) VALUES (?,?,?)';
+		$db->query($sql,'iii',$id_projeto,$id_usuario,$config->MAX_HIST_PRJS->valor);
+
+	};
+
+	// Carregando configurações da empresa
+	$config = json_decode(file_get_contents($FILE_CONFIG));
 	
 	// defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
@@ -96,7 +117,7 @@
 	}
 
 	// defining api routes  V1 = = = = = = = = = = = = = = = =
-	$app->group($baseRoute,function() use($app,$db,$id_empresa,$token,$empresa){
+	$app->group($baseRoute,function() use($app,$db,$id_empresa,$token,$empresa,$config){
 		
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
 			$app->post('/login/',function() use ($app,$db,$id_empresa,$empresa){
@@ -172,7 +193,7 @@
 					http_response_code(401);
 					$response = new response(1,'Não renovou token: '.$token);
 					$response->flush();
-					return;
+					exit(1);
 				} else {
 					$new_token = uniqid('',true);
 					$id = $rs[0]['id'];
@@ -186,6 +207,7 @@
 						$app->response->setStatus(500);
 						$response = new response(1,'Falha na consulta sql:'.$e);
 						$response->flush();
+						exit(1);
 					}
 				}
 			});
@@ -202,7 +224,7 @@
 					http_response_code(401);
 					$response = new response(1,'Não autorizado.');
 					$response->flush();
-					return;
+					exit(1);
 				} else {
 					// Atualizando informações do usuário
 					$id = $rs[0]['id'];
@@ -289,7 +311,7 @@
 					http_response_code(401);
 					$response = new response(1,'Não pode acessar os dados de outras empresas.');
 					$response->flush();
-					return;
+					exit(1);
 				}
 			});
 
@@ -370,7 +392,7 @@
 							http_response_code(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login, email ou sigla.');
 							$response->flush();
-							return;
+							exit(1);
 						}
 						// Registrando a ação
 						registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.($usuario->ativo==true?1:0));
@@ -385,7 +407,7 @@
 							http_response_code(401);
 							$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla');
 							$response->flush();
-							return;
+							exit(1);
 						}
 						// Registrando a ação
 						registrarAcao($db,$id,ACAO_ALTEROU_DADOS_DE_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
@@ -393,6 +415,7 @@
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
+					exit(1);
 				}
 			});
 
@@ -422,7 +445,7 @@
 					http_response_code(401);
 					$response = new response(1,'Já existe um usuário cadastrado com este login ou sigla.:'.$e->getMessage());
 					$response->flush();
-					return;
+					exit(1);
 				}
 				// Registrando a ação
 				registrarAcao($db,$id,ACAO_CRIOU_USUARIO,$usuario->nome.','.$usuario->email.','.$usuario->login.','.$usuario->ativo);
@@ -555,7 +578,7 @@
 						http_response_code(401);
 						$response = new response(1,'Já existe uma disciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa == true?1:0));
@@ -591,7 +614,7 @@
 					http_response_code(401);
 					$response = new response(1,'Já existe uma disciplina cadastrado com este nome ou sigla. '.$e->getMessage());
 					$response->flush();
-					return;
+					exit(1);
 				}
 				// Registrando a ação
 				registrarAcao($db,$id,ACAO_CRIOU_DISCIPLINA,$disciplina->nome.','.$disciplina->sigla.','.($disciplina->ativa==true?1:0));
@@ -722,13 +745,14 @@
 						http_response_code(401);
 						$response = new response(1,'Verifique se já não existe uma subdisciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
+					exit(1);
 				}
 			});
 
@@ -764,7 +788,7 @@
 						http_response_code(401);
 						$response = new response(1,'Já existe uma subdisciplina cadastrado com esta sigla ou nome.');
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
@@ -817,13 +841,14 @@
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_REMOVEU_SUBDISCIPLINA,$subdisciplina->nome.','.$subdisciplina->sigla.','.($subdisciplina->ativa == true?1:0));
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
+					exit(1);
 				}
 			});
 
@@ -866,7 +891,7 @@
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 
 					// Registrando a ação
@@ -874,6 +899,7 @@
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
+					exit(1);
 				}
 			});
 
@@ -913,13 +939,14 @@
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					exit(1);
 				}
 			});
 			
@@ -959,13 +986,14 @@
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_ESPECIALISTA,$id_especialista.','.$id_disciplina);
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
+					exit(1);
 				}
 			});
 
@@ -1008,14 +1036,15 @@
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_VALIDADORES,$id_disciplina.',['.implode('|', $ids_validadores).']');
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					exit(1);
 				}
 			});
 			
@@ -1056,13 +1085,14 @@
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina);
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					exit(1);
 				}
 			});
 			
@@ -1102,13 +1132,14 @@
 						http_response_code(401);
 						$response = new response(1,$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_DESASSOCIOU_VALIDADOR,$id_validador.','.$id_disciplina);
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					exit(1);
 				}
 			});
 		// FIM DE ROTAS DE DISCIPLINAS
@@ -1173,7 +1204,7 @@
 				$response->flush();
 			});
 
-			$app->get('/projetos/:id',function($id) use ($app,$db,$token){
+			$app->get('/projetos/:id',function($id) use ($app,$db,$token,$config){
 				// Lendo e saneando as informações da requisição
 				$id_projeto = 1*$id;
 				
@@ -1193,6 +1224,7 @@
 			
 				$rs = $db->query($sql,'si',$token,$id)[0];
 				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
 				
 				if($ok == 1){
 
@@ -1233,9 +1265,13 @@
 					// Criando o objeto response 
 					$response = new response(0,'Ok');
 					$response->projeto = $projeto;
+
+					// registrando acesso ao projeto no histórico
+					addInHistProj($id_projeto,$id_usuario,$db,$config);
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					exit(1)	;
 				}
 
 				// enviando resposta
@@ -1298,12 +1334,12 @@
                     } catch (Exception $e) {
                     	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 						$response->flush();
-						die();
+						exit(1);
                     }
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
-					die();
+					exit(1);
 				}
 
 				// retornando
@@ -1358,12 +1394,12 @@
                     } catch (Exception $e) {
                     	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 						$response->flush();
-						die();
+						exit(1);
                     }
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	
-					die();
+					exit(1);
 				}
 
 				// Guardando o id do projeto criado
@@ -1398,7 +1434,7 @@
 					http_response_code(401);
 					$response = new response(1,'inconscistência nas informações fornecidas');
 					$response.flush();
-					die();
+					exit(1);
 				}
 
 				// verificando se o usário enviado é do mesmo cliente da area atual
@@ -1429,13 +1465,14 @@
 						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_AREA,implode(',', (array)$area));
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					exit(1);
 				}
 			});
 
@@ -1471,13 +1508,14 @@
 						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_AREA,implode(',', (array)$area));
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					exit(1);
 				}
 			});
 
@@ -5168,6 +5206,29 @@
 
 			});
 		// FIM DE ROTAS DE TELAS
+
+		// ROTAS PARA HISTORICO
+			$app->get('/historico/projetos',function() use ($app,$db,$token){
+
+				// Preparando a resposta
+				$response = new response(0,'ok');
+
+				// Definindo a consulta
+				$sql = 'SELECT a.id_projeto,
+						       a.ordem
+						FROM gdoks_hist_prjs a
+						INNER JOIN gdoks_usuarios b ON a.id_usuario=b.id
+						WHERE b.token=?
+						ORDER BY a.ordem DESC';
+
+				// Estabelecendo resultado da consulta como parte do response
+				$response->historico = $db->query($sql,'s',$token);
+				
+				// Enviando o response para o cliente
+				$response->flush();
+
+			});
+		// FIM DE ROTAS PARA HISTORICOS
 	});
 
 	// running the app

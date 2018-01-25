@@ -3701,30 +3701,74 @@ function NavController($scope){
 	.controller('DashProjetoController',DashProjetoController);
 
 	function ProjetosController($scope,GDoksFactory,$location){
-		// levantando projetos na base de dados local
-		$scope.projetos = [];
 
-		// definindo critério padrão de ordem
+		// Definindo o valor mínimo para que a busca de projeto seja executada
+		$scope.minBusca = 3;
+		$scope.q = {'nome':''};
+
+		// Definindo a variável de scopo 'projetos'
+		$scope.projetos = null;
+		$scope.historico = null;
+
+		// Definindo variável local auxiliar ids_historico
+		var ids_projetos = null;
+
+		// Definindo critério padrão de ordem
 		$scope.o = 'nome';
 		
-		$scope.getProjetos = function(){
-			GDoksFactory.getProjetosDetalhados()
-			.success(function(response){
-				$scope.projetos = response.projetos;
-			})
-			.error(function(error){
-				// Retornando Toast para o usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Não foi possível carregar os projetos do servidor.')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
+		// Carregando projetos
+		GDoksFactory.getProjetosDetalhados()
+		.success(function(response){
+			$scope.projetos = response.projetos;
+			parseHistorico();
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Não foi possível carregar os projetos do servidor.')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
 
-				// Imprimindo erro no console
-				console.log(error);
-			})
-		}	
+			// Imprimindo erro no console
+			console.warn(error);
+		});
+		
+
+		// Carregando histórico de projetos carregados
+		GDoksFactory.getHistProjetos()
+		.success(function(response){
+			ids_projetos = response.historico;
+			parseHistorico();
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao tentar carregar histórico de projetos')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+
+			// Imprimindo erro no console
+			console.warn(error);
+		});
+
+		// Definindo função que cria vetor de histórico de projetos
+		function parseHistorico(){
+			if($scope.projetos != null && ids_projetos != null){
+
+				// Definindo o histórico como um vetor vazio
+				$scope.historico = [];
+
+				// Construindo vetor de histórico
+				for (var i = 0; i < ids_projetos.length; i++) {
+					$scope.historico.push($scope.projetos.find(function(a){return a.id == this},ids_projetos[i].id_projeto))
+				}
+			}
+		}
+				
 
 		// função que leva para a tela de adicionar projeto
 		$scope.goToAddProjeto = function(){
@@ -3751,8 +3795,6 @@ function NavController($scope){
 			}
 		}
 
-		// Listando carregando os projetos
-		$scope.getProjetos(1);
 	};
 
 	function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
@@ -6548,6 +6590,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.avancarRevisao = function(doc){
 				return $http.get(API_ROOT+'/documentos/'+doc.id+'/avancarRevisao',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getHistProjetos = function(){
+			 	return $http.get(API_ROOT+'/historico/projetos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;

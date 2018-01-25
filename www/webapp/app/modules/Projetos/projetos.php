@@ -8,10 +8,51 @@
 		<md-input-container>
 			<label>Buscar Projeto</label>
 			<md-icon class="material-icons step" aria-label="Buscar Projeto">search</md-icon>
-			<input ng-minlength="4" type="text" ng-model="q.nome" placeholder="Digite">
+			<input type="text" ng-model="q.nome" placeholder="Digite">
 		</md-input-container>
 	</div>
-	<table>
+
+	<table class="historico" ng-if="q.nome.length == 0">
+		<thead>
+			<tr>
+				<td>
+					Código
+				</td>
+				<td>
+					Nome
+				</td>
+				<td>
+					Cliente
+				</td>
+				<td>
+					Progresso
+				</td>
+				<td>
+					Ações
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="p in historico|orderBy:oh" ng-click="gotoProjeto(p.id)">
+				<td>{{p.codigo}}</td>
+				<td>{{p.nome}}</td>
+				<td>{{p.nome_cliente}}</td>
+				<td>{{p.progresso_total}} %</td>
+				<td>
+					<?php if($opcoes_de_tela['AcessarPrj']): ?>
+					<md-button
+						class="md-raised md-fab md-mini md-primary"
+						ng-click="editProjeto(p.id,$event)"
+						aria-label="Abrir Projeto">
+							<md-icon class="material-icons step">mode_edit</md-icon>
+					</md-button>
+					<?php endif; ?>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table class="projetos">
 		<thead>
 			<tr>
 				<td ng-click="setOrderBy('codigo')">
@@ -58,4 +99,5 @@
 			</tr>
 		</tbody>
 	</table>
+
 </div>
