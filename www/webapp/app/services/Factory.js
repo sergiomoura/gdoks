@@ -91,8 +91,9 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/projetos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.getProjetosDetalhados = function(){
-				return $http.get(API_ROOT+'/projetos/detalhados',buildHeaders());
+			GDoksFactory.getProjetosDetalhados = function(listarInativos){
+				var i = (listarInativos === true)?1:0;
+				return $http.get(API_ROOT+'/projetos/detalhados?i='+i,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjeto = function(id){

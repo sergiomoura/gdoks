@@ -5,6 +5,8 @@
 <div id="projetos_container" class="container_80">
 	<div layout="row" layout-align="space-between center">
 		<md-button ng-click="goToAddProjeto()" class="md-raised md-primary" ng-disabled="!<?=$opcoes_de_tela['CadastrarNovoPrj']?>" aria-label="Cadastrar Novo Projeto">Cadastrar Novo Projeto</md-button>
+		<md-button ng-click="onListarProjetosClick()" class="md-primary" aria-label="Mostrar Projetos Inativos">{{mostrarInativos?"Esconder Projetos Inativos":"Mostrar Projetos Inativos"}}</md-button>
+		<span flex></span>
 		<md-input-container>
 			<label>Buscar Projeto</label>
 			<md-icon class="material-icons step" aria-label="Buscar Projeto">search</md-icon>

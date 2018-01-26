@@ -3715,25 +3715,12 @@ function NavController($scope){
 
 		// Definindo critério padrão de ordem
 		$scope.o = 'nome';
-		
-		// Carregando projetos
-		GDoksFactory.getProjetosDetalhados()
-		.success(function(response){
-			$scope.projetos = response.projetos;
-			parseHistorico();
-		})
-		.error(function(error){
-			// Retornando Toast para o usuário
-			$mdToast.show(
-				$mdToast.simple()
-				.textContent('Não foi possível carregar os projetos do servidor.')
-				.position('bottom left')
-				.hideDelay(5000)
-			);
 
-			// Imprimindo erro no console
-			console.warn(error);
-		});
+		// Definindo valor padrão para mostrar inativos ou não
+		$scope.mostrarInativos = false;
+		
+		// Carregando projetos sem listar os inativos
+		getProjetos($scope.mostrarInativos);
 		
 
 		// Carregando histórico de projetos carregados
@@ -3768,7 +3755,53 @@ function NavController($scope){
 				}
 			}
 		}
+
+
+		// Definindo função que carrega projetos
+		function getProjetos(listarInativos){
+
+			// Mostrar carregando
+			$scope.root.carregando = true;
+
+			GDoksFactory.getProjetosDetalhados(listarInativos)
+			.success(function(response){
+				// Escondendo carregando
+				$scope.root.carregando = false;
+
+				// Lendo response para o scope
+				$scope.projetos = response.projetos;
+
+				// Parsing histórico
+				parseHistorico();
+			})
+			.error(function(error){
+
+				// Esconde Carregando
+				$scope.root.carregando = false;
 				
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Não foi possível carregar os projetos do servidor.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			});
+
+		}
+			
+		// Definindo função que será executada ao clicar no botão de listar projetos
+		$scope.onListarProjetosClick = function(){
+
+			// Trocando o valor de mostrarInativos
+			$scope.mostrarInativos = !$scope.mostrarInativos;
+
+			// Recarregando projetos
+			getProjetos($scope.mostrarInativos);
+		}	
 
 		// função que leva para a tela de adicionar projeto
 		$scope.goToAddProjeto = function(){
@@ -6209,8 +6242,9 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 				return $http.get(API_ROOT+'/projetos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.getProjetosDetalhados = function(){
-				return $http.get(API_ROOT+'/projetos/detalhados',buildHeaders());
+			GDoksFactory.getProjetosDetalhados = function(listarInativos){
+				var i = (listarInativos === true)?1:0;
+				return $http.get(API_ROOT+'/projetos/detalhados?i='+i,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjeto = function(id){

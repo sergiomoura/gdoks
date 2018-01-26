@@ -1164,9 +1164,15 @@
 			});
 
 			$app->get('/projetos/detalhados',function() use ($app,$db,$token){
+				
+				// Lendo se a requisição pede que os inativos sejam listados
+				$listar_inativos = array_key_exists('i', $_GET) && $_GET['i'] == 1;
+				
+				// Definindo a condição que determina se inativos serão ou não listados
+				$condicao_inativos = $listar_inativos? "TRUE" : "a.ativo";
 
 				// Levantando os projetos que este usuário possui pemissão
-				$sql = 'SELECT
+				$sql = "SELECT
 							A.*,
 							B.progresso_total
 						FROM
@@ -1182,7 +1188,9 @@
 						   INNER JOIN gdoks_documentos d ON c.id=d.id_subarea
 						   INNER JOIN gdoks_clientes e ON a.id_cliente=e.id
 						   INNER JOIN gdoks_usuarios u ON a.id_empresa=u.id_empresa
-						   WHERE u.token=?
+						   WHERE
+						   		u.token=?
+						   		AND $condicao_inativos
 						   GROUP BY a.id,
 						            a.codigo,
 						            a.nome) A
@@ -1197,7 +1205,7 @@
 						      INNER JOIN gdoks_subareas b ON b.id=a.id_subarea
 						      INNER JOIN gdoks_areas c ON c.id=b.id_area
 						      INNER JOIN gdoks_revisoes d ON a.id=d.id_documento
-						      GROUP BY id_projeto) Y) B ON A.id=B.id_projeto';
+						      GROUP BY id_projeto) Y) B ON A.id=B.id_projeto";
 
 				$response = new response(0,'ok');
 				$response->projetos = $db->query($sql,'s',$token);
@@ -5218,7 +5226,8 @@
 						       a.ordem
 						FROM gdoks_hist_prjs a
 						INNER JOIN gdoks_usuarios b ON a.id_usuario=b.id
-						WHERE b.token=?
+						INNER JOIN gdoks_projetos c ON a.id_projeto=c.id
+						WHERE b.token=? AND c.ativo
 						ORDER BY a.ordem DESC';
 
 				// Estabelecendo resultado da consulta como parte do response

@@ -10,7 +10,22 @@
 		margin-bottom: 50px;
 		td {
 			padding: 5px 30px;
+
+			&:nth-child(1){
+				width: 50px;
+			}
+
+			&:nth-child(4){
+				width: 50px;
+			}
+
+			&:nth-child(5){
+				width: 50px;
+			}
 		}
+
+		
+
 		thead{
 			td{
 				font-size: 14px;
