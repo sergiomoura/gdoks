@@ -1,47 +1,67 @@
+A) Fazer com que projetos inativos:
+	☐	Não altere documento
+	☐	Não emite grd
+	☐	Não apareça por padrão
+	☐	Aparece na lista de projetos só quando liberada a visualização de projetos inativos
 
-- Fazer com que não apareça por padrão projetos inativos
-- Fazer com que projetos inativos
-	- Não altera documento
-	- não emite grd
-	- aparece só quando liberada a visualização de projetos inativos
+B) Fazer visão geral no dashboard de projeto:
+	☐	Percentuais no prazo e percentuais em dia
+	☐	Dias restante para o final do prazo do projeto
 
-- Fazer visão geral no dashboard de projeto:
-	- Gráfico de barras com total de documentos com percentuais...
-	- Percentuais no prazo e percentuais em dia
-	- Dias restante para o final do prazo do projeto
+C) Avulsos:
+	☐	Travar atualização da revisão quando esta estiver em uma grd enviada
+	☐	Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
+	☐	Tratar caso de atualização de documento sem aumentar progresso.
+	☐ Sequência das revisões deve ser configurável
+	☐	Criar sequencial de revisão em paralelo, que pode ser alterado manualmente.
+	☐	Exibir os últimos projetos abertos no topo da lista da página de projetos.
 
-- Travar atualização da revisão quando esta estiver em uma grd enviada
-- Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
-- Tratar caso de atualização de documento sem aumentar progresso.
+D) Dúvida:
+??? nos documentos só esta podendo excluir arquivos caso subimos de revisão.
+??? na verdade isso so pode acontecer se o arquivo estiver emitido por alguma GRD,
+??? devemos criar um vinculo dentro do documento para o executante ou avalista saber em qual grd foi emitida.
 
+E) Desenhar e Implementar Dashboard Home:
+	☐	nº de documentos em revisão
+	☐	produtividade dos especialistas
+	☐	vizualização da equipe
 
-- Criar sequencial de revisão em paralelo, que pode ser alterado manualmente.
--	Exibir os últimos projetos abertos no topo da lista da página de projetos.
-- nos documentos só esta podendo excluir arquivos caso subimos de revisão. na verdade isso so pode acontecer se o arquivo estiver emitido por alguma GRD, devemos criar um vinculo dentro do documento para o executante ou avalista saber em qual grd foi emitida.
-- 
+F) Bloqueio de Telas:
+	☐ Usuários
+	☐ Documentos
+	☐ GRDs
+	☐ Disciplinas
+	☐ Clientes
+	☐ Cargos
+	☐ Log
+	☐ Configurações
 
-☐ Desenhar e Implementar Dashboard Home
-	- nº de documentos em revisão
-	- produtividade dos especialistas
-	- vizualização da equipe
-☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
-☐ Notificar o usuário na tela de documeto quando este for de uma disciplna sem validador ou especialista
-☐ no cadastro de um documento no projeto, habilitar aba documento somente depois de subarea cadastrada
-☐ Dar o documento como concluído
-☐ Cadastrar logo do cliente
-☐ Fazer logo de cliente aparecer na GRD da faraday
-☐ Alertar usuário quando remover documento que todos os arquivos serão excluídos
-☐ Sequência das revisões deve ser configurável
-☐ No cadastro do projeto, marcar se documentos estão disponíveis para GRD quando autorizada pelo validador ou somente quando estiver 100%
-☐ Consertar busca de documento com progresso a validar:  Failed to create statement: Unknown column 'id_progresso_a_validar' in 'where clause'
-☐ Página de Busca de documentos retornar a páginação pág 1 antes da busca...(busque tudo, vá para página 4, altere parâmetros e busque restrito)
-☐	Mostrar na tela de documentos um select para alterar entre outros documentos do projeto
-☐	Fazer com que acessos a endereços aleatórios da api não retornem nada...
-☐	Mostrar na tela de cadastro de documento de abertura de operações o tamanho máximo do upload e bloquear em clientside esse tamanho.
-☐	Poder fazer download de DOA a partir da tela de seu cadastro
-☐	Mostar tamanho de DAOS em formato legívelpara humano
-☐ Tela Cadastro de Formatos de Papel
-☐ Tabelas a serem preenchidas na instalação
+G) Outros Bug a serem resolvidos:
+	☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
+	☐ Notificar o usuário na tela de documeto quando este for de uma disciplna sem validador ou especialista
+	☐ No cadastro de um documento no projeto, habilitar aba documento somente depois de subarea cadastrada
+	☐ Cadastrar logo do cliente
+	☐ Fazer logo de cliente aparecer na GRD da faraday
+	☐ Alertar usuário quando remover documento que todos os arquivos serão excluídos
+	☐ No cadastro do projeto, marcar se documentos estão disponíveis para GRD quando autorizada pelo validador ou somente quando estiver 100%
+	☐ Consertar busca de documento com progresso a validar:  Failed to create statement: Unknown column 'id_progresso_a_validar' in 'where clause'
+	☐ Página de Busca de documentos retornar a páginação pág 1 antes da busca...(busque tudo, vá para página 4, altere parâmetros e busque restrito)
+	☐	Mostrar na tela de documentos um select para alterar entre outros documentos do projeto
+	☐	Fazer com que acessos a endereços aleatórios da api não retornem nada...
+	☐	Mostrar na tela de cadastro de documento de abertura de operações o tamanho máximo do upload e bloquear em clientside esse tamanho.
+	☐	Poder fazer download de DOA a partir da tela de seu cadastro
+	☐	Mostar tamanho de DAOS em formato legívelpara humano
+	☐ Tela Cadastro de Formatos de Papel
+	☐ No download Resource interpreted as Document but transferred with MIME type application/zip
+	☐	Melhorar a forma com que os documentos atrasados são destacados
+	☐	Cadastrar documentos lendo lista de CSV
+	☐	Quando for baixar um documento só, baixar sem zipar
+	☐	Número de revisões a serem guardadas é limitado e configurável
+	☐	Tela e-mails enviados
+	☐	Na tela de cadastro de projeto, mdInput messages show animation called on invalid messages element
+	☐	Alertar na tela de atualização de documentos quanto ao tamanho máximo de uploads
+
+Tabelas a serem preenchidas na instalação:
 	- Empresas
 	- Ações
 	- Cargos
@@ -52,26 +72,6 @@
 	- Codigos EMI
 	- tipos de docs
 
-Bloqueio de Telas:
-		☐ usuários
-		☐ documentos
-		☐ GRDs
-		☐ Disciplinas
-		☐ Clientes
-		☐ Cargos
-		☐ Log
-		☐ Configurações
-	☐ Otimizar página de projetos para grande volume de dados
-	☐ No download Resource interpreted as Document but transferred with MIME type application/zip
-	☐	Melhorar a forma com que os documentos atrasados são destacados
-	☐	Cadastrar documentos lendo lista de CSV
-	☐	Quando for baixar um documento só, baixar sem zipar
-	☐	Número de revisões a serem guardadas é limitado e configurável
-	☐	Tela e-mails enviados
-	☐	Na tela de cadastro de projeto, mdInput messages show animation called on invalid messages element
-
-BUGS Avulsos:
-	☐	Alertar na tela de atualização de documentos quanto ao tamanho máximo de uploads
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
