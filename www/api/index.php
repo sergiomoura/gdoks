@@ -1156,7 +1156,7 @@
 						       p.id_cliente
 						FROM gdoks_usuarios u
 						INNER JOIN gdoks_projetos p ON p.id_empresa=u.id_empresa
-						WHERE u.token=?';
+						WHERE u.token=? and p.ativo';
 
 				$response = new response(0,'ok');
 				$response->projetos = $db->query($sql,'s',$token);
