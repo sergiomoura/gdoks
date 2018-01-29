@@ -3,6 +3,7 @@ A) Fazer com que projetos inativos:
 	☐	Não emite grd
 	✔	Não apareça por padrão @done (18-01-26 17:27)
 	✔	Aparece na lista de projetos só quando liberada a visualização de projetos inativos @done (18-01-26 17:27)
+	✔	Tratar caso de GRD de projeto inativo (não carregado); @done (18-01-29 17:37)
 
 B) Fazer visão geral no dashboard de projeto:
 	☐	Percentuais no prazo e percentuais em dia

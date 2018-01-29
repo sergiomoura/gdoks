@@ -2542,6 +2542,11 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 		indexedDB.open('gdoks').onsuccess = function(evt){
 			evt.target.result.transaction('clientes').objectStore('clientes').getAll().onsuccess = function(evt){
 				$scope.clientes = evt.target.result;
+
+				// atribuindo cliente da grd  caso ela tenha sido carregada primeiro
+				if($scope.grd != null){
+					$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.id_cliente);
+				}
 			}
 		}
 
@@ -3399,26 +3404,33 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 								loadObservacoes();
 							}
 
-							// carregando o projeto da base local
-							indexedDB.open('gdoks').onsuccess = function(evt){
-								evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
-									// Levantando os projetos do cliente
-									$scope.projetos = evt.target.result.filter(function(a){return a.id_cliente==this},$scope.grd.id_cliente);
+							// Verificando se a grd é de um projeto ativo;
+							if($scope.grd.projeto_ativo == 1) {
+								// Projeto ativo. Carregando o projeto da base local
+								indexedDB.open('gdoks').onsuccess = function(evt){
+									evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
+										// Levantando os projetos do cliente
+										$scope.projetos = evt.target.result.filter(function(a){return a.id_cliente==this},$scope.grd.id_cliente);
 
-									// atribuindo projeto a grd
-									$scope.grd.projeto = $scope.projetos.find(function(a){return a.id==this}, $scope.grd.id_projeto);
-									
-									// Carregando áreas do projeto
-									loadAreasDeProjeto($scope.grd.projeto.id);
+										// atribuindo projeto a grd
+										$scope.grd.projeto = $scope.projetos.find(function(a){return a.id==this}, $scope.grd.id_projeto);
 
-									// atribuindo o cliente
-									$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.projeto.id_cliente);
-
-									// apagando propriedade id_projeto
-									delete $scope.grd.id_projeto;
-									delete $scope.grd.id_cliente;
+										// apagando propriedade id_projeto
+										delete $scope.grd.id_projeto;
+										delete $scope.grd.id_cliente;
+									}
 								}
+							} else {
+								// Projeto da GRD é inativo. As informações do projeto já estão carregadas na GRD.
+								// Push o projeto da GRD no $scope.projetos
+								$scope.projetos.push($scope.grd.projeto);
 							}
+
+							// atribuindo o cliente
+							$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.projeto.id_cliente);
+
+							// Carregando áreas do projeto
+							loadAreasDeProjeto($scope.grd.projeto.id);
 						})
 						.error(function(error){
 							// Esconde carregando

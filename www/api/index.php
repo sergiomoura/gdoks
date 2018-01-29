@@ -4395,7 +4395,8 @@
 							       c.obs,
 							       c.datahora_registro,
 							       c.datahora_enviada,
-							       b.id_cliente
+							       b.id_cliente,
+							       b.ativo as projeto_ativo
 							FROM gdoks_usuarios a
 							INNER JOIN gdoks_projetos b ON a.id_empresa=b.id_empresa
 							INNER JOIN gdoks_grds c ON c.id_projeto=b.id
@@ -4424,6 +4425,10 @@
 						// Atribuindo revisões a grd
 						$grd->docs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$grd->id));
 						
+						// Caso o projeto esteja inativo, levantando as informações deste projeto para enviar junto com a GRD
+						$sql = 'SELECT id,codigo,nome,id_cliente,ativo FROM gdoks_projetos WHERE id=?';
+						$grd->projeto = (object)$db->query($sql,'i',$grd->id_projeto)[0];
+
 						// Enviando resposta para cliente
 						$response = new response(0,'ok');
 						$response->grd = $grd;
