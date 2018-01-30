@@ -4334,14 +4334,33 @@
 				$id_empresa = $rs['id_empresa'];
 				$id = $rs['id'];
 
-				// Verificando se o projeto é da empresa atual
-				$sql = 'SELECT count(*) as ok FROM gdoks_projetos WHERE id=? AND id_empresa=?';
+				// Verificando se o projeto é da empresa atual e se o projeto está ativo
+				$sql = 'SELECT count(*) as ok,ativo FROM gdoks_projetos WHERE id=? AND id_empresa=?';
 				$rs = $db->query($sql,'ii',$grd->id_projeto,$id_empresa);
+				
+				// Bloquando caso projeto não seja da empresa do usuário
 				if($rs[0]['ok'] == 0){
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');
 					$response->flush();
-					return;
+					exit(1);
+				}
+
+				// Bloquando caso projeto atual da GRD esteja inativo
+				if($rs[0]['ativo'] == 0 || isnull($rs[0]['ativo'])){
+					http_response_code(401);
+					$response = new response(1,'Não altera GRD de projeto inativo.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Bloqueando caso o novo projeto da GRD esteja inativo
+				$sql = 'SELECT ativo FROM gdoks_projetos WHERE id=?';
+				if(($db->query($sql,'i',$grd->id_projeto))[0]['ativo'] == 0){
+					http_response_code(401);
+					$response = new response(1,'Não altera GRD para um projeto inativo.');
+					$response->flush();
+					exit(1);
 				}
 
 				// atribuindo um string vazio para obs caso ela venha vazia

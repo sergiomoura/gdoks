@@ -277,7 +277,7 @@
 					// Retornando Toast para o usuário
 					$mdToast.show(
 						$mdToast.simple()
-						.textContent('Falha ao alterar GRD')
+						.textContent('Falha ao alterar GRD: ' + error.msg)
 						.position('bottom left')
 						.hideDelay(5000)
 					);
@@ -1049,6 +1049,18 @@
 								// Projeto da GRD é inativo. As informações do projeto já estão carregadas na GRD.
 								// Push o projeto da GRD no $scope.projetos
 								$scope.projetos.push($scope.grd.projeto);
+							}
+
+							// Mostrando alerta caso a GRD seja de um projeto inativo
+							if($scope.grd.projeto_ativo == 0){
+								$mdDialog.show(
+								$mdDialog.alert()
+									.clickOutsideToClose(false)
+									.title('Essa GRD é de um projeto inativo!')
+									.textContent('Algumas informações dela não poderão ser alteradas. Ela não poderá ser enviada para o cliente.')
+									.ariaLabel('GRD de projeto inativo')
+									.ok('OK')
+								);
 							}
 
 							// atribuindo o cliente

@@ -1,6 +1,6 @@
 A) Fazer com que projetos inativos:
 	☐	Não altere documento
-	☐	Não emite grd
+	✔	Não emite grd @done (18-01-30 04:11)
 	✔	Não apareça por padrão @done (18-01-26 17:27)
 	✔	Aparece na lista de projetos só quando liberada a visualização de projetos inativos @done (18-01-26 17:27)
 	✔	Tratar caso de GRD de projeto inativo (não carregado); @done (18-01-29 17:37)

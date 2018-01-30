@@ -16,19 +16,19 @@
 				Baixar GRD em ZIP
 			</md-button>
 			<div class="sendActions">
-				<md-button class="md-fab md-mini" ng-click="confirmPublicarController($event)" ng-disabled="grd.docs.length == 0 || grd.docs==undefined">
+				<md-button class="md-fab md-mini" ng-click="confirmPublicarController($event)" ng-disabled="grd.docs.length == 0 || grd.docs==undefined || grd.projeto_ativo==0">
 					<md-icon class="material-icons step" aria-label="Publicar na área do cliente">public</md-icon>
 					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 						Publicar na área do cliente
 					</md-tooltip>
 				</md-button>
-				<md-button class="md-fab md-mini" ng-click="openDialogDeEnviarLinkPorEmail($event)" ng-disabled="grd.docs.length == 0 || grd.docs==undefined">
+				<md-button class="md-fab md-mini" ng-click="openDialogDeEnviarLinkPorEmail($event)" ng-disabled="grd.docs.length == 0 || grd.docs==undefined || grd.projeto_ativo==0">
 					<md-icon class="material-icons step" aria-label="Enviar link por email">email</md-icon>
 					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 						Enviar LINK por email
 					</md-tooltip>
 				</md-button>
-				<md-button class="md-fab md-mini" ng-disabled="grd.docs.length == 0 || grd.docs==undefined || !grd.cliente.ftp_configurado" ng-click="confirmFtpUploadController($event)">
+				<md-button class="md-fab md-mini" ng-disabled="grd.docs.length == 0 || grd.docs==undefined || !grd.cliente.ftp_configurado || grd.projeto_ativo==0" ng-click="confirmFtpUploadController($event)">
 					<md-icon class="material-icons step" aria-label="Fazer upload para FTP">unarchive</md-icon>
 					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 						Enviar para FTP do cliente
@@ -44,7 +44,7 @@
 					<div layout="row" layout-align="space-between start">
 						<md-input-container flex="25">
 							<label>Cliente</label>
-							<md-select ng-model="grd.cliente" ng-change="onClienteChange()" ng-disabled="grd.datahora_enviada!=null" required>
+							<md-select ng-model="grd.cliente" ng-change="onClienteChange()" ng-disabled="grd.datahora_enviada!=null || grd.projeto_ativo==0" required>
 							  <md-select-label>Selecione um Cliente</md-select-label>
 							  <md-option ng-value="cliente" ng-repeat="cliente in clientes|orderBy:'nome'">{{ cliente.nome }}</md-option>
 							</md-select>
@@ -66,7 +66,7 @@
 					<div layout="row" layout-align="space-between start">
 						<md-input-container flex="25">
 							<label>Projeto</label>
-							<md-select ng-model="grd.projeto" ng-change="onProjetoChange()" ng-disabled="grd.datahora_enviada!=null" required>
+							<md-select ng-model="grd.projeto" ng-change="onProjetoChange()" ng-disabled="grd.datahora_enviada!=null || grd.projeto_ativo==0" required>
 							  <md-select-label>Selecione um Projeto do Cliente</md-select-label>
 							  <md-option ng-value="projeto" ng-repeat="projeto in projetos|orderBy:'nome'">{{ projeto.nome }}</md-option>
 							</md-select>
@@ -99,7 +99,7 @@
 						</div>
 						<div layout="row" layout-align="end center">
 							<md-button
-								ng-disabled="formDados.$pristine || formDados.$invalid || !grd.alterada"
+								ng-disabled="formDados.$pristine || formDados.$invalid || !grd.alterada || grd.projeto_ativo==0"
 								ng-click="salvar()"
 								class="md-raised md-primary"
 								aria-label="Salvar GRD">
@@ -111,7 +111,7 @@
 							<div flex>
 								<md-checkbox
 									ng-model="doc.added"
-									ng-disabled="!(doc.progresso==100 && grd.datahora_enviada==null)"
+									ng-disabled="!(doc.progresso==100 && grd.datahora_enviada==null && grd.projeto_ativo!=0)"
 									ng-click="grd.alterada=true"
 									class="md-primary doc-checkbox"
 									ng-false-value="5"
@@ -121,17 +121,17 @@
 							
 							<span class="controles_de_doc" flex="none">
 								
-								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+								<span class="ptot" ng-class="{clickable:(grd.datahora_enviada==null && grd.projeto_ativo==1)}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.nVias}} Via{{doc.nVias!=1?'s':''}}
 								</span>
-								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+								<span class="ptot" ng-class="{clickable:(grd.datahora_enviada==null && grd.projeto_ativo==1)}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.nFolhas}} Fls
 								</span>
-								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+								<span class="ptot" ng-class="{clickable:(grd.datahora_enviada==null && grd.projeto_ativo==1)}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.tipo.simbolo}}
 									<md-tooltip md-direction="bottom">Tipo</md-tooltip>
 								</span>
-								<span class="ptot" ng-class="{clickable:grd.datahora_enviada==null}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
+								<span class="ptot" ng-class="{clickable:(grd.datahora_enviada==null && grd.projeto_ativo==1)}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
 									{{doc.codEMI.simbolo}}
 									<md-tooltip md-direction="bottom">Código EMI</md-tooltip>
 								</span>
