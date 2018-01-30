@@ -3372,7 +3372,8 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 				if(id == 0){
 					$scope.grd = {
 						id: 0,
-						alterada:false
+						alterada:false,
+						projeto_ativo:true
 					};
 				} else {
 					// verificando se tipos de documento e codigos emi estão carregados

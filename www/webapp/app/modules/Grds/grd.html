@@ -114,11 +114,9 @@
 									ng-disabled="!(doc.progresso==100 && grd.datahora_enviada==null && grd.projeto_ativo!=0)"
 									ng-click="grd.alterada=true"
 									class="md-primary doc-checkbox"
-									ng-false-value="5"
 									flex aria-label="{{doc.nome}}"><span>{{doc.codigo}}</span><span>{{doc.nome}}</span>
 								</md-checkbox>
 							</div>
-							
 							<span class="controles_de_doc" flex="none">
 								
 								<span class="ptot" ng-class="{clickable:(grd.datahora_enviada==null && grd.projeto_ativo==1)}" ng-if="doc.added" ng-click="openOpcoesDeDocumentoDialog($event,doc)">
