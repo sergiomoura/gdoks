@@ -1,8 +1,8 @@
 A2) Na tela de atualização do documento:
-	☐	Trocar botão de "Baixar para revisão" -> (Checkout > Bloqueia o documento para revisão)
+	✔	Trocar botão de "Baixar para revisão" -> (Checkout > Bloqueia o documento para revisão) @done (18-02-01 13:00)
 	
 A) Fazer com que projetos inativos:
-	☐	Não altere documento
+	✔	Não altere documento @done (18-02-01 13:33)
 	✔	Não emite grd @done (18-01-30 04:11)
 	✔	Não apareça por padrão @done (18-01-26 17:27)
 	✔	Aparece na lista de projetos só quando liberada a visualização de projetos inativos @done (18-01-26 17:27)
@@ -28,6 +28,7 @@ C) Avulsos:
 	☐	Criar sequencial de revisão em paralelo, que pode ser alterado manualmente.
 	☐	Exibir os últimos projetos abertos no topo da lista da página de projetos.
 	☐	Criar botão para cadastrar novo documento na tela em que lista-se os projetos
+	☐	Próprio usuário desbloquear documento sem fazer upload
 
 D) Dúvida:
 	☐	Excluir revisão que seja última e não conste em nenhuma GRD

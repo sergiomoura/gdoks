@@ -2580,6 +2580,7 @@
 							    e.nome as nome_area,
 							    g.id as id_projeto,
 							    g.nome as nome_projeto,
+							    g.ativo as projeto_ativo,
                                 ifnull(sum(f.hh),0) as trabalho_estimado
 
 							FROM

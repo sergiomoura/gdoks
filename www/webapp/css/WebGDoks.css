@@ -273,6 +273,12 @@
       #lista_de_documentos_container .documentos tbody td:nth-child(6) {
         padding-top: 20px; }
 
+#documento_container .aviso {
+  background-color: #ddd;
+  color: #9891a0;
+  padding: 10px 36px;
+  margin-top: 20px;
+  border-radius: 3px; }
 #documento_container button span {
   text-transform: none; }
 #documento_container progresso {

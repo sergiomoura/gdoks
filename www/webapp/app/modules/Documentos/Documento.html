@@ -1,11 +1,15 @@
 <md-content id="documento_container" class="container_80" layout="column" layout-padding>
-	
+	<div ng-if="documento.projeto_ativo==0" class="aviso">
+		<h3>Documento de Projeto Inativo</h3>
+		<p>Este documento faz parte de um projeto que está inativo. Ele não pode ser alterado. Se deseja alterar este documento vá até o cadastro do projeto {{documento.nome_projeto}} e ative-o.</p>
+	</div>
 	<div layout="row" layout-align="space-between center">
 		<h3>{{documento.codigo}}</h3>
 		<div layout="row" layout-align="end center">
 			<md-button
 				class="md-raised md-primary"
 				ng-click="avancarRevisao($event)"
+				ng-disabled="documento.projeto_ativo == 0"
 				aria-label="Avançar Revisão">
 					<md-icon
 						class="material-icons step"
@@ -16,7 +20,7 @@
 				class="md-raised md-primary"
 				ng-click="bloquearParaRevisao()"
 				ng-if="documento.ehEspecialista"
-				ng-disabled="!(documento.status=='validado' || documento.status=='virgem')"
+				ng-disabled="documento.projeto_ativo==0 || !(documento.status=='validado' || documento.status=='virgem')"
 				aria-label="Bloquear documento para revisão">
 					<md-icon ng-if="documento.status=='validado' || documento.status=='virgem'" class="material-icons step" aria-label="Baixar para revisão">lock_open</md-icon>
 					<md-icon ng-if="!(documento.status=='validado' || documento.status=='virgem')" class="material-icons step" aria-label="Baixar para revisão">lock_outline</md-icon>
@@ -121,7 +125,7 @@
 
 	<md-tabs md-selected="0" md-dynamic-height md-border-bottom md-whiteframe="1dp">
 		
-		<md-tab label="Atualizar Revisão" ng-disabled="!(documento.status == 'virgem' || documento.status == 'checkout')">
+		<md-tab label="Atualizar Revisão" ng-disabled="documento.projeto_ativo==0 || !(documento.status == 'virgem' || documento.status == 'checkout')">
 			<md-content class="md-padding" layout="column">
 				<form name="form_atualizarRevisao">
 					<h3>Atualizar Revisão</h3>
