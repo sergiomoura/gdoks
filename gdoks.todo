@@ -5,6 +5,10 @@ A) Fazer com que projetos inativos:
 	✔	Aparece na lista de projetos só quando liberada a visualização de projetos inativos @done (18-01-26 17:27)
 	✔	Tratar caso de GRD de projeto inativo (não carregado); @done (18-01-29 17:37)
 
+A2) Na tela de atualização do documento:
+	☐	Trocar botão de "Baixar para revisão" -> (Checkout > Bloqueia o documento para revisão)
+	☐	
+
 B) Fazer visão geral no dashboard de projeto:
 	☐	Percentuais no prazo e percentuais em dia
 	☐	Dias restante para o final do prazo do projeto
@@ -16,11 +20,10 @@ C) Avulsos:
 	☐ Sequência das revisões deve ser configurável
 	☐	Criar sequencial de revisão em paralelo, que pode ser alterado manualmente.
 	☐	Exibir os últimos projetos abertos no topo da lista da página de projetos.
+	☐	Criar botão para cadastrar novo documento na tela em que lista-se os projetos
 
 D) Dúvida:
-??? nos documentos só esta podendo excluir arquivos caso subimos de revisão.
-??? na verdade isso so pode acontecer se o arquivo estiver emitido por alguma GRD,
-??? devemos criar um vinculo dentro do documento para o executante ou avalista saber em qual grd foi emitida.
+	☐	Excluir revisão que seja última e não conste em nenhuma GRD
 
 E) Desenhar e Implementar Dashboard Home:
 	☐	nº de documentos em revisão
