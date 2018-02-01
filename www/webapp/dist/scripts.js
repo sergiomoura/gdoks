@@ -1187,6 +1187,10 @@ function ConfiguracoesController($scope){};
 	// Defininfo controller
 	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies,$mdDialog,$interval){
 
+		// Carregando informações do usuário logado a partir do cookie
+		$scope.usuario = $cookies.getObject('user');
+		console.dir($scope.usuario);
+
 		// Pedindo para carregar usuários. Documento é carregado em seguida.
 		carregaUsuarios();
 
@@ -1255,25 +1259,28 @@ function ConfiguracoesController($scope){};
 			$scope.formUploadItems.splice(index,1);
 		}
 
-		$scope.baixarParaRevisao = function(){
-			if($scope.documento.revisoes[0].pdas.length == 0) {
-				if($scope.documento.revisoes.length > 1){
-					var token = GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[1].pdas[0].id);
-				} else {
-				}
-			} else {
-				var token = GDoksFactory.baixarPDAParaRevisao($scope.documento.revisoes[0].pdas[0].id);	
-			}
+		$scope.bloquearParaRevisao = function(){
+			GDoksFactory.bloquearDocumentoParaRevisao($scope.documento.id)
+			.success(function(response){
+				$scope.documento.datahora_do_checkout = new Date(response.datahora);
+				$scope.documento.idu_checkout = $scope.usuario.id;
+				$scope.documento.sigla_checkout = $scope.usuario.sigla;
+
+				$scope.documento.status = statusDeDocumento($scope.documento);
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar bloquear documento para revisão: ' + error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			})
 			
-			var promise = $interval(function(){
-				if($cookies.get('downloadCookie') == token){
-					$interval.cancel(promise);
-					$scope.documento.idu_checkout = $cookies.getObject('user').id;
-					$scope.documento.datahora_do_checkout = new Date();
-					$scope.documento.status = statusDeDocumento($scope.documento);
-					$cookies.remove('downloadCookie',{path:'/'});
-				}
-			},500);
 		}
 
 		$scope.baixar = function(){
@@ -1495,6 +1502,7 @@ function ConfiguracoesController($scope){};
 				$scope.root.addDocumentoAoHistorico(doc);
 				
 				// Parsings...
+				doc.datahora_do_checkout = (doc.datahora_do_checkout==null) ? null : new Date(doc.datahora_do_checkout);
 				for (var i = doc.revisoes.length - 1; i >= 0; i--) {
 					doc.revisoes[i].data_limite = new Date(doc.revisoes[i].data_limite+'T00:00:00');
 					doc.revisoes[i].ua = new Date(doc.revisoes[i].ua);
@@ -6494,6 +6502,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 				form.parentNode.removeChild(form);
 
 				return token;
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.bloquearDocumentoParaRevisao = function(id_doc){
+				return $http.post(API_ROOT+'/documentos/'+id_doc+'/checkout',null,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.baixarRevisaoAtualizada = function(id_revisao){

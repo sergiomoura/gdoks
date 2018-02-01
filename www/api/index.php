@@ -2566,8 +2566,9 @@
 								a.id,
 							    a.nome,
 							    a.codigo,
-							    idu_checkout,
-							    datahora_do_checkout,
+							    a.idu_checkout,
+							    h.sigla as sigla_checkout,
+							    a.datahora_do_checkout,
 							    b.id as id_subdisciplina,
 							    b.nome as nome_subdisciplina,
 							    c.id as id_disciplina,
@@ -2580,6 +2581,7 @@
 							    g.id as id_projeto,
 							    g.nome as nome_projeto,
                                 ifnull(sum(f.hh),0) as trabalho_estimado
+
 							FROM
 								gdoks_documentos a
 							    INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
@@ -2588,6 +2590,7 @@
 							    INNER JOIN gdoks_areas e ON d.id_area=e.id
 							    INNER JOIN gdoks_projetos g ON g.id=e.id_projeto
                                 LEFT JOIN gdoks_hhemdocs f ON f.id_doc=a.id
+                                LEFT JOIN gdoks_usuarios h ON h.id=a.idu_checkout
 							WHERE
 								a.id=?
 							GROUP BY
@@ -2752,6 +2755,71 @@
 
 				}
 			});
+			
+			$app->post('/documentos/:id_doc/checkout',function($id_doc) use ($app,$db,$token,$empresa) {
+				
+				// Levantando o id do usuário
+				$sql = 'SELECT id from gdoks_usuarios where token=? and validade_do_token > now()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Token inválido');
+					$response->flush();
+					exit(1);
+				}
+				$idu = 1*$rs[0]['id'];
+
+
+				// Verificando se ele é especialista da disciplina do documento
+				$sql = 'SELECT count(*) AS especialista
+						FROM gdoks_documentos a
+						INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+						INNER JOIN gdoks_disciplinas c ON b.id_disciplina=c.id
+						INNER JOIN gdoks_especialistas d ON d.id_disciplina=c.id
+						WHERE a.id=?
+						  AND d.id_usuario=?';
+				$ehEspecialista = (($db->query($sql,'ii',$id_doc,$idu))[0]['especialista'] == 1);
+				if(!$ehEspecialista){
+					http_response_code(401);
+					$response = new response(1,'Usuário não é especialista da disciplina deste documento.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Verificando se o documento está liberado
+				$sql = 'SELECT a.idu_checkout,
+						       a.datahora_do_checkout,
+						       b.sigla
+						FROM
+							gdoks_documentos a
+							LEFT JOIN gdoks_usuarios b on a.idu_checkout=b.id
+						WHERE a.id=?';
+				$rs = $db->query($sql,'i',$id_doc);
+				$documento_liberado = is_null($rs[0]['idu_checkout']);
+				if(!$documento_liberado){
+					// Retornando o usuário que está com o documento e quando ele fez o checkout
+					http_response_code(401);
+					$response = new response(2,'Documento bloqueado para revisão por outro usuário');
+					$response->idu = $rs[0]['idu_checkout'];
+					$response->sigla = $rs[0]['sigla'];
+					$response->datahora = $rs[0]['datahora_do_checkout'];
+					$response->flush();
+					exit(1);
+				} else {
+					// Bloqueando o documento para usuário revisar
+					$sql = 'UPDATE gdoks_documentos SET idu_checkout=?,datahora_do_checkout=now() WHERE id=?';
+					$db->query($sql,'ii',$idu,$id_doc);
+
+					// Retornando sucesso
+					$response = new response(0,'ok');
+					$response->datahora = date('Y-m-d h:i:s');
+					$response->flush();
+
+					// Registrando checkout no log
+					registrarAcao($db,$idu,ACAO_BLOQUEOU_DOCUMENTO,$id_doc);
+				}
+			});
+			
 
 			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db,$token,$empresa) {
 

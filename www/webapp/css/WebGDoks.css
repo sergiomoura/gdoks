@@ -273,6 +273,8 @@
       #lista_de_documentos_container .documentos tbody td:nth-child(6) {
         padding-top: 20px; }
 
+#documento_container button span {
+  text-transform: none; }
 #documento_container progresso {
   position: relative;
   top: 6px; }

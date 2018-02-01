@@ -320,6 +320,10 @@ WebGDoks.factory('GDoksFactory',
 				return token;
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.bloquearDocumentoParaRevisao = function(id_doc){
+				return $http.post(API_ROOT+'/documentos/'+id_doc+'/checkout',null,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.baixarRevisaoAtualizada = function(id_revisao){
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");
