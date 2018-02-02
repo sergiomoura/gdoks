@@ -4416,7 +4416,7 @@
 				}
 
 				// Bloquando caso projeto atual da GRD esteja inativo
-				if($rs[0]['ativo'] == 0 || isnull($rs[0]['ativo'])){
+				if($rs[0]['ativo'] == 0 || is_null($rs[0]['ativo'])){
 					http_response_code(401);
 					$response = new response(1,'Não altera GRD de projeto inativo.');
 					$response->flush();
