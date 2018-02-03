@@ -47,6 +47,13 @@ WebGDoks.config(
 			}
 		)
 		.when(
+			'/ua',
+			{
+				controller: 'UAController',
+				templateUrl: 'app/modules/UA/ua.php'
+			}
+		)
+		.when(
 			'/projetos',
 			{
 				controller: 'ProjetosController',

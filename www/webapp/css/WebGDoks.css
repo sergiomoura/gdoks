@@ -1168,14 +1168,6 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 #usuario_container .permissoes_container .controles {
   padding: 15px 10px 0 10px; }
 
-.visaogeral_container {
-  margin-left: 15px; }
-  .visaogeral_container h3 {
-    color: #2196F3; }
-  .visaogeral_container pre {
-    color: rgba(0, 0, 0, 0.54);
-    width: 100%; }
-
 #validacao_container {
   padding-top: 30px; }
   #validacao_container table {
@@ -1298,5 +1290,13 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 #dashprojeto_container .aviso {
   text-align: center;
   margin-bottom: 50px; }
+
+.ua_container {
+  margin-left: 15px; }
+  .ua_container h3 {
+    color: #2196F3; }
+  .ua_container pre {
+    color: rgba(0, 0, 0, 0.54);
+    width: 100%; }
 
 /*# sourceMappingURL=WebGDoks.css.map */
