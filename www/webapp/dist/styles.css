@@ -431,7 +431,7 @@ help:hover > text {
       width: 100%; }
     body .container .login {
       background-color: rgba(255, 255, 255, 0.85);
-      padding: 40px 20px 20px 20px; }
+      padding: 40px 20px 15px 20px; }
       body .container .login div {
         margin-bottom: 10px; }
       body .container .login button[type=submit] {

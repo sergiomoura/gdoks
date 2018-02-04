@@ -33,9 +33,9 @@
 					<md-button ng-click="getToken()" flex class="md-raised md-primary" ng-disabled="empresa=='' || login=='' || senha==''" aria-label="Entrar em empresa">Entrar</md-button>
 				</div>
 				<button type="submit"></button>
+				<div ng-if="loginFail" class="loginFail">Login/Senha inválidos.</div>
+				<div ng-if="getIddbFail" class="loginFail">Empresa Inexistente.</div>
 			</form>
-			<div ng-if="loginFail" class="loginFail">Login/Senha inválidos.</div>
-			<div ng-if="getIddbFail" class="loginFail">Empresa Inexistente.</div>
 		</div>
 	</body>
 	<script src="node_modules/angular/angular.min.js"></script>
