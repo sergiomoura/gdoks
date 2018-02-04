@@ -26,7 +26,8 @@ var WebGDoks = angular.module('WebGDoks',
 								'Topo',
 								'Usuarios',
 								'VisaoGeral',
-								'Validacao']);
+								'Validacao',
+								'UA']);
 
 // Definindo Rotas
 WebGDoks.config(

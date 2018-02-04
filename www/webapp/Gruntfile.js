@@ -22,6 +22,7 @@ module.exports = function(grunt) {
 					'node_modules/ng-currency/dist/ng-currency.js',
 					'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
 					'node_modules/ng-tags-input/build/ng-tags-input.min.js',
+					'node_modules/chart.js/dist/Chart.bundle.js',
 					'app/modules/Cargos/CargosController.js',
 					'app/modules/Clientes/ClientesController.js',
 					'app/modules/Configuracoes/ConfiguracoesController.js',
@@ -48,6 +49,7 @@ module.exports = function(grunt) {
 					'app/directives/directives.js',
 					'app/directives/clickoutside.directives.js',
 					'app/modules/Historico/HistoricoController.js',
+					'app/modules/UA/UAController.js',
 				],
 				dest: 'dist/scripts.js'
 			},
