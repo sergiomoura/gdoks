@@ -58,6 +58,14 @@
 				$scope.loginData.senha = '';
 				$scope.loginData.empresa = '';
 
+				// Carregando imagem de fundo (background)
+				var img = new Image();
+				img.onload = function(){
+					document.body.style.backgroundImage = 'url(' + img.src + ')';
+					document.body.style.opacity = 1;
+				}
+				img.src = "img/loginbg.jpg";
+
 				// Defininfo tela inicial
 				var screen = $location.search().screen?$location.search().screen:'';
 
