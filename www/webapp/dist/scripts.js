@@ -24109,7 +24109,29 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 
 })();
 ;angular.module('VisaoGeral',[])
-.controller('VisaoGeralController',function($scope){
+.controller('VisaoGeralController',function($scope,GDoksFactory){
+
+	// Declarando variáveis do scope
+	$scope.progresso_geral = null;
+
+	// Carregando dados de visão geral
+	GDoksFactory.getVisaoGeral()
+	.success(function(response){
+		$scope.progresso_geral = Math.round(response.progresso_geral);
+		plotaGrafico_progressoGeral();
+	})
+	.error(function(error){
+		// Retornando Toast para o usuário
+		$mdToast.show(
+			$mdToast.simple()
+			.textContent('Falha ao carregar dados: ' + error.msg)
+			.position('bottom left')
+			.hideDelay(5000)
+		);
+
+		// Imprimindo erro no console
+		console.warn(error);
+	});
 
 	// Definição de Cores
 	var corPrimaria = '#2196F3'; // azul
@@ -24122,13 +24144,14 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 
 
 	// Construindo o gráfico de progresso geral
+	function plotaGrafico_progressoGeral(){
 		var ctx = document.getElementById("progressoGeral_canvas").getContext('2d');
 		var chart_ProgressoGeral = new Chart(ctx, {
 			type: 'doughnut',
 			data: {
 				labels: ["Progresso Geral", ""],
 				datasets: [{
-					data: [80, 20],
+					data: [$scope.progresso_geral, 100-$scope.progresso_geral],
 					backgroundColor: [
 						corPrimaria,
 						cinza,
@@ -24153,7 +24176,8 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 					enabled: false
 				}
 			}
-	});
+		});
+	}
 });
 ;(function(){
 	// Definindo módulo
@@ -25325,6 +25349,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getHistProjetos = function(){
 			 	return $http.get(API_ROOT+'/historico/projetos',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getVisaoGeral = function(){
+				return $http.get(API_ROOT+'/visaogeral',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;

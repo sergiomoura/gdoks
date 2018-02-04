@@ -483,6 +483,10 @@ WebGDoks.factory('GDoksFactory',
 			 	return $http.get(API_ROOT+'/historico/projetos',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getVisaoGeral = function(){
+				return $http.get(API_ROOT+'/visaogeral',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

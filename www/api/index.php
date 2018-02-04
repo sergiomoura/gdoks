@@ -452,6 +452,52 @@
 			});
 		// FIM DE ROTAS DE USUÁRIOS
 		
+		// ROTAS DE DADOS PARA VISÃO GERAL
+			$app->get('/visaogeral',function() use ($app,$db,$token){
+				// Verificando se o token do usuário é válido
+				$sql = 'SELECT id
+						FROM gdoks_usuarios
+						WHERE token=?
+						  AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Token inválido');
+					$response->flush();
+					exit(1);
+				}
+
+				// Objeto de resposta de sucesso
+				$response = new response(0,'ok');
+
+				// Levantando dados de projeto
+				$sql = 'SELECT sum(B.progresso_validado)/count(*) as progresso_geral
+						FROM
+						  (SELECT a.id,
+						          max(e.id) AS id_revisao
+						   FROM gdoks_documentos a
+						   INNER JOIN gdoks_subareas b ON a.id_subarea=b.id
+						   INNER JOIN gdoks_areas c ON b.id_area=c.id
+						   INNER JOIN gdoks_projetos d ON c.id_projeto=d.id
+						   LEFT JOIN gdoks_revisoes e ON e.id_documento=a.id
+						   WHERE d.ativo
+						   GROUP BY a.id) A
+						INNER JOIN gdoks_revisoes B ON A.id_revisao=B.id;';
+				try {
+					$response->progresso_geral = ($db->query($sql))[0]['progresso_geral'];
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					exit(1);					
+				}
+				
+				// Enviando resposta de sucesso para o cliente
+				$response->flush();
+
+			});
+		// FIM DE ROTAS DE DADOS PARA VISÃO GERAL
+
 		// ROTAS DE DISCIPLINAS
 			$app->get('/disciplinas',function() use ($app,$db,$token){
 				// lendo o token
