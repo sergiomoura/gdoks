@@ -13,9 +13,9 @@
 	</head>
 	<body ng-controller="controller">
 		<div class="container" ng-cloak>
-			<img src="../webapp/img/logo.png" alt="GDoks">
 			<md-progress-linear md-mode="indeterminate" ng-if="carregando"></md-progress-linear>
 			<form name="esqueci" class="login" layout="column" md-whiteframe="1dp">
+				<img src="../webapp/img/logo.png" alt="GDoks">
 				<div style="text-align:center;">
 					Esqueceu sua senha?
 				</div>
