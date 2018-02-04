@@ -1,13 +1,3 @@
-A2) Na tela de atualização do documento:
-	✔	Trocar botão de "Baixar para revisão" -> (Checkout > Bloqueia o documento para revisão) @done (18-02-01 13:00)
-	
-A) Fazer com que projetos inativos:
-	✔	Não altere documento @done (18-02-01 13:33)
-	✔	Não emite grd @done (18-01-30 04:11)
-	✔	Não apareça por padrão @done (18-01-26 17:27)
-	✔	Aparece na lista de projetos só quando liberada a visualização de projetos inativos @done (18-01-26 17:27)
-	✔	Tratar caso de GRD de projeto inativo (não carregado); @done (18-01-29 17:37)
-
 E) Desenhar e Implementar Dashboard Home:
 	
 	☐	Produtividade dos especialistas
@@ -83,6 +73,14 @@ Tabelas a serem preenchidas na instalação:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	A2) Na tela de atualização do documento @done (18-02-01 13:50)
+	✔	A) Fazer com que projetos inativos @done (18-02-01 13:50)
+	✔	Não altere documento @done (18-02-01 13:33)
+	✔	Trocar botão de "Baixar para revisão" -> (Checkout > Bloqueia o documento para revisão) @done (18-02-01 13:00)
+	✔	Não emite grd @done (18-01-30 04:11)
+	✔	Tratar caso de GRD de projeto inativo (não carregado); @done (18-01-29 17:37)
+	✔	Não apareça por padrão @done (18-01-26 17:27)
+	✔	Aparece na lista de projetos só quando liberada a visualização de projetos inativos @done (18-01-26 17:27)
 	✔ Por gráficos em barra no progresso do documento (dashboard projeto) @done (18-01-24 07:07)
 	✔ BUGFIX - mOSTRAR O DOCUMENTO QUE CONSTA NA grd NA REVISÃO NA QUAL ELE FOI INCLUÍDO NA grd E NÃO NA REVISÃO MAIS ATUAL @done (18-01-23 09:49)
 	✔ Fazer com que o resultado da busca de documentos fique com a mesma aparência do dashboard do projeto @done (18-01-22 15:17)

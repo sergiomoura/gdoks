@@ -1,10 +1,22 @@
-.visaogeral_container {
-	margin-left: 15px;
-	h3 {
-		color:$azul;
-	}
-	pre {
-		color: $cinza;
-		width: 100%;
+.visaogeral_container{
+	width:80%;
+	margin-left:10%;
+	margin-top:20px;
+	.progressoGeral{
+		position: relative;
+		display:block;
+		width:30%;
+		canvas{}
+		.numero{
+			position: absolute;
+			top: calc(50% - 10px);
+			left: calc(50% - 51px);
+			font-size: 40px;
+			letter-spacing: -1px;
+			color: #2196F3;
+			cursor: default;
+			text-align: center;
+			width: 100px;
+		}
 	}
 }
