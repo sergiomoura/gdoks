@@ -13,9 +13,9 @@
 	</head>
 	<body ng-controller="LoginController">
 		<div class="container" ng-cloak>
-			<img src="img/logo.png" alt="GDoks">
 			<md-progress-linear md-mode="indeterminate" ng-if="carregando"></md-progress-linear>
 			<form ng-submit="getToken()" class="login" layout="column" md-whiteframe="1dp">
+				<img src="img/logo.png" alt="GDoks">
 				<md-input-container>
 					<label>Empresa</label>
 					<input type="text" ng-model="loginData.empresa" id="empresa">

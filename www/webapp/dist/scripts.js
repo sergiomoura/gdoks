@@ -3159,7 +3159,7 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 		$scope.confirmPublicarController = function(evt){
 			var confirm = $mdDialog.confirm()
 				.title('Publicar GRD na área do cliente')
-				.textContent('Tem certeza que deseja ublicar a GRD na área do cliente?')
+				.textContent('Tem certeza que deseja Publicar a GRD na área do cliente?')
 				.ariaLabel('Publicar GRD na área do cliente')
 				.targetEvent(evt)
 				.ok('Sim')

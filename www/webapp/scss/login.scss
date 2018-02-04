@@ -1,43 +1,46 @@
-.container {
-	width: 440px;
-	position: relative;
-	left: 50%;
-	margin-left: -220px;
-	top: 50px;
-	font-size: 20px;
+body {
+	background-image:url(../img/loginbg.jpg);
+	background-size: 100vw;
+	.container {
+		width: 440px;
+		position: relative;
+		left: 50%;
+		margin-left: -220px;
+		top: 50px;
+		font-size: 20px;
 
-	md-progress-linear{
-		position:absolute;
-		top:124px;
-		width:calc(100% + 1px);
-	}
-
-	.login{
-		background-color: #FFF;
-		padding: 40px 20px 20px 20px;
-		margin-top: 5px;
-		div{
-			margin-bottom: 10px;
+		md-progress-linear{
+			position:absolute;
+			bottom:0px;
+			width:100%;
 		}
-		button[type=submit]{
-			display: none;
+
+		.login{
+			background-color:rgba(255,255,255,0.85);
+			padding: 40px 20px 20px 20px;
+			div{
+				margin-bottom: 10px;
+			}
+			button[type=submit]{
+				display: none;
+			}
 		}
-	}
 
-	img {
-		height: 113px;
-		width: 420px;
-		margin: 0 0 0px 15px;
-	}
+		img {
+			height: 100px;
+			width: 370px;
+			margin: 0 0 30px 15px;
+		}
 
-	input:-webkit-autofill {
-		-webkit-box-shadow: 0 0 0 1000px white inset !important;
-		-webkit-text-fill-color: #CCC !important;
-	}
+		input:-webkit-autofill {
+			-webkit-box-shadow: 0 0 0 1000px white inset !important;
+			-webkit-text-fill-color: #CCC !important;
+		}
 
-	.loginFail {
-		text-align: center;
-		margin-top: 5px;
-		font-size: 16px;
+		.loginFail {
+			text-align: center;
+			margin-top: 5px;
+			font-size: 16px;
+		}
 	}
 }
