@@ -232,6 +232,7 @@
 		} else {
 			// Busca no cookie. Carregando
 			$scope.busca = $cookies.getObject('busca');
+			$scope.busca.validacao = 3; // <==== remover linha depois de reinserir opção de buscar documento pela validacao
 			$scope.buscarDocumentos();
 		}
 	}

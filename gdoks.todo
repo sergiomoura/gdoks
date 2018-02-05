@@ -1,13 +1,3 @@
- 	✔	21:10 - Carregar dados para gráfico de projeto geral @done (18-02-04 21:49)
-	✔	21:40 - Ajustar dados para que dados de projetos pareçam legais (servidor) @done (18-02-04 21:49)
-	☐	22:10 - Fazer gráfico de documentos
-	☐	23:10 - Carregar dados para gráfico de documentos
-	☐	23:40 - Ajustar dados para que dados de documentos pareçam legais (servidor)
-	☐	00:10 - Preparar treinamento testando o sistema
-	☐	02:10 - Fazer gráfico para grds
-	☐	03:10 - Carregar dados para gráficos de grds
-	☐	03:40 - Ajustar dados para que dados de GRDs pareçam legais (servidor)
-
 E) Desenhar e Implementar Dashboard Home:
 	
 	☐	Produtividade dos especialistas
@@ -46,6 +36,7 @@ F) Bloqueio de Telas:
 
 G) Outros Bug a serem resolvidos:
 	☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso
+	☐	Adicionar critério de buscar documento por validação
 	☐ Notificar o usuário na tela de documeto quando este for de uma disciplna sem validador ou especialista
 	☐ No cadastro de um documento no projeto, habilitar aba documento somente depois de subarea cadastrada
 	☐ Cadastrar logo do cliente
