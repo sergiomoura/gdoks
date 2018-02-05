@@ -17,7 +17,7 @@
 				<md-button ng-click="onBuscarDocumentoClick()" style="width: 250px; left:5px; position: relative;top: 7px" class="md-raised md-primary" aria-label="Buscar Documento"><md-icon class="material-icons step" aria-label="Buscar Documento">search</md-icon> Buscar Documento</md-button>
 			</div>
 			<div layout="row" layout-align="space-between start">
-				<md-input-container flex="45">
+				<md-input-container flex="100">
 					<label>Completude</label>
 					<md-select ng-model="busca.completude">
 					  <md-option ng-value="1">Somente os por concluir</md-option>
@@ -25,14 +25,16 @@
 					  <md-option ng-value="3">Todos - Concluídos ou não</md-option>
 					</md-select>
 				</md-input-container>
-				<md-input-container flex="45">
+
+				<!-- <md-input-container flex="45">
 					<label>Validação</label>
 					<md-select ng-model="busca.validacao">
 					  <md-option ng-value="1">... com progresso a validar</md-option>
 					  <md-option ng-value="2">... validados</md-option>
 					  <md-option ng-value="3">... qualquer situação</md-option>
 					</md-select>
-				</md-input-container>
+				</md-input-container> -->
+
 			</div>
 		</div>
 		<div layout="column" flex="45">
