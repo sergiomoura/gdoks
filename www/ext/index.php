@@ -66,7 +66,7 @@
 			$grd->sendZip($nome_usuario,true); // true => SEM COMPRESSÃO;
 		} catch (Exception $e) {
 			http_response_code(401);
-			echo('{"error":1,"msg":"'.$e->getMessage.'"}');
+			echo('{"error":1,"msg":"'.$e->getMessage().'"}');
 			exit(1);
 		}
 	});
