@@ -547,7 +547,8 @@
 						INNER JOIN gdoks_projetos d ON c.id_projeto=d.id
 						LEFT JOIN gdoks_revisoes e ON e.id_documento=a.id
 						WHERE d.ativo
-						  AND idu_checkout IS NOT NULL';
+						  AND a.idu_checkout IS NOT NULL
+						  AND e.progresso_validado<100';
 				try {
 					$n_docs_em_revisao = $db->query($sql)[0]['n_docs_em_revisao'];
 				} catch (Exception $e) {
@@ -2961,7 +2962,6 @@
 					registrarAcao($db,$idu,ACAO_BLOQUEOU_DOCUMENTO,$id_doc);
 				}
 			});
-			
 
 			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db,$token,$empresa) {
 
