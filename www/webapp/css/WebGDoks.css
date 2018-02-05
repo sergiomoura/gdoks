@@ -1175,7 +1175,8 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   .visaogeral_container .progressoGeral {
     position: relative;
     display: block;
-    width: 30%; }
+    width: 30%;
+    float: left; }
     .visaogeral_container .progressoGeral .numero {
       position: absolute;
       top: calc(50% - 10px);
@@ -1186,6 +1187,18 @@ md-expansion-panel-expanded .md-expansion-panel-item {
       cursor: default;
       text-align: center;
       width: 100px; }
+  .visaogeral_container .documentos {
+    position: relative;
+    display: block;
+    width: 70%;
+    float: left;
+    height: 50vh; }
+  .visaogeral_container .grds {
+    position: relative;
+    display: block;
+    width: 100%;
+    float: left;
+    height: 50vh; }
 
 #validacao_container {
   padding-top: 30px; }

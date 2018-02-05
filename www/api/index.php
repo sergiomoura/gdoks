@@ -470,8 +470,8 @@
 				// Objeto de resposta de sucesso
 				$response = new response(0,'ok');
 
-				// Levantando dados de projeto
-				$sql = 'SELECT sum(B.progresso_validado)/count(*) as progresso_geral
+				// Levantando quantos documentos de projeto ativo nós tempos
+				$sql = 'SELECT count(*) as n_docs
 						FROM
 						  (SELECT a.id,
 						          max(e.id) AS id_revisao
@@ -484,14 +484,108 @@
 						   GROUP BY a.id) A
 						INNER JOIN gdoks_revisoes B ON A.id_revisao=B.id;';
 				try {
-					$response->progresso_geral = ($db->query($sql))[0]['progresso_geral'];
+					$n_docs = ($db->query($sql))[0]['n_docs'];
 				} catch (Exception $e) {
 					http_response_code(401);
 					$response = new response(1,$e->getMessage());
 					$response->flush();
 					exit(1);					
 				}
-				
+
+				// Levantando progresso total dos documentos de projetos ativos
+				$sql = 'SELECT sum(B.progresso_validado) as progresso_total
+						FROM
+						  (SELECT a.id,
+						          max(e.id) AS id_revisao
+						   FROM gdoks_documentos a
+						   INNER JOIN gdoks_subareas b ON a.id_subarea=b.id
+						   INNER JOIN gdoks_areas c ON b.id_area=c.id
+						   INNER JOIN gdoks_projetos d ON c.id_projeto=d.id
+						   LEFT JOIN gdoks_revisoes e ON e.id_documento=a.id
+						   WHERE d.ativo
+						   GROUP BY a.id) A
+						INNER JOIN gdoks_revisoes B ON A.id_revisao=B.id;';
+
+				try {
+					$progresso_total = ($db->query($sql))[0]['progresso_total'];
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					exit(1);					
+				}
+
+				// Levantando a quantidade de documentos concluidos
+				$sql = 'SELECT count(*) n_docs_concluidos
+						FROM
+						  (SELECT a.id,
+						          max(e.id) AS id_revisao
+						   FROM gdoks_documentos a
+						   INNER JOIN gdoks_subareas b ON a.id_subarea=b.id
+						   INNER JOIN gdoks_areas c ON b.id_area=c.id
+						   INNER JOIN gdoks_projetos d ON c.id_projeto=d.id
+						   LEFT JOIN gdoks_revisoes e ON e.id_documento=a.id
+						   WHERE d.ativo AND a.idu_checkout IS NOT NULL
+						   GROUP BY a.id) A
+						INNER JOIN gdoks_revisoes B ON A.id_revisao=B.id
+						WHERE B.progresso_validado=100;';
+
+				try {
+					$n_docs_concluidos = $db->query($sql)[0]['n_docs_concluidos'];
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					exit(1);					
+				}
+
+				// Levantando a quantidade de documentos em revisao
+				$sql = 'SELECT count(*) n_docs_em_revisao
+						FROM gdoks_documentos a
+						INNER JOIN gdoks_subareas b ON a.id_subarea=b.id
+						INNER JOIN gdoks_areas c ON b.id_area=c.id
+						INNER JOIN gdoks_projetos d ON c.id_projeto=d.id
+						LEFT JOIN gdoks_revisoes e ON e.id_documento=a.id
+						WHERE d.ativo
+						  AND idu_checkout IS NOT NULL';
+				try {
+					$n_docs_em_revisao = $db->query($sql)[0]['n_docs_em_revisao'];
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					exit(1);					
+				}
+
+				// Determinando datas de intervalos de grds
+				$n_intervalos = 8;
+
+				// Determinando n_dias para a data inicial
+				$n_dias = new DateInterval('P'. (date('N')*1 + (($n_intervalos - 1) * 7) -1) .'D');
+
+				// Determinando a data inicial: hoje + (7 - d) - 42dias
+				$data_inicial = (new DateTime(date('Y-m-d')))->sub($n_dias);
+
+				// Declarando vetor de intervalos
+				$intervalos = Array();
+
+				// Construindo vetor de intervalos
+				$sql = 'SELECT count(*) as n_grds from gdoks_grds WHERE datahora_enviada>=? AND  datahora_enviada<?';
+				for ($i=0; $i < $n_intervalos; $i++) { 
+					$intervalo = new stdClass();
+					$intervalo->i = $data_inicial->format('Y-m-d');
+					$intervalo->n = $db->query($sql,'ss',$intervalo->i,($data_inicial->add(new DateInterval('P7D')))->format('Y-m-d'))[0]['n_grds'];
+					array_push($intervalos, $intervalo);
+				}
+
+				// Determinando o progresso_geral
+				$response->progresso_geral = $progresso_total/$n_docs;
+				$response->n_docs_concluidos = $n_docs_concluidos;
+				$response->n_docs_em_revisao = $n_docs_em_revisao;
+				$response->n_docs_parados = $n_docs - $n_docs_concluidos - $n_docs_em_revisao;
+				$response->n_docs = $n_docs;
+				$response->n_grds = $intervalos;
+
 				// Enviando resposta de sucesso para o cliente
 				$response->flush();
 
