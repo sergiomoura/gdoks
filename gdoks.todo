@@ -59,6 +59,8 @@ G) Outros Bug a serem resolvidos:
 	☐	Tela e-mails enviados
 	☐	Na tela de cadastro de projeto, mdInput messages show animation called on invalid messages element
 	☐	Alertar na tela de atualização de documentos quanto ao tamanho máximo de uploads
+	☐	Remover da tabela gdoks_arquivos o caminho completo para o arquivo no servidor.
+
 
 Tabelas a serem preenchidas na instalação:
 	- Empresas
