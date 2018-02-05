@@ -2142,8 +2142,8 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   padding: 15px 10px 0 10px; }
 
 .visaogeral_container {
-  width: 80%;
-  margin-left: 10%;
+  width: 95%;
+  margin-left: 2.5%;
   margin-top: 20px; }
   .visaogeral_container .progressoGeral {
     position: relative;
@@ -2171,7 +2171,7 @@ md-expansion-panel-expanded .md-expansion-panel-item {
     display: block;
     width: 100%;
     float: left;
-    height: 50vh; }
+    height: 40vh; }
 
 #validacao_container {
   padding-top: 30px; }
