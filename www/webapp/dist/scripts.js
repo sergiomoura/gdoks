@@ -19797,7 +19797,6 @@ function ConfiguracoesController($scope){};
 
 		// Carregando informações do usuário logado a partir do cookie
 		$scope.usuario = $cookies.getObject('user');
-		console.dir($scope.usuario);
 
 		// Pedindo para carregar usuários. Documento é carregado em seguida.
 		carregaUsuarios();
