@@ -580,7 +580,7 @@
 				}
 
 				// Determinando o progresso_geral
-				$response->progresso_geral = $progresso_total/$n_docs;
+				$response->progresso_geral = ($n_docs==0 ? 0 : $progresso_total/$n_docs);
 				$response->n_docs_concluidos = $n_docs_concluidos;
 				$response->n_docs_em_revisao = $n_docs_em_revisao;
 				$response->n_docs_parados = $n_docs - $n_docs_concluidos - $n_docs_em_revisao;
