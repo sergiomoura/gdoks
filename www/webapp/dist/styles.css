@@ -1201,6 +1201,10 @@ textarea {
 
 #lista_de_documentos_container .md-errors-spacer {
   display: none; }
+#lista_de_documentos_container .aviso {
+  color: rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  text-align: center; }
 #lista_de_documentos_container .paginacao {
   width: 400px;
   position: relative;
