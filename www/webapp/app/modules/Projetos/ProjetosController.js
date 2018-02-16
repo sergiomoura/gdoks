@@ -429,13 +429,16 @@
 
 	function DashProjetoController($scope,GDoksFactory,$location,$routeParams){
 		
-		// Definindo variável projeto
+		// Definindo variáveis de scope
 		$scope.projeto = {};
 		$scope.documentos = [];
 		$scope.grds = [];
 
+		// Declarando variáveis auxiliares
+		var id_projeto = $routeParams.id;
+
 		// Carregando projeto	
-		GDoksFactory.getProjeto($routeParams.id)
+		GDoksFactory.getProjeto(id_projeto)
 		.success(function(response){
 			if(response.error == 0){
 				// Parsing datas do projeto
@@ -464,6 +467,9 @@
 			// Imprimindo erro no console
 			console.warn(err);
 		})
+
+		// Carregando estatísticas de projeto
+		GDoksFactory.getEstatisticasDeProjeto(id_projeto);
 
 		// Carregando documentos do projeto
 		GDoksFactory.getDocumentosDoProjeto($routeParams.id)

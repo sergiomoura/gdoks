@@ -1427,6 +1427,10 @@
 				$response->flush();
 			});
 
+			$app->get('/projetos/:id/stats',function($id) use ($app,$db,$token,$config){
+				echo('hahaha!');
+			});
+
 			$app->put('/projetos/:id',function($id) use ($app,$db,$token){
 				
 				// Lendo dados
