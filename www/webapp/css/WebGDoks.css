@@ -149,6 +149,10 @@
 
 #clientes_container md-input-container {
   margin-top: 40px; }
+#clientes_container .aviso {
+  color: rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  text-align: center; }
 #clientes_container .lista .cliente {
   display: inline-block;
   width: calc(33% - 50px);
@@ -1210,6 +1214,10 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 
 #validacao_container {
   padding-top: 30px; }
+  #validacao_container .aviso {
+    color: rgba(0, 0, 0, 0.12);
+    border-radius: 5px;
+    text-align: center; }
   #validacao_container table {
     width: 100%;
     border-collapse: collapse; }

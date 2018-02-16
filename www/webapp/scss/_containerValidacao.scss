@@ -1,5 +1,13 @@
 #validacao_container {
+
 	padding-top:30px;
+	
+	.aviso{
+		color:$cinzaClaro;
+		border-radius: 5px;
+		text-align:center;
+	}
+
 	table {
 		
 		width:100%;

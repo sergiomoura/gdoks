@@ -60,7 +60,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<div ng-if="documentos.length == 0">
+	<div class="aviso" ng-if="documentos.length == 0">
 		Nenhum documento para você validar.
 	</div>
 </div>
