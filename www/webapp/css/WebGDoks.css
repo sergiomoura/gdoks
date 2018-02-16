@@ -1113,6 +1113,10 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   #projetos_container .historico thead td {
     color: rgba(0, 0, 0, 0.54);
     padding: 14px 30px; }
+#projetos_container .aviso {
+  color: rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  text-align: center; }
 
 #senha_container {
   padding: 20px; }

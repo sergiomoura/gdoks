@@ -14,7 +14,7 @@
 		</md-input-container>
 	</div>
 
-	<table class="historico" ng-if="q.nome.length == 0">
+	<table class="historico" ng-if="q.nome.length == 0 && historico.length > 0">
 		<thead>
 			<tr>
 				<td>
@@ -54,7 +54,7 @@
 		</tbody>
 	</table>
 
-	<table class="projetos">
+	<table class="projetos" ng-if="projetos.length > 0">
 		<thead>
 			<tr>
 				<td ng-click="setOrderBy('codigo')">
@@ -101,5 +101,8 @@
 			</tr>
 		</tbody>
 	</table>
+
+	<div class="aviso" ng-if="projetos.length == 0">Nenhum projeto cadastrado</div>
+	
 
 </div>
