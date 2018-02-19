@@ -1,11 +1,3 @@
-E) Desenhar e Implementar Dashboard Home:
-	
-	☐	Produtividade dos especialistas
-	☐	Vizualização da equipe
-	☐	Percentuais de avanço de cada projeto com seu deadline
-	☐	Percentuais de documentos por status nos projetos ativos
-	
-
 B) Fazer visão geral no dashboard de projeto:
 	☐	Percentuais no prazo e percentuais em dia
 	☐	Dias restante para o final do prazo do projeto
@@ -76,6 +68,9 @@ Tabelas a serem preenchidas na instalação:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ E) Desenhar e Implementar Dashboard Home: @done (18-02-05 14:57)
+	✔	Percentuais de documentos por status nos projetos ativos @done (18-02-05 14:56)
+	✔	Percentuais de avanço de cada projeto com seu deadline @done (18-02-05 14:56)
 	✔	A2) Na tela de atualização do documento @done (18-02-01 13:50)
 	✔	A) Fazer com que projetos inativos @done (18-02-01 13:50)
 	✔	Não altere documento @done (18-02-01 13:33)
