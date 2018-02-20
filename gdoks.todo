@@ -1,8 +1,30 @@
+F) Bloqueio de Telas:
+	☐ Usuários
+	☐ Documentos
+	☐ GRDs
+	☐ Disciplinas
+	☐ Clientes
+	☐ Cargos
+	☐ Log
+	☐ Configurações
+	☐	Home *
+
+E) Desenhar e Implementar Dashboard Home:
+	☐	Implementar cada quadro de dashboard de maneira independente para que sejam opções da tela visão geral
+	☐	Melhores dos especialistas
+	☐	Melhores Validadores
+	☐	Número de documentos para não concluídos da especialidade do usuário
+	☐	Número de documentos para validar das disciplinas da qual o usuário é validador
+	✔	Percentuais de avanço de cada projeto com seu deadline @done (18-02-16 21:25)
+	✔	Percentuais de documentos por status nos projetos ativos @done (18-02-16 21:25)
+
 B) Fazer visão geral no dashboard de projeto:
 	☐	Percentuais no prazo e percentuais em dia
 	☐	Dias restante para o final do prazo do projeto
 
 C) Avulsos:
+	☐	Fazer carregamento de usuários sempre do servidor, não mais da base local
+	☐	Fazer com que o usuário 1 seja o admin e ele não seja visto por outros usuários. somente por ele mesmo.
 	☐	Travar atualização da revisão quando esta estiver em uma grd enviada
 	☐	Diminuir progresso validado de um documento quando ele tiver em 100% e for atualizado
 	☐	Tratar caso de atualização de documento sem aumentar progresso.
@@ -13,18 +35,9 @@ C) Avulsos:
 	☐	Próprio usuário desbloquear documento sem fazer upload
 
 D) Dúvida:
-	☐	Excluir revisão que seja última e não conste em nenhuma GRD
+	☐	Excluir revisão que seja última (não única) e não conste em nenhuma GRD
 
 
-F) Bloqueio de Telas:
-	☐ Usuários
-	☐ Documentos
-	☐ GRDs
-	☐ Disciplinas
-	☐ Clientes
-	☐ Cargos
-	☐ Log
-	☐ Configurações
 
 G) Outros Bug a serem resolvidos:
 	☐	Mostrar cores dos toasts de erro com uma cor diferente da cor dos toasts de sucesso

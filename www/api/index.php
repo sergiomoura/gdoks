@@ -1315,7 +1315,7 @@
 				// Levantando os projetos que este usuário possui pemissão
 				$sql = "SELECT
 							A.*,
-							B.progresso_total
+							ifnull(B.progresso_total,0) as progresso_total
 						FROM
 						  (SELECT a.id,
 						          a.codigo,
@@ -1324,9 +1324,9 @@
 						          e.id AS id_cliente,
 						          e.nome_fantasia AS nome_cliente
 						   FROM gdoks_projetos a
-						   INNER JOIN gdoks_areas b ON a.id=b.id_projeto
-						   INNER JOIN gdoks_subareas c ON b.id=c.id_area
-						   INNER JOIN gdoks_documentos d ON c.id=d.id_subarea
+						   LEFT JOIN gdoks_areas b ON a.id=b.id_projeto
+						   LEFT JOIN gdoks_subareas c ON b.id=c.id_area
+						   LEFT JOIN gdoks_documentos d ON c.id=d.id_subarea
 						   INNER JOIN gdoks_clientes e ON a.id_cliente=e.id
 						   INNER JOIN gdoks_usuarios u ON a.id_empresa=u.id_empresa
 						   WHERE
