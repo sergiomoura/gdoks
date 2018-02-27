@@ -136,10 +136,11 @@
 							aria-label="Selecionar Arquivos"
 							ng-model="updateFiles"
 							ngf-select
+							ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
 							ngf-multiple="true"
-							ngf-change="onFilesChange()"
-							>
-								<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>Selecionar Arquivos
+							ngf-change="onFilesChange()">
+								<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>
+								Selecionar Arquivos (Máximo <?php echo(ini_get('upload_max_filesize')); ?>B)
 						</md-button>
 					</div>
 					

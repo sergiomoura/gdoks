@@ -122,7 +122,7 @@ WebGDoks.config(
 			'/documentos/:id',
 			{
 				controller: 'DocumentoController',
-				templateUrl: 'app/modules/Documentos/Documento.html'
+				templateUrl: 'app/modules/Documentos/documento.php'
 			}
 		)
 		.when(
