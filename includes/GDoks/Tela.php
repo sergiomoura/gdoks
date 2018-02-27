@@ -47,7 +47,7 @@
 			// Tratando url de tela para testar na query
 			$url_tela = str_replace('/www','', $url_tela);
 
-			// verificando se usuário tem acesso a tela
+			// Verificando se existe uma tela com a url passada
 			$sql = 'SELECT
 						a.id,
 						a.titulo,
@@ -56,28 +56,39 @@
 						a.endereco,
 						a.href
 					FROM gdoks_telas a
-					INNER JOIN gdoks_usuarios_x_telas b ON a.id=b.id_tela
-					AND b.id_usuario=?
 					WHERE a.endereco=?';
-			$rs = $db->query($sql,'is',$id_usuario,$url_tela);
-
-			if(sizeof($rs)==1){
-				// Usuário tem acesso a tela
-				// populando atributos locais
-				$instance = new self($db);
-				$instance->_id = $rs[0]['id'];
-				$instance->_titulo = $rs[0]['titulo'];
-				$instance->_descricao = $rs[0]['descricao'];
-				$instance->_icone = $rs[0]['icone'];
-				$instance->_endereco = $rs[0]['endereco'];
-				$instance->_href = $rs[0]['href'];
-				$instance->_id_usuario = $id_usuario;
-
-				// retornando instancia
-				return $instance;
-			} else {
-				throw new Exception("Erro: Tela inexistente ou acesso bloqueado a usuário", 1);
+			$rs = $db->query($sql,'s',$url_tela);
+			if(sizeof($rs) == 0){
+				throw new Exception("Erro: Tela inexistente", 1);
+				exit();
 			}
+
+			// Verificando se usuário tem acesso a tela
+			$sql = 'SELECT
+						count(*) as n
+					FROM
+						gdoks_usuarios_x_telas b
+					WHERE
+						b.id_tela=?	AND b.id_usuario=?';
+			$rs_aux = $db->query($sql,'ii',$rs[0]['id'],$id_usuario);
+			if($rs_aux[0]['n'] == 0){
+				throw new Exception("Erro: Usuário não tem acesso a esta tela.", 1);
+				exit();
+			}
+			
+			// Usuário tem acesso a tela
+			// populando atributos locais
+			$instance = new self($db);
+			$instance->_id = $rs[0]['id'];
+			$instance->_titulo = $rs[0]['titulo'];
+			$instance->_descricao = $rs[0]['descricao'];
+			$instance->_icone = $rs[0]['icone'];
+			$instance->_endereco = $rs[0]['endereco'];
+			$instance->_href = $rs[0]['href'];
+			$instance->_id_usuario = $id_usuario;
+
+			// retornando instancia
+			return $instance;
 		}
 
 		public function getId(){
