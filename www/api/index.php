@@ -2260,7 +2260,7 @@
 
 				// Verificando se o documento possui algum PDA
 				$sql = 'SELECT count(*) as nPdas FROM gdoks_revisoes a INNER JOIN gdoks_pdas b ON (a.id=b.id_revisao AND a.id_documento=?)';
-				$nPdas = $db->query($sql,'i',$id_documento)[0];
+				$nPdas = $db->query($sql,'i',$id_documento)[0]['nPdas'];
 				if($nPdas > 0){
 					http_response_code(401);
 					$response = new response(1,'Impossível remover documento já alterado/atualizado.');
@@ -2283,7 +2283,6 @@
 
 				// Registrando a ação
 				registrarAcao($db,$id_usuario,ACAO_REMOVEU_DOCUMENTO,implode(',',$documento));
-				
 			});
 
 			$app->get('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db,$token){
