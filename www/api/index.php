@@ -2251,25 +2251,39 @@
 				$rs = $db->query($sql,'si',$token,$id_documento)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
-				if($ok == 1){
-					// Tudo ok! O Documento a ser removido é do mesmo cliente do usuário
-					$sql = 'DELETE FROM gdoks_documentos WHERE id=?';
-					try {
-						$db->query($sql,'i',$id_documento);
-						$response = new response(0,'Documento removido com sucesso.');
-						$response->flush();
-					} catch (Exception $e) {
-						http_response_code(401);
-						$response = new response(1,$e->getMessage());
-						$response->flush();
-						return;
-					}
-					// Registrando a ação
-					registrarAcao($db,$id_usuario,ACAO_REMOVEU_DOCUMENTO,implode(',',$documento));
-				} else {
+				if($ok != 1){
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					$response->flush();
+					exit(1);
 				}
+
+				// Verificando se o documento possui algum PDA
+				$sql = 'SELECT count(*) as nPdas FROM gdoks_revisoes a INNER JOIN gdoks_pdas b ON (a.id=b.id_revisao AND a.id_documento=?)';
+				$nPdas = $db->query($sql,'i',$id_documento)[0];
+				if($nPdas > 0){
+					http_response_code(401);
+					$response = new response(1,'Impossível remover documento já alterado/atualizado.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Tudo ok! O Documento a ser removido é do mesmo cliente do usuário
+				$sql = 'DELETE FROM gdoks_documentos WHERE id=?';
+				try {
+					$db->query($sql,'i',$id_documento);
+					$response = new response(0,'Documento removido com sucesso.');
+					$response->flush();
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,$e->getMessage());
+					$response->flush();
+					return;
+				}
+
+				// Registrando a ação
+				registrarAcao($db,$id_usuario,ACAO_REMOVEU_DOCUMENTO,implode(',',$documento));
+				
 			});
 
 			$app->get('/projetos/:id_projeto/documentos/',function($id_projeto) use ($app,$db,$token){

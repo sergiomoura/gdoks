@@ -72,9 +72,15 @@
 
 			$mdDialog.show(confirm).then(
 				function() {
+					// Mostra carregando
+					$scope.root.carregando = true;
+
 					documento.id_projeto = $scope.projeto.id;
 					GDoksFactory.removerDocumento(documento)
 					.success(function(response){
+
+						// Esconde carregando
+						$scope.root.carregando = false;
 						
 						// Localizando o index do documento excluído do projeto
 						var pos = $scope.projeto.documentos.findIndex(function(a){return a.id==this},documento.id);
@@ -90,6 +96,19 @@
 							.hideDelay(5000)
 						);
 					})
+					.error(function(error){
+						
+						// Esconde carregando
+						$scope.root.carregando = false;
+
+						// Retornando Toast para usuário!
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Falha ao tentar remover documento: ' + error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					});
 				}
 			);
 		};

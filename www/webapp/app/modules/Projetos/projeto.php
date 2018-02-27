@@ -308,7 +308,17 @@
 									</div>
 								</div>								
 								<div layout="row" layout-align="space-between center">
-									<md-button class="md-raised md-accent" aria-label="Remover" ng-click="openRemoverConfirm($event,doc)">Remover</md-button>
+									<span>
+										<md-button
+											class="md-raised md-accent"
+											aria-label="Remover"
+											ng-click="openRemoverConfirm($event,doc)"
+											ng-disabled="doc.ultimo_pda!=null">Remover
+										</md-button>
+										<md-tooltip ng-if="doc.ultimo_pda!=null" md-delay="0" md-direction="bottom" md-autohide="true">
+											Impossível remover documento que já foi atualizado/alterado.
+										</md-tooltip>
+									</span>
 									<md-button class="md-raised md-primary" aria-label="Editar"  ng-click="openDocumentoDialog($event,doc.id)">Editar</md-button>
 								</div>
 								<div layout="row" layout-align="center center">
