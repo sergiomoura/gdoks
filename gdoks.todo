@@ -23,6 +23,9 @@ B) Fazer visão geral no dashboard de projeto:
 	☐	Dias restante para o final do prazo do projeto
 
 C) Avulsos:
+	☐	Por aviso na tela de atualizar documento sobre o aviso do tamanho limite (atualmente 100MB)
+	☐	Impedir exclusão de documento que tenha algum pda.
+	☐	Bloquear alteração de documentos que estejam bloqueados por outro usuário.
 	☐	Fazer carregamento de usuários sempre do servidor, não mais da base local
 	☐	Fazer com que o usuário 1 seja o admin e ele não seja visto por outros usuários. somente por ele mesmo.
 	☐	Travar atualização da revisão quando esta estiver em uma grd enviada
