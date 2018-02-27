@@ -1,3 +1,7 @@
+<?php 
+	// Incluindo o blocker de tela.
+	include('blocker_tela.php');
+?>
 <div class="visaogeral_container">
 	<div class="progressoGeral">
 		<canvas id="progressoGeral_canvas" width="100%" height="100%" ></canvas>

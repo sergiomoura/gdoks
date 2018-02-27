@@ -84,7 +84,6 @@
 		<div layout="row" style="height:100%">
 			<md-sidenav layout="column" md-is-locked-open="root.mostrandoMenu" md-whiteframe="1dp" md-component-id="menu_principal">
 				<md-sidemenu>
-					<md-sidemenu-button ng-click="toggleMenu()" href="#/dashboard"><md-icon class="material-icons step" aria-label="home">home</md-icon>Home</md-sidemenu-button>
 					<?php 
 					foreach ($telas as $tela) {
 						echo('<md-sidemenu-button ng-click="toggleMenu()" href="'.$tela->getHref().'"><md-icon class="material-icons step" aria-label="'.$tela->getTitulo().'">'.$tela->getIcone().'</md-icon>'.$tela->getTitulo().'</md-sidemenu-button>'."\n");
