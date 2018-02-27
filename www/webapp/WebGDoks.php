@@ -16,7 +16,11 @@
 	unset($dbkey);
 
 	// Levantando telas permitidas a este usuário
-	$sql = 'SELECT id_tela FROM gdoks_usuarios_x_telas WHERE id_usuario=?';
+	$sql = 'SELECT a.id_tela
+			FROM gdoks_usuarios_x_telas a
+			INNER JOIN gdoks_telas b ON a.id_tela=b.id
+			WHERE a.id_usuario=?
+			ORDER BY b.ordem ASC';
 	$idsDeTelas = array_map(function($a){return $a['id_tela'];}, $db->query($sql,'i',$user->id));
 	
 	// Criando vetor de telas
