@@ -2230,7 +2230,14 @@
 						       id_subdisciplina
 						FROM gdoks_documentos
 						WHERE id=?';
-				$documento = $db->query($sql,'i',$id_documento)[0];
+				$rs = $db->query($sql,'i',$id_documento);
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Documento inexistente.');
+					$response->flush();
+					exit(1);
+				}
+				$documento = $rs[0];
 
 				// verificando se o usário enviado é da mesma empresa do documento atual
 				$sql = 'SELECT A.id AS id_usuario,
