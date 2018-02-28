@@ -26,6 +26,7 @@ C) Avulsos:
 	✔	Por aviso na tela de atualizar documento sobre o aviso do tamanho limite (atualmente 100MB) @done (18-02-27 04:02)
 	✔	Impedir exclusão de documento que tenha algum pda. @done (18-02-27 03:46)
 	✔	Bloquear alteração de documentos que estejam bloqueados por outro usuário. @done (18-02-27 06:29)
+	☐	Fazer com que quem bloqueou possa desbloquear sem alterar o documento
 	☐	Fazer carregamento de usuários sempre do servidor, não mais da base local
 	☐	Fazer com que o usuário 1 seja o admin e ele não seja visto por outros usuários. somente por ele mesmo.
 	☐	Travar atualização da revisão quando esta estiver em uma grd enviada
