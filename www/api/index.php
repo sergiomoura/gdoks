@@ -2664,41 +2664,42 @@
 				$idu = $rs[0]['id'];
 
 				// Levantando dados dos documentos que aguardam validação do usuário logado
-				$sql = 'SELECT b.id AS id_disciplina,
-						       b.nome AS nome_disciplina,
-						       b.sigla AS sigla_disciplina,
-						       c.id AS id_subdisciplina,
-						       c.nome AS nome_subdisciplina,
-						       d.id,
-						       d.codigo,
-						       d.nome,
-						       e.id AS id_revisao,
-						       e.progresso_a_validar,
-						       e.progresso_validado,
-						       max(f.id) AS id_pda,
-						       f.idu AS id_especialista,
-						       g.sigla as sigla_especialista
-						FROM gdoks_validadores a
-						INNER JOIN gdoks_disciplinas b ON a.id_disciplina=b.id
-						INNER JOIN gdoks_subdisciplinas c ON c.id_disciplina=b.id
-						INNER JOIN gdoks_documentos d ON d.id_subdisciplina=c.id
-						INNER JOIN gdoks_revisoes e ON e.id_documento=d.id
-						INNER JOIN gdoks_pdas f ON f.id_revisao=e.id
-						INNER JOIN gdoks_usuarios g ON f.idu=g.id
-						WHERE a.id_usuario=?
-						  AND e.progresso_a_validar>0
-						GROUP BY b.id,
-						         b.nome,
-						         b.sigla,
-						         c.id,
-						         c.nome,
-						         d.id,
-						         d.codigo,
-						         d.nome,
-						         e.id,
-						         e.progresso_a_validar,
-						         e.progresso_validado,
-						         f.idu';
+				$sql = 'SELECT *
+						FROM
+						  (SELECT a.id,
+						          a.codigo,
+						          a.nome,
+						          c.id AS id_disciplina,
+						          c.nome AS nome_disciplina,
+						          c.sigla AS sigla_disciplina,
+						          b.id AS id_subdisciplina,
+						          b.nome AS nome_subdisciplina
+						   FROM gdoks_documentos a
+						   INNER JOIN gdoks_subdisciplinas b ON a.id_subdisciplina=b.id
+						   INNER JOIN gdoks_disciplinas c ON b.id_disciplina=c.id
+						   INNER JOIN gdoks_validadores d ON c.id=d.id_disciplina
+						   AND d.id_usuario=?) X
+						INNER JOIN
+						  (SELECT X.id_pda,
+						          X.id_revisao,
+						          Y.progresso_a_validar,
+						          Y.progresso_validado,
+						          Y.id_documento,
+						          Z.id AS id_especialista,
+						          Z.sigla AS sigla_especialista
+						   FROM
+						     (SELECT I.id_pda,
+						             I.id_revisao,
+						             K.idu
+						      FROM
+						        (SELECT max(a.id) AS id_pda,
+						                a.id_revisao
+						         FROM gdoks_pdas a
+						         GROUP BY a.id_revisao) I
+						      INNER JOIN gdoks_pdas K ON I.id_pda=K.id) X
+						   INNER JOIN gdoks_revisoes Y ON X.id_revisao=Y.id
+						   INNER JOIN gdoks_usuarios Z ON X.idu=Z.id
+						   WHERE Y.progresso_a_validar>0) Y ON X.id=Y.id_documento';
 				$documentos = array_map(function($d){return (object)$d;}, $db->query($sql,'i',$idu));
 
 				// Retornando documentos
