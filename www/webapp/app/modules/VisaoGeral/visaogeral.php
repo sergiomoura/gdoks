@@ -3,6 +3,10 @@
 	include('blocker_tela.php');
 ?>
 <div class="visaogeral_container">
+	<div class="docsParaValidar" ng-controller="DocsParaValidarController">
+		<pre>{{docsParaValidar | json}}</pre>
+	</div>
+	
 	<div class="progressoGeral">
 		<canvas id="progressoGeral_canvas" width="100%" height="100%" ></canvas>
 		<div class="numero" ng-if="progresso_geral!=null">{{progresso_geral}}%</div>
@@ -15,4 +19,5 @@
 	<div class="grds">
 		<canvas id="grds_canvas" width="100%" height="100%" ></canvas>
 	</div>
+
 </div>

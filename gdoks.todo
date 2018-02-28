@@ -7,7 +7,7 @@ F) Bloqueio de Telas:
 	☐ Cargos
 	☐ Log
 	☐ Configurações
-	☐	Home *
+	✔	Home * @done (18-02-27 15:05)
 
 E) Desenhar e Implementar Dashboard Home:
 	☐	Implementar cada quadro de dashboard de maneira independente para que sejam opções da tela visão geral
