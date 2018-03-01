@@ -19897,7 +19897,18 @@ function ConfiguracoesController($scope){};
 				$scope.documento.datahora_do_checkout = null;
 				$scope.documento.status = statusDeDocumento($scope.documento);
 			})
-			console.dir($scope.documento);
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Erro: ' + error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			})
 		}
 
 		$scope.baixar = function(){
