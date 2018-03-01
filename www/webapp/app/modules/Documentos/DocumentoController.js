@@ -103,6 +103,16 @@
 			
 		}
 
+		$scope.desbloquear = function(){
+			GDoksFactory.desbloquearDocumento($scope.documento.id)
+			.success(function(response){
+				$scope.documento.idu_checkout = null;
+				$scope.documento.datahora_do_checkout = null;
+				$scope.documento.status = statusDeDocumento($scope.documento);
+			})
+			console.dir($scope.documento);
+		}
+
 		$scope.baixar = function(){
 			GDoksFactory.baixarPDA($scope.documento.revisoes[0].pdas[0].id);
 		}

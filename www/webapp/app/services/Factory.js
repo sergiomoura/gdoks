@@ -324,6 +324,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/documentos/'+id_doc+'/checkout',null,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.desbloquearDocumento = function(id_doc){
+				return $http.post(API_ROOT+'/documentos/'+id_doc+'/checkin',null,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.baixarRevisaoAtualizada = function(id_revisao){
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");

@@ -2988,6 +2988,51 @@
 				}
 			});
 
+			$app->post('/documentos/:id_doc/checkin',function($id_doc) use ($app,$db,$token,$empresa) {
+				
+				// Levantando o id do usuário
+				$sql = 'SELECT id from gdoks_usuarios where token=? and validade_do_token > now()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Token inválido');
+					$response->flush();
+					exit(1);
+				}
+				$idu = 1*$rs[0]['id'];
+
+				// Verificando se ele é que bloqueado e levantando o bloqueador
+				$sql = 'SELECT idu_checkout FROM gdoks_documentos WHERE id=?';
+				$idu_checkout = $db->query($sql,'i',$id_doc)[0]['idu_checkout'];
+
+				// Verificando se o documento está de fato bloqueado
+				if(is_null($idu_checkout)){
+					http_response_code(401);
+					$response = new response(1,'O documento já está desbloqueado.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Verificando se quem bloqueou é mesmo o usuário que está tentando desbloquear
+				if($idu_checkout != $idu) {
+					http_response_code(401);
+					$response = new response(1,'O documento não foi bloqueado pelo usuário atual.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Tudo ok... desbloqueando o documento!
+				$sql = 'UPDATE gdoks_documentos SET idu_checkout=null,datahora_do_checkout=null WHERE id=?';
+				$db->query($sql,'i',$id_doc);
+
+				// Retornando sucesso
+				$response = new response(0,'ok');
+				$response->flush();
+
+				// Registrando checkout no log
+				registrarAcao($db,$idu,ACAO_DESBLOQUEOU_DOCUMENTO,$id_doc);
+			});
+
 			$app->post('/documentos/:id_doc/pdas',function($id_doc) use ($app,$db,$token,$empresa) {
 
 				// Lendo dados

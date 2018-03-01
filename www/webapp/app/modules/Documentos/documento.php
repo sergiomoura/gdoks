@@ -19,14 +19,14 @@
 			<md-button
 				class="md-raised md-primary"
 				ng-click="bloquearParaRevisao()"
-				ng-if="documento.ehEspecialista"
+				ng-if="documento.ehEspecialista && !(documento.status=='checkout' && documento.idu_checkout==usuario.id)"
 				ng-disabled="documento.projeto_ativo==0 || !(documento.status=='validado' || documento.status=='virgem')"
 				aria-label="Bloquear documento para revisão">
 					<md-icon ng-if="documento.status=='validado' || documento.status=='virgem'" class="material-icons step" aria-label="Baixar para revisão">lock_open</md-icon>
 					<md-icon ng-if="!(documento.status=='validado' || documento.status=='virgem')" class="material-icons step" aria-label="Baixar para revisão">lock_outline</md-icon>
 					
 					<!-- Determinando o texto do botão -->
-					<span ng-if="documento.status=='validado' || documento.status=='virgem'">CHECKOUT</span>
+					<span ng-if="documento.status=='validado' || documento.status=='virgem'">Bloquear</span>
 					<span ng-if="documento.status=='checkout'">Bloqueado por {{documento.sigla_checkout}} em {{documento.datahora_do_checkout|date:"dd/MM/yyyy à's' hh:mm:ss"}}</span>
 					<span ng-if="documento.status=='paravalidacao'">Aguardando validação</span>
 					<span ng-if="documento.status=='concluido'">Concluído</span>
@@ -34,6 +34,17 @@
 
 					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 						Bloquear documento para revisão
+					</md-tooltip>
+			</md-button>
+
+			<md-button
+				ng-if="documento.status=='checkout' && documento.idu_checkout==usuario.id"
+				class="md-raised md-primary"
+				ng-click="desbloquear()"
+				aria-label="Desbloquear">
+					<md-icon class="material-icons step" aria-label="Desbloquear">lock_ouline</md-icon>Desbloquear
+					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+						Desbloquear documento sem altera-lo
 					</md-tooltip>
 			</md-button>
 

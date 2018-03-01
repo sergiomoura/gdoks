@@ -1,3 +1,7 @@
+H) Alterações sugeridas por Neiva:
+	☐	Clonar documento
+	☐	Importar LDP para um projeto.
+	☐	Exportar LDP para Excel
 F) Bloqueio de Telas:
 	☐ Usuários
 	☐ Documentos
@@ -14,7 +18,7 @@ E) Desenhar e Implementar Dashboard Home:
 	☐	Melhores dos especialistas
 	☐	Melhores Validadores
 	☐	Número de documentos para não concluídos da especialidade do usuário
-	☐	Número de documentos para validar das disciplinas da qual o usuário é validador
+	✔	Número de documentos para validar das disciplinas da qual o usuário é validador @done (18-03-01 10:06)
 	✔	Percentuais de avanço de cada projeto com seu deadline @done (18-02-16 21:25)
 	✔	Percentuais de documentos por status nos projetos ativos @done (18-02-16 21:25)
 

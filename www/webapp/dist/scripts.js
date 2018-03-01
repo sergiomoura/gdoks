@@ -19890,6 +19890,16 @@ function ConfiguracoesController($scope){};
 			
 		}
 
+		$scope.desbloquear = function(){
+			GDoksFactory.desbloquearDocumento($scope.documento.id)
+			.success(function(response){
+				$scope.documento.idu_checkout = null;
+				$scope.documento.datahora_do_checkout = null;
+				$scope.documento.status = statusDeDocumento($scope.documento);
+			})
+			console.dir($scope.documento);
+		}
+
 		$scope.baixar = function(){
 			GDoksFactory.baixarPDA($scope.documento.revisoes[0].pdas[0].id);
 		}
@@ -25392,6 +25402,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.bloquearDocumentoParaRevisao = function(id_doc){
 				return $http.post(API_ROOT+'/documentos/'+id_doc+'/checkout',null,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.desbloquearDocumento = function(id_doc){
+				return $http.post(API_ROOT+'/documentos/'+id_doc+'/checkin',null,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.baixarRevisaoAtualizada = function(id_revisao){
