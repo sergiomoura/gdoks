@@ -19997,7 +19997,7 @@ function ConfiguracoesController($scope){};
 
 			// Appending dialog to document.body to cover sidenav in docs app
 			var confirm = $mdDialog.confirm()
-				.title('Tem que deseja avançar a revisão deste documento?')
+				.title('Tem certeza que deseja avançar a revisão deste documento?')
 				.textContent('A ação não poderá ser desfeita.')
 				.ariaLabel('Deseja avançar a revisão deste documento? Esta ação não poderá ser desfeita.')
 				.targetEvent(ev)
