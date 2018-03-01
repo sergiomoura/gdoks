@@ -43,7 +43,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<a href="" ng-click="verTodos()">Ver Todos</a>
+		<a href="" ng-click="verTodos()" ng-if="docsParaValidar.length>0">Ver Todos</a>
 	</div>
 
 	<div class="grds">
