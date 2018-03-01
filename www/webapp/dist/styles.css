@@ -2177,7 +2177,7 @@ md-expansion-panel-expanded .md-expansion-panel-item {
   .visaogeral_container .documentos {
     position: relative;
     display: block;
-    width: 70%;
+    width: 30%;
     float: left;
     height: 50vh; }
   .visaogeral_container .grds {
@@ -2186,6 +2186,29 @@ md-expansion-panel-expanded .md-expansion-panel-item {
     width: 100%;
     float: left;
     height: 40vh; }
+  .visaogeral_container .docsParaValidar {
+    position: relative;
+    display: block;
+    width: 30%;
+    float: left;
+    padding: 25px 0 0 20px;
+    font-size: 16px; }
+    .visaogeral_container .docsParaValidar table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse; }
+      .visaogeral_container .docsParaValidar table tbody tr td {
+        border-top: 1px solid rgba(0, 0, 0, 0.12); }
+      .visaogeral_container .docsParaValidar table tbody tr:last-child td {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+      .visaogeral_container .docsParaValidar table td:last-child {
+        text-align: right; }
+    .visaogeral_container .docsParaValidar a {
+      position: absolute;
+      right: 5px;
+      bottom: -40px;
+      color: #2196F3;
+      text-decoration: none; }
 
 #validacao_container {
   padding-top: 30px; }

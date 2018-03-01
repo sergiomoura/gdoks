@@ -24325,9 +24325,10 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 	}
 
 	// Definindo controller de docsParaValidar
-	function DocsParaValidarController($scope,GDoksFactory,$mdToast){
+	function DocsParaValidarController($scope,GDoksFactory,$mdToast,$location){
 		// Declarando docsParaValidar
 		$scope.docsParaValidar = [];
+		$scope.maxDocsExibidos = 5;
 
 		// Carrtegando documentos para validar
 		(function(){
@@ -24361,6 +24362,20 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 				}
 			});
 		})()
+
+		// Funções Auxiliares
+		$scope.goToDoc = function(idDoc){
+			$location.url('/documentos/'+idDoc);
+		}
+
+		$scope.baixarPDA = function(idPDA){
+			GDoksFactory.baixarPDA(idPDA);
+		}
+
+		$scope.verTodos = function(){
+			$location.url('/validacao');
+		}
+
 	}
 
 	// Atribuindo controllers
