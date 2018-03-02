@@ -259,27 +259,34 @@
 		public function listarArquivos(){
 			// listando arquivos mais recentes da grd
 			$sql = 'SELECT O.caminho,
-					       O.nome_cliente,
-                           M.nome_subdisciplina
-					FROM
-					  (SELECT R.id,
-					  		  R.nome_subdisciplina,
-					          max(S.id) AS id_pda
-					   FROM
-					     (SELECT x.id_revisao AS id,nome_subdisciplina
-					      FROM
-					        (SELECT a.id AS id_documento,c.nome as nome_subdisciplina, 
-									max(b.id) AS id_revisao
-							 FROM gdoks_documentos a
-							 INNER JOIN gdoks_revisoes b ON a.id=b.id_documento
-							 INNER JOIN gdoks_subdisciplinas c ON a.id_subdisciplina=c.id
-							 GROUP BY a.id,c.nome) x
-					      INNER JOIN gdoks_grds_x_revisoes y ON x.id_revisao=y.id_revisao
-					      WHERE y.id_grd=?) R
-					   INNER JOIN gdoks_pdas S ON R.id=S.id_revisao
-					   GROUP BY R.id) M
-					INNER JOIN gdoks_pdas_x_arquivos N ON M.id_pda=N.id_pda
-					INNER JOIN gdoks_arquivos O ON N.id_arquivo=O.id';
+			       O.nome_cliente,
+			       M.nome_subdisciplina,
+			       M.codigo_documento
+			FROM
+			  (SELECT R.id,
+			          R.nome_subdisciplina,
+			          R.codigo_documento,
+			          max(S.id) AS id_pda
+			   FROM
+			     (SELECT x.id_revisao AS id,
+			             nome_subdisciplina,
+			             codigo_documento
+			      FROM
+			        (SELECT a.id AS id_documento,
+			                a.codigo AS codigo_documento,
+			                c.nome AS nome_subdisciplina,
+			                max(b.id) AS id_revisao
+			         FROM gdoks_documentos a
+			         INNER JOIN gdoks_revisoes b ON a.id=b.id_documento
+			         INNER JOIN gdoks_subdisciplinas c ON a.id_subdisciplina=c.id
+			         GROUP BY a.id,
+			                  c.nome) x
+			      INNER JOIN gdoks_grds_x_revisoes y ON x.id_revisao=y.id_revisao
+			      WHERE y.id_grd=?) R
+			   INNER JOIN gdoks_pdas S ON R.id=S.id_revisao
+			   GROUP BY R.id) M
+			INNER JOIN gdoks_pdas_x_arquivos N ON M.id_pda=N.id_pda
+			INNER JOIN gdoks_arquivos O ON N.id_arquivo=O.id';
 			return array_map(function($a){return (object)$a;}, $this->db->query($sql,'i',$this->_id));
 		}
 
@@ -302,6 +309,24 @@
 
 			// Gerando lista de arquivos
 			$arquivos = $this->listarArquivos();
+			
+			// Parsing arquivos para determinar quais de doc compostos e quais são de doc simples
+			$documentos = Array();
+			foreach ($arquivos as $arquivo) {
+				if(array_key_exists($arquivo->codigo_documento, $documentos)){
+					$documentos[$arquivo->codigo_documento]++;
+				} else {
+					$documentos[$arquivo->codigo_documento] = 1;
+				}
+			}
+
+			foreach ($arquivos as $arquivo) {
+				if($documentos[$arquivo->codigo_documento] == 1){
+					$arquivo->docSimples = true;
+				} else {
+					$arquivo->docSimples = false;
+				}
+			}
 
 			// Definindo nome do arquivo zip
 			$caminhoZip = TMP_PATH.$this->_codigo_empresa.'/'.$this->_codigo.'.zip';
@@ -335,16 +360,29 @@
 
 				// Substituindo espaços no nome da subdisciplina para nomear a subpasta
 				$pasta = str_replace(' ', '_', $f->nome_subdisciplina);
+				$subpasta = str_replace(' ', '_', $f->codigo_documento);
 
 				// Adicionando arquivo
-				if(!$zip->addFile($f->caminho,$pasta.'/'.$f->nome_cliente)){
+				if($f->docSimples){
+					if(!$zip->addFile($f->caminho,$pasta.'/'.$f->nome_cliente)){
 
-					throw new Exception('Erro ao tentar adicionar '.$f->caminho.' ao zip', 1);
-					return;
+						throw new Exception('Erro ao tentar adicionar '.$f->caminho.' ao zip', 1);
+						return;
 
-				} elseif ($sem_compressao) {
-					// setando ocmpressão para zip_entry_open(zip, zip_entry)
-					$zip->setCompressionIndex($i, ZipArchive::CM_STORE);
+					} elseif ($sem_compressao) {
+						// setando compressão para zip_entry_open(zip, zip_entry)
+						$zip->setCompressionIndex($i, ZipArchive::CM_STORE);
+					}
+				} else {
+					if(!$zip->addFile($f->caminho,$pasta.'/'.$subpasta.'/'.$f->nome_cliente)){
+
+						throw new Exception('Erro ao tentar adicionar '.$f->caminho.' ao zip', 1);
+						return;
+
+					} elseif ($sem_compressao) {
+						// setando compressão para zip_entry_open(zip, zip_entry)
+						$zip->setCompressionIndex($i, ZipArchive::CM_STORE);
+					}
 				}
 
 				// fechando e abrindo o zip para não estourar o número de arquivos abertos
@@ -357,9 +395,10 @@
 			}
 
 			// Fechando o zip
-			if(!$zip->close()){
-				throw new Exception('Erro ao fechar o arquivo zip', 1);
-				return;
+			try {
+				$zip->close();
+			} catch (Exception $e) {
+				// Evitando o erro por que o arquivo já está fechado...
 			}
 
 			// apagando o pdf
