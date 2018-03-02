@@ -373,7 +373,6 @@
 			// Gerando o zip
 			try {
 				$caminhoDoZip = $this->gerarZip($nome_do_emissor,$sem_compressao);
-				die($caminhoDoZip);
 			} catch (Exception $e) {
 				throw $e;
 				return;
@@ -384,12 +383,13 @@
 			header('Cache-Control: public, must-revalidate, max-age=0');
 			header('Pragma: no-cache');
 			header('Content-type: application/octet-stream');
+			header("Content-length: ".filesize($caminhoDoZip));
 			header('Content-Disposition: attachment; filename="'.$this->_codigo.'.zip"');
 			header('Accept-Ranges: bytes');
 			header("Content-Transfer-Encoding: binary");
 
 			// output the file first clean mem
-			ob_clean();
+			ob_end_clean();
 			readfile($caminhoDoZip);
 			
 			// apagando o zip
