@@ -4695,7 +4695,7 @@
 					ini_set('max_execution_time', 240);
 
 					// Enviando GRD em ZIP
-					$grd->sendZip($user->nome,false); // (true => SEM COMPRESSÃO)
+					$grd->sendZip($user->nome,true); // (true => SEM COMPRESSÃO)
 				} else {
 					// Levantando GRD requerida se ela for da mesma empresa do usuário com base em seu token
 					$sql = 'SELECT c.id,

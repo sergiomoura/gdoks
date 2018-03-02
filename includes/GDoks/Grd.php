@@ -373,6 +373,7 @@
 			// Gerando o zip
 			try {
 				$caminhoDoZip = $this->gerarZip($nome_do_emissor,$sem_compressao);
+				die($caminhoDoZip);
 			} catch (Exception $e) {
 				throw $e;
 				return;
