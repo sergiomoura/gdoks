@@ -388,5 +388,9 @@
 			GDoksFactory.baixarModeloParaImportacao($scope.projeto.id);
 		}
 
+		$scope.UploadXlsx = function($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event){
+			console.dir($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event);
+		}
+
 	}
 })()

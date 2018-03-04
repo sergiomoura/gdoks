@@ -232,11 +232,24 @@
 						</md-button>
 						<md-button
 							class="md-raised md-primary"
-							aria-label="Novo Documento"
+							aria-label="Baixar Modelo de LDP"
 							ng-click="baixarModeloParaImportacao()">
 								<md-icon class="material-icons step" aria-label="Baixar Modelo de LDP">file_download</md-icon>Baixar Modelo de LDP
 								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 									Baixar modelo de LDP para importação (modelo.xlsx)
+								</md-tooltip>
+						</md-button>
+						<md-button
+							class="md-raised md-primary"
+							aria-label="Enviar arquivo para importação"
+							ngf-select
+							ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
+							ngf-multiple="false"
+							ngf-pattern="'.xlsx'"
+							ngf-change="UploadXlsx($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)">
+								<md-icon class="material-icons step" aria-label="Enviar arquivo para importação">unarchive</md-icon>Importar
+								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+									Enviar arquivo para importação (xlsx)
 								</md-tooltip>
 						</md-button>
 					</div>
