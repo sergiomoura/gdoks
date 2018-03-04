@@ -14,9 +14,18 @@
 		private $_subdisciplinas;
 		private $_areas;
 		private $_subareas;
-		private $_idProjeto;
+		private $_codEmpresa;
 
-		public function __construct($codEmpresa, $id_projeto){
+		private $linhaCabecalho = 1;
+		private $linhaInicialDeDados = 2;
+		private $linhaFinalDeDados = 1000;
+		private $maxlengh_codigoDocumento = 45;
+		private $maxlengh_codigoAlternativo = 45;
+		private $maxlengh_nomeArea = 45;
+		private $maxlengh_nomeSubarea = 45;
+		private $maxlengh_titulo = 100;
+
+		public function __construct($codEmpresa){
 			// Definindo o nome do arquivo dbkey
 			$FILE_DBKEY = CLIENT_DATA_PATH.$codEmpresa.'/dbkey.php';
 
@@ -41,41 +50,196 @@
 			$sql = 'SELECT id,nome,sigla,id_disciplina FROM gdoks_subdisciplinas ORDER BY id_disciplina,sigla';
 			$this->_subdisciplinas = array_map(function($a){return (object)$a;}, $db->query($sql));
 
-			// levantando áreas do projeto
-			$sql = 'SELECT id,nome,codigo FROM gdoks_areas WHERE id_projeto=? ORDER BY codigo';
-			$this->_areas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
-
-			// Levantando subareas
-			$sql = 'SELECT a.id,
-					       a.nome,
-					       a.codigo,
-					       a.id_area
-					FROM gdoks_subareas a
-					INNER JOIN gdoks_areas b ON a.id_area=b.id
-					WHERE b.id_projeto=?
-					ORDER BY a.id_area,a.codigo';
-			$this->_subareas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
-
 			// Destruindo conexão com banco de dados
 			unset($db);
 
-			// Guardando o id do projeto
-			$this->_idProjeto = $id_projeto;
+			// Guardando o código da empresa
+			$this->_codEmpresa = $codEmpresa;
 		}
 
 		private function gerarXlsx(){
 
-			// Criando planilha
+			// Criando spread
 			$spreadsheet = new Spreadsheet();
-			$sheet = $spreadsheet->getActiveSheet();
-			$sheet->setCellValue('A1', 'Hello World!');
+
+			// Criando planilha de disciplinas
+			$sheet_disciplinas = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Disciplinas');
+
+			// Anexando planilha de disciplinas a spread
+			$spreadsheet->addSheet($sheet_disciplinas);
+
+			// Preenchendo planilha de Disciplinas
+			foreach ($this->_disciplinas as $i => $d) {
+				$sheet_disciplinas->setCellValue('A'.($i+1),$d->sigla.' - '.$d->nome);
+			}
+
+			// Criando planilha de subdisciplinas
+			$sheet_subs = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Subdisciplinas');
+
+			// Anexando planilha de disciplinas a spread
+			$spreadsheet->addSheet($sheet_subs);
+
+			// Preenchendo planilha de Disciplinas
+			foreach ($this->_subdisciplinas as $i => $s) {
+				$sheet_subs->setCellValue('A'.($i+1),$s->sigla.' - '.$s->nome);
+			}
+
+			// Criando planilha de documentos
+			$sheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Documentos');
+
+			// Anexando planilha de disciplinas a spread
+			$spreadsheet->addSheet($sheet);
+
+			// Escrevendo head da tabela
+			$sheet->setCellValue('A'.$this->linhaCabecalho, 'Código');
+			$sheet->setCellValue('B'.$this->linhaCabecalho, 'Cód Alternativo');
+			$sheet->setCellValue('C'.$this->linhaCabecalho, 'Título');
+			$sheet->setCellValue('D'.$this->linhaCabecalho, 'Disciplina');
+			$sheet->setCellValue('E'.$this->linhaCabecalho, 'Subdisciplina');
+			$sheet->setCellValue('F'.$this->linhaCabecalho, 'Área');
+			$sheet->setCellValue('G'.$this->linhaCabecalho, 'Subárea');
+			$sheet->setCellValue('H'.$this->linhaCabecalho, 'Data Limite');
+
+			// Escrevendo Validação de dados para coluna A (Código)
+			$validation = $sheet->getCell('A'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_TEXTLENGTH );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setErrorTitle('Código de documento inválido');
+			$validation->setError('O código do documento deve conter entre 1 e '.$this->maxlengh_codigoDocumento.' caracteres.');
+			$validation->setFormula1(1);
+			$validation->setFormula2($this->maxlengh_codigoDocumento);
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+				$spreadsheet->getActiveSheet()->getCell('A'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Escrevendo validação de dados para a coluna B (Código alternativo)
+			$validation = $sheet->getCell('B'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_TEXTLENGTH );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setErrorTitle('Código de alternativo inválido');
+			$validation->setError('O código do alternativo deve conter entre 1 e '.$this->maxlengh_codigoAlternativo.' caracteres.');
+			$validation->setFormula1(1);
+			$validation->setFormula2($this->maxlengh_codigoAlternativo);
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+				$spreadsheet->getActiveSheet()->getCell('B'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Escrevendo validação de dados para a coluna C (Título)
+			$validation = $sheet->getCell('C'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_TEXTLENGTH );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setErrorTitle('Título de documento inválido');
+			$validation->setError('O Título do documento deve conter entre 1 e '.$this->maxlengh_titulo.' caracteres.');
+			$validation->setFormula1(1);
+			$validation->setFormula2($this->maxlengh_titulo);
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+				$spreadsheet->getActiveSheet()->getCell('C'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Escrevendo validação de dados para a coluna D (Disciplina)
+			$validation = $sheet->getCell('D'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setShowDropDown(true);
+			$validation->setErrorTitle('Disciplina inválida');
+			$validation->setError('Selecione uma disciplina da lista.');
+			$validation->setFormula1('Disciplinas!$A$1:$A$'.sizeof($this->_disciplinas));
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+			 	$sheet->getCell('D'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Escrevendo validação de dados para a coluna E (Subdisciplina)
+			$validation = $sheet->getCell('E'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setShowDropDown(true);
+			$validation->setErrorTitle('Subdisciplina inválida');
+			$validation->setError('Selecione uma subdisciplina da lista.');
+			$validation->setFormula1('Subdisciplinas!$A$1:$A$'.sizeof($this->_subdisciplinas));
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+			 	$sheet->getCell('E'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Escrevendo validação de dados para a coluna F (Área)
+			$validation = $sheet->getCell('F'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_TEXTLENGTH );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setErrorTitle('Nome de área inválido');
+			$validation->setError('O nome de uma área deve conter entre 1 e '.$this->maxlengh_nomeArea.' caracteres.');
+			$validation->setFormula1(1);
+			$validation->setFormula2($this->maxlengh_nomeArea);
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+				$sheet->getCell('F'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Escrevendo validação de dados para a coluna G (Subarea)
+			$validation = $sheet->getCell('G'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_TEXTLENGTH );
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setErrorTitle('Nome de subárea inválido');
+			$validation->setError('O nome de uma subárea deve conter entre 1 e '.$this->maxlengh_nomeSubarea.' caracteres.');
+			$validation->setFormula1(1);
+			$validation->setFormula2($this->maxlengh_nomeSubarea);
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+				$sheet->getCell('G'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Escrevendo validação de dados para a coluna H (Datalimite)
+			$validation = $sheet->getCell('H'.$this->linhaInicialDeDados)->getDataValidation();
+			$validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_DATE);
+			$validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP );
+			$validation->setAllowBlank(false);
+			$validation->setShowInputMessage(true);
+			$validation->setShowErrorMessage(true);
+			$validation->setErrorTitle('Data limite inválida');
+			$validation->setError('Somente datas válidas são aceitas.');
+			$validation->setFormula1('1');
+			$validation->setFormula2('402133');
+			
+			for ($i = ($this->linhaInicialDeDados+1); $i <= $this->linhaFinalDeDados; $i++) { 
+				$sheet->getCell('H'.$i)->setDataValidation(clone $validation);
+			}
+
+			// Removendo a planilha inicialmente existente
+			$spreadsheet->removeSheetByIndex(0);
 
 			// Criando o Writer
 			$writer = new Xlsx($spreadsheet);
-			$writer->save('modelo_projeto_'.$this->_idProjeto.'.xlsx');
+
+			// Definindo o nome do arquivo e a pasta na qual ele sera salvo
+			$file = TMP_PATH.'/'.$this->_codEmpresa.'/modeloLDP.xlsx';
+
+			// Escrevendo o arquivo no fs
+			$writer->save($file);
+
+			// Retornando o caminho do arquivo
+			return $file;
+
 		}
 
 		public function enviarXlsx(){
-
+			$file = $this->gerarXlsx();
+			echo ($file);
 		}
 	}
