@@ -77,6 +77,9 @@
 				$sheet_disciplinas->setCellValue('A'.($i+1),$d->sigla.' - '.$d->nome);
 			}
 
+			// Escondendo planilha de disciplinas
+			$sheet_disciplinas->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN);
+
 			// Criando planilha de subdisciplinas
 			$sheet_subs = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Subdisciplinas');
 
@@ -87,6 +90,9 @@
 			foreach ($this->_subdisciplinas as $i => $s) {
 				$sheet_subs->setCellValue('A'.($i+1),$s->sigla.' - '.$s->nome);
 			}
+
+			// Escondendo planilha de disciplinas
+			$sheet_subs->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN);
 
 			// Criando planilha de documentos
 			$sheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Documentos');
