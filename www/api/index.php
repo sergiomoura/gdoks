@@ -2535,6 +2535,12 @@
 				$modelo = new ModeloLDP($empresa);
 				$modelo->enviarXlsx();
 			});
+
+			$app->post('/projetos/:id_projeto/lpd',function($id_projeto) use ($app,$db,$token,$empresa){
+				
+			});
+
+
 		// FIM DE ROTAS DE PROJETOS
 
 		// ROTAS DE DOCUMENTOS
