@@ -14,6 +14,7 @@
 	require('response.php');
 	require('GDoks/GDoks.php');
 	require('GDoks/Grd.php');
+	require('GDoks/ModeloLDP.php');
 	require('GDoks/Crypter.php');
 
 	// Definindo o timezone padrão
@@ -2530,8 +2531,9 @@
 				}
 			});
 
-			$app->get('/projetos/:id_projeto/modeloLdpParaImportacao',function($id_projeto) use ($app,$db,$token){
-				echo('ok2');
+			$app->get('/projetos/:id_projeto/modeloLdpParaImportacao',function($id_projeto) use ($app,$db,$token,$empresa){
+				$modelo = new ModeloLDP($empresa);
+				$modelo->enviarXlsx();
 			});
 		// FIM DE ROTAS DE PROJETOS
 

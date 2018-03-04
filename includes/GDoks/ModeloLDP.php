@@ -15,6 +15,7 @@
 		private $_areas;
 		private $_subareas;
 		private $_codEmpresa;
+		private $_xlsx;
 
 		private $linhaCabecalho = 1;
 		private $linhaInicialDeDados = 2;
@@ -55,6 +56,9 @@
 
 			// Guardando o código da empresa
 			$this->_codEmpresa = $codEmpresa;
+
+			// Gerando o Xlsx
+			$this->gerarXlsx();
 		}
 
 		private function gerarXlsx(){
@@ -90,6 +94,20 @@
 			// Anexando planilha de disciplinas a spread
 			$spreadsheet->addSheet($sheet);
 
+			// Determinando a altura da primeira linha na planilha documentos
+			// $sheet->getColumnDimension('A')->setWidth(15);
+			$sheet->getDefaultColumnDimension()->setWidth(15);
+			$sheet->getRowDimension('1')->setRowHeight(20);
+
+			// Formatando o cabeçalho
+			$estilo = $sheet->getStyle('A'.$this->linhaCabecalho.':H'.$this->linhaCabecalho);
+			$estilo->getFill()
+    			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    			->getStartColor()->setARGB('FF2196F3');
+			$estilo->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$estilo->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+			$estilo->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+
 			// Escrevendo head da tabela
 			$sheet->setCellValue('A'.$this->linhaCabecalho, 'Código');
 			$sheet->setCellValue('B'.$this->linhaCabecalho, 'Cód Alternativo');
@@ -99,6 +117,7 @@
 			$sheet->setCellValue('F'.$this->linhaCabecalho, 'Área');
 			$sheet->setCellValue('G'.$this->linhaCabecalho, 'Subárea');
 			$sheet->setCellValue('H'.$this->linhaCabecalho, 'Data Limite');
+
 
 			// Escrevendo Validação de dados para coluna A (Código)
 			$validation = $sheet->getCell('A'.$this->linhaInicialDeDados)->getDataValidation();
@@ -223,23 +242,26 @@
 
 			// Removendo a planilha inicialmente existente
 			$spreadsheet->removeSheetByIndex(0);
+			
+			// Tornando a planilha de documentos ativa
+			$spreadsheet->setActiveSheetIndexByName('Documentos');
 
-			// Criando o Writer
-			$writer = new Xlsx($spreadsheet);
-
-			// Definindo o nome do arquivo e a pasta na qual ele sera salvo
-			$file = TMP_PATH.'/'.$this->_codEmpresa.'/modeloLDP.xlsx';
-
-			// Escrevendo o arquivo no fs
-			$writer->save($file);
-
-			// Retornando o caminho do arquivo
-			return $file;
-
+			// Salvando spreadsheet como propriedade do objeto
+			$this->_xlsx = $spreadsheet;
 		}
 
 		public function enviarXlsx(){
-			$file = $this->gerarXlsx();
-			echo ($file);
+
+			// Mandando os headers
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+			header('Content-Disposition: attachment;filename="modelo_importacao.xlsx"');
+			header('Cache-Control: max-age=0');
+			
+			// Criando o Writer
+			$writer = new Xlsx($this->_xlsx);
+
+			// Escrevendo o arquivo na saída php
+			$writer->save('php://output');
 		}
+		
 	}
