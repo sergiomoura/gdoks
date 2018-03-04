@@ -385,7 +385,7 @@
 		}
 
 		$scope.baixarModeloParaImportacao = function(){
-			GDoksFactory.baixarModeloParaImportacao();
+			GDoksFactory.baixarModeloParaImportacao($scope.projeto.id);
 		}
 
 	}

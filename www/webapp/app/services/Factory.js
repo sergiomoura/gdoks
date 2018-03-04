@@ -495,10 +495,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/projetos/'+id_projeto+'/stats',buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.baixarModeloParaImportacao = function(){
+			GDoksFactory.baixarModeloParaImportacao = function(id_projeto){
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");
-				form.setAttribute('action',API_ROOT + '/modelos/LdpParaImportacao');
+				form.setAttribute('action',API_ROOT + '/projetos/'+id_projeto+'/modeloLdpParaImportacao');
 				form.setAttribute('method','GET');
 				form.setAttribute('style','display:none');
 

@@ -262,13 +262,6 @@
 				}
 			});
 		
-		// ROTAS PARA MODELOS
-			$app->get('/modelos/LdpParaImportacao',function() use ($app,$db,$token){
-				echo('ok');
-			});
-			
-		// FIM DE ROTAS PARA MODELOS
-
 		// ROTAS DE USUÁRIOS
 			$app->get('/usuarios',function() use ($app,$db,$token){
 				$sql = 'SELECT a.id,
@@ -2535,6 +2528,10 @@
 					http_response_code(401);
 					$response = new response(1,'Não lê dados de outra empresa.');
 				}
+			});
+
+			$app->get('/projetos/:id_projeto/modeloLdpParaImportacao',function($id_projeto) use ($app,$db,$token){
+				echo('ok2');
 			});
 		// FIM DE ROTAS DE PROJETOS
 
