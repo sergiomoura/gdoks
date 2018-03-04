@@ -262,6 +262,13 @@
 				}
 			});
 		
+		// ROTAS PARA MODELOS
+			$app->get('/modelos/LdpParaImportacao',function() use ($app,$db,$token){
+				echo('ok');
+			});
+			
+		// FIM DE ROTAS PARA MODELOS
+
 		// ROTAS DE USUÁRIOS
 			$app->get('/usuarios',function() use ($app,$db,$token){
 				$sql = 'SELECT a.id,

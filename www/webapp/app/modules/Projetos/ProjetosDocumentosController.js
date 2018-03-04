@@ -384,5 +384,9 @@
 			}
 		}
 
+		$scope.baixarModeloParaImportacao = function(){
+			GDoksFactory.baixarModeloParaImportacao();
+		}
+
 	}
 })()
