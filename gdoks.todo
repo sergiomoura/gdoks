@@ -1,7 +1,11 @@
-H) Alterações sugeridas por Neiva:
+H) Alterações sugeridas por Neiva e consequências:
 	☐	Clonar documento
+	☐	Melhorar apresentação dos documentos no cadastro o projeto
 	☐	Importar LDP para um projeto.
-	☐	Exportar LDP para Excel
+	☐ Adicionar link para baixar LDP no dash do projeto
+	☐	Adicionar link para baixar LDP na tela de edição do projeto
+	☐	DFazer opção baixar LDP na tela de projetos e utilizar nela no dash e no cadastro do projeto
+
 F) Bloqueio de Telas:
 	☐ Usuários
 	☐ Documentos
@@ -11,25 +15,18 @@ F) Bloqueio de Telas:
 	☐ Cargos
 	☐ Log
 	☐ Configurações
-	✔	Home * @done (18-02-27 15:05)
 
 E) Desenhar e Implementar Dashboard Home:
 	☐	Implementar cada quadro de dashboard de maneira independente para que sejam opções da tela visão geral
 	☐	Melhores dos especialistas
 	☐	Melhores Validadores
 	☐	Número de documentos para não concluídos da especialidade do usuário
-	✔	Número de documentos para validar das disciplinas da qual o usuário é validador @done (18-03-01 10:06)
-	✔	Percentuais de avanço de cada projeto com seu deadline @done (18-02-16 21:25)
-	✔	Percentuais de documentos por status nos projetos ativos @done (18-02-16 21:25)
 
 B) Fazer visão geral no dashboard de projeto:
 	☐	Percentuais no prazo e percentuais em dia
 	☐	Dias restante para o final do prazo do projeto
 
 C) Avulsos:
-	✔	Por aviso na tela de atualizar documento sobre o aviso do tamanho limite (atualmente 100MB) @done (18-02-27 04:02)
-	✔	Impedir exclusão de documento que tenha algum pda. @done (18-02-27 03:46)
-	✔	Bloquear alteração de documentos que estejam bloqueados por outro usuário. @done (18-02-27 06:29)
 	☐	Fazer com que quem bloqueou possa desbloquear sem alterar o documento
 	☐	Fazer carregamento de usuários sempre do servidor, não mais da base local
 	☐	Fazer com que o usuário 1 seja o admin e ele não seja visto por outros usuários. somente por ele mesmo.
@@ -89,6 +86,15 @@ Tabelas a serem preenchidas na instalação:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	Gerar modelo para importação de lista de documentos @done (18-03-05 07:56) @project(H) Alterações sugeridas por Neiva)
+	✔	Exportar LDP para Excel @done (18-03-05 07:56) @project(H) Alterações sugeridas por Neiva)
+	✔	Número de documentos para validar das disciplinas da qual o usuário é validador @done (18-03-01 10:06) @project(E) Desenhar e Implementar Dashboard Home)
+	✔	Home * @done (18-02-27 15:05) @project(F) Bloqueio de Telas)
+	✔	Bloquear alteração de documentos que estejam bloqueados por outro usuário. @done (18-02-27 06:29) @project(C) Avulsos)
+	✔	Por aviso na tela de atualizar documento sobre o aviso do tamanho limite (atualmente 100MB) @done (18-02-27 04:02) @project(C) Avulsos)
+	✔	Impedir exclusão de documento que tenha algum pda. @done (18-02-27 03:46) @project(C) Avulsos)
+	✔	Percentuais de documentos por status nos projetos ativos @done (18-02-16 21:25) @project(E) Desenhar e Implementar Dashboard Home)
+	✔	Percentuais de avanço de cada projeto com seu deadline @done (18-02-16 21:25) @project(E) Desenhar e Implementar Dashboard Home)
 	✔ E) Desenhar e Implementar Dashboard Home: @done (18-02-05 14:57)
 	✔	Percentuais de documentos por status nos projetos ativos @done (18-02-05 14:56)
 	✔	Percentuais de avanço de cada projeto com seu deadline @done (18-02-05 14:56)
