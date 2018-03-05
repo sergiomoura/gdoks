@@ -47,8 +47,21 @@
 						ng-click="editProjeto(p.id,$event)"
 						aria-label="Abrir Projeto">
 							<md-icon class="material-icons step">mode_edit</md-icon>
+							<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+								Alterar Projeto
+							</md-tooltip>
+					</md-button>
+					<md-button
+						class="md-raised md-fab md-mini md-primary"
+						ng-click="baixarLDP(p.id,$event)"
+						aria-label="Baixar LDP">
+							<md-icon class="material-icons step">playlist_add_check</md-icon>
+							<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+								Baixar LDP
+							</md-tooltip>
 					</md-button>
 					<?php endif; ?>
+
 				</td>
 			</tr>
 		</tbody>
@@ -95,6 +108,18 @@
 						ng-click="editProjeto(p.id,$event)"
 						aria-label="Abrir Projeto">
 							<md-icon class="material-icons step">mode_edit</md-icon>
+							<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+								Alterar Projeto
+							</md-tooltip>
+					</md-button>
+					<md-button
+						class="md-raised md-fab md-mini md-primary"
+						ng-click="baixarLDP(p.id,$event)"
+						aria-label="Baixar LDP">
+							<md-icon class="material-icons step">playlist_add_check</md-icon>
+							<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+								Baixar LDP
+							</md-tooltip>
 					</md-button>
 					<?php endif; ?>
 				</td>

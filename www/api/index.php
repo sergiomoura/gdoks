@@ -2535,6 +2535,18 @@
 				$modelo = new ModeloLDP($empresa);
 				$modelo->enviarXlsx();
 			});
+
+			$app->get('/projetos/:id_projeto/ldp',function($id_projeto) use ($app,$db,$token,$empresa){
+				
+				// Incluindo a ldp da empresa
+				include(CLIENT_DATA_PATH.$empresa.'/ldp.php');
+				
+				// Criando ldp do projeto
+				$ldp = new ldp($id_projeto);
+
+				// Enviando ldp
+				$ldp->enviarXlsx();
+			});
 		// FIM DE ROTAS DE PROJETOS
 
 		// ROTAS DE DOCUMENTOS

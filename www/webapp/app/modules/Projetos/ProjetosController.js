@@ -132,6 +132,13 @@
 			}
 		}
 
+
+		// Função que baixa LDP
+		$scope.baixarLDP = function(idProjeto,evt){
+			evt.stopPropagation();
+			GDoksFactory.baixarLDP(idProjeto);
+		}
+
 	};
 
 	function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
@@ -545,6 +552,7 @@
 		$scope.goToGrd = function(idGrd){
 			$location.url('/grds/'+idGrd);
 		}
+
 	};
 
 })();

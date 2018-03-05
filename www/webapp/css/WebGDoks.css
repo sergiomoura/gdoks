@@ -1097,7 +1097,7 @@ md-expansion-panel-expanded .md-expansion-panel-item {
     #projetos_container table td:nth-child(4) {
       width: 50px; }
     #projetos_container table td:nth-child(5) {
-      width: 50px; }
+      width: 117px; }
   #projetos_container table thead td {
     font-size: 14px;
     cursor: pointer;
@@ -1108,6 +1108,8 @@ md-expansion-panel-expanded .md-expansion-panel-item {
       top: 3px; }
   #projetos_container table thead td:focus {
     outline: none; }
+  #projetos_container table thead td:nth-child(5) {
+    text-align: center; }
   #projetos_container table tbody tr {
     cursor: pointer; }
     #projetos_container table tbody tr td {
