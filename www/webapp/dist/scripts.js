@@ -22495,7 +22495,6 @@ function NavController($scope){
 			evt.stopPropagation();
 			GDoksFactory.baixarLDP(idProjeto);
 		}
-
 	};
 
 	function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
@@ -25616,6 +25615,7 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.baixarLDP = function(idProjeto){
+
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");
 				form.setAttribute('action',API_ROOT + '/projetos/' + idProjeto + '/ldp');

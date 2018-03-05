@@ -138,7 +138,6 @@
 			evt.stopPropagation();
 			GDoksFactory.baixarLDP(idProjeto);
 		}
-
 	};
 
 	function ProjetoController($scope,$routeParams,$timeout,$cookies,Upload,GDoksFactory,$mdToast,$location){
