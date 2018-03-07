@@ -1985,14 +1985,6 @@ textarea {
 #logs_container table tr:last-child td {
   border-bottom: 1px solid #999; }
 
-#addprojeto_container .bt_salvar {
-  position: absolute;
-  right: 15px;
-  bottom: 15px; }
-
-#addprojeto_container .bt_cancelar {
-  margin-left: 15px; }
-
 #addprojeto_dao_container md-input-container {
   position: relative;
   top: 20px; }
@@ -2007,20 +1999,6 @@ textarea {
 
 #addprojeto_areas_container table input[type=text] {
   width: 100%; }
-
-#addprojeto_documentos_container {
-  padding-bottom: 56px;
-  margin-bottom: 180px; }
-
-#addprojeto_documentos_container table > tr > td > span {
-  display: block;
-  color: #CCC;
-  font-size: 12px; }
-
-#addprojeto_documentos_container .bt_adicionar {
-  position: absolute;
-  right: 15px;
-  bottom: 15px; }
 
 #form_daos > div.alertaDeTamanho {
   text-align: center;
@@ -2056,6 +2034,29 @@ md-expansion-panel-expanded .md-expansion-panel-item {
 
 #daosRegistradas_container table td:last-child {
   text-align: right; }
+
+#addprojeto_documentos_container .lista_de_docs td:nth-child(2) {
+  width: 160px; }
+#addprojeto_documentos_container .lista_de_docs td:nth-child(3) {
+  width: 80px; }
+#addprojeto_documentos_container .lista_de_docs td:nth-child(4) {
+  width: 80px; }
+#addprojeto_documentos_container .lista_de_docs td:nth-child(5) {
+  width: 175px; }
+#addprojeto_documentos_container .lista_de_docs thead td {
+  font-size: 14px;
+  padding-bottom: 5px; }
+#addprojeto_documentos_container .lista_de_docs .codigo {
+  font-size: 18px; }
+#addprojeto_documentos_container .lista_de_docs .codigo, #addprojeto_documentos_container .lista_de_docs .subdisciplina, #addprojeto_documentos_container .lista_de_docs .area {
+  display: block; }
+#addprojeto_documentos_container .lista_de_docs .nome, #addprojeto_documentos_container .lista_de_docs .disciplina, #addprojeto_documentos_container .lista_de_docs .subarea {
+  font-size: 12px; }
+#addprojeto_documentos_container .lista_de_docs tbody .impar td {
+  border-top: 1px solid rgba(0, 0, 0, 0.54);
+  border-bottom: none !important; }
+#addprojeto_documentos_container .lista_de_docs tbody .par td {
+  border-top: none; }
 
 #projetos_container md-input-container {
   margin-top: 50px; }

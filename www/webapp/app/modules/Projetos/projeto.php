@@ -220,7 +220,7 @@
 		</md-tab>
 
 		<md-tab label="Documentos" ng-disabled="projeto.id==0">
-			<md-content class="md-padding" ng-controller="ProjetosDocumentosController">
+			<md-content id="addprojeto_documentos_container" class="md-padding" ng-controller="ProjetosDocumentosController" id="">
 				<h1 class="md-display-2">Documentos</h1>
 				<div layout="row" layout-align="space-between center">
 					<div>
@@ -246,104 +246,86 @@
 						<input type="text" ng-model="q.nome" placeholder="Digite">
 					</md-input-container>
 				</div>
-				
-				<md-expansion-panel-group md-component-id="panelGroup">
-					<md-expansion-panel  ng-repeat="doc in projeto.documentos | filter:q as result" md-component-id="{{'panel_'+$index}}">
-						<md-expansion-panel-collapsed layout="row" layout-align="start start">
-							<div class="md-expansion-panel-item" style="width: 150px">
-								<div class="label">Código</div>
-								<div class="value">{{doc.codigo}}</div>
-							</div>
-							<div class="md-expansion-panel-item" style="width: 150px">
-								<div class="label">Título</div>
-								<div class="value">{{doc.nome}}</div>
-							</div>
-							<div class="md-expansion-panel-item" flex>
-								<div class="label">Subdisciplina</div>
-								<div class="value">{{doc.subdisciplina.codigo}} - {{doc.subdisciplina.nome}}</div>
-							</div>
-							<div class="md-expansion-panel-item"  style="width: 200px">
-								<div class="label">Sub-área</div>
-								<div class="value">{{doc.subarea.codigo}}</div>
-							</div>
-							<div class="md-expansion-panel-item"  style="width: 85px">
-								<div class="label">Data Limite</div>
-								<div class="value">{{doc.data_limite|date:'dd/MM/yyyy'}}</div>
-							</div>
-						</md-expansion-panel-collapsed>
-						<md-expansion-panel-expanded>
-							<md-expansion-panel-content layout="column">
-								<div>
-									<div class="md-expansion-panel-item">
-										<div class="label">ID</div>
-										<div class="value">{{doc.id}}</div>
-									</div>
-									<div class="md-expansion-panel-item">
-										<div class="label">Código</div>
-										<div class="value">{{doc.codigo}}</div>
-									</div>
-									<div class="md-expansion-panel-item">
-										<div class="label">Título</div>
-										<div class="value">{{doc.nome}}</div>
-									</div>
-									<div class="md-expansion-panel-item">
-										<div class="label">Subdisciplina</div>
-										<div class="value">{{doc.subdisciplina.nome}}</div>
-									</div>
-									<div class="md-expansion-panel-item">
-										<div class="label">Disciplina</div>
-										<div class="value">{{doc.subdisciplina.disciplina.nome}}</div>
-									</div>
-									<div class="md-expansion-panel-item">
-										<div class="label">Área</div>
-										<div class="value">{{doc.subarea.area.nome}}</div>
-									</div>
-									<div class="md-expansion-panel-item">
-										<div class="label">Sub-área</div>
-										<div class="value">{{doc.subarea.nome}}</div>
-									</div>
-									<div class="md-expansion-panel-item">
-										<div class="label">Data Limite</div>
-										<div class="value">{{doc.data_limite|date:'dd/MM/yyyy'}}</div>
-									</div>
+
+				<table class="lista_de_docs">
+					<thead>
+						<tr>
+							<td>Nome</td>
+							<td>Disciplina</td>
+							<td>Área</td>
+							<td>Data Limite</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody ng-repeat="doc in projeto.documentos | filter:q as result">
+						<tr class="impar">
+							<td>
+								<span class="codigo">{{doc.codigo}}</span>
+								<span class="nome">{{doc.nome}}</span>
+							</td>
+							<td>
+								<span class="subdisciplina">{{doc.subdisciplina.nome}}</span>
+								<span class="disciplina">{{doc.subdisciplina.disciplina.sigla}}</span>
+							</td>
+							<td>
+								<span class="area">{{doc.subarea.area.nome}}</span>
+								<span class="subarea">{{doc.subarea.nome}}</span>
+							</td>
+							<td class="data_limite">{{doc.data_limite|date:'dd/MM/yyyy'}}</td>
+							<td>
+								<md-button class="md-fab md-mini md-primary" ng-click="clonarDocumento(doc.id)">
+									<md-icon class="material-icons step" aria-label="Clonar Documento">content_copy</md-icon>
+									<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+										Clonar documento
+									</md-tooltip>
+								</md-button>
+
+								<md-button class="md-fab md-mini md-primary" ng-click="openDocumentoDialog($event,doc.id)">
+									<md-icon class="material-icons step" aria-label="Alterar cadastro do documento">mode_edit</md-icon>
+									<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+										Editar / Alterar
+									</md-tooltip>
+								</md-button>
+
+								<span>
+									<md-button
+										class="md-fab md-mini md-accent"
+										aria-label="Remover"
+										ng-click="openRemoverConfirm($event,doc)"
+										ng-disabled="doc.ultimo_pda!=null">
+											<md-icon class="material-icons step" aria-label="Alterar cadastro do documento">delete</md-icon>
+											<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+												Apagar Cadastro do Documento
+											</md-tooltip>
+									</md-button>
+									<md-tooltip ng-if="doc.ultimo_pda!=null" md-delay="0" md-direction="bottom" md-autohide="true">
+										Impossível remover documento que já foi atualizado/alterado.
+									</md-tooltip>
+								</span>
+							</td>
+						</tr>
+						<tr class="par">
+							<td>
+								<div class="label">Trabalho (Homem x Hora)</div>
+								<div class="value" ng-repeat="hh in doc.hhs" ng-if="doc.hhs.length > 0">
+									{{hh.cargo.nome}}: {{hh.hh}} hh
 								</div>
-								<div layout="row">
-									<div class="md-expansion-panel-item" flex layout="column">
-										<div class="label">Trabalho (Homem x Hora)</div>
-										<div class="value" ng-repeat="hh in doc.hhs">
-											{{hh.cargo.nome}}: {{hh.hh}} hh
-										</div>
+								<div ng-if="doc.hhs.length == 0"> - </div>
+							</td>
+							<td colspan="4">
+								<div class="md-expansion-panel-item" flex>
+									<div class="label">Dependências</div>
+									<div class="value" ng-if="doc.dependencias.length>0">
+										<span ng-repeat="dp in doc.dependencias">
+											{{dp.codigo}}
+										</span>
 									</div>
-									<div class="md-expansion-panel-item" flex>
-										<div class="label">Dependências</div>
-										<div class="value">
-											<span ng-repeat="dp in doc.dependencias">
-												{{dp.codigo}}
-											</span>
-										</div>
-									</div>
-								</div>								
-								<div layout="row" layout-align="space-between center">
-									<span>
-										<md-button
-											class="md-raised md-accent"
-											aria-label="Remover"
-											ng-click="openRemoverConfirm($event,doc)"
-											ng-disabled="doc.ultimo_pda!=null">Remover
-										</md-button>
-										<md-tooltip ng-if="doc.ultimo_pda!=null" md-delay="0" md-direction="bottom" md-autohide="true">
-											Impossível remover documento que já foi atualizado/alterado.
-										</md-tooltip>
-									</span>
-									<md-button class="md-raised md-primary" aria-label="Editar"  ng-click="openDocumentoDialog($event,doc.id)">Editar</md-button>
+									<div ng-if="doc.dependencias.length==0"> - </div>
 								</div>
-								<div layout="row" layout-align="center center">
-									<md-button ng-click="collapsePanel($index)" class="md-mini" aria-label="Menos Informações do Documento"><md-icon class="material-icons step" aria-label="Menos">expand_less</md-icon></md-button>
-								</div>
-							</md-expansion-panel-content>
-						</md-expansion-panel-expanded>
-					</md-expansion-panel>
-				</md-expansion-panel-group>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</md-content>
 		</md-tab>
 	</md-tabs>
