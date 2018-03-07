@@ -2210,7 +2210,8 @@
 					// removendo dependencias do objeto para salvar no log
 					unset($documento->dependencias);
 					unset($documento->hhs);
-
+					unset($documento->revisoes);
+					
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,implode(',', (array)$documento));
 				} else {

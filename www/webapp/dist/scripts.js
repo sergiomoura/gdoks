@@ -23378,7 +23378,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 			$mdExpansionPanel('panel_'+index).collapse();
 		}
 
-		$scope.openDocumentoDialog = function(evt,idDoc){
+		$scope.openDocumentoDialog = function(evt,idDoc,clonar){
 
 			// Definindo o objeto documento que foi clicado
 			if(idDoc == 0) {
@@ -23394,8 +23394,12 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 					subarea:null,
 					data_limite:null
 				};
-			} else {
+			} else if(clonar == undefined || clonar==false) {
 				$scope.docSelecionado = $scope.projeto.documentos.find(function(d){return d.id == this},idDoc);
+			} else {
+				$scope.docSelecionado = angular.copy($scope.projeto.documentos.find(function(d){return d.id == this},idDoc));
+				$scope.docSelecionado.id = 0;
+				$scope.docSelecionado.codigo = "[CÓPIA] "+$scope.docSelecionado.codigo;
 			}
 
 			// Atribuindo o id_projeto ao documento
@@ -23411,7 +23415,8 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 						doc: angular.copy($scope.docSelecionado),
 						documentos: angular.copy($scope.projeto.documentos),
 						cargos:$scope.cargos,
-						parentScope:$scope
+						parentScope:$scope,
+						copy:clonar
 					},
 					templateUrl: './app/modules/Documentos/doc-dialog.tmpl.html',
 					parent: angular.element(document.body),
@@ -23481,7 +23486,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 			);
 		};
 
-		function dialogController($scope,disciplinas,areas,subareas,doc,documentos,cargos,parentScope){
+		function dialogController($scope,disciplinas,areas,subareas,doc,documentos,cargos,parentScope,copy){
 			
 			// Copiando doc para o scope
 			$scope.doc = doc;
@@ -23507,14 +23512,14 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 			$scope.doc.hhs.push({cargo:null,hh:1});
 
 			// Determinando o valor da disciplina selecionada
-			$scope.disciplinaSelecionada = (doc.id==0 ? null : $scope.disciplinas.find(
+			$scope.disciplinaSelecionada = ( (doc.id==0 && !copy) ? null : $scope.disciplinas.find(
 																					function(a){
 																						return a.id == this
 																					},
 																					$scope.doc.subdisciplina.disciplina.id
 																				 ));
 			// Linkando doc.subdisciplina a um elemento de disciplinaSelecionada.subs
-			$scope.doc.subdisciplina = (doc.id==0 ? null : $scope.disciplinaSelecionada.subs.find(
+			$scope.doc.subdisciplina = ( (doc.id==0 && !copy) ? null : $scope.disciplinaSelecionada.subs.find(
 																			function(a){
 																				return a.id==this;
 																			},$scope.doc.subdisciplina.id
@@ -23522,7 +23527,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 
 
 			// Determinando o valor da area selecionada
-			$scope.areaSelecionada = (doc.id==0 ? null : $scope.areas.find(
+			$scope.areaSelecionada = ( (doc.id==0 && !copy) ? null : $scope.areas.find(
 													function(a){
 														return a.id == this
 													}, $scope.doc.subarea.area.id));
@@ -23649,6 +23654,9 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 						// Atribuindo id ao novo documento
 						documento.id = response.newId;
 						documento.rev_serial = 1;
+
+						// Se for uma clonagem, anulando o ultimo pda
+						if(copy) {documento.ultimo_pda=null;}
 
 						// Parsing subdisciplina do documento
 						var achouSub = false;

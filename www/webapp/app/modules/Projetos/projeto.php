@@ -273,7 +273,7 @@
 							</td>
 							<td class="data_limite">{{doc.data_limite|date:'dd/MM/yyyy'}}</td>
 							<td>
-								<md-button class="md-fab md-mini md-primary" ng-click="clonarDocumento(doc.id)">
+								<md-button class="md-fab md-mini md-primary" ng-click="openDocumentoDialog($event,doc.id,true)">
 									<md-icon class="material-icons step" aria-label="Clonar Documento">content_copy</md-icon>
 									<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 										Clonar documento
