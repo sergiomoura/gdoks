@@ -45,8 +45,7 @@
 								<md-datepicker
 												md-open-on-focus
 												md-hide-icons="calendar"
-												ng-model="projeto.data_final_p"
-												></md-datepicker></td>
+												ng-model="projeto.data_final_p"></md-datepicker>
 							</md-input-container>
 						</div>
 						<div layout="row">
@@ -359,5 +358,6 @@
 				</md-expansion-panel-group>
 			</md-content>
 		</md-tab>
+
 	</md-tabs>
 </div>
