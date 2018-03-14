@@ -1,6 +1,5 @@
 H) Alterações sugeridas por Neiva e consequências:
-	☐	Melhorar apresentação dos documentos no cadastro o projeto
-	☐	Clonar documento
+	☐	Melhorar apresentação dos documentos no cadastro o projeto	
 	☐	Melhorar a tela de Atualizar documento.
 		☐	Adicionar Cliente
 		☐	Incorporar histórico de progresso à barra "Progresso"
@@ -9,9 +8,31 @@ H) Alterações sugeridas por Neiva e consequências:
 	☐	Importar LDP para um projeto.
 	☐ Adicionar link para baixar LDP no dash do projeto
 	☐	Adicionar link para baixar LDP na tela de edição do projeto
+	☐	Escolher baixar LDP em PDF ou excel.
 	☐	Fazer "opção de tela"  baixar LDP na tela de projetos e utilizar nela no dash e no cadastro do projeto
 	☐	Fazer com que primeira revisão do documento possa ser inserida no ato do seu cadastro.
 	☐	Importar ZIP com lista de documentos e seus arquivos JUNTOS.
+	☐	Fazer visualizar arquivos PDFs e Imagens no browser
+	☐	Pesquisar visualização de Word e Excel no browser
+	☐	Por informações de custos de HH na LD segundo modelo enviado por anthony
+	☐	Controle de pendências por documento e vice-versa
+	☐	Pensar relatórios de pendências de documentos.
+	☐	Melhorar texto padrão do email de envio de GRD
+	☐	Tornar o texto padrão do envio de GRD configurável
+
+
+
+2.1.3GDF
+
+Faz o diligenciamento dos documentos de Fornecedor
+Prepara automaticamente as GRD´s internas para a Engenharia e as GRD´s externas para os Fornecedores
+Emite relatórios de pendências da Engenharia e dos Fornecedores
+Emite relatórios com todas as tramitações dos documentos para avaliação da performance do Fornecedor
+Emite relatórios de situação dos documentos por TAG de equipamento
+Totalmente integrado ao Gdoks
+Obedece ao perfil de segurança do usuário
+
+	
 
 F) Bloqueio de Telas:
 	☐ Usuários
@@ -93,6 +114,7 @@ Tabelas a serem preenchidas na instalação:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	Clonar documento @done (18-03-12 16:58) @project(H) Alterações sugeridas por Neiva e consequências)
 	✔	Gerar modelo para importação de lista de documentos @done (18-03-05 07:56) @project(H) Alterações sugeridas por Neiva)
 	✔	Exportar LDP para Excel @done (18-03-05 07:56) @project(H) Alterações sugeridas por Neiva)
 	✔	Número de documentos para validar das disciplinas da qual o usuário é validador @done (18-03-01 10:06) @project(E) Desenhar e Implementar Dashboard Home)
