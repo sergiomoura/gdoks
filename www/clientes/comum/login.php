@@ -9,6 +9,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../comum/geral.css">
+	<title><?php echo(NOME_EMPRESA) ?> - Área do Cliente</title>
 </head>
 <body>
 	<form action="" method="post">
