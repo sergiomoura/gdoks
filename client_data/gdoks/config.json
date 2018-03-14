@@ -10,5 +10,18 @@
 	"MAX_HIST_PRJS":{
 		"valor":5,
 		"tipo":"int[0,10]"
+	},
+	"MSG_PADRAO_ENVIO_GRD":{
+		"valor":"Prezado cliente,<br><br>Clique [link]aqui[/link] para baixar documentos da GRD $grd_codigo referentes ao projeto $projeto_nome.<br>Caso não seja possível visualizar o link copie o seguinte endereço e cole no seu navegador<br><br>$url_grd",
+		"tipo":"html"
+	},
+	"ASSUNTO_PADRAO_ENVIO_GRD":{
+		"valor":"$empresa_nome - $projeto_nome: Envio de Arquivos ($grd_codigo)",
+		"tipo":"string[0,256]"
+	},
+	"ASSINATURA_PADRAO_ENVIO_GRD":{
+		"valor":"<br><br>$usuario_nome<br><a href='mailto:$usuario_email'>$usuario_email</a><br>$empresa_nome",
+		"tipo":"html"
 	}
+
 }
