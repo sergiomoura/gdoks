@@ -21,7 +21,7 @@
 					break;
 
 				case 'html':
-					echo('<textarea ui-tinymce ng-model="tinymceModel"></textarea>');
+					echo('<textarea></textarea>');
 					break;
 				
 				case 'int':
