@@ -50,6 +50,8 @@ module.exports = function(grunt) {
 					'app/directives/clickoutside.directives.js',
 					'app/modules/Historico/HistoricoController.js',
 					'app/modules/UA/UAController.js',
+					'node_modules/trix/dist/trix.js',
+					'node_modules/angular-trix/dist/angular-trix.min.js',
 				],
 				dest: 'dist/scripts.js'
 			},

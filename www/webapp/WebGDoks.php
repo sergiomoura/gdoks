@@ -41,6 +41,7 @@
 		<link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css">
 		<link rel="stylesheet" href="node_modules/angular-material-expansion-panel/dist/md-expansion-panel.min.css">
 		<link rel="stylesheet" href="node_modules/angular-material-sidemenu/dest/angular-material-sidemenu.css">
+		<link rel="stylesheet" href="node_modules/trix/dist/trix.css">
 	</head>
 	<body ng-controller="RootController" layout="column" ng-cloak>
 		<md-toolbar layout="row" layout-align="start center" md-whiteframe="6dp" style="z-index: 100">

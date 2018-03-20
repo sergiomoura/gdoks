@@ -2323,6 +2323,22 @@ textarea {
 
 #configuracoes_container {
   padding: 20px; }
+  #configuracoes_container .input-container {
+    margin-bottom: 10px; }
+    #configuracoes_container .input-container label {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.87); }
+  #configuracoes_container .codSubstituicao {
+    background-color: rgba(0, 0, 0, 0.06);
+    padding: 20px;
+    margin-left: 30px; }
+    #configuracoes_container .codSubstituicao h2 {
+      margin: 0 0 15px 0; }
+    #configuracoes_container .codSubstituicao div {
+      font-size: 14px;
+      padding-left: 10px; }
+      #configuracoes_container .codSubstituicao div span {
+        font-weight: bold; }
 
 
 /*# sourceMappingURL=styles.css.map */

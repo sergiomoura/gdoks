@@ -1,6 +1,7 @@
 // Definindo Module WebGDoks
 var WebGDoks = angular.module('WebGDoks',
-								['ngRoute',
+								[
+								'ngRoute',
 								'ngCookies',
 								'ng-currency',
 								'ngLocale',
@@ -27,7 +28,9 @@ var WebGDoks = angular.module('WebGDoks',
 								'Usuarios',
 								'VisaoGeral',
 								'Validacao',
-								'UA']);
+								'UA',
+								'angularTrix',
+								]);
 
 // Definindo Rotas
 WebGDoks.config(
