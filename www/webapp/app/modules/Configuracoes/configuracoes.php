@@ -15,9 +15,13 @@
 					$tipo = explode('[', $conf->tipo)[0];
 					switch ($tipo) {
 						case 'string':
+							// determinando o tamanho máximo e o mínimo da string
+							$vetor = json_decode(str_replace($tipo, '', $conf->tipo));
+							$min = min($vetor);
+							$max = max($vetor);
 							 echo('<md-input-container>');
 							 echo('	<label>'.$conf->label.'</label>');
-							 echo('	<input type="text" placeholder="" ng-model="config.'.$key.'.valor">');
+							 echo('	<input type="text" placeholder="" ng-maxlength="'.$max.'" maxlength="'.$max.'" ng-model="config.'.$key.'.valor">');
 							 echo('</md-input-container>');
 							break;
 
@@ -30,9 +34,13 @@
 							break;
 						
 						case 'int':
+							// determinando o tamanho máximo e o mínimo da string
+							$vetor = json_decode(str_replace($tipo, '', $conf->tipo));
+							$min = min($vetor);
+							$max = max($vetor);
 							 echo('<md-input-container>');
 							 echo('	<label>'.$conf->label.'</label>');
-							 echo('	<input type="number"  placeholder="5" ng-model="config.'.$key.'.valor">');
+							 echo('	<input type="number" min="'.$min.'" max="'.$max.'" ng-min="'.$min.'" ng-max="'.$max.'"  placeholder="0" ng-model="config.'.$key.'.valor">');
 							 echo('</md-input-container>');
 							break;
 
