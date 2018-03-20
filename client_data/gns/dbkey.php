@@ -1,8 +1,8 @@
 <?php
-	
+	include_once('GDoks/GDoks.php');
 	$dbkey = new stdClass();
 
-	if(substr($_SERVER['HTTP_HOST'],0,9) == 'localhost'){
+	if(GDoks::server() == GDoks::SERVER_LOCAL){
 		$dbkey->DB_HOST = 'localhost';
 		$dbkey->DB_USER = 'root';
 		$dbkey->DB_PASS = 'vaiplaneta';

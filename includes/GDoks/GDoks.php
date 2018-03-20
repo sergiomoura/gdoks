@@ -15,8 +15,23 @@
 			// incluindo as constantes
 			include_once('constantes.php');
 
+			// Checa se o arquivo de configurações existe
+			if(!file_exists(CLIENT_DATA_PATH.$empresa.'/config.json')){
+				throw new Exception("Arquivo de configurações inexistente", 1);
+				exit(1);
+			}
+
 			// carregando dados a serem retornados
-			return json_decode(file_get_contents(CLIENT_DATA_PATH.$empresa.'/config.json'));
+			$config = json_decode(file_get_contents(CLIENT_DATA_PATH.$empresa.'/config.json'));
+
+			// Verificando se os dados carregados foram puderam ser interpretados
+			if(json_last_error() != JSON_ERROR_NONE){
+				throw new Exception("Falha ao interpretar arquivo de configurações.", 1);
+				exit(1);
+			}
+
+			// Retornando configurações
+			return $config;
 		}
 
 		public static function connectDB($empresa){
@@ -25,7 +40,7 @@
 			include_once('db.php');
 			
 			// Conectando a base de dados
-			$db = new DB($dbkey) ;
+			$db = new DB($dbkey);
 
 			// retornando conexão
 			return $db;

@@ -19,8 +19,8 @@
 
 	// Definindo o timezone padrão
 	date_default_timezone_set('America/Sao_Paulo');
-		
-	// definindo função getallheaders caso ela não exista (caso NGINX)
+	
+	// Definindo função getallheaders caso ela não exista (caso NGINX)
 	if (!function_exists('getallheaders')){ 
 		function getallheaders(){ 
 			$headers = [];
@@ -33,14 +33,14 @@
 		}
 	}
 
-	// lendo informações no header
+	// Lendo informações no header
 	$headers = getallheaders();
 	if ( array_key_exists('Authorization', $headers) && $headers['Authorization'] != '' && !is_null($headers['Authorization']) ){
-		// definindo iddb e token a partir do header
+		// Definindo iddb e token a partir do header
 		$empresa =  explode('-', $headers['Authorization'])[0];
 		$token = explode('-', $headers['Authorization'])[1];
 	} elseif (isset($_COOKIE['user'])) {
-		// se informação não está no header, talvez esteja no cookie para requisições de download
+		// Se informação não está no header, talvez esteja no cookie para requisições de download
 		$user = json_decode($_COOKIE['user']);
 		$empresa = $user->empresa;
 		$token = $user->token;
@@ -52,15 +52,15 @@
 	$FILE_LOGO = CLIENT_DATA_PATH.$empresa.'/logo.jpg';
 	$FILE_CONFIG = CLIENT_DATA_PATH.$empresa.'/config.json';
 	
-	// criando a conexão
+	// Criando a conexão
 	if(isset($empresa) && file_exists($FILE_DBKEY)){
-		// incluindo arquivo que define $dbkey
+		// Incluindo arquivo que define $dbkey
 		include($FILE_DBKEY);
 
 		// Criando conexão
 		$db = new DB($dbkey);
 
-		// salvando o id_empresa
+		// Salvando o id_empresa
 		$id_empresa = $dbkey->ID_EMPRESA;
 
 	} else {
@@ -72,10 +72,10 @@
 		exit(1);
 	}
 	
-	// definindo função que realiza log
+	// Definindo função que realiza log
 	function registrarAcao($db,$idUsuario,$idAcao,$parametros = ''){
 
-		// definindo tamanho máximo do parâmetro
+		// Definindo tamanho máximo do parâmetro
 		$param_maxlen = 256;
 		if($parametros == ''){
 			$sql = 'INSERT INTO gdoks_log (id_usuario,id_acao,data) values (?,?,now())';
@@ -104,9 +104,17 @@
 	};
 
 	// Carregando configurações da empresa
-	$config = json_decode(file_get_contents($FILE_CONFIG));
+	try {
+		$config = GDoks::getConf($empresa)	;
+	} catch (Exception $e) {
+		http_response_code(401);
+		$response = new response(1,$e->getMessage());
+		$response->flush();
+		exit(1);
+	}
 	
-	// defining api - - - - - - - - - - - - - - - - - - - -
+	
+	// Defining api - - - - - - - - - - - - - - - - - - - -
 	$app = new \Slim\Slim();
 
 	// Definindo BaseRoute para dunciconar tanto no PHPBuiltInServer quanto no Apache
@@ -117,7 +125,7 @@
 		$baseRoute = '/api/v1';
 	}
 
-	// defining api routes  V1 = = = = = = = = = = = = = = = =
+	// Defining api routes  V1 = = = = = = = = = = = = = = = =
 	$app->group($baseRoute,function() use($app,$db,$id_empresa,$token,$empresa,$config,$FILE_CONFIG){
 		
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -

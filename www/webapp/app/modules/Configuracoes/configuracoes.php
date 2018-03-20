@@ -3,7 +3,12 @@
 	include('blocker_tela.php');
 
 	// Carregando configurações da empresa
-	$configuracoes = GDoks::getConf($user->empresa);
+	try {
+		$configuracoes = GDoks::getConf($user->empresa);
+	} catch (Exception $e) {
+		echo($e->getMessage());
+		exit(1);
+	}
 
 ?>
 <div id="configuracoes_container"  class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
