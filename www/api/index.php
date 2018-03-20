@@ -118,7 +118,7 @@
 	}
 
 	// defining api routes  V1 = = = = = = = = = = = = = = = =
-	$app->group($baseRoute,function() use($app,$db,$id_empresa,$token,$empresa,$config){
+	$app->group($baseRoute,function() use($app,$db,$id_empresa,$token,$empresa,$config,$FILE_CONFIG){
 		
 		// LOGIN ROUTE DEFINITION - - - - - - - - - - - - -
 			$app->post('/login/',function() use ($app,$db,$id_empresa,$empresa){
@@ -5571,6 +5571,58 @@
 
 			});
 		// FIM DE ROTAS PARA HISTORICOS
+
+		// ROTAS PARA CONFIGURAÇÕES
+			$app->get('/configuracoes',function() use ($app,$db,$token,$config){
+
+				// Preparando a resposta
+				$response = new response(0,'ok');
+				$response->config = $config;
+								
+				// Enviando o response para o cliente
+				$response->flush();
+
+			});
+
+			$app->put('/configuracoes',function() use ($app,$db,$token,$FILE_CONFIG){
+
+				// Levantando o id do usuário a partir do token
+				$sql = 'select id from gdoks_usuarios where token=?';
+				$idu = $db->query($sql,'s',$token)[0]['id'];
+
+				// Lendo configurações enviadas configurações
+				$config = json_decode($app->request->getBody());
+
+				if(json_last_error() == JSON_ERROR_NONE){
+					try {
+						file_put_contents($FILE_CONFIG, json_encode($config));
+					} catch (Exception $e) {
+						http_response_code(401);
+						$response = new response(1,'Falha ao gravar configurações.');
+						$response->flush();
+						exit(1);
+					}
+
+					// Enviando resposta positiva para o cliente
+					$response = new response(0,'ok');
+					$response->flush();
+
+					// Registrando ação
+					registrarAcao($db,$idu,ACAO_ALTEROU_CONFIG_GERAL);
+
+					// Interrompendo o script com sucesso
+					exit(0);
+					
+				} else {
+					http_response_code(401);
+					$response = new response(1,'Configurações enviadas são inválidas.');
+					$response->flush();
+					exit(1);
+				}
+				
+
+			});
+		// FIM DE TODAS PARA CONFIGURAÇÕES
 	});
 
 	// running the app

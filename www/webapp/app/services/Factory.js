@@ -530,6 +530,14 @@ WebGDoks.factory('GDoksFactory',
 				form.parentNode.removeChild(form);
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getConfiguracoes = function(){
+				return $http.get(API_ROOT+'/configuracoes',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.putConfiguracoes = function(config){
+				return $http.put(API_ROOT+'/configuracoes',config,buildHeaders());	
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]
