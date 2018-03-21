@@ -78,6 +78,12 @@
 						</md-button>
 					</md-menu-item>
 					<md-menu-item>
+						<md-button ng-click="onHelpClick()">
+							<md-icon class="material-icons step" aria-label="Ajuda">help_outline</md-icon>
+							Ajuda
+						</md-button>
+					</md-menu-item>
+					<md-menu-item>
 						<md-button ng-click="logout()">
 							<md-icon class="material-icons step" aria-label="Sair do GDoks">exit_to_app</md-icon>
 							Sair

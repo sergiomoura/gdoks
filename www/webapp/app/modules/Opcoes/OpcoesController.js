@@ -8,4 +8,7 @@ angular.module('Opcoes',[])
 		indexedDB.deleteDatabase('gdoks');
 		window.location = '/';
 	}
+	$scope.onHelpClick = function(){
+		window.open('/help/help.html','_blank');
+	}
 });
