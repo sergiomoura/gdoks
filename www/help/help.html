@@ -33,10 +33,10 @@
 			<li>
 				<a href="#documentos">Documentos</a>
 				<ul>
-					<li><a href="#baixarDoc">Baixar um Documento</a></li>
 					<li><a href="#bloqDoc">Bloquear um Documento</a></li>
 					<li><a href="#atualDoc">Atualizar/Alterar um Documento</a></li>
 					<li><a href="#validDoc">Validar Documento</a></li>
+					<li><a href="validacao">Validação em Lote</a></li>
 					<li><a href="#avancarRevisaoDoc">Avançar Revisão de Documento</a></li>
 				</ul>
 			</li>
@@ -51,7 +51,6 @@
 			<li><a href="#log">Log de Utilização do GDoks</a></li>
 			<li><a href="conf">Configurações Gerais</a></li>
 			<li><a href="trocaSenha">Trocar login/senha</a></li>
-			<li><a href="validacao">Validação em Lote</a></li>
 		</ul>
 	</aside>
 	<main>
@@ -287,6 +286,72 @@
 				e clique em salvar.
 			</p>
 			<img src="img/18.png" class="imgTela" alt="Inativando Projeto">
+
+		</article>
+
+		<article id="documentos">
+			<h1>Documentos</h1>
+			<p>Ao clicar em Menu > Documentos você será direcionado para uma página de busca de documentos.</p>
+			<p>A busca pode utilizar vários critérios como o próprio formulário sugere</p>
+			<img src="img/19.png" class="imgTela" alt="Busca de documentos">
+			<p>Uma vez que o documento desejado seja encontrado ele pode ser acessado clicando-se sobre ele.</p>
+			<p>Os últimos documentos acessados são listados no acesso rápido no canto superior direito da tela.</p>
+			<img src="img/20.png" class="imgTela" alt="Acesso rápido 1">
+			<img src="img/21.png" class="imgTela" alt="Acesso rápido 2">
+			Clicando em qualquer item do menu acima te levará para a tela do documento ao qual ele se refere.
+			<img src="img/22.png" class="imgTela" alt="Tela do Documento">
+			O fluxo de trabalho geral pelo qual o documento passa pode ser descrito nos seguintes passos:
+			<ol>
+				<li>Bloquear documento</li>
+				<li>Atualizar/Alterar o documento (fora do GDoks)</li>
+				<li>Transmitir arquivo atualizado do documento para o GDoks</li>
+				<li>Validar alterações no documento</li>
+			</ol>
+			<p>
+				Esses passos são repetidos até que o documento seja dado como concluído (validado com 100% de progresso).
+			</p>
+			<p>
+				Por padrão, o GDoks é configurado para que somente documentos concluídos possam ser emitidos para o
+				cliente. Tendo sido emitido para o cliente este documento não poderá ser alterado, exceto se uma nova
+				revisão deste for criada (clicando no botão "Avançar Revisão").
+				A política "Somente documentos concluídos podem ser enviados para o cliente" pode ser flexibilizado na
+				tela de configurações do GDoks.
+			</p>
+			<h3 id="bloqDoc">Bloquear um Documento</h3>
+			<p>
+				Qualquer usuário que seja especialista da disciplina de um determinado documento poderá trabalhar neste
+				documento. Contudo, o primeiro passo para que isso seja feito é o bloqueio documento. Isso evita que
+				um especialista-A sobreponha as alterações realizadas por um especialista-B.
+			</p>
+			<p>
+				É então fundamental que, antes de bloquear um documento, o especialista tenha certeza de estar
+				trabalhando na última versão oficial dele. Para isso, ele pode simplesmente "Baixar" a ultima versão da
+				revisão atual do documento clicando no botão "Baixar".
+			</p>
+			<p>
+				Tendo a certeza de ter a última versão oficial do documento, o especialista pode bloquear o documento
+				clicando no botão "Bloquear". Quando ele faz isso, existem apenas dois destinos para o documento no
+				GDoks: Ou ele é desbloqueado sem nenhuma alteração (clicando no botão "Desbloquear") ou ele
+				atualiza/altera o documento (fora do GDoks) e transmite os arquivos atualizados para o GDoks.
+				Trataremos deste segundo caminho a seguir.
+			</p>
+			<h3 id="atualDoc">Atualizar/Alterar um Documento</h3>
+			<p>
+				Imagine então que o documento foi baixado pelo especialista e bloqueado para ser alterado.
+				O especialista faz as alterações devidas nos arquivos do documento em sua máquina, usando o programa
+				adequado para a alteração do arquivo (Word, Excel, AutoCAD, etc). Feita essa alteração, deseja-se então
+				atualizar o documento no GDoks.
+			</p>
+			<p>
+				Cabe então ao especialista acessar a tela do documento, clicar na aba "Atualizar Revisão" e
+				depois no botão "Selecionar Arquivos (Máximo  ___ MB)".
+			</p>
+			<img src="img/23.png" class="imgTela" alt="Atualizar Documento 1">
+			Uma janela se abrirá onde o especialista da deve selecionar os arquivos que compõem a nova versão do
+			documento. Ele então deverá fornecer qual o progresso que aquela atualização representa para o andamento do
+			documento e, caso o documento esteja atrasado, ele deverá preencher o campo "Observação" com a justificativa
+			para o atraso. Também poderá nesse momento dizer o número de páginas que cada arquivo possui e o tamanho.
+			<img src="img/24.png" class="imgTela" alt="Atualizar Documento 2">
 
 		</article>
 	</main>
