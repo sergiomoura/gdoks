@@ -22403,6 +22403,9 @@ function NavController($scope){
 		indexedDB.deleteDatabase('gdoks');
 		window.location = '/';
 	}
+	$scope.onHelpClick = function(){
+		window.open('/help/help.html','_blank');
+	}
 });;(function(){
 	angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 	.controller('ProjetosController',ProjetosController)
