@@ -36,6 +36,11 @@ main article .imgTela {
 	box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
 
+main article .imgInline {
+	vertical-align: middle;
+	width:36px;
+}
+
 main article p{
 	margin: 15px 0 15px 0;
 	text-align: justify;
