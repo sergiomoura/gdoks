@@ -14,6 +14,7 @@
 			<li><a href="#cadClientes">Clientes</a></li>
 			<li><a href="#cadDisciplinas">Disciplinas e Subdisciplinas</a></li>
 			<li><a href="#cadCargos">Cargos</a></li>
+			<li><a href="#log">Log de Utilização do GDoks</a></li>
 			<li>
 				<a href="#projetos">Projetos</a>
 				<ul>
@@ -36,8 +37,9 @@
 					<li><a href="#bloqDoc">Bloquear um Documento</a></li>
 					<li><a href="#atualDoc">Atualizar/Alterar um Documento</a></li>
 					<li><a href="#validDoc">Validar Documento</a></li>
-					<li><a href="validacao">Validação em Lote</a></li>
+					<li><a href="#validacao">Validação em Lote</a></li>
 					<li><a href="#avancarRevisaoDoc">Avançar Revisão de Documento</a></li>
+					<li><a href="#atualDocAvancado">Atualizar Documento (Avançado)</a></li>
 				</ul>
 			</li>
 			<li>
@@ -48,7 +50,6 @@
 					<li><a href="#regObsGrd">Registrar Observações do Clinte</a></li>
 				</ul>
 			</li>
-			<li><a href="#log">Log de Utilização do GDoks</a></li>
 			<li><a href="conf">Configurações Gerais</a></li>
 			<li><a href="trocaSenha">Trocar login/senha</a></li>
 		</ul>
@@ -173,6 +174,19 @@
 				respectivos valores de HH.
 			</p>
 			<img src="img/8.png" class="imgTela" alt="Adicionar/Alterar Cargo">
+		</article>
+
+		<article id="log">
+			<h1>Log de Utilização do GDoks</h1>
+			<p>
+				Todas as ações realizadas no GDoks que alterem de alguma forma as informações nele armazenada
+				são registradas. Fica registrada assim a ação, o usuário que a realizou, em que instante e outras
+				informações que descrevam a ação.
+			</p>
+			<p>
+				Esses registros podem ser vistos acessando Menu > Log e ficam armazenadas por 2 (dois) anos.
+			</p>
+			<img src="img/30.png" class="imgTela" alt="Log do GDoks">
 		</article>
 
 		<article id="projetos">
@@ -401,7 +415,80 @@
 				</ul>
 			</p>
 			<img src="img/28.png" class="imgTela" alt="Documento validado">
+			<h3 id="validacao">Validação em Lote</h3>
+			<p>
+				A tela "Validação" permite que um validador veja todos os documentos que precisão de validação e que
+				podem ser validados por ele. Basta então que ele marque os documentos que deseja validar, atribua um
+				progresso para cada um deles e clique no botão "Validar Documentos Selecionados". Essa tela pode ser
+				acessada clicando em Menu > Validação.
+			</p>
+			<img src="img/29.png" class="imgTela" alt="Validação em Lote">
+			<h3 id="avancarRevisaoDoc">Avançar Revisão de Documento</h3>
+			<p>Um documento pode ter sua revisão avançada (ex: sair de Rev 0 para Rev 1).</p>
+			<p>Em geral, isso é realizado depois que um documento emitido é criticado pelo cliente.</p>
+			<p>
+				Quando um documento tem sua revisão avançada e ele se encontra em uma outra revisão, seu status volta a
+				ser virgem mesmo que ele contenha já alguns arquivos da revisão anterior.
+			</p>
+			<p>
+				O fluxo de trabalho com o documento então se reinicia:
+				<ol>
+					<li>Bloquear documento</li>
+					<li>Atualizar/Alterar o documento (fora do GDoks)</li>
+					<li>Transmitir arquivo atualizado do documento para o GDoks</li>
+					<li>Validar alterações no documento</li>
+				</ol>
+			</p>
+			<p>
+				Para avançar a revisão de um documento basta clicar no botão "Avançar Revisão" na tela do documento.
+			</p>
+			<img src="img/31.png" class="imgTela" alt="Avançar Revisão">
+			<img src="img/32.png" class="imgTela" alt="Revisão Avançada">
+			<h3 id="atualDocAvancado">Atualizar Documento (Avançado)</h3>
+			<p>
+				Em algumas situações um documento é composto por vários arquivos.
+			</p>
+			<p>
+				Para atualizar um documento composto por vários arquivos, o especialista só necessita enviar para o
+				GDoks o(s) arquivos que foram alterados. Por exemplo, imagine que um documento é inicialmente composto
+				por dois arquivos de nomes 0001.pdf e 0002.pdf. Depois, em um dado momento, o especialista deseja
+				atualizar este documento enviando dois arquivos:
+				<ul>
+					<li>0002.pdf, que é o mesmo 0002.pdf mas com algumas</li>
+					<li>0003.pdf que é um arquivo novo no documento</li>
+				</ul>
+			</p>
+			<p>
+				Nestas condições, o GDoks exibiria uma tela como mostra a figura abaixo:
+			</p>
+			<img src="img/33.png" class="imgTela" alt="Atualizando Documento Composto">
+			<p>
+				Observe que:
+				<ul>
+					<li>
+						O arquivo 0001.pdf, por já existir no GDoks, aparece listado mesmo não tendo sido
+						selecionado pelo especialista. É dada a opção ao especialista de manter este arquivo ou
+						remove-lo do documento.
+					</li>
+					<li>
+						O arquivo 0002.pdf já existe no documento e está sendo enviado novamente (Preexistente para
+						Atualizar). O GDoks entende que este arquivo será atualizado (sobrescrito) pela nova versão
+						que está sendo enviada.
+					</li>
+					<li>
+						O arquivo 0003.pdf ainda não existe no documento até o presente momento. O GDoks então irá
+						armazenar este arquivo como sendo um novo arquivo do documento.
+					</li>
+				</ul> 
+			</p>
 		</article>
+
+		<article>
+			<h1>GRD - Guia de Remessa de Documentos</h1>
+		</article>
+
+
+
 	</main>
 </body>
 </html>
