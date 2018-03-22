@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>GDoks - Ajuda</title>
 	<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-	<link rel="stylesheet" href="webapp/css/normalizer.css">
+	<link rel="stylesheet" href="../webapp/css/normalizer.css">
 	<link rel="stylesheet" href="help.css">
 </head>
 <body>
@@ -50,7 +50,7 @@
 					<li><a href="#regObsGrd">Registrar Observações do Clinte</a></li>
 				</ul>
 			</li>
-			<li><a href="conf">Configurações Gerais</a></li>
+			<li><a href="#conf">Configurações Gerais</a></li>
 			<li><a href="trocaSenha">Trocar login/senha</a></li>
 		</ul>
 	</aside>
@@ -576,10 +576,58 @@
 
 			<img src="img/39.png" class="imgTela" alt="Observação Registrada">
 
+		</article>
+		
+		<article>
+			
+			<h1 id="conf">Configurações Gerais</h1>
+			<p>
+				A tela Menu > Configurações concentra as mais diversas configurações do GDoks.
+			</p>
+			
+			<h3>Máximo de projetos no histórico</h3>
+			<p>É o número máximo de projetos que aparecem listados em destaque na lista de projetos.</p>
+			
+			<h3>Assunto padrão no envio de GRD por e-mail</h3>
+			<p>
+				No envio do link de uma GRD para um cliente por e-mail o assunto já vem preenchido com um texto
+				padrão. É muito importante que este assunto possua informações curtas relevantes para que os seus
+				clientes não acharem que se trata de um vírus. É importante então que o assunto do e-mail transmita
+				credibilidade a quem recebe o e-mail.
+			</p>
+			<p>
+				Para isso, você pode utilizar os códigos de substituição relacionados no quadro da direita. Esses
+				códigos (começados com $) serão, na hora do envio, substituídos pelas palavras às quais eles correspondem.
+				Exemplo:
+			</p>
+			<p>
+				E empresa ENGEMAX está trabalhando num projeto chamado "Linha Savana" para o cliente "Savanas LTDA".
+				O nome do contato é Miguel Aleixo. Se está enviando a GRD-2018-000003 para o cliente.
+				O assunto padrão poderá está configurado assim:<br>
+				<center><i>$empresa_nome - $projeto_nome: Envio de Arquivos ($grd_codigo)</i></center>
+				Na hora do envio da mensagem se transformará em:
+				<center><i>ENGEMAX - Linha Savana: Envio de Arquivos (GRD-2018-000003)</i></center>
+			</p>
 
+			<h4>Mensagem padrão no envio de GRD</h4>
+			<p>Análogo ao item anterior (assunto da mensagem), mas a possibilidade de alguma formatação de texto.</p>
+
+			<h4>Assinatura no envio de GRD</h4>
+			<p>Análogo ao item anterior (Mensagem)</p>
+
+			<h4>Notificar Validador por E-mail</h4>
+			<p>
+				Quando habilitada, envia um e-mail para os validadores de uma disciplina que tenha um documento
+				precisando de validação
+			</p>
+
+			<h4>Notificar Especialistas por E-mail</h4>
+			<p>
+				Quando habilitada, envia um e-mail para os especialistas para avisar que algum documento precisa da
+				atenção deles.
+			</p>
 
 		</article>
-
 
 
 	</main>
