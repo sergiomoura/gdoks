@@ -18,6 +18,8 @@ main {
 	margin: 0 0 0 400px;
 	background-color: #FFF;
 	padding-bottom: 20px;
+	width: calc(100% - 400px);
+	max-width: 1200px;
 }
 
 main .logo{
