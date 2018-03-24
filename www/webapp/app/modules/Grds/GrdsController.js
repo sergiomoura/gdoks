@@ -175,6 +175,22 @@
 			}
 		}
 
+		// Carregando configurações do GDoks
+		var config = null;
+		GDoksFactory.getConfiguracoes().
+		success(function(response){
+			config = response.config;
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao carregar configurações: ' + error.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		});
+
 		// Define função a ser executada quando o cliente é alterado
 		$scope.onClienteChange = function(){
 			// Carrega os projetos daquele cliente
@@ -829,6 +845,7 @@
 					controller: enviarLinkViaEmailDialogController,
 					locals:{
 						parentScope:$scope,
+						config:config
 					},
 					templateUrl: './app/modules/Grds/enviarLinkViaEmail.dialog.tmpl.html',
 					parent: angular.element(document.body),
@@ -837,10 +854,41 @@
 				});
 		}
 
-		function enviarLinkViaEmailDialogController($scope,parentScope,GDoksFactory){
+		function enviarLinkViaEmailDialogController($scope,parentScope,config,GDoksFactory,$cookies){
+
 			// Amarrando a grd deste scope com o parentScope
 			$scope.grd = parentScope.grd;
 
+			// Carregando informaç~oes do usuário
+			var user = $cookies.getObject('user');
+
+			// Construindo assunto a partir das configurações
+			var assunto = config.ASSUNTO_PADRAO_ENVIO_GRD.valor;
+			assunto = assunto
+						.replace('$grd_codigo',$scope.grd.codigo)
+						.replace('$empresa_nome',user.nome_empresa)
+						.replace('$projeto_nome',$scope.grd.projeto.nome)
+						.replace('$usuario_nome',user.nome)
+						.replace('$usuario_email',user.email);
+
+			// Construindo menssagem a partir das configurações
+			var msg = config.MSG_PADRAO_ENVIO_GRD.valor;
+			msg = msg
+					.replace('$grd_codigo',$scope.grd.codigo)
+					.replace('$empresa_nome',$scope.grd.cliente.nome)
+					.replace('$projeto_nome',$scope.grd.projeto.nome)
+					.replace('$usuario_nome',user.nome)
+					.replace('$usuario_email',user.email);
+
+			// Definindo expressão regular 
+			var re = /\$grd_link\(.+\)/;
+			var match = msg.match(re);
+			if(match){
+				// removendo o primeiro eó último caractere (parentesis)
+				var texto = match[0].substr(9).slice(1,-1);
+				msg = msg.replace(re,'[link]'+texto+'[/link]');
+			}
+			
 			// Definindo mensagem
 			$scope.mail = {
 				destinatarios:[
@@ -849,8 +897,8 @@
 						email:$scope.grd.cliente.contato_email
 					}
 				],
-				assunto:'Link para '+$scope.grd.codigo,
-				msg:'Faça o download da [link]'+$scope.grd.codigo+'[/link]'
+				assunto:assunto,
+				msg:msg
 			}
 
 			// Definindo função que adiciona um destinatário

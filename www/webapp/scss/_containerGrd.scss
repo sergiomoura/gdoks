@@ -216,7 +216,12 @@
 
 .enviarEmail_dialog{
 	padding: 20px;
-	width: 400px;
+	width: 640px;
+	
+	.destinatarios md-input-container{
+		width:300px;
+	}
+
 	.container_assunto_msg{
 		width: 98%;
 	}

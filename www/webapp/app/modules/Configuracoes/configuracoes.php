@@ -64,8 +64,8 @@
 		</div>
 		<div flex class="codSubstituicao">
 			<h2>Códigos de Substituição</h2>
-			<div><span>$empresa</span>: Nome da empresa</div>
-			<div><span>$projeto</span>: Nome do projeto</div>
+			<div><span>$empresa_nome</span>: Nome da empresa</div>
+			<div><span>$projeto_nome</span>: Nome do projeto</div>
 			<div><span>$usuario_nome</span>: Nome do usuário</div>
 			<div><span>$usuario_email</span>: E-mail do usuário</div>
 			<div><span>$grd_codigo</span>: Código da GRD</div>

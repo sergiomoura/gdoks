@@ -164,6 +164,14 @@
 					$user->email = $rs['email'];
 					$user->token = $token;
 					$user->empresa = $empresa;
+
+					// Levantando o nome da empresa para enviar para o usuário
+					$sql = 'SELECT a.nome AS nome_empresa
+							FROM gdoks_empresas a
+							INNER JOIN gdoks_usuarios b ON a.id=b.id_empresa
+							WHERE b.id=?';
+					$user->nome_empresa = $db->query($sql,'i',$rs['id'])[0]['nome_empresa'];
+
 					
 					// definindo resposta http como 200
 					$app->response->setStatus(200);
@@ -5129,7 +5137,6 @@
 					}
 				}
 			});
-
 
 			$app->post('/grds/:id_grd/publicar',function($id_grd) use ($app,$db,$token){
 				// Lendo conteúdo da requisição

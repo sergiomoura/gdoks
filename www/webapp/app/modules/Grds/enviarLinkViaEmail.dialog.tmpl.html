@@ -41,17 +41,14 @@
 					<label>Assunto</label>
 					<input type="text" ng-model="mail.assunto">
 				</md-input-container>
-				<md-input-container>
-					<label>Mensagem</label>
-					<textarea ng-model="mail.msg"></textarea>
-					<div
-						ng-if="!msgTemLink()"
-						ng-message="pattern"
-						class="md-input-message-animation ng-scope"
-						style="opacity: 1; margin-top: 0px;">
-							O texto deve conter alguma ocorrência de '[link]TEXTO[/link]'
-						</div>
-				</md-input-container>
+				<trix-editor angular-trix ng-model="mail.msg"></trix-editor>
+				<div
+					ng-if="!msgTemLink()"
+					ng-message="pattern"
+					class="md-input-message-animation ng-scope"
+					style="opacity: 1; margin-top: 0px;">
+						O texto deve conter alguma ocorrência de '[link]TEXTO[/link]'
+					</div>
 			</div>
 		</form>
 		<div class="controles" layout="row" layout-align="space-between center">

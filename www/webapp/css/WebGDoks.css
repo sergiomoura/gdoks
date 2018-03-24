@@ -872,7 +872,9 @@
 
 .enviarEmail_dialog {
   padding: 20px;
-  width: 400px; }
+  width: 640px; }
+  .enviarEmail_dialog .destinatarios md-input-container {
+    width: 300px; }
   .enviarEmail_dialog .container_assunto_msg {
     width: 98%; }
   .enviarEmail_dialog .md-errors-spacer {
