@@ -875,7 +875,16 @@
 			var msg = config.MSG_PADRAO_ENVIO_GRD.valor;
 			msg = msg
 					.replace('$grd_codigo',$scope.grd.codigo)
-					.replace('$empresa_nome',$scope.grd.cliente.nome)
+					.replace('$empresa_nome',user.nome_empresa)
+					.replace('$projeto_nome',$scope.grd.projeto.nome)
+					.replace('$usuario_nome',user.nome)
+					.replace('$usuario_email',user.email);
+
+			// Contruindo assinatura de mensagem a partir das configurações
+			var ass = config.ASSINATURA_ENVIO_GRD.valor;
+			ass = ass
+					.replace('$grd_codigo',$scope.grd.codigo)
+					.replace('$empresa_nome',user.nome_empresa)
 					.replace('$projeto_nome',$scope.grd.projeto.nome)
 					.replace('$usuario_nome',user.nome)
 					.replace('$usuario_email',user.email);
@@ -898,7 +907,7 @@
 					}
 				],
 				assunto:assunto,
-				msg:msg
+				msg:msg+ass
 			}
 
 			// Definindo função que adiciona um destinatário
