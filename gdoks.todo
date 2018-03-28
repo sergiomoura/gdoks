@@ -1,5 +1,5 @@
 H) Alterações sugeridas por Neiva e consequências:
-	☐	Alertar/Não permitir quando o novo progresso for menor ou igual ao anterior
+	✔	Alertar/Não permitir quando o novo progresso for menor ou igual ao anterior @done (18-03-28 14:11)
 	✔	Bloquear documento virgem para o atualizar se habilitar @done (18-03-28 13:47)
 	☐	Conigurar para que somente documento completo vá em GRD ou não.
 	☐	Melhorar a tela de Atualizar documento.

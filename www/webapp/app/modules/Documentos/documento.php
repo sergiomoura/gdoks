@@ -133,8 +133,6 @@
 			</td>
 		</tr>
 	</table>
-	<!-- <pre>{{documento | json }}</pre>
-	<pre>{{ usuario | json}}</pre> -->
 	<md-tabs md-selected="0" md-dynamic-height md-border-bottom md-whiteframe="1dp">
 		
 		<md-tab
@@ -161,7 +159,10 @@
 					<div layout="row" layout-align="space-between start" style="margin-top: 40px;">
 						<md-input-container ng-if="formUploadItems.length>0" flex="45">
 							<label>Progresso Total</label>
-							<input required type="number" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" ng-value="documento.revisoes[0].progresso_validado" min="{{documento.revisoes[0].progresso_validado}}" max="100">
+							<input required type="number" name="progresso_total" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" ng-value="documento.revisoes[0].progresso_validado" ng-min="documento.revisoes[0].progresso_validado+1" min="{{documento.revisoes[0].progresso_validado+1}}" max="100">
+							<div ng-messages="form_atualizarRevisao.progresso_total.$error">
+								 <div ng-message="min">O progresso total deve ser no mínimo {{documento.revisoes[0].progresso_validado+1}} %</div>
+							</div>
 						</md-input-container>
 						
 						<md-input-container ng-if="formUploadItems.length>0" flex="45">
