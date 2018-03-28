@@ -284,10 +284,32 @@
 				Note que o documento não tem ainda nenhum arquivo. Ele somente foi cadastrado no GDoks com várias
 				informações referidas a ele.
 			</p>
-			<h4 id="importar">Modo 2 - Em Lote (em desenvolvimento)</h4>
+			<h4 id="importar">Modo 2 - Em Lote</h4>
 			<p>
-				Cadastramento de documentos em lote (importação de LDP) está em fase de desenvolvimento e estará em
-				funcionamento até 30/03/2018
+				É possível informar ao GDoks todos os documentos de um projeto de uma só vez. Ele faz isso interpretando
+				as informações de uma planilha modelo, que pode ser baixada no próprio GDoks, na aba "Documentos",
+				clicando no botão "Baixar Modelo Para Importação".
+			</p>
+			<img src="img/42.png" class="imgTela" alt="Baixar modelo para importação">
+			<p>
+				Feito isso, você deve preencher a planilha com as informações dos documentos do projeto, levando em
+				conta algumas restrições que o GDoks impõe para que seja mantida a consistência e integridade dos dados.
+				São elas:
+				<ul>
+					<li>Código Único: O GDoks não permite que dois documentos possuam o mesmo código.</li>
+					<li>
+						Relação Disciplina/Subdisciplina: O GDoks não permite que você atribua uma subdisciplina a um
+						documento que não seja subdisciplina da disciplina escolhida.
+					</li>
+				</ul>
+			</p>
+			<p>
+				Os códigos de área e subáreas da planilha serão adicionados ao projeto.
+				Caso já exista uma área/subárea com o código inserido na planilha, essa área/subárea será utilizada.
+			</p>
+			<p>
+				Para importar a lista de documentos, depois dela pronta, basta clicar no botão "Implortar" e selecionar
+				o arquivo que contém a lista de documentos, baseado no modelo baixado.
 			</p>
 			<h3 id="inatProjetos">Inativando Projetos</h3>
 			<p>

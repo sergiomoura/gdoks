@@ -227,15 +227,15 @@
 							class="md-raised md-primary"
 							aria-label="Novo Documento"
 							ng-click="openDocumentoDialog($event,0)">
-								<md-icon class="material-icons step" aria-label="Baixar Modelo de LDP">add</md-icon>Novo Documento
+								<md-icon class="material-icons step" aria-label="Criar um novo documento">add</md-icon>Novo Documento
 						</md-button>
 						<md-button
 							class="md-raised md-primary"
 							aria-label="Baixar Modelo de LDP"
 							ng-click="baixarModeloParaImportacao()">
-								<md-icon class="material-icons step" aria-label="Baixar Modelo de LDP">file_download</md-icon>Baixar Modelo de LDP
+								<md-icon class="material-icons step" aria-label="Baixar modelo para importação">file_download</md-icon>Baixar Modelo para Importação
 								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
-									Baixar modelo de LDP para importação (modelo.xlsx)
+									Baixar modelo para importação (modelo.xlsx)
 								</md-tooltip>
 						</md-button>
 						<md-button
