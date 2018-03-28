@@ -222,7 +222,7 @@
 			<md-content class="md-padding" ng-controller="ProjetosDocumentosController">
 				<h1 class="md-display-2">Documentos</h1>
 				<div layout="row" layout-align="space-between center">
-					<div>
+					<form id="form_import" name="form_import">
 						<md-button
 							class="md-raised md-primary"
 							aria-label="Novo Documento"
@@ -241,17 +241,16 @@
 						<md-button
 							class="md-raised md-primary"
 							aria-label="Enviar arquivo para importação"
-							ngf-select
+							ngf-select="UploadXlsx($files, $invalidFiles)"
 							ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
 							ngf-multiple="false"
-							ngf-pattern="'.xlsx'"
-							ngf-change="UploadXlsx($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)">
+							ngf-pattern="'.xlsx'">
 								<md-icon class="material-icons step" aria-label="Enviar arquivo para importação">unarchive</md-icon>Importar
 								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 									Enviar arquivo para importação (xlsx)
 								</md-tooltip>
 						</md-button>
-					</div>
+					</form>
 					<md-input-container>
 						<label>Buscar por Documento</label>
 						<md-icon class="material-icons step" aria-label="Buscar documento">search</md-icon>

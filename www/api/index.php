@@ -100,8 +100,48 @@
 		// Pondo o novo elemento no histórico com ordem MAX_HIST_PRJS
 		$sql = 'REPLACE INTO gdoks_hist_prjs (id_projeto,id_usuario,ordem) VALUES (?,?,?)';
 		$db->query($sql,'iii',$id_projeto,$id_usuario,$config->MAX_HIST_PRJS->valor);
-
 	};
+
+	// Definindo função que traduz o erro de upload
+	function erroDeUpload($erro_n){
+		switch ($erro_n) {
+			case UPLOAD_ERR_OK:
+				return 'Upload bem sucedido.';
+				break;
+
+			case UPLOAD_ERR_INI_SIZE:
+				return 'O arquivo enviado excede o limite definido ('.ini_get('upload_max_filesize') .')';
+				break;
+
+			case UPLOAD_ERR_FORM_SIZE:
+				return 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
+				break;
+
+			case UPLOAD_ERR_PARTIAL:
+				return 'O upload do arquivo foi feito parcialmente';
+				break;
+
+			case UPLOAD_ERR_NO_FILE:
+				return 'Nenhum arquivo foi enviado';
+				break;
+
+			case UPLOAD_ERR_NO_TMP_DIR:
+				return 'Pasta temporária ausente';
+				break;
+
+			case UPLOAD_ERR_CANT_WRITE:
+				return 'Falha em escrever o arquivo em disco';
+				break;
+			
+			case UPLOAD_ERR_EXTENSION:
+				return 'Uma extensão interrompeu o upload do arquivo';
+				break;
+
+			default:
+				return 'Desconhecido (Cod '.$erro_n.')';
+				break;
+		}
+	}
 
 	// Carregando configurações da empresa
 	$config = json_decode(file_get_contents($FILE_CONFIG));
@@ -1935,40 +1975,9 @@
 							$erro->arquivo = $_FILES['profiles']['name'][$i]['file'];
 							$erro->codigo = -1;
 
-							// entrando no switch para retornar msg de erro adequada
-							switch ($_FILES['profiles']['error'][$i]['file']) {
-								case UPLOAD_ERR_INI_SIZE:
-									$msg = 'O arquivo enviado excede o limite definido ('.ini_get('upload_max_filesize') .')';
-									break;
+							// Traduzindo qual o erro do upload
+							$msg = erroDeUpload($_FILES['profiles']['error'][$i]['file']);
 
-								case UPLOAD_ERR_FORM_SIZE:
-									$msg = 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
-									break;
-
-								case UPLOAD_ERR_PARTIAL:
-									$msg = 'O upload do arquivo foi feito parcialmente';
-									break;
-
-								case UPLOAD_ERR_NO_FILE:
-									$msg = 'Nenhum arquivo foi enviado';
-									break;
-
-								case UPLOAD_ERR_NO_TMP_DIR:
-									$msg = 'Pasta temporária ausente';
-									break;
-
-								case UPLOAD_ERR_CANT_WRITE:
-									$msg = 'Falha em escrever o arquivo em disco';
-									break;
-								
-								case UPLOAD_ERR_EXTENSION:
-									$msg = 'Uma extensão interrompeu o upload do arquivo';
-									break;
-
-								default:
-									$msg = 'Desconhecido (Cod '.$_FILES['profiles']['error'][$i]['file'].')';
-									break;
-							}
 							$erro->msg = 'Upload falhou. Erro: '.$msg;
 							array_push($erros, $erro);
 						}
@@ -2536,11 +2545,245 @@
 				$modelo->enviarXlsx();
 			});
 
-			$app->post('/projetos/:id_projeto/lpd',function($id_projeto) use ($app,$db,$token,$empresa){
-				
+			$app->post('/projetos/:id_projeto/importarLDP/',function($id_projeto) use ($app,$db,$empresa,$token){
+				// Fazendo use do PHPSpreadsheet
+				$spred = new PhpOffice\PhpSpreadsheet\Spreadsheet;
+
+				// Lendo dados
+				$id_projeto = 1*$id_projeto;
+
+				// Verificando se o projeto é da mesma empresa do usuário
+				$sql = 'SELECT
+							A.id,A.id_empresa,COUNT(*) as ok
+						FROM (
+							SELECT
+								id,id_empresa
+							FROM gdoks_usuarios
+							WHERE token=? AND validade_do_token>now()) A INNER JOIN 
+								(
+							SELECT
+								id_empresa
+							FROM gdoks_projetos
+								WHERE id=?) B on A.id_empresa=B.id_empresa;';
+				$rs = $db->query($sql,'si',$token,$id_projeto)[0];
+				$ok = $rs['ok'];
+				$id_usuario = $rs['id'];
+				$id_empresa = $rs['id_empresa'];
+
+				// Indo adiante
+				if($ok == 1) {
+					// Verificando se há arquivo na requisição
+					if(!isset($_FILES['file'])){
+						http_response_code(401);
+						$response = new response(1,'Requisição mal feita.');
+						$response->flush();
+						exit(1);
+					}
+
+					// Verificando integridade do arquivo
+					if($_FILES['file']['error'][0]!=0){
+						http_response_code(401);
+						$response = new response(1,erroDeUpload($_FILES['file']['error'][0]));
+						$response->flush();
+						exit(1);
+					}
+
+					// Carregando arquivo enviado
+					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+					$reader->setReadDataOnly(true);
+					$spreadsheet = $reader->load($_FILES['file']['tmp_name'][0]);
+
+					// Selecionando a planilha de Documentos
+					$sheet_documentos = $spreadsheet->getSheetByName('Documentos');
+
+					// Determinando o número de linhas ($n_linhas)
+					$cod = $sheet_documentos->getCell('A2')->getValue();
+					$n_linhas = 0;
+					while ($cod!='') {
+						$n_linhas++;
+						$cod = $sheet_documentos->getCell('A'.($n_linhas+2))->getValue();
+					}
+
+					// Associando colunas aos seus conteúdos
+					$col_codigo = 'A';
+					$col_codAlt = 'B';
+					$col_titulo = 'C';
+					$col_disciplina = 'D';
+					$col_subdisciplina = 'E';
+					$col_area = 'F';
+					$col_subarea = 'G';
+					$col_dataLimite = 'H';
+
+					// Criando vetor de críticas
+					$criticas = Array();
+
+					// Loop de processamento de linhas
+					for ($i=2; $i <= $n_linhas+1; $i++) { 
+						
+						// Criando objeto doc
+						$doc = new stdClass();
+
+						// Critica
+						$critica = Array();
+
+						// Validando campos e criando objeto a ser tratado 
+							
+							// Validando código
+							$doc->codigo = $sheet_documentos->getCell($col_codigo.$i)->getValue();
+							$MAX_COD_SIZE = 45;
+							if(sizeof($doc->codigo) > $MAX_COD_SIZE){
+								array_push($critica, 'Código muito longo. Tamanho máximo: '.$MAX_COD_SIZE);
+							}
+
+							// Verificando se o código já existe
+							$sql = 'SELECT id FROM gdoks_documentos WHERE codigo=?';
+							$rs = $db->query($sql,'s',$doc->codigo);
+							if(sizeof($rs) >0){
+								array_push($critica, 'Já existe um documento com este código.');
+							}
+
+							// Validando código alternativo
+							$doc->codAlt = $sheet_documentos->getCell($col_codAlt.$i)->getValue();
+							$MAX_CODALT_SIZE = 45;
+							if(sizeof($doc->codAlt) > $MAX_CODALT_SIZE){
+								array_push($critica, 'Código alternativo muito longo. Tamanho máximo: '.$MAX_CODALT_SIZE);
+							}
+
+							// Validando título
+							$doc->titulo = $sheet_documentos->getCell($col_titulo.$i)->getValue();
+							$MAX_TITULO_SIZE = 100;
+							if(sizeof($doc->titulo) > $MAX_TITULO_SIZE){
+								array_push($critica, 'Título do documento muito longo. Tamanho máximo: '.$MAX_TITULO_SIZE);
+							}
+
+							// Validando disciplina
+							$disciplina = $sheet_documentos->getCell($col_disciplina.$i)->getValue();
+							$sigla_disciplina = explode(' - ', $disciplina)[0];
+							$sql = 'SELECT id FROM gdoks_disciplinas WHERE sigla=?';
+							$rs = $db->query($sql,'s',$sigla_disciplina);
+							if(sizeof($rs) == 0){
+								array_push($critica, 'Disciplina inexistente: "'.$disciplina.'"');
+								$doc->disciplina = 0;
+							} else {
+								$doc->disciplina = $rs[0]['id'];
+							}
+
+							// Validando subdisciplina
+							$subdisciplina = $sheet_documentos->getCell($col_subdisciplina.$i)->getValue();
+							$sigla_subdisciplina = explode(' - ', $subdisciplina)[0];
+							$sql = 'SELECT id FROM gdoks_subdisciplinas WHERE sigla=? AND id_disciplina=?';
+							$rs = $db->query($sql,'si',$sigla_subdisciplina,$doc->disciplina);
+							if(sizeof($rs) == 0){
+								array_push($critica, 'Subdisciplina inexistente ou não pertence a disciplina: "'.$subdisciplina.'"');
+								$doc->subdisciplina = 0;
+							} else {
+								$doc->subdisciplina = $rs[0]['id'];
+							}
+
+							// Validando área e definindo o que fazer sobre subarea
+							$area = $sheet_documentos->getCell($col_area.$i)->getValue();
+							
+							// Definindo possíveis ações sobre subarea
+							$acao_crieSubarea = 1;
+							$acao_naoCrieSubarea = 2;
+							$acao_testeExistenciaDeSubarea = 3;
+
+							if($area == ''){
+								array_push($critica, 'Código de área vazio.');
+								$doc->area = 0;
+								$oQueFazer = $acao_naoCrieSubarea;
+							} else {
+								$sql = 'SELECT id FROM gdoks_areas WHERE id_projeto=? AND codigo=?';
+								$rs = $db->query($sql,'is',$id_projeto,$area);
+								if(sizeof($rs) == 0){
+									// Área inexistente. Criando e recuperando id.
+									$sql = 'INSERT INTO gdoks_areas (codigo, id_projeto) VALUES (?,?)';
+									try {
+										$db->query($sql,'si',$area,$id_projeto);
+										$doc->area = $db->insert_id;
+										$oQueFazer = $acao_crieSubarea;
+									} catch (Exception $e) {
+										array_push($critica, 'Falha ao tentar criar area: "'.$e->getMessage().'"');
+										$oQueFazer = $acao_naoCrieSubarea;
+									}
+								} else {
+									// Área existente. Lendo id.
+									$doc->area = $rs[0]['id'];
+									$oQueFazer = $acao_testeExistenciaDeSubarea;
+								}
+							}
+
+							// Validando subárea
+							$subarea = $sheet_documentos->getCell($col_subarea.$i)->getValue();
+							if($subarea == ''){
+								array_push($critica, 'Código de subárea vazio');
+							} else {
+								if($oQueFazer == $acao_crieSubarea){
+									$sql = 'INSERT INTO gdoks_subareas (codigo,id_area) VALUES (?,?)';
+									try {
+										$db->query($sql,'si',$subarea,$doc->area);
+										$doc->subarea = $db->insert_id;
+									} catch (Exception $e) {
+										array_push($critica, 'Falha ao tentar criar subarea: "'.$e->getMessage().'"');
+										$doc->subarea = 0;
+									}
+								} elseif($oQueFazer == $acao_testeExistenciaDeSubarea){
+									$sql = 'SELECT id FROM gdoks_subareas WHERE codigo=? AND id_area=?';
+									$rs = $db->query($sql,'si',$subarea,$doc->area);
+									if(sizeof($rs) == 0){
+										// Subárea inexistente. Criando subarea
+										$sql = 'INSERT INTO gdoks_subareas (codigo,id_area) VALUES (?,?)';
+										try {
+											$db->query($sql,'si',$subarea,$doc->area);
+											$doc->subarea = $db->insert_id;
+										} catch (Exception $e) {
+											array_push($critica, 'Falha ao tentar criar subarea: "'.$e->getMessage().'"');
+											$doc->subarea = 0;
+										}
+									} else {
+										// Subárea já existe
+										$doc->subarea = $rs[0]['id'];
+									}
+								}
+							}
+
+							// Validando data limite
+							$n_dias = $sheet_documentos->getCell($col_dataLimite.$i)->getValue();
+							if(is_numeric($n_dias)){
+								$n_dias--;
+								$data_limite = new DateTime('01-01-1900');
+								$data_limite = $data_limite->add(new DateInterval('P'.$n_dias.'D'));
+								$doc->data_limite = $data_limite->format('Y-m-d');
+							} else {
+								array_push($critica, 'Data limite inválida.');
+								$doc->data_limite = 0;
+							}
+						// Fim de Validações
+						
+						// Verificando se houve criticas
+						if(sizeof($critica) == 0) {
+							// Inserindo documento na base
+							$sql = 'INSERT INTO gdoks_documentos (nome,codigo,codigo_alternativo,id_subarea,id_subdisciplina) VALUES (?,?,?,?,?)';
+							$db->query($sql,'sssii',$doc->titulo,$doc->codigo,$doc->codAlt,$doc->subarea,$doc->subdisciplina);
+							$doc->id = $db->insert_id;
+
+							// Criando revisão do documento
+							$sql = 'INSERT INTO gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar) VALUES (0,?,?,0,0)';
+							$db->query($sql,'is',$doc->id,$doc->data_limite);
+						} else {
+							$criticas[$i] = $critica;
+						}
+					}
+					$response = new response(0,'ok');
+					$response->criticas = $criticas;
+					$response->flush();
+
+				} else {
+					http_response_code(401);
+					$response = new response(1,'Não altera dados de outra empresa.');	
+					exit(1);
+				}
 			});
-
-
 		// FIM DE ROTAS DE PROJETOS
 
 		// ROTAS DE DOCUMENTOS
@@ -5295,44 +5538,8 @@
 							$result = new stdClass();
 							$result->file = $file;
 							$result->err = $erros[$i];
-							switch ($erros[$i]) {
-								case UPLOAD_ERR_OK:
-									$result->msg = 'Ok';
-									break;
-
-								case UPLOAD_ERR_INI_SIZE:
-									$result->msg = 'O arquivo enviado excede o limite definido ('.ini_get('upload_max_filesize') .')';
-									break;
-
-								case UPLOAD_ERR_FORM_SIZE:
-									$result->msg = 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
-									break;
-
-								case UPLOAD_ERR_PARTIAL:
-									$result->msg = 'O upload do arquivo foi feito parcialmente';
-									break;
-
-								case UPLOAD_ERR_NO_FILE:
-									$result->msg = 'Nenhum arquivo foi enviado';
-									break;
-
-								case UPLOAD_ERR_NO_TMP_DIR:
-									$result->msg = 'Pasta temporária ausente';
-									break;
-
-								case UPLOAD_ERR_CANT_WRITE:
-									$result->msg = 'Falha em escrever o arquivo em disco';
-									break;
-								
-								case UPLOAD_ERR_EXTENSION:
-									$result->msg = 'Uma extensão interrompeu o upload do arquivo';
-									break;
-
-								default:
-									$result->msg = 'Desconhecido (Cod '.$_FILES['profiles']['error'][$i]['file'].')';
-									break;
-							}
-
+							$result->msg = erroDeUpload($erros[$i]);
+							
 							if($erros[$i] == 0){
 								// gerando nome unico do arquivo
 								$uniq_name = uniqid();
@@ -5398,43 +5605,7 @@
 							$result = new stdClass();
 							$result->file = $file;
 							$result->err = $erros[$i];
-							switch ($erros[$i]) {
-								case UPLOAD_ERR_OK:
-									$result->msg = 'Ok';
-									break;
-
-								case UPLOAD_ERR_INI_SIZE:
-									$result->msg = 'O arquivo enviado excede o limite definido ('.ini_get('upload_max_filesize') .')';
-									break;
-
-								case UPLOAD_ERR_FORM_SIZE:
-									$result->msg = 'O arquivo excede o limite definido em MAX_FILE_SIZE no formulário HTML';
-									break;
-
-								case UPLOAD_ERR_PARTIAL:
-									$result->msg = 'O upload do arquivo foi feito parcialmente';
-									break;
-
-								case UPLOAD_ERR_NO_FILE:
-									$result->msg = 'Nenhum arquivo foi enviado';
-									break;
-
-								case UPLOAD_ERR_NO_TMP_DIR:
-									$result->msg = 'Pasta temporária ausente';
-									break;
-
-								case UPLOAD_ERR_CANT_WRITE:
-									$result->msg = 'Falha em escrever o arquivo em disco';
-									break;
-								
-								case UPLOAD_ERR_EXTENSION:
-									$result->msg = 'Uma extensão interrompeu o upload do arquivo';
-									break;
-
-								default:
-									$result->msg = 'Desconhecido (Cod '.$_FILES['profiles']['error'][$i]['file'].')';
-									break;
-							}
+							$result->msg = erroDeUpload($erros[$i]);
 
 							if($erros[$i] == 0){
 								// gerando nome unico do arquivo

@@ -23365,7 +23365,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 	angular.module('Projetos').controller('ProjetosDocumentosController',ProjetosDocumentosController);
 	
 	// Definindo o controller
-	function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdDialog,$mdToast){
+	function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdDialog,$mdToast,Upload,$cookies,$timeout){
 		
 		$scope.collapsePanel = function(index){
 			$mdExpansionPanel('panel_'+index).collapse();
@@ -23749,8 +23749,34 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 			GDoksFactory.baixarModeloParaImportacao($scope.projeto.id);
 		}
 
-		$scope.UploadXlsx = function($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event){
-			console.dir($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event);
+		//$scope.UploadXlsx = function($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event){
+		$scope.UploadXlsx = function(file, errFiles){
+			
+			$scope.f = file;
+		    $scope.errFile = errFiles && errFiles[0];
+		    if (file) {
+		        file.upload = Upload.upload({
+		        	url: API_ROOT+'/projetos/'+$scope.projeto.id+'/importarLDP/',
+		            data: {file: file},
+		            headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
+		        });
+
+		        file.upload.then(
+		        	function (response) {
+		            	$timeout(function () {
+		                	file.result = response.data;
+		                	console.dir(response.data);
+		            	});
+		        	},
+		        	function (response) {
+		            	if (response.status > 0)
+		                	$scope.errorMsg = response.status + ': ' + response.data;
+		        	},
+		        	function (evt) {
+		            	file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+		        	}
+		        );
+		    }
 		}
 
 	}
