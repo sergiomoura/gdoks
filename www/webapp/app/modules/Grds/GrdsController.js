@@ -25,6 +25,7 @@
 		// Carregando dados
 		loadClientes();
 		loadProjetos();
+		loadConfig();
 
 		// FUNÇÕES DE COMUNICAÇÃO COM O SERVIDOR = = = = = = = = = = = = = = = = = = = = = = = =
 		function buscar(q){
@@ -113,7 +114,7 @@
 			}
 		}
 
-		// função que carrega projetos da base local
+		// Função que carrega projetos da base local
 		function loadProjetos(){
 			indexedDB.open('gdoks').onsuccess= function(evt){
 				evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
@@ -123,6 +124,25 @@
 					$scope.$apply();
 				}
 			}
+		}
+
+		// Função que carrega configurações do GDoks
+		function loadConfig(){
+			GDoksFactory.getConfiguracoes()
+			.success(function(response){
+				$scope.somenteConcluidosPodemSerAdd = response.config.SOMENTE_DOC_CONCLUIDOS_SAO_EMITIDOS.valor;
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao carregar configurações. Assumindo comportamento padrão.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				$scope.somenteConcluidosPodemSerAdd = true;
+			});
 		}
 
 

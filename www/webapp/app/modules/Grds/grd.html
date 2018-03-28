@@ -111,7 +111,7 @@
 							<div flex>
 								<md-checkbox
 									ng-model="doc.added"
-									ng-disabled="!(doc.progresso==100 && grd.datahora_enviada==null && grd.projeto_ativo!=0)"
+									ng-disabled="!((doc.progresso==100 || (!somenteConcluidosPodemSerAdd && doc.progresso>0)) && grd.datahora_enviada==null && grd.projeto_ativo!=0)"
 									ng-click="grd.alterada=true"
 									class="md-primary doc-checkbox"
 									flex aria-label="{{doc.nome}}"><span>{{doc.codigo}}</span><span>{{doc.nome}}</span>

@@ -34,5 +34,11 @@
         "desc": "Envia um e-mail para os especialistas de uma disciplina que tenham um documento precisando de sua atenção.",
         "valor": false,
         "tipo": "bool"
-    }
+    },
+    "SOMENTE_DOC_CONCLUIDOS_SAO_EMITIDOS": {
+        "label": "Somente documentos concluídos podem ser emitidos (Adicionados a GRD)",
+        "desc": "Somente documentos concluídos podem ser emitidos (Adicionados a GRD)",
+        "valor": true,
+        "tipo": "bool"
+    }    
 }
