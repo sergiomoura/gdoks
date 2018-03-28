@@ -45,8 +45,7 @@
 								<md-datepicker
 												md-open-on-focus
 												md-hide-icons="calendar"
-												ng-model="projeto.data_final_p"
-												></md-datepicker></td>
+												ng-model="projeto.data_final_p"></md-datepicker>
 							</md-input-container>
 						</div>
 						<div layout="row">
@@ -223,7 +222,7 @@
 			<md-content id="addprojeto_documentos_container" class="md-padding" ng-controller="ProjetosDocumentosController" id="">
 				<h1 class="md-display-2">Documentos</h1>
 				<div layout="row" layout-align="space-between center">
-					<div>
+					<form id="form_import" name="form_import">
 						<md-button
 							class="md-raised md-primary"
 							aria-label="Novo Documento"
@@ -232,14 +231,26 @@
 						</md-button>
 						<md-button
 							class="md-raised md-primary"
-							aria-label="Novo Documento"
+							aria-label="Baixar Modelo de LDP"
 							ng-click="baixarModeloParaImportacao()">
 								<md-icon class="material-icons step" aria-label="Baixar Modelo de LDP">file_download</md-icon>Baixar Modelo de LDP
 								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 									Baixar modelo de LDP para importação (modelo.xlsx)
 								</md-tooltip>
 						</md-button>
-					</div>
+						<md-button
+							class="md-raised md-primary"
+							aria-label="Enviar arquivo para importação"
+							ngf-select="UploadXlsx($files, $invalidFiles)"
+							ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
+							ngf-multiple="false"
+							ngf-pattern="'.xlsx'">
+								<md-icon class="material-icons step" aria-label="Enviar arquivo para importação">unarchive</md-icon>Importar
+								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+									Enviar arquivo para importação (xlsx)
+								</md-tooltip>
+						</md-button>
+					</form>
 					<md-input-container>
 						<label>Buscar por Documento</label>
 						<md-icon class="material-icons step" aria-label="Buscar documento">search</md-icon>
@@ -328,5 +339,6 @@
 				</table>
 			</md-content>
 		</md-tab>
+
 	</md-tabs>
 </div>

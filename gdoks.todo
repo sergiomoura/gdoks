@@ -3,6 +3,8 @@ H) Alterações sugeridas por Neiva e consequências:
 	☐	Alertar/Não permitir quando o novo progresso for menor ou igual ao anterior
 	☐	Bloquear documento virgem para o atualizar se habilitar	
 	☐	Conigurar para que somente documento completo vá em GRD ou não.
+	✔	Melhorar apresentação dos documentos no cadastro o projeto @done (18-03-07 14:31)
+	✔	Clonar documento @done (18-03-07 14:31)
 	☐	Melhorar a tela de Atualizar documento.
 		☐	Adicionar Cliente
 		☐	Incorporar histórico de progresso à barra "Progresso"
