@@ -137,10 +137,9 @@
 	<pre>{{ usuario | json}}</pre> -->
 	<md-tabs md-selected="0" md-dynamic-height md-border-bottom md-whiteframe="1dp">
 		
-		<!-- <md-tab label="Atualizar Revisão" ng-disabled="documento.projeto_ativo==0 || !(documento.status == 'virgem' || documento.status == 'checkout')"> -->
 		<md-tab
 			label="Atualizar Revisão"
-			ng-disabled="documento.projeto_ativo==0 || (documento.status == 'checkout' && documento.idu_checkout!=usuario.id) || (documento.status != 'virgem' && documento.status != 'checkout')">
+			ng-disabled="documento.projeto_ativo==0 || (documento.status == 'checkout' && documento.idu_checkout!=usuario.id) || (documento.status != 'checkout')">
 			<md-content class="md-padding" layout="column">
 				<form name="form_atualizarRevisao">
 					<h3>Atualizar Revisão</h3>

@@ -1,16 +1,12 @@
 H) Alterações sugeridas por Neiva e consequências:
-	☐	Melhorar apresentação dos documentos no cadastro o projeto	
 	☐	Alertar/Não permitir quando o novo progresso for menor ou igual ao anterior
-	☐	Bloquear documento virgem para o atualizar se habilitar	
+	✔	Bloquear documento virgem para o atualizar se habilitar @done (18-03-28 13:47)
 	☐	Conigurar para que somente documento completo vá em GRD ou não.
-	✔	Melhorar apresentação dos documentos no cadastro o projeto @done (18-03-07 14:31)
-	✔	Clonar documento @done (18-03-07 14:31)
 	☐	Melhorar a tela de Atualizar documento.
 		☐	Adicionar Cliente
 		☐	Incorporar histórico de progresso à barra "Progresso"
 		☐	Mostrar arquivos que estão compondo o documento
 	☐	Fazer Screencast de como atualizar um documento.
-	✔	Importar LDP para um projeto. @done (18-03-28 12:21)
 	☐ Adicionar link para baixar LDP no dash do projeto
 	☐	Adicionar link para baixar LDP na tela de edição do projeto
 	☐	Escolher baixar LDP em PDF ou excel.
@@ -122,7 +118,11 @@ Tabelas a serem preenchidas na instalação:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	Melhorar apresentação dos documentos no cadastro o projeto @done (18-03-28 13:41) @project(H) Alterações sugeridas por Neiva e consequências)
+	✔	Importar LDP para um projeto. @done (18-03-28 12:21) @project(H) Alterações sugeridas por Neiva e consequências)
 	✔	Clonar documento @done (18-03-12 16:58) @project(H) Alterações sugeridas por Neiva e consequências)
+	✔	Melhorar apresentação dos documentos no cadastro o projeto @done (18-03-07 14:31) @project(H) Alterações sugeridas por Neiva e consequências)
+	✔	Clonar documento @done (18-03-07 14:31) @project(H) Alterações sugeridas por Neiva e consequências)
 	✔	Gerar modelo para importação de lista de documentos @done (18-03-05 07:56) @project(H) Alterações sugeridas por Neiva)
 	✔	Exportar LDP para Excel @done (18-03-05 07:56) @project(H) Alterações sugeridas por Neiva)
 	✔	Número de documentos para validar das disciplinas da qual o usuário é validador @done (18-03-01 10:06) @project(E) Desenhar e Implementar Dashboard Home)
