@@ -72,4 +72,20 @@
 			border-top: none;
 		}
 	}
+
+	.criticas{
+		margin: 0 10px;
+		div {
+			padding:20px;
+			text-align:center;
+			background-color:$laranja;
+			color:#FFF;
+		}
+		&>ul{
+			border:1px solid $laranja;
+			margin-top:0px;
+			padding:20px 50px;
+			color:$laranja;
+		}
+	}
 }

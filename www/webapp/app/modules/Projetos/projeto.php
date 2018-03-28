@@ -258,6 +258,21 @@
 					</md-input-container>
 				</div>
 
+				<div class="criticas" ng-if="criticas.length > 0">
+					<div>
+						Algumas linhas do arquivo não foram consideradas por conterem erros.<br>
+						Corrija os erros e tente novamente
+					</div>
+					<ul>
+						<li ng-repeat="critica in criticas">
+							Linha {{critica.linha}}
+							<ul>
+								<li ng-repeat="obs in critica.observacoes">{{obs}}</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+
 				<table class="lista_de_docs">
 					<thead>
 						<tr>

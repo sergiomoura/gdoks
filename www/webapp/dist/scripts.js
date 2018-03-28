@@ -23481,6 +23481,9 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 	
 	// Definindo o controller
 	function ProjetosDocumentosController($scope,GDoksFactory,$mdExpansionPanel,$mdDialog,$mdToast,Upload,$cookies,$timeout){
+
+		// Definindo criticas
+		$scope.criticas = [];
 		
 		$scope.collapsePanel = function(index){
 			$mdExpansionPanel('panel_'+index).collapse();
@@ -23878,6 +23881,10 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 			$scope.f = file;
 		    $scope.errFile = errFiles && errFiles[0];
 		    if (file) {
+
+		    	// Mostra carregando
+		    	$scope.root.carregando = true;
+
 		        file.upload = Upload.upload({
 		        	url: API_ROOT+'/projetos/'+$scope.projeto.id+'/importarLDP/',
 		            data: {file: file},
@@ -23886,14 +23893,42 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 
 		        file.upload.then(
 		        	function (response) {
+	            		// Esconde carregando
+	    				$scope.root.carregando = false;
+
 		            	$timeout(function () {
-		                	file.result = response.data;
-		                	console.dir(response.data);
+		            		$scope.criticas = response.data.criticas;
+		            		GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
+	            			.success(function(response){
+	            				$scope.projeto.documentos = response.documentos;
+	            			})
+
+	            			if($scope.criticas.length == 0){
+	            				// Retornando Toast para o usuário
+	            				$mdToast.show(
+	            					$mdToast.simple()
+	            					.textContent('Todas as linhas do arquivo foram importadas com sucesso para o projeto.')
+	            					.position('bottom left')
+	            					.hideDelay(5000)
+	            				);
+	            			}
 		            	});
 		        	},
 		        	function (response) {
-		            	if (response.status > 0)
-		                	$scope.errorMsg = response.status + ': ' + response.data;
+		        		// Esconde carregando
+	    				$scope.root.carregando = false;
+
+		            	if (response.status == 400){
+		            		// Não fazer nada... requisições estranhas do browser
+		            	} else {
+		            		// Retornando Toast para o usuário
+		            		$mdToast.show(
+		            			$mdToast.simple()
+		            			.textContent('Falha ao importar arquivo: ' + response.data)
+		            			.position('bottom left')
+		            			.hideDelay(5000)
+		            		);
+		            	}
 		        	},
 		        	function (evt) {
 		            	file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));

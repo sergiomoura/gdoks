@@ -2604,7 +2604,7 @@
 				if($ok == 1) {
 					// Verificando se há arquivo na requisição
 					if(!isset($_FILES['file'])){
-						http_response_code(401);
+						http_response_code(400);
 						$response = new response(1,'Requisição mal feita.');
 						$response->flush();
 						exit(1);
@@ -2801,7 +2801,10 @@
 							$sql = 'INSERT INTO gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar) VALUES (0,?,?,0,0)';
 							$db->query($sql,'is',$doc->id,$doc->data_limite);
 						} else {
-							$criticas[$i] = $critica;
+							$aux = new stdClass();
+							$aux->linha = $i;
+							$aux->observacoes = $critica;
+							array_push($criticas, $aux);
 						}
 					}
 					$response = new response(0,'ok');

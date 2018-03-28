@@ -1059,6 +1059,18 @@
   border-bottom: none !important; }
 #addprojeto_documentos_container .lista_de_docs tbody .par td {
   border-top: none; }
+#addprojeto_documentos_container .criticas {
+  margin: 0 10px; }
+  #addprojeto_documentos_container .criticas div {
+    padding: 20px;
+    text-align: center;
+    background-color: #ef6c00;
+    color: #FFF; }
+  #addprojeto_documentos_container .criticas > ul {
+    border: 1px solid #ef6c00;
+    margin-top: 0px;
+    padding: 20px 50px;
+    color: #ef6c00; }
 
 #projetos_container md-input-container {
   margin-top: 50px; }
