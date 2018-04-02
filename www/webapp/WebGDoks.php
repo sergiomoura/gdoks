@@ -84,6 +84,12 @@
 						</md-button>
 					</md-menu-item>
 					<md-menu-item>
+						<md-button ng-click="onSobreClick()">
+							<md-icon class="material-icons step" aria-label="Sobre o GDoks">announcement_outline</md-icon>
+							Sobre o GDoks
+						</md-button>
+					</md-menu-item>
+					<md-menu-item>
 						<md-button ng-click="logout()">
 							<md-icon class="material-icons step" aria-label="Sair do GDoks">exit_to_app</md-icon>
 							Sair

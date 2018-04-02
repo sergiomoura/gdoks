@@ -24,6 +24,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'Historico',
 								'Projetos',
 								'Senha',
+								'Sobre',
 								'Topo',
 								'Usuarios',
 								'VisaoGeral',
@@ -48,6 +49,13 @@ WebGDoks.config(
 			{
 				controller: 'VisaoGeralController',
 				templateUrl: 'app/modules/VisaoGeral/visaogeral.php'
+			}
+		)
+		.when(
+			'/sobre',
+			{
+				controller: 'SobreController',
+				templateUrl: 'app/modules/Sobre/sobre.php'
 			}
 		)
 		.when(

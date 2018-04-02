@@ -11,4 +11,7 @@ angular.module('Opcoes',[])
 	$scope.onHelpClick = function(){
 		window.open('/help/help.html','_blank');
 	}
+	$scope.onSobreClick = function(){
+		$location.url("/sobre");
+	}
 });

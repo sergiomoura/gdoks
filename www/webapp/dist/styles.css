@@ -85,6 +85,40 @@ md-sidemenu-button {
 .md-sidemenu md-divider + .md-subheader {
   margin-top: -8px; }
 
+;body {
+  background-size: 100vw; }
+  body .container {
+    width: 440px;
+    position: relative;
+    left: 50%;
+    margin-left: -220px;
+    top: 50px;
+    font-size: 20px; }
+    body .container md-progress-linear {
+      position: absolute;
+      bottom: 0px;
+      width: 100%; }
+    body .container .login {
+      background-color: rgba(255, 255, 255, 0.85);
+      padding: 40px 20px 15px 20px; }
+      body .container .login div {
+        margin-bottom: 10px; }
+      body .container .login button[type=submit] {
+        display: none; }
+    body .container img {
+      height: 100px;
+      width: 370px;
+      margin: 0 0 30px 15px; }
+    body .container input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px white inset !important;
+      -webkit-text-fill-color: #CCC !important; }
+    body .container .loginFail {
+      text-align: center;
+      margin-top: 5px;
+      font-size: 16px;
+    }
+}
+
 ;@charset "UTF-8";
 html {
   height: 100%; }
@@ -2093,6 +2127,44 @@ textarea {
 
 #senha_container {
   padding: 20px; }
+
+#sobre_container .logo {
+  position: relative;
+  width: 50%;
+  left: 25%;
+  margin-top: 50px; }
+#sobre_container .ua {
+  display: block;
+  color: #FFF;
+  width: 50%;
+  position: relative;
+  left: 25%;
+  text-align: center;
+  font-size: 18px;
+  background-color: #2196F3;
+  padding: 5px;
+  text-decoration: none; }
+#sobre_container .roadmap h1 {
+  text-align: center; }
+#sobre_container .roadmap table {
+  color: rgba(0, 0, 0, 0.54);
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  font-size: 16px; }
+  #sobre_container .roadmap table thead {
+    color: #2196F3; }
+  #sobre_container .roadmap table td {
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  #sobre_container .roadmap table td:nth-child(1) {
+    width: 150px;
+    text-align: center; }
+#sobre_container .obs {
+  margin-bottom: 50px;
+  font-size: 14px;
+  color: #2196F3;
+  text-align: center; }
 
 .subarea_dialog {
   padding: 20px; }

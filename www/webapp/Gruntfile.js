@@ -39,6 +39,7 @@ module.exports = function(grunt) {
 					'app/modules/Projetos/ProjetosDAOsController.js',
 					'app/modules/Projetos/ProjetosDocumentosController.js',
 					'app/modules/Senha/SenhaController.js',
+					'app/modules/Sobre/SobreController.js',
 					'app/modules/Topo/TopoController.js',
 					'app/modules/Usuarios/UsuariosController.js',
 					'app/modules/VisaoGeral/VisaoGeralController.js',

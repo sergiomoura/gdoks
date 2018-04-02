@@ -1121,6 +1121,44 @@
 #senha_container {
   padding: 20px; }
 
+#sobre_container .logo {
+  position: relative;
+  width: 50%;
+  left: 25%;
+  margin-top: 50px; }
+#sobre_container .ua {
+  display: block;
+  color: #FFF;
+  width: 50%;
+  position: relative;
+  left: 25%;
+  text-align: center;
+  font-size: 18px;
+  background-color: #2196F3;
+  padding: 5px;
+  text-decoration: none; }
+#sobre_container .roadmap h1 {
+  text-align: center; }
+#sobre_container .roadmap table {
+  color: rgba(0, 0, 0, 0.54);
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  font-size: 16px; }
+  #sobre_container .roadmap table thead {
+    color: #2196F3; }
+  #sobre_container .roadmap table td {
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  #sobre_container .roadmap table td:nth-child(1) {
+    width: 150px;
+    text-align: center; }
+#sobre_container .obs {
+  margin-bottom: 50px;
+  font-size: 14px;
+  color: #2196F3;
+  text-align: center; }
+
 .subarea_dialog {
   padding: 20px; }
 

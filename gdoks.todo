@@ -1,17 +1,24 @@
+K) Requisições PC:
+	☐	Registrar valor do documento
+	☐	Gerenciar Propostas (Arquivo + Valor Total)
+	☐	Boletim de Medição de Projeto.
+	☐	Editar / Excluir documento a partir da página do documento.
+	☐	Ver Esqueci minha senha
+
 H) Alterações sugeridas por Neiva e consequências:
 	✔	Alertar/Não permitir quando o novo progresso for menor ou igual ao anterior @done (18-03-28 14:11)
 	✔	Bloquear documento virgem para o atualizar se habilitar @done (18-03-28 13:47)
-	☐	Conigurar para que somente documento completo vá em GRD ou não.
+	✔	Conigurar para que somente documento completo vá em GRD ou não. @done (18-03-28 17:12)
 	☐	Melhorar a tela de Atualizar documento.
 		☐	Adicionar Cliente
 		☐	Incorporar histórico de progresso à barra "Progresso"
 		☐	Mostrar arquivos que estão compondo o documento
+	☐	Fazer com que primeira revisão do documento possa ser inserida no ato do seu cadastro.
 	☐	Fazer Screencast de como atualizar um documento.
+	☐	Escolher baixar LDP em PDF ou excel.
 	☐ Adicionar link para baixar LDP no dash do projeto
 	☐	Adicionar link para baixar LDP na tela de edição do projeto
-	☐	Escolher baixar LDP em PDF ou excel.
 	☐	Fazer "opção de tela"  baixar LDP na tela de projetos e utilizar nela no dash e no cadastro do projeto
-	☐	Fazer com que primeira revisão do documento possa ser inserida no ato do seu cadastro.
 	☐	Importar ZIP com lista de documentos e seus arquivos JUNTOS.
 	☐	Fazer visualizar arquivos PDFs e Imagens no browser
 	☐	Pesquisar visualização de Word e Excel no browser
@@ -22,7 +29,7 @@ H) Alterações sugeridas por Neiva e consequências:
 	☐	Tornar o texto padrão do envio de GRD configurável
 	☐	Logo depois que envia a grd a aba retorno GRD fica habilitada mas o botão de inserir observação não aparece.
 	☐	Logo depois de salvar a observação, o título e o código do documento não aparecem.
-
+	☐	
 
 
 
@@ -35,7 +42,6 @@ I) GDF:
 	☐	Emite relatórios de situação dos documentos por TAG de equipamento
 	☐	Totalmente integrado ao Gdoks
 	☐	Obedece ao perfil de segurança do usuário
-
 	
 
 F) Bloqueio de Telas:

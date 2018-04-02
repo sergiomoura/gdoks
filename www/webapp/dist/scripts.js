@@ -22483,6 +22483,9 @@ function NavController($scope){
 	$scope.onHelpClick = function(){
 		window.open('/help/help.html','_blank');
 	}
+	$scope.onSobreClick = function(){
+		$location.url("/sobre");
+	}
 });;(function(){
 	angular.module('Projetos',['ngFileUpload','ngTagsInput'])
 	.controller('ProjetosController',ProjetosController)
@@ -23994,7 +23997,18 @@ function SenhaController($scope,$mdToast,GDoksFactory){
 	$scope.cancel = function(){
 		window.location = "WebGDoks.php#/home";
 	}
-};angular.module('Topo',[])
+};(function(){
+	// Definição de modulo
+	var module = angular.module('Sobre',[]);
+
+	// Atrivbuição de controller ao módulo
+	module.controller('SobreController',SobreController);
+
+	// Definição de controller
+	function SobreController($scope){
+		
+	}
+})();;angular.module('Topo',[])
 .controller('TopoController',function($scope){
 	$scope.toggleOpcoesMenu = function(){
 		$scope.mostrandoOpcoes = !$scope.mostrandoOpcoes;
@@ -24784,6 +24798,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'Historico',
 								'Projetos',
 								'Senha',
+								'Sobre',
 								'Topo',
 								'Usuarios',
 								'VisaoGeral',
@@ -24808,6 +24823,13 @@ WebGDoks.config(
 			{
 				controller: 'VisaoGeralController',
 				templateUrl: 'app/modules/VisaoGeral/visaogeral.php'
+			}
+		)
+		.when(
+			'/sobre',
+			{
+				controller: 'SobreController',
+				templateUrl: 'app/modules/Sobre/sobre.php'
 			}
 		)
 		.when(
