@@ -1301,6 +1301,10 @@ textarea {
 #documento_container progresso {
   position: relative;
   top: 6px; }
+#documento_container .fabs_container {
+  position: relative;
+  height: 0;
+  top: 8px; }
 #documento_container .header_table {
   font-size: 14px;
   width: 100%; }

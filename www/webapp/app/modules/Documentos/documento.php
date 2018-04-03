@@ -1,10 +1,34 @@
+<?php 
+	// Incluindo classe "Tela" para carregar as opções da tela Documentos
+	include('GDoks/Tela.php');
+
+	// Levantando dados do usuário a partir do cookie
+	$user = json_decode($_COOKIE['user']);
+
+	// Incluindo constantes
+	include_once('constantes.php');
+	include_once('db.php');
+
+	// Carregando dbkey
+	include_once(CLIENT_DATA_PATH.$user->empresa.'/dbkey.php');
+
+	// Criando conexão com base de dados
+	$db = new DB($dbkey);
+	unset($dbkey);
+
+	$tela = Tela::CreateById(3,$user->id, $db);
+	$permissoes = $tela->getOpcoes();
+	
+ ?>
 <md-content id="documento_container" class="container_80" layout="column" layout-padding>
 	<div ng-if="documento.projeto_ativo==0" class="aviso">
 		<h3>Documento de Projeto Inativo</h3>
 		<p>Este documento faz parte de um projeto que está inativo. Ele não pode ser alterado. Se deseja alterar este documento vá até o cadastro do projeto {{documento.nome_projeto}} e ative-o.</p>
 	</div>
 	<div layout="row" layout-align="space-between center">
+		
 		<h3>{{documento.codigo}}</h3>
+
 		<div layout="row" layout-align="end center">
 			<md-button
 				class="md-raised md-primary"
@@ -65,7 +89,7 @@
 			</md-button>
 		</div>
 	</div>
-	
+
 	<table class="header_table">
 		<tr>
 			<td colspan="3">
@@ -133,7 +157,25 @@
 			</td>
 		</tr>
 	</table>
-	<md-tabs md-selected="0" md-dynamic-height md-border-bottom md-whiteframe="1dp">
+
+	<div class="fabs_container" layout="row" layout-align="end center">
+		<!-- <md-button class="md-primary md-fab md-mini" ng-click="confirmPublicarController($event)">
+			<md-icon class="material-icons step" aria-label="Alterar documento">mode_edit</md-icon>
+			<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+				Alterar Documento
+			</md-tooltip>
+		</md-button> -->
+		<?php if($permissoes['RemoverDocumento'] === 1): ?>
+		<md-button class="md-accent md-fab md-mini" ng-click="openRemoverConfirm($event,doc)" ng-disabled="documento.revisoes.length > 1 || documento.revisoes[0].pdas.length > 0">
+			<md-icon class="material-icons step" aria-label="Excluir documento">delete</md-icon>
+			<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+				Excluir documento
+			</md-tooltip>
+		</md-button>
+		<?php endif; ?>
+	</div>
+
+	<md-tabs class="tabs" md-selected="0" md-dynamic-height md-border-bottom md-whiteframe="1dp">
 		
 		<md-tab
 			label="Atualizar Revisão"
@@ -296,6 +338,5 @@
 				</md-expansion-panel-group>
 			</md-content>
 		</md-tab>
-
 	</md-tabs>
 </md-content>

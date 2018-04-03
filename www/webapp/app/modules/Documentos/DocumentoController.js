@@ -6,7 +6,7 @@
 	module.controller('DocumentoController', DocumentoController);
 
 	// Defininfo controller
-	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies,$mdDialog,$interval){
+	function DocumentoController($scope,Upload,$mdExpansionPanel,$routeParams,GDoksFactory,$mdToast,$cookies,$mdDialog,$interval,$location){
 
 		// Carregando informações do usuário logado a partir do cookie
 		$scope.usuario = $cookies.getObject('user');
@@ -208,8 +208,57 @@
 	        		.hideDelay(5000)
 	        	);
 	        }
-	        
+
 		}
+
+		$scope.openRemoverConfirm = function(ev) {
+			// Appending dialog to document.body to cover sidenav in docs app
+			var confirm = $mdDialog.confirm()
+				.title('Tem certeza que deseja remover o cadastro deste documento?')
+				.textContent('A ação não poderá ser desfeita.')
+				.ariaLabel('Deseja remover cadastro de documento?')
+				.targetEvent(ev)
+				.ok('Sim')
+				.cancel('Não');
+
+			$mdDialog.show(confirm).then(
+				function() {
+					// Mostra carregando
+					$scope.root.carregando = true;
+
+					GDoksFactory.removerDocumento($scope.documento)
+					.success(function(response){
+
+						// Esconde carregando
+						$scope.root.carregando = false;
+						
+						// Indo para tela de busca de documentos
+						$location.url("/documentos");
+
+						// Retornando Toast para usuário!
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Documento removido com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					})
+					.error(function(error){
+						
+						// Esconde carregando
+						$scope.root.carregando = false;
+
+						// Retornando Toast para usuário!
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Falha ao tentar remover documento: ' + error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					});
+				}
+			);
+		};
 
 		$scope.openValidarProgressoDialog  = function(evt){
 			$mdDialog.show(

@@ -1,3 +1,7 @@
+<?php 
+	// Incluindo o blocker de tela.
+	include('blocker_tela.php');
+?>
 <md-content id="lista_de_documentos_container" class="container_80" layout-padding layout-wrap>
     
 	<div layout="row" layout-align="space-between start">
