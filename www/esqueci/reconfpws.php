@@ -38,7 +38,7 @@
 		<link rel="stylesheet" href="../webapp/css/normalizer.css">
 		<link rel="stylesheet" href="../webapp/node_modules/angular-material/angular-material.min.css">
 		<link rel="stylesheet" href="../webapp/css/geral.css">
-		<link rel="stylesheet" href="../webapp/css/login.css">
+		<link rel="stylesheet" href="../webapp/css/esqueci.css">
 	</head>
 	<body ng-controller="controller">
 		<div class="container" ng-cloak>
