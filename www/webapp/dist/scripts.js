@@ -20010,10 +20010,19 @@ module.exports = function(Chart) {
 	            			// limpando dados
 	            			$scope.updateFiles = [];
 	            			$scope.update = {};
-							$scope.formcoUploadItems = [];
+							$scope.formUploadItems = [];
 							
 	            			// Recarregando documento da base
 	            			carregaDocumento($scope.documento.id);
+
+	            			// Mostrando uma mensagem de sucesso para o usuário
+	            			// Retornando Toast para o usuário
+	            			$mdToast.show(
+	            				$mdToast.simple()
+	            				.textContent('O documento foi atualizado com sucesso. Aguardando validação.')
+	            				.position('bottom left')
+	            				.hideDelay(5000)
+	            			);
 	            		}
 	            	},
 	            	function(error){
@@ -20201,7 +20210,7 @@ module.exports = function(Chart) {
 					// Retornando Toast para o usuário
 					$mdToast.show(
 						$mdToast.simple()
-						.textContent('Progresso validado')
+						.textContent('Progresso de documento validado')
 						.position('bottom left')
 						.hideDelay(5000)
 					);

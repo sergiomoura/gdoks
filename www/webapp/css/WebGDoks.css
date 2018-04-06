@@ -283,115 +283,126 @@
       #lista_de_documentos_container .documentos tbody td:nth-child(6) {
         padding-top: 20px; }
 
-#documento_container .aviso {
-  background-color: #ddd;
-  color: #9891a0;
-  padding: 10px 36px;
-  margin-top: 20px;
-  border-radius: 3px; }
-#documento_container button span {
-  text-transform: none; }
-#documento_container progresso {
-  position: relative;
-  top: 6px; }
-#documento_container .fabs_container {
-  position: relative;
-  height: 0;
-  top: 8px; }
-#documento_container .header_table {
-  font-size: 14px;
-  width: 100%; }
-  #documento_container .header_table tr td {
-    padding: 2px 0px; }
-    #documento_container .header_table tr td label {
-      font-weight: bold; }
-    #documento_container .header_table tr td label:after {
-      content: ": "; }
-  #documento_container .header_table span a {
-    display: inline-block;
-    padding: 2px 5px;
-    color: #2196F3; }
-    #documento_container .header_table span a:hover {
-      background-color: #e3f2fd;
-      color: #2196F3; }
-#documento_container .files_table {
-  font-size: 14px;
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px; }
-  #documento_container .files_table td {
-    border-bottom: 1px solid #e5e5e5;
-    padding: 0 15px;
-    border-right: 1px solid #e5e5e5; }
-  #documento_container .files_table td:nth-child(1) {
-    border-left: 1px solid #e5e5e5; }
-  #documento_container .files_table td:nth-child(2) {
-    width: 25px; }
-  #documento_container .files_table td:nth-child(3) {
-    width: 50px;
-    padding: 0; }
-    #documento_container .files_table td:nth-child(3) input {
-      border: none;
-      background: none;
-      padding: 10px;
-      height: 100%;
-      text-align: center;
-      width: 100px; }
-    #documento_container .files_table td:nth-child(3) input:focus {
-      outline: none; }
-  #documento_container .files_table td:nth-child(4) {
-    width: 95px; }
-  #documento_container .files_table td:nth-child(5) {
-    width: 200px; }
-  #documento_container .files_table td:nth-child(6) {
-    width: 50px; }
-  #documento_container .files_table md-select {
-    margin: 0; }
-  #documento_container .files_table md-input-container {
-    margin: 0; }
-  #documento_container .files_table md-input-container input {
-    margin: 25px 0 0 0; }
-  #documento_container .files_table tbody tr:nth-child(odd) td {
-    background-color: #FFF; }
-  #documento_container .files_table thead {
-    color: #2196F3; }
-    #documento_container .files_table thead td {
-      padding: 10px 0 10px 10px !important; }
-#documento_container .afterControls {
-  margin: 20px 0 0 0; }
-#documento_container .hbar {
-  background-color: #DFDFDF;
-  height: 20px;
-  width: 100%;
-  margin-bottom: 25px;
-  display: inline-block; }
-  #documento_container .hbar div {
-    transition: width 0.3s ease-out;
-    display: inline-block;
-    height: 20px;
-    font-size: 10px;
-    text-align: right;
-    padding-right: 2px;
+#documento_container {
+  overflow-x: hidden; }
+  #documento_container .aviso {
+    background-color: #ddd;
+    color: #9891a0;
+    padding: 10px 36px;
+    margin-top: 20px;
+    border-radius: 3px; }
+  #documento_container button span {
+    text-transform: none; }
+  #documento_container progresso {
     position: relative;
-    left: 0;
-    overflow: hidden;
-    line-height: 20px; }
-  #documento_container .hbar .prgValidado {
-    background-color: #2196F3;
-    color: #FFF; }
-  #documento_container .hbar .prgAValidar {
-    background-color: #6DD900;
-    color: #FFF; }
-#documento_container .short {
-  width: calc(100% - 200px); }
-#documento_container .pda_data {
-  color: #bdbdbd;
-  font-size: 12px;
-  position: relative;
-  top: -6px;
-  display: inline-block;
-  width: 192px;
-  text-align: right; }
+    top: 6px; }
+  #documento_container .fabs_container {
+    position: relative;
+    height: 0;
+    top: 8px; }
+  #documento_container .md-whiteframe-1dp {
+    margin: 0 0 30px 0;
+    background-color: #FFF; }
+    #documento_container .md-whiteframe-1dp md-content {
+      background-color: #fff; }
+  #documento_container .header_table {
+    font-size: 14px;
+    width: 100%; }
+    #documento_container .header_table tr td {
+      padding: 2px 0px; }
+      #documento_container .header_table tr td label {
+        font-weight: bold; }
+      #documento_container .header_table tr td label:after {
+        content: ": "; }
+    #documento_container .header_table span a {
+      display: inline-block;
+      padding: 2px 5px;
+      color: #2196F3; }
+      #documento_container .header_table span a:hover {
+        background-color: #e3f2fd;
+        color: #2196F3; }
+  #documento_container .files_table {
+    font-size: 14px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; }
+    #documento_container .files_table td {
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 15px;
+      border-right: 1px solid #e5e5e5; }
+    #documento_container .files_table td:nth-child(1) {
+      border-left: 1px solid #e5e5e5; }
+    #documento_container .files_table td:nth-child(2) {
+      width: 25px; }
+    #documento_container .files_table td:nth-child(3) {
+      width: 50px;
+      padding: 0; }
+      #documento_container .files_table td:nth-child(3) input {
+        border: none;
+        background: none;
+        padding: 10px;
+        height: 100%;
+        text-align: center;
+        width: 100px; }
+      #documento_container .files_table td:nth-child(3) input:focus {
+        outline: none; }
+    #documento_container .files_table td:nth-child(4) {
+      width: 95px; }
+    #documento_container .files_table td:nth-child(5) {
+      width: 200px; }
+    #documento_container .files_table td:nth-child(6) {
+      width: 50px; }
+    #documento_container .files_table md-select {
+      margin: 0; }
+    #documento_container .files_table md-input-container {
+      margin: 0; }
+    #documento_container .files_table md-input-container input {
+      margin: 25px 0 0 0; }
+    #documento_container .files_table tbody tr:nth-child(odd) td {
+      background-color: #F0F0F0; }
+    #documento_container .files_table thead {
+      color: #2196F3; }
+      #documento_container .files_table thead td {
+        padding: 10px 0 10px 10px !important; }
+  #documento_container .afterControls {
+    margin: 20px 0 0 0; }
+  #documento_container .hbar {
+    background-color: #DFDFDF;
+    height: 20px;
+    width: 100%;
+    margin-bottom: 25px;
+    display: inline-block; }
+    #documento_container .hbar div {
+      transition: width 0.3s ease-out;
+      display: inline-block;
+      height: 20px;
+      font-size: 10px;
+      text-align: right;
+      padding-right: 2px;
+      position: relative;
+      left: 0;
+      overflow: hidden;
+      line-height: 20px; }
+    #documento_container .hbar .prgValidado {
+      background-color: #2196F3;
+      color: #FFF; }
+    #documento_container .hbar .prgAValidar {
+      background-color: #6DD900;
+      color: #FFF; }
+  #documento_container .short {
+    width: calc(100% - 200px); }
+  #documento_container .pda_data {
+    color: #bdbdbd;
+    font-size: 12px;
+    position: relative;
+    top: -6px;
+    display: inline-block;
+    width: 192px;
+    text-align: right; }
+  #documento_container .historico .revisao {
+    margin: 0 0 10px 0; }
+    #documento_container .historico .revisao .titulo {
+      margin: 0 0 10px 0; }
 
 #docs_container {
   padding-top: 20px;

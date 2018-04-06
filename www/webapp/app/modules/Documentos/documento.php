@@ -159,184 +159,160 @@
 	</table>
 
 	<div class="fabs_container" layout="row" layout-align="end center">
-		<!-- <md-button class="md-primary md-fab md-mini" ng-click="confirmPublicarController($event)">
-			<md-icon class="material-icons step" aria-label="Alterar documento">mode_edit</md-icon>
-			<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
-				Alterar Documento
-			</md-tooltip>
-		</md-button> -->
 		<?php if($permissoes['RemoverDocumento'] === 1): ?>
-		<md-button class="md-accent md-fab md-mini" ng-click="openRemoverConfirm($event,doc)" ng-disabled="documento.revisoes.length > 1 || documento.revisoes[0].pdas.length > 0">
+		<md-button class="md-fab md-mini" ng-click="openRemoverConfirm($event,doc)" ng-disabled="documento.revisoes.length > 1 || documento.revisoes[0].pdas.length > 0">
 			<md-icon class="material-icons step" aria-label="Excluir documento">delete</md-icon>
 			<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
 				Excluir documento
 			</md-tooltip>
 		</md-button>
 		<?php endif; ?>
+		
+		<!-- <md-button class="md-primary md-fab md-mini" ng-click="confirmPublicarController($event)">
+			<md-icon class="material-icons step" aria-label="Alterar documento">mode_edit</md-icon>
+			<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+				Alterar Documento
+			</md-tooltip>
+		</md-button> -->
+		
+		<md-button
+			class="md-primary md-fab md-mini"
+			ng-click=""
+			ng-disabled="documento.projeto_ativo==0 || (documento.status == 'checkout' && documento.idu_checkout!=usuario.id) || (documento.status != 'checkout')"
+			ng-model="updateFiles"
+			ngf-select
+			ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
+			ngf-multiple="true"
+			ngf-change="onFilesChange()">
+			<md-icon class="material-icons step" aria-label="Atualizar documento">file_upload</md-icon>
+			<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+				Atualizar documento (Máx.: <?php echo(ini_get('upload_max_filesize').'B'); ?>)
+			</md-tooltip>
+		</md-button>
+		
 	</div>
-
-	<md-tabs class="tabs" md-selected="0" md-dynamic-height md-border-bottom md-whiteframe="1dp">
+	
+	<form
+		name="form_atualizarRevisao"
+		id="form_atualizarRevisao"
+		ng-if="formUploadItems.length>0"
+		class="md-whiteframe-1dp"
+		>
+		<div layout="row" layout-align="space-between start" style="margin-top: 40px;">
+			<md-input-container flex="45">
+				<label>Progresso Total</label>
+				<input
+					required type="number"
+					name="progresso_total"
+					ng-model="update.progressoTotal"
+					placeholder="Entre com um valor para o progresso total"
+					ng-value="documento.revisoes[0].progresso_validado"
+					ng-min="documento.revisoes[0].progresso_validado+1"
+					min="{{documento.revisoes[0].progresso_validado+1}}"
+					max="100">
+				<div ng-messages="form_atualizarRevisao.progresso_total.$error" multiple md-auto-hide="false">
+					 <div ng-message="min">O progresso total deve ser no mínimo {{documento.revisoes[0].progresso_validado+1}} %</div>
+				</div>
+			</md-input-container>
+			
+			<md-input-container flex="45">
+				<label>Observações<span ng-if="agora>documento.revisoes[0].data_limite"> (Obrigatória por atraso)</span></label>
+				<input ng-required="agora>documento.revisoes[0].data_limite" type="text" placeholder="Escreva observações sobre esta atualização" ng-model="update.observacoes">
+			</md-input-container>
+		</div>
+		<table class="files_table">
+			<thead>
+				<tr>
+					<td>Nome</td>
+					<td></td>
+					<td>Nº de Páginas</td>
+					<td>Tam. do Papel</td>
+					<td>Tipo</td>
+					<td>Ação</td>
+				</tr>
+			</thead>
+			<tr ng-repeat="item in formUploadItems|orderBy:'nome'">
+				<td>{{item.nome}}</td>
+				<td><md-button ng-click="onDeleteClick(item.nome)" class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
+				<td>
+					<input type="number" aria-label="Número de Páginas" min="1" ng-model="item.nPaginas">
+				</td>
+				<td>
+					<md-select md-selected-text="dic_tamanhosDePapel[item.tamanhoDoPapel]" ng-model="item.tamanhoDoPapel" aria-label="Tamanho do Papel" class="md-no-underline">
+						<md-option ng-value="opt.id" ng-repeat="opt in tamanhosDePapel">{{ opt.nome }} ({{opt.a}}mm x {{opt.l}}mm)</md-option>
+					</md-select>
+				</td>
+				<td>
+					{{item.tipo=='novo'?'Novo':''}}
+					{{item.tipo=='antigoParaAtualizar'?'Preexistente para Atualizar':''}}
+					{{item.tipo=='antigoNaoAtualizar'?'Preexistente':''}}
+				</td>
+				<td>
+					<md-select ng-model="item.acao" class="md-no-underline" ng-if="item.tipo=='antigoNaoAtualizar'" aria-label="Ação">
+					  <md-option ng-value="1">Manter</md-option>
+					  <md-option ng-value="0">Excluir</md-option>
+					</md-select>
+					<span ng-if="item.tipo!='antigoNaoAtualizar'">Enviar</span>
+				</td>
+			</tr>
+		</table>
 		
-		<md-tab
-			label="Atualizar Revisão"
-			ng-disabled="documento.projeto_ativo==0 || (documento.status == 'checkout' && documento.idu_checkout!=usuario.id) || (documento.status != 'checkout')">
-			<md-content class="md-padding" layout="column">
-				<form name="form_atualizarRevisao">
-					<h3>Atualizar Revisão</h3>
-					<div layout="row" layout-align="space-between center">
-						<md-button
-							class="md-raised md-primary"
-							ng-disabled="false"
-							aria-label="Selecionar Arquivos"
-							ng-model="updateFiles"
-							ngf-select
-							ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
-							ngf-multiple="true"
-							ngf-change="onFilesChange()">
-								<md-icon class="material-icons step" aria-label="Selecionar Arquivos">folder</md-icon>
-								Selecionar Arquivos (Máximo <?php echo(ini_get('upload_max_filesize')); ?>B)
-						</md-button>
-					</div>
-					
-					<div layout="row" layout-align="space-between start" style="margin-top: 40px;">
-						<md-input-container ng-if="formUploadItems.length>0" flex="45">
-							<label>Progresso Total</label>
-							<input required type="number" name="progresso_total" ng-model="update.progressoTotal" placeholder="Entre com um valor para o progresso total" ng-value="documento.revisoes[0].progresso_validado" ng-min="documento.revisoes[0].progresso_validado+1" min="{{documento.revisoes[0].progresso_validado+1}}" max="100">
-							<div ng-messages="form_atualizarRevisao.progresso_total.$error">
-								 <div ng-message="min">O progresso total deve ser no mínimo {{documento.revisoes[0].progresso_validado+1}} %</div>
-							</div>
-						</md-input-container>
-						
-						<md-input-container ng-if="formUploadItems.length>0" flex="45">
-							<label>Observações<span ng-if="agora>documento.revisoes[0].data_limite"> (Obrigatória por atraso)</span></label>
-							<input ng-required="agora>documento.revisoes[0].data_limite" type="text" placeholder="Escreva observações sobre esta atualização" ng-model="update.observacoes">
-						</md-input-container>
-					</div>
-					<table ng-if="formUploadItems.length>0" class="files_table">
-						<thead>
-							<tr>
-								<td>Nome</td>
-								<td></td>
-								<td>Nº de Páginas</td>
-								<td>Tam. do Papel</td>
-								<td>Tipo</td>
-								<td>Ação</td>
-							</tr>
-						</thead>
-						<tr ng-repeat="item in formUploadItems|orderBy:'nome'">
-							<td>{{item.nome}}</td>
-							<td><md-button ng-click="onDeleteClick(item.nome)" class="md-icon-button md-primary" ng-disabled="item.tipo=='antigoNaoAtualizar'" aria-label="Excluir"><md-icon class="material-icons step" aria-label="Excluir">delete</md-icon></md-button></td>
-							<td>
-								<input type="number" aria-label="Número de Páginas" min="1" ng-model="item.nPaginas">
-							</td>
-							<td>
-								<md-select md-selected-text="dic_tamanhosDePapel[item.tamanhoDoPapel]" ng-model="item.tamanhoDoPapel" aria-label="Tamanho do Papel" class="md-no-underline">
-									<md-option ng-value="opt.id" ng-repeat="opt in tamanhosDePapel">{{ opt.nome }} ({{opt.a}}mm x {{opt.l}}mm)</md-option>
-								</md-select>
-							</td>
-							<td>
-								{{item.tipo=='novo'?'Novo':''}}
-								{{item.tipo=='antigoParaAtualizar'?'Preexistente para Atualizar':''}}
-								{{item.tipo=='antigoNaoAtualizar'?'Preexistente':''}}
-							</td>
-							<td>
-								<md-select ng-model="item.acao" class="md-no-underline" ng-if="item.tipo=='antigoNaoAtualizar'" aria-label="Ação">
-								  <md-option ng-value="1">Manter</md-option>
-								  <md-option ng-value="0">Excluir</md-option>
-								</md-select>
-								<span ng-if="item.tipo!='antigoNaoAtualizar'">Enviar</span>
-							</td>
-						</tr>
-					</table>
-					
-					<div layout="row" layout-align="end center"class="afterControls">
-						<md-button
-							class="md-raised md-primary"
-							ng-disabled="!form_atualizarRevisao.$valid"
-							aria-label="Enviar Arquivos"
-							ng-if="formUploadItems.length>0"
-							ng-click="enviarArquivos()"
-							>
-								<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>
-								<span ng-if="agora<=documento.revisoes[0].data_limite || (update.observacoes!=undefined && update.observacoes!='')">Enviar Atualização</span>
-								<span ng-if="agora>documento.revisoes[0].data_limite && (update.observacoes==undefined || update.observacoes=='')">Atualização atrasada. Preencha o campo de observação.</span>
-						</md-button>
-					</div>
-				</form>	
-			</md-content>
-		</md-tab>
-		
-		<md-tab label="Histórico">
-			<md-content layout-padding layout-wrap>
+		<div layout="row" layout-align="end center"class="afterControls">
+			<md-button
+				class="md-raised md-primary"
+				ng-disabled="!form_atualizarRevisao.$valid"
+				aria-label="Enviar Arquivos"
+				ng-if="formUploadItems.length>0"
+				ng-click="enviarArquivos()"
+				>
+					<md-icon class="material-icons step" aria-label="Enviar Arquivos">cloud_upload</md-icon>
+					<span ng-if="agora<=documento.revisoes[0].data_limite || (update.observacoes!=undefined && update.observacoes!='')">Enviar Atualização</span>
+					<span ng-if="agora>documento.revisoes[0].data_limite && (update.observacoes==undefined || update.observacoes=='')">Atualização atrasada. Preencha o campo de observação.</span>
+			</md-button>
+		</div>
+	</form>
+	
+	<div class="historico md-whiteframe-1dp">
+		<md-content layout-padding layout-wrap>
 			<h3>Histórico de Revisões</h3>
 			<div ng-if="documento.revisoes.length==0">Esse documento não teve nenhuma revisão registrada.</div>
-				<md-expansion-panel-group md-component-id="panelGroup" ng-if="documento.revisoes.length>0">
-					<md-expansion-panel  ng-repeat="rev in documento.revisoes|orderBy:'-serial'" md-component-id="{{'histPanel_'+$index}}">
-						<md-expansion-panel-collapsed layout="column" class="md-padding">
-							<div layout="row" layout-align="space-between start">
-								<div>Revisão: {{rev.serial}}</div>
-								<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
-							</div>
-							<progresso
-								progress="[rev.progresso_validado,rev.progresso_a_validar]"
-								colors="['#2196F3','#6DD900']"
-								fcolors="['#FFF','#FFF']"
-								width="1000"
-								height="20"></progresso>
-						</md-expansion-panel-collapsed>
-						<md-expansion-panel-expanded>
-							<md-expansion-panel-content layout="column">
-								<div layout="row" layout-align="space-between start">
-									<div>Revisão: {{rev.serial}}</div>
-									<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
-								</div>
-								<progresso
-									progress="[rev.progresso_validado,rev.progresso_a_validar]"
-									colors="['#2196F3','#6DD900']"
-									fcolors="['#FFF','#FFF']"
-									width="780"
-									height="20"></progresso>
-								<div ng-if="rev.pdas.length==0">Nenhum progresso anterior registrado.</div>
-								<div ng-if="rev.pdas.length>0">Progresso</div>
-								<div ng-repeat="pda in rev.pdas">
-									
-									<div class="hbar short">
-										<!-- se for o primeiro pda -->
-										<div ng-if="$first && rev.progresso_validado>0"
-											class="prgValidado"
-											style="width: calc({{rev.progresso_validado}}% - 2px)">
-											{{rev.progresso_validado}}%
-										</div
-										><div ng-if="$first && rev.progresso_a_validar>0"
-											class="prgAValidar"
-											style="width: calc({{rev.progresso_a_validar}}% - 2px)">
-											{{rev.progresso_a_validar}}%
-										</div>
-										<!-- se NÃO for o primeiro pda -->
-										<div ng-if="!$first && pda.progresso_total>0"
-											class="prgValidado"
-											style="width: calc({{pda.progresso_total}}% - 2px)">
-											{{pda.progresso_total}}%
-										</div>
-									</div>
-									<span class="pda_data" ng-if="pda.idu_validador!=null">
-										{{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
-									</span>
-									<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar==0">
-										Validação Dispensada.
-									</span>
-									<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar>0">
-										Aguardando Validação
-									</span>
-								</div>
-								<div layout="row" layout-align="center center">
-									<md-button ng-click="collapseHistPanel($index)" class="md-icon-button" aria-label="Colapsar"><md-icon class="material-icons step" aria-label="Colapsar">keyboard_arrow_up</md-icon></md-button>
-								</div>
-							</md-expansion-panel-content>
-						</md-expansion-panel-expanded>
-					</md-expansion-panel>
-				</md-expansion-panel-group>
-			</md-content>
-		</md-tab>
-	</md-tabs>
+			<div ng-if="documento.revisoes.length>0" ng-repeat="rev in documento.revisoes|orderBy:'-serial'" class="revisao">
+				<div layout="row" layout-align="space-between start" class="titulo">
+					<div>Revisão: {{rev.serial}}</div>
+					<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
+				</div>
+				<div ng-repeat="pda in rev.pdas">
+					<div class="hbar short">
+						<!-- se for o primeiro pda -->
+						<div ng-if="$first && rev.progresso_validado>0"
+							class="prgValidado"
+							style="width: calc({{rev.progresso_validado}}% - 2px)">
+							{{rev.progresso_validado}}%
+						</div
+						><div ng-if="$first && rev.progresso_a_validar>0"
+							class="prgAValidar"
+							style="width: calc({{rev.progresso_a_validar}}% - 2px)">
+							{{rev.progresso_a_validar}}%
+						</div>
+						<!-- se NÃO for o primeiro pda -->
+						<div ng-if="!$first && pda.progresso_total>0"
+							class="prgValidado"
+							style="width: calc({{pda.progresso_total}}% - 2px)">
+							{{pda.progresso_total}}%
+						</div>
+					</div>
+					<span class="pda_data" ng-if="pda.idu_validador!=null">
+						{{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
+					</span>
+					<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar==0">
+						Validação Dispensada.
+					</span>
+					<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar>0">
+						Aguardando Validação
+					</span>
+				</div>
+			</div>
+		</md-content>
+	</div>
+	
 </md-content>
