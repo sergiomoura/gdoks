@@ -24,6 +24,10 @@
 
 	.md-whiteframe-1dp {
 		margin: 0 0 30px 0;
+		background-color: #FFF;
+		md-content {
+		 	background-color: #fff;
+		}
 	}
 
 	.header_table {
@@ -105,7 +109,7 @@
 		}
 		tbody{
 			tr:nth-child(odd) td{
-				background-color:#FFF;
+				background-color:#F0F0F0;
 			}
 			tr:nth-child(even) td{
 				
@@ -164,4 +168,14 @@
 		width:192px;
 		text-align:right;
 	}
+
+	.historico{
+		.revisao{
+			margin: 0 0 10px 0;
+			.titulo{
+				margin: 0 0 10px 0;
+			}
+		}
+	}
+	overflow-x: hidden;
 }

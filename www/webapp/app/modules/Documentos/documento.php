@@ -272,76 +272,46 @@
 		</div>
 	</form>
 	
-	<div class="md-whiteframe-1dp">
+	<div class="historico md-whiteframe-1dp">
 		<md-content layout-padding layout-wrap>
 			<h3>Histórico de Revisões</h3>
 			<div ng-if="documento.revisoes.length==0">Esse documento não teve nenhuma revisão registrada.</div>
-			<md-expansion-panel-group md-component-id="panelGroup" ng-if="documento.revisoes.length>0">
-					<md-expansion-panel  ng-repeat="rev in documento.revisoes|orderBy:'-serial'" md-component-id="{{'histPanel_'+$index}}">
-						<md-expansion-panel-collapsed layout="column" class="md-padding">
-							<div layout="row" layout-align="space-between start">
-								<div>Revisão: {{rev.serial}}</div>
-								<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
-							</div>
-							<progresso
-								progress="[rev.progresso_validado,rev.progresso_a_validar]"
-								colors="['#2196F3','#6DD900']"
-								fcolors="['#FFF','#FFF']"
-								width="1000"
-								height="20"></progresso>
-						</md-expansion-panel-collapsed>
-						<md-expansion-panel-expanded>
-							<md-expansion-panel-content layout="column">
-								<div layout="row" layout-align="space-between start">
-									<div>Revisão: {{rev.serial}}</div>
-									<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
-								</div>
-								<progresso
-									progress="[rev.progresso_validado,rev.progresso_a_validar]"
-									colors="['#2196F3','#6DD900']"
-									fcolors="['#FFF','#FFF']"
-									width="780"
-									height="20"></progresso>
-								<div ng-if="rev.pdas.length==0">Nenhum progresso anterior registrado.</div>
-								<div ng-if="rev.pdas.length>0">Progresso</div>
-								<div ng-repeat="pda in rev.pdas">
-									
-									<div class="hbar short">
-										<!-- se for o primeiro pda -->
-										<div ng-if="$first && rev.progresso_validado>0"
-											class="prgValidado"
-											style="width: calc({{rev.progresso_validado}}% - 2px)">
-											{{rev.progresso_validado}}%
-										</div
-										><div ng-if="$first && rev.progresso_a_validar>0"
-											class="prgAValidar"
-											style="width: calc({{rev.progresso_a_validar}}% - 2px)">
-											{{rev.progresso_a_validar}}%
-										</div>
-										<!-- se NÃO for o primeiro pda -->
-										<div ng-if="!$first && pda.progresso_total>0"
-											class="prgValidado"
-											style="width: calc({{pda.progresso_total}}% - 2px)">
-											{{pda.progresso_total}}%
-										</div>
-									</div>
-									<span class="pda_data" ng-if="pda.idu_validador!=null">
-										{{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
-									</span>
-									<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar==0">
-										Validação Dispensada.
-									</span>
-									<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar>0">
-										Aguardando Validação
-									</span>
-								</div>
-								<div layout="row" layout-align="center center">
-									<md-button ng-click="collapseHistPanel($index)" class="md-icon-button" aria-label="Colapsar"><md-icon class="material-icons step" aria-label="Colapsar">keyboard_arrow_up</md-icon></md-button>
-								</div>
-							</md-expansion-panel-content>
-						</md-expansion-panel-expanded>
-					</md-expansion-panel>
-			</md-expansion-panel-group>
+			<div ng-if="documento.revisoes.length>0" ng-repeat="rev in documento.revisoes|orderBy:'-serial'" class="revisao">
+				<div layout="row" layout-align="space-between start" class="titulo">
+					<div>Revisão: {{rev.serial}}</div>
+					<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
+				</div>
+				<div ng-repeat="pda in rev.pdas">
+					<div class="hbar short">
+						<!-- se for o primeiro pda -->
+						<div ng-if="$first && rev.progresso_validado>0"
+							class="prgValidado"
+							style="width: calc({{rev.progresso_validado}}% - 2px)">
+							{{rev.progresso_validado}}%
+						</div
+						><div ng-if="$first && rev.progresso_a_validar>0"
+							class="prgAValidar"
+							style="width: calc({{rev.progresso_a_validar}}% - 2px)">
+							{{rev.progresso_a_validar}}%
+						</div>
+						<!-- se NÃO for o primeiro pda -->
+						<div ng-if="!$first && pda.progresso_total>0"
+							class="prgValidado"
+							style="width: calc({{pda.progresso_total}}% - 2px)">
+							{{pda.progresso_total}}%
+						</div>
+					</div>
+					<span class="pda_data" ng-if="pda.idu_validador!=null">
+						{{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
+					</span>
+					<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar==0">
+						Validação Dispensada.
+					</span>
+					<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar>0">
+						Aguardando Validação
+					</span>
+				</div>
+			</div>
 		</md-content>
 	</div>
 	
