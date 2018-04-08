@@ -178,30 +178,29 @@
 				$sql = 'SELECT id,
 							   nome,
 							   login,
-							   email,
-						       count(*)=1 AS ok
+							   email
 						FROM
 							gdoks_usuarios
 						WHERE login=?
 						  AND senha=PASSWORD(?)
 						  AND id_empresa=?
 						  AND ativo';
-				$rs = $db->query($sql,'ssi',$data->login,$data->senha,$id_empresa)[0];
+				$rs = $db->query($sql,'ssi',$data->login,$data->senha,$id_empresa);
 				
 				// perguntando se usuário é válido
-				if($rs['ok'] == 1){
+				if(sizeof($rs) == 1){
 					// SIM, usuário é válido
 					// gerando novo token
 					$token = uniqid('',true);
 					
 					// atualizando o token na base de dados
-					$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$rs['id']);
+					$db->query('update gdoks_usuarios set token=?, validade_do_token=? where id=?','ssi',$token,Date('Y-m-d H:i:s',time()+TOKEN_DURARION),$rs[0]['id']);
 					
 					// Arrumando dados do usuário
 					$user = new stdClass();
-					$user->id = $rs['id'];
-					$user->nome = $rs['nome'];
-					$user->email = $rs['email'];
+					$user->id = $rs[0]['id'];
+					$user->nome = $rs[0]['nome'];
+					$user->email = $rs[0]['email'];
 					$user->token = $token;
 					$user->empresa = $empresa;
 
@@ -210,7 +209,7 @@
 							FROM gdoks_empresas a
 							INNER JOIN gdoks_usuarios b ON a.id=b.id_empresa
 							WHERE b.id=?';
-					$user->nome_empresa = $db->query($sql,'i',$rs['id'])[0]['nome_empresa'];
+					$user->nome_empresa = $db->query($sql,'i',$rs[0]['id'])[0]['nome_empresa'];
 
 					
 					// definindo resposta http como 200
