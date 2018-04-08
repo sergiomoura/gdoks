@@ -3842,7 +3842,7 @@
 				$id_doc = 1*$id_doc;
 
 				// Levantando o serial atual
-				$sql = "SELECT data_limite, max(serial)+1 as novoSerial FROM gdoks_revisoes WHERE id_documento=?";
+				$sql = "SELECT data_limite, max(serial)+1 as novoSerial FROM gdoks_revisoes WHERE id_documento=? GROUP BY data_limite";
 				$rs = $db->query($sql,'i',$id_doc);
 				$novoSerial = $rs[0]['novoSerial'];
 				$dataLimite = $rs[0]['data_limite'];
@@ -3979,7 +3979,7 @@
 
 				// Verificando se o cliente é da mesma empresa do usuário
 				$sql = 'SELECT
-							A.id,COUNT(*) as ok
+							A.id
 						FROM (
 							SELECT
 								id,id_empresa
@@ -3990,12 +3990,12 @@
 								id_empresa
 							FROM gdoks_clientes
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
-				$rs = $db->query($sql,'si',$token,$id)[0];
-				$ok = $rs['ok'];
-				$id_usuario = $rs['id'];
+				$rs = $db->query($sql,'si',$token,$id);
+				$ok = (sizeof($rs) > 0);
+				$id_usuario = $rs[0]['id'];
 
 				// Indo adiante
-				if($ok == 1) {
+				if($ok) {
 
 					// Verificando se o cliente está com a senha do ftp setada
 					if(empty($cliente->ftp_senha) || is_null($cliente->ftp_senha) || $cliente->ftp_senha==''){
@@ -4263,7 +4263,7 @@
 				
 				// Verificando se o cargo é da mesma empresa do usuário
 				$sql = 'SELECT
-							A.id,COUNT(*) as ok
+							A.id
 						FROM (
 							SELECT
 								id,id_empresa
@@ -4274,12 +4274,12 @@
 								id_empresa
 							FROM gdoks_cargos
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
-				$rs = $db->query($sql,'si',$token,$id)[0];
-				$ok = $rs['ok'];
-				$id_usuario = $rs['id'];
+				$rs = $db->query($sql,'si',$token,$id);
+				$ok = (sizeof($rs) > 0);
+				$id_usuario = $rs[0]['id'];
 
 				// Indo adiante
-				if($ok == 1) {
+				if($ok) {
 					$sql = "UPDATE gdoks_cargos
 							SET	
 								nome=?,
@@ -4344,7 +4344,7 @@
 
 				// Verificando se o cargo é da mesma empresa do usuário
 				$sql = 'SELECT
-							A.id,COUNT(*) as ok
+							A.id
 						FROM (
 							SELECT
 								id,id_empresa
@@ -4355,24 +4355,26 @@
 								id_empresa
 							FROM gdoks_cargos
 								WHERE id=?) B on A.id_empresa=B.id_empresa;';
-				$rs = $db->query($sql,'si',$token,$id)[0];
-				$ok = $rs['ok'];
-				$id_usuario = $rs['id'];
+				$rs = $db->query($sql,'si',$token,$id);
+				$ok = (sizeof($rs) > 0);
+				$id_usuario = $rs[0]['id'];
 
 				// Indo adiante
-				if($ok == 1) {
+				if($ok) {
 					$sql = "DELETE FROM gdoks_cargos WHERE id=?";
                     try {
                     	$db->query($sql,'i',$idCargo);
                     } catch (Exception $e) {
+                    	http_response_code(500);
                     	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 						$response->flush();
-						die();
+						exit(1);
                     }
 				} else {
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
-					die();
+					$response = new response(1,'Não altera dados de outra empresa.');
+					$response->flush();
+					exit(1);
 				}
 
 				// retornando
