@@ -106,13 +106,13 @@
 		</tr>
 		<tr>
 			<td>
+				<label>Cliente</label> {{documento.nome_cliente}}
+			</td>
+			<td>
 				<label>Área</label> {{documento.nome_area}}
 			</td>
 			<td>
 				<label>Sub-área</label> {{documento.cod_subarea}}
-			</td>
-			<td>
-				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
 			</td>
 			<td>
 				
@@ -126,7 +126,7 @@
 				<label>Subdisciplina</label> {{documento.nome_subdisciplina}}
 			</td>
 			<td>
-				<label>Trabalho Estimado</label> {{documento.trabalho_estimado}} hh
+				<label>Revisão Atual</label> {{documento.revisoes[0].serial}}
 			</td>
 		</tr>
 		<tr>
@@ -136,7 +136,9 @@
 			<td>
 				<label>Data Limite</label> {{documento.revisoes[0].data_limite|date:"dd/MM/yyyy"}} ({{documento.revisoes[0].data_limite|daysFromNow}})
 			</td>
-			<td></td>
+			<td>
+				<label>Trabalho Estimado</label> {{documento.trabalho_estimado}} hh
+			</td>
 		</tr>
 		<tr>
 			<td colspan="3">
@@ -145,20 +147,9 @@
 				<span ng-repeat="grd in documento.grds"><a href="#/grds/{{grd.id}}">{{grd.codigo}} (rev {{grd.serial_rev}})</a></span>
 			</td>
 		</tr>
-		<!--
-		<tr>
-			<td colspan="3">
-				<label style="display: inline-block; width: 75px;">Progresso</label>
-				<progresso
-					progress="[documento.revisoes[0].progresso_validado,documento.revisoes[0].progresso_a_validar]"
-					colors="['#2196F3','#6DD900']"
-					fcolors="['#FFF','#FFF']"
-					width="780"
-					height="20"></progresso>
-			</td>
-		</tr>
-		-->
 	</table>
+	
+	<pre></pre>
 
 	<div class="fabs_container" layout="row" layout-align="end center">
 		<?php if($permissoes['RemoverDocumento'] === 1): ?>

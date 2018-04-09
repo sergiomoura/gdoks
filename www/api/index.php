@@ -3035,6 +3035,9 @@
 							    g.id as id_projeto,
 							    g.nome as nome_projeto,
 							    g.ativo as projeto_ativo,
+							    i.nome as nome_cliente,
+							    i.nome_fantasia as fantasia_cliente,
+							    i.id as id_cliente,
                                 ifnull(sum(f.hh),0) as trabalho_estimado
 
 							FROM
@@ -3044,6 +3047,7 @@
 							    INNER JOIN gdoks_subareas d ON a.id_subarea=d.id
 							    INNER JOIN gdoks_areas e ON d.id_area=e.id
 							    INNER JOIN gdoks_projetos g ON g.id=e.id_projeto
+							    INNER JOIN gdoks_clientes i ON i.id=g.id_cliente
                                 LEFT JOIN gdoks_hhemdocs f ON f.id_doc=a.id
                                 LEFT JOIN gdoks_usuarios h ON h.id=a.idu_checkout
 							WHERE
