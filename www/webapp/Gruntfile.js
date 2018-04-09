@@ -23,6 +23,7 @@ module.exports = function(grunt) {
 					'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
 					'node_modules/ng-tags-input/build/ng-tags-input.min.js',
 					'node_modules/chart.js/dist/Chart.bundle.js',
+					'node_modules/angular-filesize-filter/angular-filesize-filter.js',
 					'app/modules/Cargos/CargosController.js',
 					'app/modules/Clientes/ClientesController.js',
 					'app/modules/Configuracoes/ConfiguracoesController.js',

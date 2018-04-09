@@ -136,4 +136,4 @@ WebGDoks.directive("progresso", function (){
 				});
 			}        
 		}
-	})
+})

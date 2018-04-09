@@ -19156,7 +19156,48 @@ module.exports = function(Chart) {
 };
 
 },{"25":25,"45":45,"6":6}]},{},[7])(7)
-});;(function(){
+});;/*global angular */
+
+(function (angular) {
+    "use strict";
+
+    // -- MODULE DECLARATION
+    angular.module("ngFilesizeFilter", [])
+
+    // FILTER
+    .filter("filesize", function () {
+
+        /**
+         * An array of units, starting at bytes and ending with yottabytes.
+         */
+        var units = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+        return function(bytes, precision) {
+
+            // validate 'bytes'
+            if (isNaN(parseFloat(bytes))) {
+                return "-";
+            }
+            if (bytes < 1) {
+                return "0 B";
+            }
+
+            // validate 'precision'
+            if (isNaN(precision)) {
+                precision = 1;
+            }
+
+            var unitIndex = Math.floor(Math.log(bytes) / Math.log(1000)),
+                value = bytes / Math.pow(1000, unitIndex);
+
+            return value.toFixed(precision) + " " + units[unitIndex];
+
+        };
+
+    });
+
+})(angular);
+;(function(){
 	
 	var modCargos = angular.module('Cargos',[]);
 
@@ -19866,6 +19907,14 @@ module.exports = function(Chart) {
 		// Definindo itens para o formUpload
 		$scope.formUploadItems = [];
 
+		$scope.mostraPdaInfo = function(id){
+			if($scope.pdaExibido == id){
+				$scope.pdaExibido = undefined;
+			} else {
+				$scope.pdaExibido = id;
+			}
+		}
+
 		$scope.collapseHistPanel = function(index){
 			$mdExpansionPanel('histPanel_'+index).collapse();
 		}
@@ -19961,6 +20010,14 @@ module.exports = function(Chart) {
 
 		$scope.baixar = function(){
 			GDoksFactory.baixarPDA($scope.documento.revisoes[0].pdas[0].id);
+		}
+
+		$scope.downloadPda = function(idPda){
+			GDoksFactory.baixarPDA(idPda);
+		}
+
+		$scope.downloadArquivo = function(idArquivo){
+			GDoksFactory.downloadArquivo(idArquivo);
 		}
 
 		$scope.enviarArquivos = function(){
@@ -24844,6 +24901,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'ngFileUpload',
 								'ui.mask',
 								'angular-click-outside',
+								'ngFilesizeFilter',
 								'Cargos',
 								'Clientes',
 								'Configuracoes',
@@ -26065,7 +26123,7 @@ WebGDoks.directive("progresso", function (){
 				});
 			}        
 		}
-	});/*global angular, navigator*/
+});/*global angular, navigator*/
 
 (function() {
     'use strict';

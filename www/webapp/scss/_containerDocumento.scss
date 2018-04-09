@@ -33,6 +33,7 @@
 	.header_table {
 		font-size: 14px;
 		width: 100%;
+		margin-bottom:20px;
 		tr td {
 			padding: 2px 0px;
 			label{
@@ -129,9 +130,10 @@
 		background-color: #DFDFDF;
 		height: 20px;
 		width: 100%;
-		margin-bottom: 25px;
+		margin-bottom: 5px;
 		display: inline-block;
-
+		outline:none;
+		cursor:pointer;
 		div{
 			transition: width 0.3s ease-out;
 			display: inline-block;
@@ -156,24 +158,51 @@
 		}
 	}
 	.short {
-		width: calc(100% - 200px);
-	}
-
-	.pda_data{
-		color:rgb(189,189,189);
-		font-size:12px;
-		position:relative;
-		top: -6px;
-		display:inline-block;
-		width:192px;
-		text-align:right;
+		width: calc(100% - 75px);
 	}
 
 	.historico{
 		.revisao{
-			margin: 0 0 10px 0;
+			margin: 0 0 20px 0;
+			padding: 0 0 20px 0;
+			border-bottom: 1px solid $cinzaClaro;
 			.titulo{
 				margin: 0 0 10px 0;
+			}
+			.pda {
+				.pda_info {
+					width: 100%;
+					padding: 15px;
+					background-color: #dfdfdf;
+					position: relative;
+					top: -6px;
+					font-size: 13px;
+					min-height: 115px;
+					ul {
+						list-style-type: decimal-leading-zero;
+						margin: 0 0 0 25px;
+    					padding: 0;
+    					li {
+    						margin: 3px 0 0 0;
+    						padding: 0 0 0 5px;
+    					}
+					}
+					a {
+						color:$azul;
+					}
+					div:nth-child(2){
+						text-align:right;
+						.md-button {
+							display: block;
+							position: absolute;
+							top: 55px;
+							right: 6px;
+						}
+					}
+				}
+			}
+			&:last-child {
+				border-bottom:none;
 			}
 		}
 	}

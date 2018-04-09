@@ -46,8 +46,8 @@
 				ng-if="documento.ehEspecialista && !(documento.status=='checkout' && documento.idu_checkout==usuario.id)"
 				ng-disabled="documento.projeto_ativo==0 || !(documento.status=='validado' || documento.status=='virgem')"
 				aria-label="Bloquear documento para revisão">
-					<md-icon ng-if="documento.status=='validado' || documento.status=='virgem'" class="material-icons step" aria-label="Baixar para revisão">lock_open</md-icon>
-					<md-icon ng-if="!(documento.status=='validado' || documento.status=='virgem')" class="material-icons step" aria-label="Baixar para revisão">lock_outline</md-icon>
+					<md-icon ng-if="documento.status=='validado' || documento.status=='virgem'" class="material-icons step" aria-label="Bloquear documento para revisão">lock_open</md-icon>
+					<md-icon ng-if="!(documento.status=='validado' || documento.status=='virgem')" class="material-icons step" aria-label="Desbloquear para revisão">lock_outline</md-icon>
 					
 					<!-- Determinando o texto do botão -->
 					<span ng-if="documento.status=='validado' || documento.status=='virgem'">Bloquear</span>
@@ -95,7 +95,7 @@
 			<td colspan="3">
 				<label>Título</label> {{documento.nome}}
 			</td>
-			<td rowspan="7">
+			<td rowspan="6">
 				<img src="img/status-{{documento.status}}.svg" alt="Status do documento: {{documento.status}}" width="120" height="195">
 			</td>
 		</tr>
@@ -145,6 +145,7 @@
 				<span ng-repeat="grd in documento.grds"><a href="#/grds/{{grd.id}}">{{grd.codigo}} (rev {{grd.serial_rev}})</a></span>
 			</td>
 		</tr>
+		<!--
 		<tr>
 			<td colspan="3">
 				<label style="display: inline-block; width: 75px;">Progresso</label>
@@ -156,6 +157,7 @@
 					height="20"></progresso>
 			</td>
 		</tr>
+		-->
 	</table>
 
 	<div class="fabs_container" layout="row" layout-align="end center">
@@ -189,7 +191,6 @@
 				Atualizar documento (Máx.: <?php echo(ini_get('upload_max_filesize').'B'); ?>)
 			</md-tooltip>
 		</md-button>
-		
 	</div>
 	
 	<form
@@ -276,13 +277,17 @@
 		<md-content layout-padding layout-wrap>
 			<h3>Histórico de Revisões</h3>
 			<div ng-if="documento.revisoes.length==0">Esse documento não teve nenhuma revisão registrada.</div>
-			<div ng-if="documento.revisoes.length>0" ng-repeat="rev in documento.revisoes|orderBy:'-serial'" class="revisao">
-				<div layout="row" layout-align="space-between start" class="titulo">
-					<div>Revisão: {{rev.serial}}</div>
-					<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>	
+			
+			<div
+				ng-if="documento.revisoes.length>0"
+				ng-repeat="rev in documento.revisoes|orderBy:'-serial'"
+				class="revisao">
+				<div class="titulo">
+					Revisão {{rev.serial}}
 				</div>
-				<div ng-repeat="pda in rev.pdas">
-					<div class="hbar short">
+				<div ng-if="rev.pdas == undefined || rev.pdas.length == 0">Revisão ainda sem arquivos.</div>
+				<div class="pda" ng-repeat="pda in rev.pdas">
+					<div class="hbar" ng-click="mostraPdaInfo(pda.id)">
 						<!-- se for o primeiro pda -->
 						<div ng-if="$first && rev.progresso_validado>0"
 							class="prgValidado"
@@ -301,17 +306,33 @@
 							{{pda.progresso_total}}%
 						</div>
 					</div>
-					<span class="pda_data" ng-if="pda.idu_validador!=null">
-						{{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
-					</span>
-					<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar==0">
-						Validação Dispensada.
-					</span>
-					<span class="pda_data" ng-if="pda.idu_validador==null && rev.progresso_a_validar>0">
-						Aguardando Validação
-					</span>
+					<div class="check-element animate-show-hide pda_info" layout="row" layout-align="space-between start" ng-show="pdaExibido==pda.id">
+						<div>
+							Arquivos:
+							<ul>
+								<li ng-repeat="arq in pda.arquivos">
+									<a href="" ng-click="downloadArquivo(arq.id)">{{arq.nome_cliente}} ({{arq.tamanho | filesize}})</a>
+								</li>
+							</ul>
+							<span ng-if="pda.arquivos.length == 0">Sem arquivos.</span>
+						</div>
+						<div>
+							<md-button ng-click="downloadPda(pda.id)" class="md-raised md-primary" aria-label="Baixar arquivos em zip">Baixar Todos os Arquivos (.zip)</md-button>
+							<span ng-if="pda.idu_validador!=null">
+								Atualizado por {{pda.validador.sigla}} em {{pda.datahora_validacao|date:"dd/MM/yyyy à's' hh:mm:ss"}}
+							</span>
+							<span ng-if="pda.idu_validador==null && rev.progresso_a_validar==0">
+								Validação Dispensada.
+							</span>
+							<span ng-if="pda.idu_validador==null && rev.progresso_a_validar>0">
+								Aguardando Validação
+							</span>
+							<div>Data Limite: {{rev.data_limite|date:"dd/MM/yyyy"}}</div>
+						</div>
+					</div>
 				</div>
 			</div>
+
 		</md-content>
 	</div>
 	

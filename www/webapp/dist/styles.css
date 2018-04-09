@@ -1314,7 +1314,8 @@ textarea {
       background-color: #fff; }
   #documento_container .header_table {
     font-size: 14px;
-    width: 100%; }
+    width: 100%;
+    margin-bottom: 20px; }
     #documento_container .header_table tr td {
       padding: 2px 0px; }
       #documento_container .header_table tr td label {
@@ -1377,8 +1378,10 @@ textarea {
     background-color: #DFDFDF;
     height: 20px;
     width: 100%;
-    margin-bottom: 25px;
-    display: inline-block; }
+    margin-bottom: 5px;
+    display: inline-block;
+    outline: none;
+    cursor: pointer; }
     #documento_container .hbar div {
       transition: width 0.3s ease-out;
       display: inline-block;
@@ -1397,19 +1400,39 @@ textarea {
       background-color: #6DD900;
       color: #FFF; }
   #documento_container .short {
-    width: calc(100% - 200px); }
-  #documento_container .pda_data {
-    color: #bdbdbd;
-    font-size: 12px;
-    position: relative;
-    top: -6px;
-    display: inline-block;
-    width: 192px;
-    text-align: right; }
+    width: calc(100% - 75px); }
   #documento_container .historico .revisao {
-    margin: 0 0 10px 0; }
+    margin: 0 0 20px 0;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
     #documento_container .historico .revisao .titulo {
       margin: 0 0 10px 0; }
+    #documento_container .historico .revisao .pda .pda_info {
+      width: 100%;
+      padding: 15px;
+      background-color: #dfdfdf;
+      position: relative;
+      top: -6px;
+      font-size: 13px;
+      min-height: 115px; }
+      #documento_container .historico .revisao .pda .pda_info ul {
+        list-style-type: decimal-leading-zero;
+        margin: 0 0 0 25px;
+        padding: 0; }
+        #documento_container .historico .revisao .pda .pda_info ul li {
+          margin: 3px 0 0 0;
+          padding: 0 0 0 5px; }
+      #documento_container .historico .revisao .pda .pda_info a {
+        color: #2196F3; }
+      #documento_container .historico .revisao .pda .pda_info div:nth-child(2) {
+        text-align: right; }
+        #documento_container .historico .revisao .pda .pda_info div:nth-child(2) .md-button {
+          display: block;
+          position: absolute;
+          top: 55px;
+          right: 6px; }
+    #documento_container .historico .revisao:last-child {
+      border-bottom: none; }
 
 #docs_container {
   padding-top: 20px;

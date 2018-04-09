@@ -31,6 +31,14 @@
 		// Definindo itens para o formUpload
 		$scope.formUploadItems = [];
 
+		$scope.mostraPdaInfo = function(id){
+			if($scope.pdaExibido == id){
+				$scope.pdaExibido = undefined;
+			} else {
+				$scope.pdaExibido = id;
+			}
+		}
+
 		$scope.collapseHistPanel = function(index){
 			$mdExpansionPanel('histPanel_'+index).collapse();
 		}
@@ -126,6 +134,14 @@
 
 		$scope.baixar = function(){
 			GDoksFactory.baixarPDA($scope.documento.revisoes[0].pdas[0].id);
+		}
+
+		$scope.downloadPda = function(idPda){
+			GDoksFactory.baixarPDA(idPda);
+		}
+
+		$scope.downloadArquivo = function(idArquivo){
+			GDoksFactory.downloadArquivo(idArquivo);
 		}
 
 		$scope.enviarArquivos = function(){
