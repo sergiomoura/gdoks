@@ -89,3 +89,14 @@
 		}
 	}
 }
+
+#addprojeto_financeiro_container {
+	background-color: #FFF;
+	md-input-container {
+		width: 50%;
+		max-width:300px;
+		&:nth-child(2){
+			margin: 50px 0 0 0;
+		}
+	}
+}

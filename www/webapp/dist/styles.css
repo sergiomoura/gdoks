@@ -2117,6 +2117,14 @@ textarea {
     padding: 20px 50px;
     color: #ef6c00; }
 
+#addprojeto_financeiro_container {
+  background-color: #FFF; }
+  #addprojeto_financeiro_container md-input-container {
+    width: 50%;
+    max-width: 300px; }
+    #addprojeto_financeiro_container md-input-container:nth-child(2) {
+      margin: 50px 0 0 0; }
+
 #projetos_container md-input-container {
   margin-top: 50px; }
 #projetos_container table {
