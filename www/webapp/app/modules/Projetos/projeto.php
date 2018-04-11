@@ -386,16 +386,29 @@
 				<md-content id="addprojeto_financeiro_container" class="md-padding" ng-controller="ProjetosFinanceiroController">
 					<h1 class="md-display-2">Financeiro</h1>
 					<form name="form_projFin" id="form_projFin" layout="column">
-						<md-input-container>
-							<label>Forma de Cobrança</label>
-							<md-select ng-model="dadosFinanceiros.forma_de_cobranca"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-							  <md-option ng-value="opt" ng-repeat="opt in opcoesDeFormaDeCobranca">{{ opt.nome }}</md-option>
-							</md-select>
-						</md-input-container>
-						<md-input-container ng-if="dadosFinanceiros.forma_de_cobranca.id == opcoesDeFormaDeCobranca[0].id">
-							<label>Valor do Projeto (R$)</label>
-							<input type="number" step="0.01" ng-model="dadosFinanceiros.valor" min="0" max="1000000000000" ng-max="1000000000000" ng-min="0">
-						</md-input-container>
+						<?php if($permissoes['VerFCProjeto']): ?>
+							<md-input-container>
+								<label>Forma de Cobrança</label>
+								<md-select ng-model="dadosFinanceiros.forma_de_cobranca" ng-disabled="<?php echo($permissoes['AlterarFCProjeto']?'true':'false'); ?>">
+								  <md-option ng-value="opt" ng-repeat="opt in opcoesDeFormaDeCobranca">{{ opt.nome }}</md-option>
+								</md-select>
+							</md-input-container>
+						<?php endif; ?>
+
+						<?php if($permissoes['VerValorProjeto']): ?>
+							<md-input-container ng-if="dadosFinanceiros.forma_de_cobranca.id == opcoesDeFormaDeCobranca[0].id">
+								<label>Valor do Projeto (R$)</label>
+								<input
+									type="number"
+									step="0.01"
+									ng-model="dadosFinanceiros.valor"
+									min="0"
+									max="1000000000000"
+									ng-max="1000000000000"
+									ng-min="0"
+									ng-disabled="<?php echo($permissoes['AlterarValorProjeto']?'true':'false'); ?>">
+							</md-input-container>
+						<?php endif; ?>
 					</form>
 					<div class="controles" layout="row" layout-align="end center">
 						<md-button class="md-raised md-accent" aria-label="Cancelar alterações">Cancelar</md-button>
