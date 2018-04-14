@@ -389,7 +389,7 @@
 						<?php if($permissoes['VerFCProjeto']): ?>
 							<md-input-container>
 								<label>Forma de Cobrança</label>
-								<md-select ng-model="dadosFinanceiros.forma_de_cobranca" ng-disabled="<?php echo($permissoes['AlterarFCProjeto']?'true':'false'); ?>">
+								<md-select ng-model="dadosFinanceiros.forma_de_cobranca" ng-disabled="<?php echo($permissoes['AlterarFCProjeto']?'false':'true'); ?>">
 								  <md-option ng-value="opt" ng-repeat="opt in opcoesDeFormaDeCobranca">{{ opt.nome }}</md-option>
 								</md-select>
 							</md-input-container>
@@ -406,13 +406,13 @@
 									max="1000000000000"
 									ng-max="1000000000000"
 									ng-min="0"
-									ng-disabled="<?php echo($permissoes['AlterarValorProjeto']?'true':'false'); ?>">
+									ng-disabled="<?php echo($permissoes['AlterarValorProjeto']?'false':'true'); ?>">
 							</md-input-container>
 						<?php endif; ?>
 					</form>
 					<div class="controles" layout="row" layout-align="end center">
 						<md-button class="md-raised md-accent" aria-label="Cancelar alterações">Cancelar</md-button>
-						<md-button class="md-raised md-primary" ng-disabled="form_projFin.$pristine" aria-label="Salvar alterações">Salvar Alterações Financeiras do Projeto</md-button>
+						<md-button ng-click="salvar()" class="md-raised md-primary" ng-disabled="form_projFin.$pristine" aria-label="Salvar alterações">Salvar Alterações Financeiras do Projeto</md-button>
 					</div>
 				</md-content>
 			</md-tab>

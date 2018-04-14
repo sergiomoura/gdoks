@@ -1491,10 +1491,6 @@
 				// Lendo id do projeto
 				$id_projeto = $id;
 
-				// Definindo id das opções de visualizar forma de cobranca de projeto
-				$id_opcao_verFormaDeCobranca = 20;
-				$id_opcao_verValorDeProjeto = 22;
-
 				// Definindo a consulta para saber da permissão do usuário em visualizar dados financeiros
 				$sql = 'SELECT b.valor
 						FROM gdoks_usuarios a
@@ -1502,8 +1498,8 @@
 						WHERE a.token=?
 						  AND b.id_opcao=?
 						  AND b.valor=1;';
-				$perm_verFormaDeCobranca = (sizeof($db->query($sql,'si',$token,$id_opcao_verFormaDeCobranca)) > 0);
-				$perm_verValorDeProjeto = (sizeof($db->query($sql,'si',$token,$id_opcao_verValorDeProjeto)) > 0);
+				$perm_verFormaDeCobranca = (sizeof($db->query($sql,'si',$token,ID_OPCAO_VER_FORMA_DE_COBRANCA)) > 0);
+				$perm_verValorDeProjeto = (sizeof($db->query($sql,'si',$token,ID_OPCAO_VER_VALOR_DE_PROJETO)) > 0);
 
 				if($perm_verValorDeProjeto || $perm_verFormaDeCobranca){
 
@@ -1534,7 +1530,35 @@
 					$response->flush();
 					exit(1);
 				}
+			});
 
+			$app->put('/projetos/:id/dadosFinanceiros',function($id) use ($app,$db,$token,$config){
+				// Lendo id do projeto
+				$id_projeto = $id;
+
+				// Lendo dados financeiros enviados
+				$dadosFinanceiros = json_decode($app->request->getBody());
+
+				// Definindo a consulta para saber da permissão do usuário em visualizar dados financeiros
+				$sql = 'SELECT b.valor
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_usuarios_x_opcoes_de_tela b ON a.id=b.id_usuario
+						WHERE a.token=?
+						  AND b.id_opcao=?
+						  AND b.valor=1;';
+
+				// Determinando permissões
+				$perm_alterarFormaDeCobranca = (sizeof($db->query($sql,'si',$token,ID_OPCAO_ALTERAR_FORMA_DE_COBRANCA)) > 0);
+				$perm_alterarValorDeProjeto  = (sizeof($db->query($sql,'si',$token,ID_OPCAO_ALTERAR_VALOR_DE_PROJETO)) > 0);
+
+				if(){
+
+				} else {
+					http_response_code(401);
+					$response = new response(1,'Sem permissão.');
+					$response->flush();
+					exit(1);
+				}
 			});
 
 			$app->put('/projetos/:id',function($id) use ($app,$db,$token){

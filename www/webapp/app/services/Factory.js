@@ -541,6 +541,10 @@ WebGDoks.factory('GDoksFactory',
 			GDoksFactory.getDadosFinanceirosDoProjeto = function(id){
 				return $http.get(API_ROOT+'/projetos/'+id+'/dadosFinanceiros',buildHeaders());
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.salvaDadosFinanceirosDoProjeto = function(idProjeto,dadosFinanceiros){
+				return $http.put(API_ROOT+'/projetos/'+idProjeto+'/dadosFinanceiros',dadosFinanceiros,buildHeaders());
+			}
 			return GDoksFactory;
 		}
 	]

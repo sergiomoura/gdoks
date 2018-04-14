@@ -24123,6 +24123,26 @@ function ProjetosFinanceiroController($scope,GDoksFactory,$mdToast,$routeParams)
 		// Imprimindo no console o erro retornado
 		console.warn(error);
 	});
+
+	// Definindo função que salva dados financeiros
+	$scope.salvar = function(){
+		GDoksFactory.salvaDadosFinanceirosDoProjeto(id_projeto,$scope.dadosFinanceiros)
+		.success(function(response){
+			console.log(response);
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Não foi possível salvar informações financeiras do projeto: ' + error.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+
+			// Imprimindo no console o erro retornado
+			console.warn(error);
+		})
+	}
 };angular.module('Senha',[]).controller('SenhaController',SenhaController)
 
 function SenhaController($scope,$mdToast,GDoksFactory){
@@ -26031,6 +26051,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getDadosFinanceirosDoProjeto = function(id){
 				return $http.get(API_ROOT+'/projetos/'+id+'/dadosFinanceiros',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.salvaDadosFinanceirosDoProjeto = function(idProjeto,dadosFinanceiros){
+				return $http.put(API_ROOT+'/projetos/'+idProjeto+'/dadosFinanceiros',dadosFinanceiros,buildHeaders());
 			}
 			return GDoksFactory;
 		}
