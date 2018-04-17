@@ -1748,18 +1748,49 @@
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
 				if($ok == 1){
-					// Tudo ok! A area a ser adicionada é do mesmo cliente do usuário
+					// Tudo ok! Levantando áreas do projeto
 					$sql = 'SELECT id,nome,codigo FROM gdoks_areas WHERE id_projeto=? ';
 					try {
-						$response = new response(0,'ok');
-						$response->areas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
-						$response->flush();
+						$areas = array_map(function($a){
+							$a = (object)$a;
+							$a->subareas = Array();
+							return $a;
+						}, $db->query($sql,'i',$id_projeto));
 					} catch (Exception $e) {
 						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
 						return;
 					}
+
+					// Levantando subareas do projeto
+					$sql = 'SELECT a.id,a.nome,a.codigo,id_area FROM gdoks_subareas a INNER JOIN gdoks_areas b ON (a.id_area=b.id AND b.id_projeto=?)';
+					try {
+						$subareas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
+					} catch (Exception $e) {
+						http_response_code(401);
+						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
+						$response->flush();
+						return;
+					}
+
+					// Atribuindo subareas às áreas
+					for ($i=0; $i < sizeof($subareas); $i++) { 
+						$sub = $subareas[$i];
+						$achou = false;
+						$j=0;
+						while(!$achou && $j<sizeof($areas)){
+							$achou = ($areas[$j]->id == $sub->id_area);
+							if($achou){
+								array_push($areas[$j]->subareas, $sub);
+							}
+							$j++;
+						}
+					}
+
+					$response = new response(0,'ok');
+					$response->areas = $areas;
+					$response->flush();
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não lê dados de outra empresa.');	
