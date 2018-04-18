@@ -4,44 +4,53 @@
 ?>
 <md-content id="lista_de_documentos_container" class="container_80" layout-padding layout-wrap>
     
-	<div layout="row" layout-align="space-between start">
-		<div layout="column" flex="45">
-			<md-input-container>
+	<div layout="column">
+
+		<div layout="row" layout-align="space-between start">
+			<md-input-container flex="66">
 				<label>Busca</label>
 				<input focus autocomplete="off" type="text" ng-model="busca.nome" placeholder="Digite o nome ou codigo do documento...">
 			</md-input-container>
-			<div layout="row" layout-align="space-between start">
-				<md-input-container flex>
-					<label>Ordenar Por</label>
-					<md-select ng-model="busca.ordem">
-					  <md-option ng-value="'nome'">Nome</md-option>
-					  <md-option ng-value="'data_limite'">Data Limite</md-option>
-					</md-select>
-				</md-input-container>
-				<md-button ng-click="onBuscarDocumentoClick()" style="width: 250px; left:5px; position: relative;top: 7px" class="md-raised md-primary" aria-label="Buscar Documento"><md-icon class="material-icons step" aria-label="Buscar Documento">search</md-icon> Buscar Documento</md-button>
-			</div>
-			<div layout="row" layout-align="space-between start">
-				<md-input-container flex="100">
-					<label>Completude</label>
-					<md-select ng-model="busca.completude">
-					  <md-option ng-value="1">Somente os por concluir</md-option>
-					  <md-option ng-value="2">Somente os concluídos</md-option>
-					  <md-option ng-value="3">Todos - Concluídos ou não</md-option>
-					</md-select>
-				</md-input-container>
-
-				<!-- <md-input-container flex="45">
-					<label>Validação</label>
-					<md-select ng-model="busca.validacao">
-					  <md-option ng-value="1">... com progresso a validar</md-option>
-					  <md-option ng-value="2">... validados</md-option>
-					  <md-option ng-value="3">... qualquer situação</md-option>
-					</md-select>
-				</md-input-container> -->
-
-			</div>
+			<md-input-container flex="30">
+				<label>Ordenar Por</label>
+				<md-select ng-model="busca.ordem">
+				  <md-option ng-value="'nome'">Nome</md-option>
+				  <md-option ng-value="'data_limite'">Data Limite</md-option>
+				</md-select>
+			</md-input-container>
 		</div>
-		<div layout="column" flex="45">
+
+		<div layout="row" layout-align="space-between center">
+			
+			<md-input-container flex="30">
+				<label>Emitido?</label>
+				<md-select ng-model="busca.emitido">
+					<md-option ng-value="2">Indiferente</md-option>
+				 	<md-option ng-value="0">Não - somente documentos não emitidos</md-option>
+				 	<md-option ng-value="1">Sim - somente documentos emitidos</md-option>
+				</md-select>
+			</md-input-container>
+			
+			<md-input-container flex="30">
+				<label>Completude</label>
+				<md-select ng-model="busca.completude">
+				  <md-option ng-value="1">Somente os por concluir</md-option>
+				  <md-option ng-value="2">Somente os concluídos</md-option>
+				  <md-option ng-value="3">Todos - Concluídos ou não</md-option>
+				</md-select>
+			</md-input-container>
+
+			<md-input-container flex="30">
+				<label>Validação</label>
+				<md-select ng-model="busca.validacao">
+				  <md-option ng-value="1">... com progresso a validar</md-option>
+				  <md-option ng-value="2">... validados</md-option>
+				  <md-option ng-value="3">... qualquer situação</md-option>
+				</md-select>
+			</md-input-container>
+			
+		</div>
+		<div layout="column">
 			<div layout="row" layout-align="space-between center">
 				<md-input-container flex="45">
 					<label>Cliente</label>
@@ -93,9 +102,13 @@
 				</md-input-container>	
 			</div>
 		</div>
+
+		<div layout="row" layout-align="end center">
+			<md-button ng-click="onBuscarDocumentoClick()" style="width: 250px; left:5px; position: relative;top: 7px" class="md-raised md-primary" aria-label="Buscar Documento"><md-icon class="material-icons step" aria-label="Buscar Documento">search</md-icon> Buscar Documento</md-button>
+		</div>
 		
 	</div>
-
+	<pre>{{areas|json}}</pre>
 	<md-content>
 		<div class="paginacao" layout="row" flex="none" ng-if="totPaginas>1">
 			<md-button
