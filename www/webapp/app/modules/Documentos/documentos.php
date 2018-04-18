@@ -25,9 +25,9 @@
 			<md-input-container flex="30">
 				<label>Emitido?</label>
 				<md-select ng-model="busca.emitido">
-					<md-option ng-value="2">Indiferente</md-option>
-				 	<md-option ng-value="0">Não - somente documentos não emitidos</md-option>
+					<md-option ng-value="2">Tanto faz</md-option>
 				 	<md-option ng-value="1">Sim - somente documentos emitidos</md-option>
+				 	<md-option ng-value="0">Não - somente documentos não emitidos</md-option>
 				</md-select>
 			</md-input-container>
 			

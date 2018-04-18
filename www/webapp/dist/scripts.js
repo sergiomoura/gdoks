@@ -19839,7 +19839,8 @@ module.exports = function(Chart) {
 				id_subdisciplina:undefined,
 				completude: 3,
 				validacao: 3,
-				pagAtual:1
+				pagAtual:1,
+				emitido:2
 			};
 		} else {
 			// Busca no cookie. Carregando
