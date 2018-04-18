@@ -19629,9 +19629,6 @@ module.exports = function(Chart) {
 		// Definindo 'agora'
 		$scope.agora = new Date();
 
-		// Definindo valor inicial para ordem
-		$scope.ordem = 'data_limite';
-
 		// Definindo o valor inicial para o vetor de areas
 		$scope.areas = [];
 

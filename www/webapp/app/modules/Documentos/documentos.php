@@ -108,7 +108,7 @@
 		</div>
 		
 	</div>
-	<pre>{{areas|json}}</pre>
+	
 	<md-content>
 		<div class="paginacao" layout="row" flex="none" ng-if="totPaginas>1">
 			<md-button
