@@ -3623,6 +3623,7 @@
 				$q->validacao			= (array_key_exists('validacao',		$_GET) && $_GET['validacao'] 		!= 'undefined') ? $_GET['validacao']:null;
 				$q->completude			= (array_key_exists('completude',		$_GET) && $_GET['completude'] 		!= 'undefined') ? $_GET['completude']:null;
 				$q->pagAtual			= (array_key_exists('pagAtual',			$_GET) && $_GET['pagAtual'] 		!= 'undefined') ? $_GET['pagAtual']:null;
+				$q->emitido				= (array_key_exists('emitido',			$_GET) && $_GET['emitido']	 		!= 'undefined') ? $_GET['emitido']:null;
 
 				// monstando as restricoes no obj restrict
 				$restrict = new stdClass();
