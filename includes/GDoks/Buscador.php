@@ -76,18 +76,19 @@
 							   b.ua,
 							   b.progresso_validado,
 							   b.progresso_a_validar,
-						       !isnull(c.id_grd) as emitido
+						       !isnull(c.id_grd) as rev_emitida
 						FROM
 						  (SELECT id_documento,
 								  max(id) AS id_revisao
 						   FROM gdoks_revisoes
 						   GROUP BY id_documento) a
 						INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
-						LEFT JOIN gdoks_grds_x_revisoes c on c.id_revisao=a.id_revisao
-						WHERE '.$this->restrictions->emitido.') Y ON X.id=Y.id_documento
+						LEFT JOIN gdoks_grds_x_revisoes c on c.id_revisao=a.id_revisao) Y
+						   ON X.id=Y.id_documento
 						WHERE
 							'.$this->restrictions->completude.' AND
-							'.$this->restrictions->validacao;
+							'.$this->restrictions->validacao.' AND
+							'.$this->restrictions->emitido;
 			return $this->db->query($sql)[0]['n'];
 		}
 
@@ -130,10 +131,11 @@
 						   GROUP BY id_documento) a
 						INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
 						LEFT JOIN gdoks_grds_x_revisoes c on c.id_revisao=a.id_revisao
-						WHERE '.$this->restrictions->emitido.') Y ON X.id=Y.id_documento
+						) Y ON X.id=Y.id_documento
 					WHERE
 						'.$this->restrictions->completude.' AND
-						'.$this->restrictions->validacao.'
+						'.$this->restrictions->validacao.' AND
+						'.$this->restrictions->emitido.'
 					ORDER BY '.$this->order;
 			return $sql;
 		}
@@ -165,9 +167,9 @@
 
 			// Montando restições sobre se o documento foi emitido ou não
 			if ($q->emitido == 0) {
-				$restrict->emitido = 'c.id_grd IS NULL';
+				$restrict->emitido = 'rev_emitida=0';
 			} elseif($q->emitido == 1) {
-				$restrict->emitido = 'c.id_grd IS NOT NULL';
+				$restrict->emitido = 'rev_emitida=1';
 			} else {
 				$restrict->emitido = 'TRUE';
 			}
