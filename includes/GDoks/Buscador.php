@@ -240,9 +240,9 @@
 
 			// Montando restrições sobre a validacao
 			if($q->validacao == '1'){
-				$restrict->validacao = 'id_progresso_a_validar>0';
+				$restrict->validacao = 'progresso_a_validar>0';
 			} elseif($q->validacao == '2'){
-				$restrict->validacao = 'id_progresso_a_validar=0';
+				$restrict->validacao = 'progresso_a_validar=0 AND progresso_validado>0';
 			} else {
 				$restrict->validacao = 'true';
 			}
