@@ -68,19 +68,23 @@
 						   		AND ('.$this->restrictions->nome.')
 						   ) X
 						LEFT JOIN
-						  (SELECT id_revisao,
-						       b.id_documento,
-						       b.serial,
-						       b.data_limite,
-						       b.ua,
-						       b.progresso_validado,
-						       b.progresso_a_validar
+						  (SELECT DISTINCT
+					  		   a.id_revisao,
+							   b.id_documento,
+							   b.serial,
+							   b.data_limite,
+							   b.ua,
+							   b.progresso_validado,
+							   b.progresso_a_validar,
+						       !isnull(c.id_grd) as emitido
 						FROM
 						  (SELECT id_documento,
-						          max(id) AS id_revisao
+								  max(id) AS id_revisao
 						   FROM gdoks_revisoes
 						   GROUP BY id_documento) a
-						INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id) Y ON X.id=Y.id_documento
+						INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
+						LEFT JOIN gdoks_grds_x_revisoes c on c.id_revisao=a.id_revisao
+						WHERE '.$this->restrictions->emitido.') Y ON X.id=Y.id_documento
 						WHERE
 							'.$this->restrictions->completude.' AND
 							'.$this->restrictions->validacao;
@@ -110,19 +114,23 @@
 					   		AND ('.$this->restrictions->nome.')
 					   ) X
 					LEFT JOIN
-					  (SELECT id_revisao,
-						       b.id_documento,
-						       b.serial,
-						       b.data_limite,
-						       b.ua,
-						       b.progresso_validado,
-						       b.progresso_a_validar
+					  (SELECT DISTINCT
+					  		   a.id_revisao,
+							   b.id_documento,
+							   b.serial,
+							   b.data_limite,
+							   b.ua,
+							   b.progresso_validado,
+							   b.progresso_a_validar,
+						       !isnull(c.id_grd) as rev_emitida
 						FROM
 						  (SELECT id_documento,
-						          max(id) AS id_revisao
+								  max(id) AS id_revisao
 						   FROM gdoks_revisoes
 						   GROUP BY id_documento) a
-						INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id) Y ON X.id=Y.id_documento
+						INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id
+						LEFT JOIN gdoks_grds_x_revisoes c on c.id_revisao=a.id_revisao
+						WHERE '.$this->restrictions->emitido.') Y ON X.id=Y.id_documento
 					WHERE
 						'.$this->restrictions->completude.' AND
 						'.$this->restrictions->validacao.'
@@ -154,6 +162,15 @@
 
 			// monstando as restricoes no obj restrict
 			$restrict = new stdClass();
+
+			// Montando restições sobre se o documento foi emitido ou não
+			if ($q->emitido == 0) {
+				$restrict->emitido = 'c.id_grd IS NULL';
+			} elseif($q->emitido == 1) {
+				$restrict->emitido = 'c.id_grd IS NOT NULL';
+			} else {
+				$restrict->emitido = 'TRUE';
+			}
 
 			// Montando restições sobre o documento - - - - - - - - - - -
 			if($q->nome == ''){
