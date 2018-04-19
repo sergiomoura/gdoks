@@ -13,6 +13,7 @@
 	require('definicoes_de_acoes.php');
 	require('response.php');
 	require('GDoks/GDoks.php');
+	require('GDoks/Buscador.php');
 	require('GDoks/Grd.php');
 	require('GDoks/ModeloLDP.php');
 	require('GDoks/Crypter.php');
@@ -3625,215 +3626,21 @@
 				$q->pagAtual			= (array_key_exists('pagAtual',			$_GET) && $_GET['pagAtual'] 		!= 'undefined') ? $_GET['pagAtual']:null;
 				$q->emitido				= (array_key_exists('emitido',			$_GET) && $_GET['emitido']	 		!= 'undefined') ? $_GET['emitido']:null;
 
-				// monstando as restricoes no obj restrict
-				$restrict = new stdClass();
+				// Instanciando classe buscador
+				$buscador = new Buscador($db);
 
-				// Montando restições sobre o documento - - - - - - - - - - -
-				if($q->nome == ''){
-					$restrict->nome = 'trueFromStr(?) OR trueFromStr(?) OR trueFromStr(?) OR trueFromStr(?)';
-				} else {
-					$restrict->nome = 'a.nome like ? OR a.codigo like ? OR codigo_alternativo like ? OR codigo_cliente like ?';
-				}
-				
-				
-				// Restrição de subarea,area,projeto,cliente
-				if(!is_null($q->id_subarea)){
-					$restrict->cliente  = 'trueFromInt(?)';
-					$restrict->projeto  = 'trueFromInt(?)';
-					$restrict->area 	= 'trueFromInt(?)';
-					$restrict->subarea  = 'b.id=?';
-				} else {
-					if(!is_null($q->id_area)){
-						$restrict->cliente = 'trueFromInt(?)';
-						$restrict->projeto = 'trueFromInt(?)';
-						$restrict->area    = 'c.id=?';
-						$restrict->subarea = 'trueFromInt(?)';
-					} else { 
-						if(!is_null($q->id_projeto)){
-							$restrict->cliente = 'trueFromInt(?)';
-							$restrict->projeto = 'd.id=?';
-							$restrict->area    = 'trueFromInt(?)';
-							$restrict->subarea = 'trueFromInt(?)';
-						} else {
-							if(!is_null($q->id_cliente)){
-								$restrict->cliente = 'e.id=?';
-								$restrict->projeto = 'trueFromInt(?)';
-								$restrict->area    = 'trueFromInt(?)';
-								$restrict->subarea = 'trueFromInt(?)';
-							} else {
-								$restrict->cliente = 'trueFromInt(?)';
-								$restrict->projeto = 'trueFromInt(?)';
-								$restrict->area    = 'trueFromInt(?)';
-								$restrict->subarea = 'trueFromInt(?)';
-							}		
-						}
-					}
-				}
-
-				// restricao de subdisciplina e disciplina
-				if(!is_null($q->id_subdisciplina)){
-					$restrict->disciplina    = 'trueFromInt(?)';
-					$restrict->subdisciplina = 'f.id=?';
-				} else {
-					if(!is_null($q->id_disciplina)){
-						$restrict->disciplina    = 'g.id=?';
-						$restrict->subdisciplina = 'trueFromInt(?)';
-					} else {
-						$restrict->disciplina    = 'trueFromInt(?)';
-						$restrict->subdisciplina = 'trueFromInt(?)';
-					}
-				}
-
-				// Montando restrições sobre a completude
-				if($q->completude == '1'){
-					$restrict->completude = 'progresso_validado<100';
-				} elseif($q->completude == '2'){
-					$restrict->completude = 'progresso_validado=100';
-				} else {
-					$restrict->completude = 'true';
-				}
-
-				// Montando restrições sobre a validacao
-				if($q->validacao == '1'){
-					$restrict->validacao = 'id_progresso_a_validar>0';
-				} elseif($q->validacao == '2'){
-					$restrict->validacao = 'id_progresso_a_validar=0';
-				} else {
-					$restrict->validacao = 'true';
-				}
-
-				// Definindo ordem
-				if($q->ordem == 'nome'){
-					$ordem = 'nome';
-				} else {
-					$ordem = 'data_limite';
-				}
-
-				// Montando colunas
-				$colunas = 'a.id,
-							a.codigo,
-							a.codigo_cliente,
-							a.codigo_alternativo,
-							a.nome,
-							a.idu_checkout,
-							a.datahora_do_checkout,
-							b.codigo AS subarea_codigo,
-							b.id AS subarea_id,
-							b.nome AS subarea_nome,
-							c.id AS area_id,
-							c.codigo AS area_codigo,
-							c.nome AS area_nome,
-							d.id AS projeto_id,
-							d.nome AS projeto_nome,
-							e.id AS cliente_id,
-							e.nome_fantasia AS cliente_nome,
-							f.id AS subdisciplina_id,
-							f.nome AS subdisciplina_nome,
-							g.id AS disciplina_id,
-							g.nome AS disciplina_nome';
-
-				$tabelas = ' gdoks_documentos a
-						   INNER JOIN gdoks_subareas b ON a.id_subarea=b.id
-						   INNER JOIN gdoks_areas c ON b.id_area=c.id
-						   INNER JOIN gdoks_projetos d ON c.id_projeto=d.id
-						   INNER JOIN gdoks_clientes e ON d.id_cliente=e.id
-						   INNER JOIN gdoks_subdisciplinas f ON a.id_subdisciplina=f.id
-						   INNER JOIN gdoks_disciplinas g ON f.id_disciplina=g.id';
-
-				// Determinando o total de ocorrências
-				$sql = "SELECT count(*) as n
-						FROM
-						  (SELECT $colunas
-						   FROM $tabelas
-						   WHERE
-						   		$restrict->subarea
-						   		AND $restrict->area
-						   		AND $restrict->subdisciplina
-						   		AND $restrict->disciplina
-						   		AND $restrict->projeto
-						   		AND $restrict->cliente
-						   		AND ($restrict->nome)
-						   ) X
-						LEFT JOIN
-						  (SELECT id_documento,max(id) AS id_revisao, serial, data_limite,
-						                                                      progresso_validado,
-						                                                      progresso_a_validar
-						   FROM gdoks_revisoes
-						   GROUP BY id_documento,data_limite,progresso_validado,progresso_a_validar,serial) Y ON X.id=Y.id_documento
-						WHERE
-							$restrict->completude AND
-							$restrict->validacao";
-
-				$n = $db->query(
-						$sql,
-						'iiiiiissss',
-						$q->id_subarea,
-						$q->id_area,
-						$q->id_subdisciplina,
-						$q->id_disciplina,
-						$q->id_projeto,
-						$q->id_cliente,
-						'%'.$q->nome.'%',
-						'%'.$q->nome.'%',
-						'%'.$q->nome.'%',
-						'%'.$q->nome.'%'
-					)[0]['n'];
-				
-				// Determinando a paginação
+				// Definindo número de documentos por página
 				$npp = 10;
-				$pos_inicial  = ($q->pagAtual-1)*$npp;
 
-				// Montando sql
-				$sql = "SELECT *
-						FROM
-						  (SELECT $colunas
-						   FROM $tabelas
-						   WHERE
-						   		$restrict->subarea
-						   		AND $restrict->area
-						   		AND $restrict->subdisciplina
-						   		AND $restrict->disciplina
-						   		AND $restrict->projeto
-						   		AND $restrict->cliente
-						   		AND ($restrict->nome)
-						   ) X
-						LEFT JOIN
-						  (SELECT id_revisao,
-							       b.id_documento,
-							       b.serial,
-							       b.data_limite,
-							       b.ua,
-							       b.progresso_validado,
-							       b.progresso_a_validar
-							FROM
-							  (SELECT id_documento,
-							          max(id) AS id_revisao
-							   FROM gdoks_revisoes
-							   GROUP BY id_documento) a
-							INNER JOIN gdoks_revisoes b ON a.id_revisao=b.id) Y ON X.id=Y.id_documento
-						WHERE
-							$restrict->completude AND
-							$restrict->validacao
-						ORDER BY $ordem
-						LIMIT $pos_inicial,$npp
-						";
-				
-				$rs = $db->query(
-						$sql,
-						'iiiiiissss',
-						$q->id_subarea,
-						$q->id_area,
-						$q->id_subdisciplina,
-						$q->id_disciplina,
-						$q->id_projeto,
-						$q->id_cliente,
-						'%'.$q->nome.'%',
-						'%'.$q->nome.'%',
-						'%'.$q->nome.'%',
-						'%'.$q->nome.'%'
-					);
+				// Realizando busca áginada
+				$docs = $buscador->buscaPaginado($q,$npp);
+
+				// Determinando o total de resultados
+				$n = $buscador->nResultados($q);
+
+				// Retornando resposta ao cliente
 				$response = new response(0,'ok');
-				$response->documentos = $rs;
+				$response->documentos = $docs;
 				$response->total = $n;
 				$response->npp = $npp;
 				$response->flush();
