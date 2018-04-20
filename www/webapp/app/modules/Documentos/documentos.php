@@ -103,8 +103,22 @@
 			</div>
 		</div>
 
-		<div layout="row" layout-align="end center">
-			<md-button ng-click="onBuscarDocumentoClick()" style="width: 250px; left:5px; position: relative;top: 7px" class="md-raised md-primary" aria-label="Buscar Documento"><md-icon class="material-icons step" aria-label="Buscar Documento">search</md-icon> Buscar Documento</md-button>
+		<div layout="row" layout-align="start center">
+			<div layout-align="start center" flex>
+				<md-button class="md-fab md-primary md-mini" ng-click="onBaixarLdpClick()">
+					<md-icon class="material-icons step" aria-label="Baixar lista de documentos">file_download</md-icon>
+					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+						Baixar Lista de Documentos (.xlsx)
+					</md-tooltip>
+				</md-button>
+				<md-button class="md-fab md-primary md-mini" ng-click="onEmitirLdpClick()">
+					<md-icon class="material-icons step" aria-label="Emitir lista de documentos">picture_as_pdf</md-icon>
+					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+						Emitir Lista de Documentos (.pdf)
+					</md-tooltip>
+				</md-button>
+			</div>
+			<md-button ng-click="onBuscarDocumentoClick()" style="text-transform:none; padding: 0 30px 0 20px; left:5px; position: relative;top: 7px" class="md-raised md-primary" aria-label="Buscar Documento"><md-icon class="material-icons step" aria-label="Buscar Documento">search</md-icon>Buscar Documentos</md-button>
 		</div>
 		
 	</div>

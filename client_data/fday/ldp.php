@@ -12,36 +12,47 @@
 
 		private $documentos;
 		private $projeto;
-		private $idProjeto;
 		private $xlsx;
+		private $db;
 		
-		public function __construct($idProjeto){
-
-			// Guardando o id do projeto
-			$this->idProjeto = $idProjeto;
-
-			// Carregando dados da base
-			$this->loadData();
-		}
-
-		private function loadData(){
+		/**
+		* Construtor: Recebe id de projeto como parâmetro ou um vetor cujos
+		* elementos são dados de documentos.
+		*/
+		public function __construct($parametro){
 
 			// Carregando a dbkey
 			include(dirname(__FILE__).'/dbkey.php');
-
+			
 			// Criando conexão
-			$db = new DB($dbkey);
+			$this->db = new DB($dbkey);
 			unset($dbkey);
 
+			// Testando se o parâmetro é um inteiro (id de projeto)
+			if(is_int($parametro)){
+				
+				// Carregando dados do projeto
+				$this->loadDadosDoProjeto($parametro);
+
+				// Carregando documentos do projeto
+				$this->loadDocumentosDoProjeto($parametro);
+
+			} elseif (is_array($parametro)) {
+				// Parâmetro já é de documentos
+				$this->documentos = $parametro;
+			}
+		}
+
+		private function loadDocumentosDoProjeto($id_projeto){
 			// Carregando documentos
 			$sql = 'SELECT a.codigo,
 					       a.nome,
 					       a.codigo_alternativo,
-					       b.nome AS nome_subarea,
-					       c.nome AS nome_area,
-					       d.nome AS nome_subdisciplina,
-					       e.nome AS nome_disciplina,
-					       R.serial AS serial_revisao
+					       b.nome AS subarea_nome,
+					       c.nome AS area_nome,
+					       d.nome AS subdisciplina_nome,
+					       e.nome AS disciplina_nome,
+					       R.serial AS serial
 					FROM gdoks_documentos a
 					INNER JOIN gdoks_subareas b ON a.id_subarea=b.id
 					INNER JOIN gdoks_areas c ON b.id_area=c.id
@@ -60,7 +71,10 @@
 						order by a.id DESC) R ON R.id_documento=a.id
 					WHERE c.id_projeto=?';
 
-			$this->documentos = array_map(function($a){return (object)$a;}, $db->query($sql,'ii',$this->idProjeto,$this->idProjeto));
+			$this->documentos = array_map(function($a){return (object)$a;}, $this->db->query($sql,'ii',$id_projeto,$id_projeto));
+		}
+
+		private function loadDadosDoProjeto($id_projeto){
 
 			// Carregando dados do projeto
 			$sql = 'SELECT
@@ -79,7 +93,7 @@
 					INNER JOIN gdoks_clientes b ON (a.id_cliente=b.id
 					                                AND a.id=?)
 					INNER JOIN gdoks_usuarios c ON a.id_responsavel=c.id';
-			$this->projeto = (object)($db->query($sql,'i',$this->idProjeto)[0]);
+			$this->projeto = (object)($db->query($sql,'i',$id_projeto)[0]);
 		}
 
 		private function criaXlsx(){
@@ -139,11 +153,11 @@
 				// Escrevendo linha
 				$sheet->setCellValue('A'.$linha,$this->documentos[$i]->codigo);
 				$sheet->setCellValue('B'.$linha,$this->documentos[$i]->nome);
-				$sheet->setCellValue('C'.$linha,$this->documentos[$i]->nome_area);
-				$sheet->setCellValue('D'.$linha,$this->documentos[$i]->nome_subarea);
-				$sheet->setCellValue('E'.$linha,$this->documentos[$i]->nome_disciplina);
-				$sheet->setCellValue('F'.$linha,$this->documentos[$i]->nome_subdisciplina);
-				$sheet->setCellValue('G'.$linha,'rev' . $this->documentos[$i]->serial_revisao);
+				$sheet->setCellValue('C'.$linha,$this->documentos[$i]->area_nome);
+				$sheet->setCellValue('D'.$linha,$this->documentos[$i]->subarea_nome);
+				$sheet->setCellValue('E'.$linha,$this->documentos[$i]->disciplina_nome);
+				$sheet->setCellValue('F'.$linha,$this->documentos[$i]->subdisciplina_nome);
+				$sheet->setCellValue('G'.$linha,'rev' . $this->documentos[$i]->serial);
 
 				// Alterando altura da linha
 				$sheet->getRowDimension($linha)->setRowHeight(20);
@@ -169,7 +183,7 @@
 
 			// Mandando os headers
 			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-			header('Content-Disposition: attachment;filename="ldp_'.$this->idProjeto.'.xlsx"');
+			header('Content-Disposition: attachment;filename="ldp_'.$this->projeto->id.'.xlsx"');
 			header('Cache-Control: max-age=0');
 			
 			// Criando o Writer
