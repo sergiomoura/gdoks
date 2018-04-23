@@ -2621,7 +2621,7 @@
 				}
 
 				// Enviando LDP
-				if($_GET['view']='html'){
+				if(array_key_exists('view', $_GET) && $_GET['view']=='html'){
 					$ldp->enviarHtml();
 				} else {
 					// Enviando ldp
