@@ -14,6 +14,7 @@
 		private $projeto;
 		private $xlsx;
 		private $db;
+		private $empresa;
 		
 		/**
 		* Construtor: Recebe id de projeto como parâmetro ou um vetor cujos
@@ -22,6 +23,9 @@
 		public function __construct($parametro){
 			// Carregando a dbkey
 			include(dirname(__FILE__).'/dbkey.php');
+
+			// Determinando o codigo da empresa
+			$this->empresa = basename(dirname(__FILE__));
 			
 			// Criando conexão
 			$this->db = new DB($dbkey);
@@ -206,5 +210,126 @@
 
 			// Escrevendo o arquivo na saída php
 			$writer->save('php://output');
+		}
+
+		public function enviarHtml(){
+			?>
+
+			<!DOCTYPE html>
+			<html lang="pt-br">
+			<head>
+				<meta charset="UTF-8">
+				<title>Lista de Documentos de Projeto - <?php echo($this->projeto->nome); ?></title>
+				<style>
+					body {
+						font-family: "arial", sans-serif;
+					}
+					header {
+						margin: 20px 0 0 0;
+						width:80%;
+						left: 10%;
+						position: relative;
+					}
+					header img{
+						float: left;
+						width:30%;
+					}
+
+					header h1 {
+						text-align: right;
+						margin: 0 0 0 0;
+						position: relative;
+						top: 20px;
+					}
+
+					header h2 {
+						text-align: right;
+						margin: 0 0 0 0;
+						font-size: 18px;
+						position: relative;
+						top: 30px;
+					}
+
+					header table{
+						width:100%;
+						margin: 60px 0 0px 0;
+						font-size: 16px;
+					}
+
+					header table td:nth-child(2){
+						text-align: right;
+					}
+
+					body>table{
+						width:80%;
+						position: relative;
+						left: 10%;
+						border-collapse: collapse;
+						margin: 20px 0 0 0;
+						font-size: 16px;
+					}
+					
+					body>table td{
+						border: 1px solid #CCC;
+						padding: 5px;
+					}
+
+					body>table thead tr td{
+						background-color: #F0F0F0;
+						text-align: center;
+					}
+				</style>
+			</head>
+			<body>
+				<header>
+					<img src="/clientes/comum/logo.php?e=<?php echo($this->empresa)?>">
+					<h1>Lista de Documentos de Projeto</h1>
+					<h2>Projeto: <?php echo($this->projeto->nome); ?></h2>
+					<table>
+						<tr>
+							<td>Data de Início (previsto): <?php echo($this->projeto->data_inicio_p); ?></td>
+							<td>Cliente: <?php echo($this->projeto->nome_cliente); ?></td>
+						</tr>
+						<tr>
+							<td>Data Final (previsto): <?php echo($this->projeto->data_final_p); ?></td>
+							<td>Contato: <?php echo($this->projeto->contato_nome); ?>(<?php echo($this->projeto->contato_email); ?>)</td>
+						</tr>
+						<tr>
+							<td>Responsável: <?php echo($this->projeto->nome_responsavel); ?> (<?php echo($this->projeto->email_responsavel); ?>)</td>
+							<td>Telefone: <?php echo($this->projeto->contato_telefone); ?></td>
+						</tr>
+					</table>
+				</header>
+				<table>
+					<thead>
+						<tr>
+							<td>Cód Documento</td>
+							<td>Título</td>
+							<td>Área</td>
+							<td>Subárea</td>
+							<td>Disciplina</td>
+							<td>Subdisciplina</td>
+							<td>Revisão Atual</td>
+						</tr>
+					</thead>
+					<tbody>
+						<?php for ($i=0; $i < sizeof($this->documentos); $i++): ?>
+						<tr>
+							<td><?php echo($this->documentos[$i]->codigo); ?></td>
+							<td><?php echo($this->documentos[$i]->nome); ?></td>
+							<td><?php echo($this->documentos[$i]->area_nome); ?></td>
+							<td><?php echo($this->documentos[$i]->subarea_codigo); ?></td>
+							<td><?php echo($this->documentos[$i]->disciplina_nome); ?></td>
+							<td><?php echo($this->documentos[$i]->subdisciplina_nome); ?></td>
+							<td><?php echo($this->documentos[$i]->rev_emitida); ?> Atual</td>
+						</tr>
+						<?php endfor; ?>
+					</tbody>	
+				</table>
+
+			</body>
+			</html>
+
+			<?php
 		}
 	}

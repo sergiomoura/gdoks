@@ -2593,7 +2593,6 @@
 				$modelo->enviarXlsx();
 			});
 
-
 			$app->get('/projetos/:id_projeto/ldp',function($id_projeto) use ($app,$db,$token,$empresa){
 				
 				// Incluindo a ldp da empresa
@@ -2621,8 +2620,13 @@
 					$ldp = new ldp($id_projeto);
 				}
 
-				// Enviando ldp
-				$ldp->enviarXlsx();
+				// Enviando LDP
+				if($_GET['view']='html'){
+					$ldp->enviarHtml();
+				} else {
+					// Enviando ldp
+					$ldp->enviarXlsx();
+				}
 			});
 
 			$app->post('/projetos/:id_projeto/importarLDP/',function($id_projeto) use ($app,$db,$empresa,$token){

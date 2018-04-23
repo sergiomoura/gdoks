@@ -144,6 +144,10 @@
 			GDoksFactory.baixarLDP($scope.busca.id_projeto,$scope.busca);
 		}
 
+		$scope.onEmitirLdpClick = function(){
+			GDoksFactory.emitirLDP($scope.busca.id_projeto,$scope.busca);	
+		}
+
 		$scope.onOpenClick = function(id){
 			$location.path('/documentos/'+id);
 		}

@@ -538,6 +538,37 @@ WebGDoks.factory('GDoksFactory',
 				form.parentNode.removeChild(form);
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.emitirLDP = function(idProjeto,busca){
+				// Criando um formulário para enviar a requisição pelo arquivo
+				var form = document.createElement("form");
+				form.setAttribute('action',API_ROOT + '/projetos/' + idProjeto + '/ldp');
+				form.setAttribute('method','GET');
+				form.setAttribute('style','display:none');
+				form.setAttribute('target','_blank');
+
+				// Criando de busca para conter o objeto de busca
+				if(busca!=undefined){
+					var input1 = document.createElement('input');
+					input1.setAttribute('name','busca');
+					input1.setAttribute('value',JSON.stringify(busca));
+					form.appendChild(input1);
+
+					var input2 = document.createElement('input');
+					input2.setAttribute('name','view');
+					input2.setAttribute('value','html');
+					form.appendChild(input2);
+				}
+
+				// adicionando form a dom
+				document.body.appendChild(form);
+
+				// submetendo o form
+				form.submit();
+
+				// removendo o form da dom
+				form.parentNode.removeChild(form);
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getConfiguracoes = function(){
 				return $http.get(API_ROOT+'/configuracoes',buildHeaders());
 			}
