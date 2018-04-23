@@ -246,6 +246,11 @@
   #lista_de_documentos_container .paginacao .md-button {
     width: 12%;
     min-width: 0px; }
+#lista_de_documentos_container .resultado_de_busca {
+  background-color: #fff;
+  padding: 20px 20px 0 20px;
+  margin: 20px 0 20px 0;
+  border: 1px solid rgba(0, 0, 0, 0.12); }
 #lista_de_documentos_container .documentos {
   border-collapse: collapse;
   width: 100%;
@@ -273,7 +278,7 @@
     #lista_de_documentos_container .documentos tbody tr:last-child td {
       border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
     #lista_de_documentos_container .documentos tbody tr:hover td {
-      background-color: #FFF; }
+      background-color: rgba(0, 0, 0, 0.06); }
     #lista_de_documentos_container .documentos tbody td {
       border-top: 1px solid rgba(0, 0, 0, 0.12); }
       #lista_de_documentos_container .documentos tbody td span {

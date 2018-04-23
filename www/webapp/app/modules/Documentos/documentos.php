@@ -105,25 +105,27 @@
 
 		<div layout="row" layout-align="start center">
 			<div layout-align="start center" flex>
-				<md-button class="md-fab md-primary md-mini" ng-click="onBaixarLdpClick()">
+				<md-button class="md-fab md-primary md-mini" ng-click="onBaixarLdpClick()" ng-disabled="!busca.id_projeto">
 					<md-icon class="material-icons step" aria-label="Baixar lista de documentos">file_download</md-icon>
 					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
-						Baixar Lista de Documentos (.xlsx)
+						Baixar Lista de Documentos de Projeto (.xlsx)
 					</md-tooltip>
 				</md-button>
-				<md-button class="md-fab md-primary md-mini" ng-click="onEmitirLdpClick()">
+				<!--
+				<md-button class="md-fab md-primary md-mini" ng-click="onEmitirLdpClick()" ng-disabled="!busca.id_projeto">
 					<md-icon class="material-icons step" aria-label="Emitir lista de documentos">picture_as_pdf</md-icon>
 					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
-						Emitir Lista de Documentos (.pdf)
+						Emitir Lista de Documentos de Projeto(.pdf)
 					</md-tooltip>
 				</md-button>
+				-->
 			</div>
 			<md-button ng-click="onBuscarDocumentoClick()" style="text-transform:none; padding: 0 30px 0 20px; left:5px; position: relative;top: 7px" class="md-raised md-primary" aria-label="Buscar Documento"><md-icon class="material-icons step" aria-label="Buscar Documento">search</md-icon>Buscar Documentos</md-button>
 		</div>
 		
 	</div>
 	
-	<md-content>
+	<md-content class="resultado_de_busca">
 		<div class="paginacao" layout="row" flex="none" ng-if="totPaginas>1">
 			<md-button
 				class="md-icon md-mini"

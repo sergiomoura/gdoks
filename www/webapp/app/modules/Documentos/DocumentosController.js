@@ -140,6 +140,10 @@
 			$scope.busca.id_subdisciplina = undefined;
 		}
 
+		$scope.onBaixarLdpClick = function(){
+			GDoksFactory.baixarLDP($scope.busca.id_projeto,$scope.busca);
+		}
+
 		$scope.onOpenClick = function(id){
 			$location.path('/documentos/'+id);
 		}

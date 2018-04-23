@@ -2598,9 +2598,28 @@
 				
 				// Incluindo a ldp da empresa
 				include(CLIENT_DATA_PATH.$empresa.'/ldp.php');
-				
-				// Criando ldp do projeto
-				$ldp = new ldp($id_projeto);
+
+				// Verificando se foi enviada busca
+				if(array_key_exists('busca', $_GET)) {
+					$q = json_decode($_GET['busca']);
+					if(json_last_error() != JSON_ERROR_NONE){
+						http_response_code(401);
+						$response = new response(1,'Parâmetros de busca inválidos');
+						$response->flush();
+						exit(1);
+					}
+
+					// Criando buscador e realizando busca
+					$buscador = new Buscador($db);
+					$docs = $buscador->busca($q);
+
+					// Criando LDP
+					$ldp = new ldp($docs);
+
+				} else {
+					// Criando ldp do projeto
+					$ldp = new ldp($id_projeto);
+				}
 
 				// Enviando ldp
 				$ldp->enviarXlsx();

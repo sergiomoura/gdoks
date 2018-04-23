@@ -19755,6 +19755,10 @@ module.exports = function(Chart) {
 			$scope.busca.id_subdisciplina = undefined;
 		}
 
+		$scope.onBaixarLdpClick = function(){
+			GDoksFactory.baixarLDP($scope.busca.id_projeto,$scope.busca);
+		}
+
 		$scope.onOpenClick = function(id){
 			$location.path('/documentos/'+id);
 		}
@@ -25954,13 +25958,21 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 				form.parentNode.removeChild(form);
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.baixarLDP = function(idProjeto){
+			GDoksFactory.baixarLDP = function(idProjeto,busca){
 
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");
 				form.setAttribute('action',API_ROOT + '/projetos/' + idProjeto + '/ldp');
 				form.setAttribute('method','GET');
 				form.setAttribute('style','display:none');
+
+				// Criando de busca para conter o objeto de busca
+				if(busca!=undefined){
+					var input = document.createElement('input');
+					input.setAttribute('name','busca');
+					input.setAttribute('value',JSON.stringify(busca));
+					form.appendChild(input);
+				}
 
 				// adicionando form a dom
 				document.body.appendChild(form);

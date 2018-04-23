@@ -20,6 +20,13 @@
 			min-width: 0px;
 		}
 	}
+	
+	.resultado_de_busca{
+		background-color: #fff;
+		padding:20px 20px 0 20px;
+		margin: 20px 0 20px 0;
+		border: 1px solid $cinzaClaro;
+	}
 
 	.documentos{
 		border-collapse:collapse;
@@ -61,7 +68,7 @@
 				}
 				&:hover{
 					td{
-						background-color: #FFF;
+						background-color: $cinzaMaisClaro;
 					}
 				}
 			}
