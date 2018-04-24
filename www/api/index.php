@@ -1488,6 +1488,92 @@
 				echo('hahaha!');
 			});
 
+			$app->get('/projetos/:id/dadosFinanceiros',function($id) use ($app,$db,$token,$config){
+				// Lendo id do projeto
+				$id_projeto = $id;
+
+				// Definindo a consulta para saber da permissão do usuário em visualizar dados financeiros
+				$sql = 'SELECT b.valor
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_usuarios_x_opcoes_de_tela b ON a.id=b.id_usuario
+						WHERE a.token=?
+						  AND b.id_opcao=?
+						  AND b.valor=1;';
+				$perm_verFormaDeCobranca = (sizeof($db->query($sql,'si',$token,ID_OPCAO_VER_FORMA_DE_COBRANCA)) > 0);
+				$perm_verValorDeProjeto = (sizeof($db->query($sql,'si',$token,ID_OPCAO_VER_VALOR_DE_PROJETO)) > 0);
+
+				if($perm_verValorDeProjeto || $perm_verFormaDeCobranca){
+
+					// Carregando dados financeiros de projeto
+					$sql = 'SELECT forma_de_cobranca,
+							       valor
+							FROM gdoks_projetos
+							WHERE id=?;';
+					$rs = $db->query($sql,'i',$id_projeto);
+
+					// Escrevendo os dados financeiros permitidos ao usuário
+					$dadosFinanceiros = new stdClass();
+					if($perm_verFormaDeCobranca){
+						$dadosFinanceiros->forma_de_cobranca = $rs[0]['forma_de_cobranca'];
+					}
+					if($perm_verValorDeProjeto){
+						$dadosFinanceiros->valor = $rs[0]['valor'];
+					}
+
+					// Retornando resposta ao usuário
+					$response = new response(0,'ok');
+					$response->dadosFinanceiros = $dadosFinanceiros;
+					$response->flush();
+
+				} else {
+					http_response_code(401);
+					$response = new response(1,'Sem permissão.');
+					$response->flush();
+					exit(1);
+				}
+			});
+
+			$app->put('/projetos/:id/dadosFinanceiros',function($id) use ($app,$db,$token,$config){
+				// Lendo id do projeto
+				$id_projeto = $id;
+
+				// Lendo dados financeiros enviados
+				$dadosFinanceiros = json_decode($app->request->getBody());
+
+				// Definindo a consulta para saber da permissão do usuário em visualizar dados financeiros
+				$sql = 'SELECT b.valor
+						FROM gdoks_usuarios a
+						INNER JOIN gdoks_usuarios_x_opcoes_de_tela b ON a.id=b.id_usuario
+						WHERE a.token=?
+						  AND b.id_opcao=?
+						  AND b.valor=1;';
+
+				// Determinando permissões
+				$perm_alterarFormaDeCobranca = (sizeof($db->query($sql,'si',$token,ID_OPCAO_ALTERAR_FORMA_DE_COBRANCA)) > 0);
+				$perm_alterarValorDeProjeto  = (sizeof($db->query($sql,'si',$token,ID_OPCAO_ALTERAR_VALOR_DE_PROJETO)) > 0);
+				
+
+				 if(!$perm_alterarValorDeProjeto && !$perm_alterarFormaDeCobranca) {
+					http_response_code(401);
+					$response = new response(1,'Sem permissão.');
+					$response->flush();
+					exit(1);
+				} else {
+					if($perm_alterarFormaDeCobranca){
+						$sql = 'UPDATE gdoks_projetos SET forma_de_cobranca=? WHERE id=?';
+						$db->query($sql,'ii',$dadosFinanceiros->forma_de_cobranca->id,$id_projeto);
+					}
+
+					if($perm_alterarValorDeProjeto){
+						$sql = 'UPDATE gdoks_projetos SET valor=? WHERE id=?';
+						$db->query($sql,'di',$dadosFinanceiros->valor,$id_projeto);
+					}
+
+					$response = new response(0,'ok');
+					$response->flush();
+				}
+			});
+
 			$app->put('/projetos/:id',function($id) use ($app,$db,$token){
 				
 				// Lendo dados

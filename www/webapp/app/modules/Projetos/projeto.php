@@ -1,3 +1,25 @@
+<?php 
+	// Incluindo classe "Tela" para carregar as opções da tela Documentos
+	include('GDoks/Tela.php');
+
+	// Levantando dados do usuário a partir do cookie
+	$user = json_decode($_COOKIE['user']);
+
+	// Incluindo constantes
+	include_once('constantes.php');
+	include_once('db.php');
+
+	// Carregando dbkey
+	include_once(CLIENT_DATA_PATH.$user->empresa.'/dbkey.php');
+
+	// Criando conexão com base de dados
+	$db = new DB($dbkey);
+	unset($dbkey);
+
+	$tela = Tela::CreateById(1,$user->id, $db);
+	$permissoes = $tela->getOpcoes();
+
+ ?>
 <div class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
 	<md-tabs md-dynamic-height md-border-bottom>
 		<md-tab label="Dados">
@@ -219,7 +241,7 @@
 		</md-tab>
 
 		<md-tab label="Documentos" ng-disabled="projeto.id==0">
-			<md-content id="addprojeto_documentos_container" class="md-padding" ng-controller="ProjetosDocumentosController" id="">
+			<md-content id="addprojeto_documentos_container" class="md-padding" ng-controller="ProjetosDocumentosController">
 				<h1 class="md-display-2">Documentos</h1>
 				<div layout="row" layout-align="space-between center">
 					<form id="form_import" name="form_import">
@@ -354,6 +376,47 @@
 				</table>
 			</md-content>
 		</md-tab>
+		
+		<?php if(
+			$permissoes['AlterarFCProjeto'] ||
+			$permissoes['VerFCProjeto'] ||
+			$permissoes['AlterarValorProjeto'] ||
+			$permissoes['VerValorProjeto']): ?>
+			<md-tab label="Financeiro" ng-disabled="projeto.id==0">
+				<md-content id="addprojeto_financeiro_container" class="md-padding" ng-controller="ProjetosFinanceiroController">
+					<h1 class="md-display-2">Financeiro</h1>
+					<form name="form_projFin" id="form_projFin" layout="column">
+						<?php if($permissoes['VerFCProjeto']): ?>
+							<md-input-container>
+								<label>Forma de Cobrança</label>
+								<md-select ng-model="dadosFinanceiros.forma_de_cobranca" ng-disabled="<?php echo($permissoes['AlterarFCProjeto']?'false':'true'); ?>">
+								  <md-option ng-value="opt" ng-repeat="opt in opcoesDeFormaDeCobranca">{{ opt.nome }}</md-option>
+								</md-select>
+							</md-input-container>
+						<?php endif; ?>
+
+						<?php if($permissoes['VerValorProjeto']): ?>
+							<md-input-container ng-if="dadosFinanceiros.forma_de_cobranca.id == opcoesDeFormaDeCobranca[0].id">
+								<label>Valor do Projeto (R$)</label>
+								<input
+									type="number"
+									step="0.01"
+									ng-model="dadosFinanceiros.valor"
+									min="0"
+									max="1000000000000"
+									ng-max="1000000000000"
+									ng-min="0"
+									ng-disabled="<?php echo($permissoes['AlterarValorProjeto']?'false':'true'); ?>">
+							</md-input-container>
+						<?php endif; ?>
+					</form>
+					<div class="controles" layout="row" layout-align="end center">
+						<md-button class="md-raised md-accent" aria-label="Cancelar alterações">Cancelar</md-button>
+						<md-button ng-click="salvar()" class="md-raised md-primary" ng-disabled="form_projFin.$pristine" aria-label="Salvar alterações">Salvar Alterações Financeiras do Projeto</md-button>
+					</div>
+				</md-content>
+			</md-tab>
+		<?php endif; ?>
 
 	</md-tabs>
 </div>
