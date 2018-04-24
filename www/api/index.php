@@ -1550,14 +1550,26 @@
 				// Determinando permissões
 				$perm_alterarFormaDeCobranca = (sizeof($db->query($sql,'si',$token,ID_OPCAO_ALTERAR_FORMA_DE_COBRANCA)) > 0);
 				$perm_alterarValorDeProjeto  = (sizeof($db->query($sql,'si',$token,ID_OPCAO_ALTERAR_VALOR_DE_PROJETO)) > 0);
+				
 
-				if(){
-
-				} else {
+				 if(!$perm_alterarValorDeProjeto && !$perm_alterarFormaDeCobranca) {
 					http_response_code(401);
 					$response = new response(1,'Sem permissão.');
 					$response->flush();
 					exit(1);
+				} else {
+					if($perm_alterarFormaDeCobranca){
+						$sql = 'UPDATE gdoks_projetos SET forma_de_cobranca=? WHERE id=?';
+						$db->query($sql,'ii',$dadosFinanceiros->forma_de_cobranca->id,$id_projeto);
+					}
+
+					if($perm_alterarValorDeProjeto){
+						$sql = 'UPDATE gdoks_projetos SET valor=? WHERE id=?';
+						$db->query($sql,'di',$dadosFinanceiros->valor,$id_projeto);
+					}
+
+					$response = new response(0,'ok');
+					$response->flush();
 				}
 			});
 

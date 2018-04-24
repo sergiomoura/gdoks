@@ -50,7 +50,13 @@ function ProjetosFinanceiroController($scope,GDoksFactory,$mdToast,$routeParams)
 	$scope.salvar = function(){
 		GDoksFactory.salvaDadosFinanceirosDoProjeto(id_projeto,$scope.dadosFinanceiros)
 		.success(function(response){
-			console.log(response);
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Dados financeiros alterados com sucesso')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
 		})
 		.error(function(error){
 			// Retornando Toast para o usuário
