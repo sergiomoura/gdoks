@@ -1559,14 +1559,20 @@
 					$response->flush();
 					exit(1);
 				} else {
+					// Levantando o id do usuário a partir do token
+					$sql = 'SELECT id FROM gdoks_usuarios WHERE token=?';
+					$idu = $db->query($sql,'s',$token)[0]['id'];
+
 					if($perm_alterarFormaDeCobranca){
 						$sql = 'UPDATE gdoks_projetos SET forma_de_cobranca=? WHERE id=?';
 						$db->query($sql,'ii',$dadosFinanceiros->forma_de_cobranca->id,$id_projeto);
+						registrarAcao($db,$idu,ACAO_ALTEROU_FP_DO_PROJETO,$id_projeto.','.$dadosFinanceiros->forma_de_cobranca->id);
 					}
 
 					if($perm_alterarValorDeProjeto){
 						$sql = 'UPDATE gdoks_projetos SET valor=? WHERE id=?';
 						$db->query($sql,'di',$dadosFinanceiros->valor,$id_projeto);
+						registrarAcao($db,$idu,ACAO_ALTEROU_VALOR_DO_PROJETO,$id_projeto.','.$dadosFinanceiros->valor);
 					}
 
 					$response = new response(0,'ok');
