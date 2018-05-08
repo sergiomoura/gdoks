@@ -21,18 +21,11 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>06/04/2018</td>
-					<td>
-						Melhorar a tela de atualização de documento.
-						<ul>
-							<li>Exibir Cliente</li>
-							<li>Incorporar histórico de progresso à barra "Progresso"</li>
-							<li>Mostrar arquivos que estão compondo o documento</li>
-						</ul>
-					</td>
+					<td>14/05/2018</td>
+					<td>Gerenciamento de Propostas</td>
 				</tr>
 				<tr>
-					<td>13/04/2018</td>
+					<td>21/05/2018</td>
 					<td>
 						Boletim de Medição de Projeto
 						<ul>
@@ -45,11 +38,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>20/04/2018</td>
-					<td>Gerenciamento de Propostas</td>
-				</tr>
-				<tr>
-					<td>27/10/2018</td>
+					<td>28/05/2018</td>
 					<td>Gerenciamento dos documentos de Fornecedor (GDF)</td>
 				</tr>
 			</tbody>
