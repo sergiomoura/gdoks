@@ -24999,6 +24999,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'VisaoGeral',
 								'Validacao',
 								'UA',
+								'Propostas',
 								'angularTrix',
 								]);
 
@@ -25011,6 +25012,13 @@ WebGDoks.config(
 			{
 				controller: 'SenhaController',
 				templateUrl: 'app/modules/Senha/senha.html'
+			}
+		)
+		.when(
+			'/propostas',
+			{
+				controller: 'PropostasController',
+				templateUrl: 'app/modules/Propostas/propostas.php'
 			}
 		)
 		.when(
@@ -26376,9 +26384,7 @@ WebGDoks.directive("progresso", function (){
 			$location.url('/documentos/'+idDoc);
 		}
 	}
-})();;angular.module('UA',[])
-.controller('UAController',function($scope){});
-;/*
+})();;/*
 Trix 0.11.2
 Copyright © 2018 Basecamp, LLC
 http://trix-editor.org/
@@ -26401,5 +26407,20 @@ http://trix-editor.org/
 }},toolbarElement:{get:function(){var t,e,n;return this.hasAttribute("toolbar")?null!=(e=this.ownerDocument)?e.getElementById(this.getAttribute("toolbar")):void 0:this.parentNode?(n="trix-toolbar-"+this.trixId,this.setAttribute("toolbar",n),t=r("trix-toolbar",{id:n}),this.parentNode.insertBefore(t,this),t):void 0}},inputElement:{get:function(){var t,e,n;return this.hasAttribute("input")?null!=(n=this.ownerDocument)?n.getElementById(this.getAttribute("input")):void 0:this.parentNode?(e="trix-input-"+this.trixId,this.setAttribute("input",e),t=r("input",{type:"hidden",id:e}),this.parentNode.insertBefore(t,this.nextElementSibling),t):void 0}},editor:{get:function(){var t;return null!=(t=this.editorController)?t.editor:void 0}},name:{get:function(){var t;return null!=(t=this.inputElement)?t.name:void 0}},value:{get:function(){var t;return null!=(t=this.inputElement)?t.value:void 0},set:function(t){var e;return this.defaultValue=t,null!=(e=this.editor)?e.loadHTML(this.defaultValue):void 0}},notify:function(t,e){return this.editorController?s("trix-"+t,{onElement:this,attributes:e}):void 0},setInputElementValue:function(t){var e;return null!=(e=this.inputElement)?e.value=t:void 0},createdCallback:function(){return p(this)},attachedCallback:function(){return this.hasAttribute("data-trix-internal")?void 0:(null==this.editorController&&(this.editorController=new e.EditorController({editorElement:this,html:this.defaultValue=this.value})),this.editorController.registerSelectionManager(),this.registerResetListener(),a(this),requestAnimationFrame(function(t){return function(){return t.notify("initialize")}}(this)))},detachedCallback:function(){var t;return null!=(t=this.editorController)&&t.unregisterSelectionManager(),this.unregisterResetListener()},registerResetListener:function(){return this.resetListener=this.resetBubbled.bind(this),window.addEventListener("reset",this.resetListener,!1)},unregisterResetListener:function(){return window.removeEventListener("reset",this.resetListener,!1)},resetBubbled:function(t){var e;return t.target!==(null!=(e=this.inputElement)?e.form:void 0)||t.defaultPrevented?void 0:this.reset()},reset:function(){return this.value=this.defaultValue}}}())}.call(this),function(){}.call(this)}).call(this),"object"==typeof module&&module.exports?module.exports=e:"function"==typeof define&&define.amd&&define(e)}.call(this);;/*! angular-trix - v1.0.0 - 2015-12-09
 * https://github.com/sachinchoolur/angular-trix
 * Copyright (c) 2015 Sachin; Licensed MIT */
-!function(){"use strict";angular.module("angularTrix",[]).directive("angularTrix",function(){return{restrict:"A",require:"ngModel",scope:{trixInitialize:"&",trixChange:"&",trixSelectionChange:"&",trixFocus:"&",trixBlur:"&",trixFileAccept:"&",trixAttachmentAdd:"&",trixAttachmentRemove:"&"},link:function(a,b,c,d){b.on("trix-initialize",function(){d.$modelValue&&b[0].editor.loadHTML(d.$modelValue)}),d.$render=function(){b[0].editor&&b[0].editor.loadHTML(d.$modelValue),b.on("trix-change",function(){d.$setViewValue(b.html())})};var e=function(d,e){b[0].addEventListener(d,function(f){"trix-file-accept"===d&&"true"===c.preventTrixFileAccept&&f.preventDefault(),a[e]({e:f,editor:b[0].editor})})};e("trix-initialize","trixInitialize"),e("trix-change","trixChange"),e("trix-selection-change","trixSelectionChange"),e("trix-focus","trixFocus"),e("trix-blur","trixBlur"),e("trix-file-accept","trixFileAccept"),e("trix-attachment-add","trixAttachmentAdd"),e("trix-attachment-remove","trixAttachmentRemove")}}})}();
+!function(){"use strict";angular.module("angularTrix",[]).directive("angularTrix",function(){return{restrict:"A",require:"ngModel",scope:{trixInitialize:"&",trixChange:"&",trixSelectionChange:"&",trixFocus:"&",trixBlur:"&",trixFileAccept:"&",trixAttachmentAdd:"&",trixAttachmentRemove:"&"},link:function(a,b,c,d){b.on("trix-initialize",function(){d.$modelValue&&b[0].editor.loadHTML(d.$modelValue)}),d.$render=function(){b[0].editor&&b[0].editor.loadHTML(d.$modelValue),b.on("trix-change",function(){d.$setViewValue(b.html())})};var e=function(d,e){b[0].addEventListener(d,function(f){"trix-file-accept"===d&&"true"===c.preventTrixFileAccept&&f.preventDefault(),a[e]({e:f,editor:b[0].editor})})};e("trix-initialize","trixInitialize"),e("trix-change","trixChange"),e("trix-selection-change","trixSelectionChange"),e("trix-focus","trixFocus"),e("trix-blur","trixBlur"),e("trix-file-accept","trixFileAccept"),e("trix-attachment-add","trixAttachmentAdd"),e("trix-attachment-remove","trixAttachmentRemove")}}})}();;angular.module('UA',[])
+.controller('UAController',function($scope){});
+;(function(){
+
+	// Definindo o módulo
+	var module = angular.module('Propostas',[]);
+
+	// Atribuindo controllers
+	module.controller('PropostasController', PropostasController);
+
+	// Definindo o controller
+	function PropostasController($scope){
+		
+	}
+
+})();
 //# sourceMappingURL=scripts.js.map

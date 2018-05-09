@@ -52,9 +52,10 @@ module.exports = function(grunt) {
 					'app/directives/directives.js',
 					'app/directives/clickoutside.directives.js',
 					'app/modules/Historico/HistoricoController.js',
-					'app/modules/UA/UAController.js',
 					'node_modules/trix/dist/trix.js',
 					'node_modules/angular-trix/dist/angular-trix.min.js',
+					'app/modules/UA/UAController.js',
+					'app/modules/Propostas/PropostasController.js',
 				],
 				dest: 'dist/scripts.js'
 			},
@@ -105,7 +106,6 @@ module.exports = function(grunt) {
 		}
 	});
 	grunt.registerTask('makeSassAndConcatCss',['sass','concat:css']);
-
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-sass');

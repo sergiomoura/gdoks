@@ -2176,6 +2176,56 @@ textarea {
   border-radius: 5px;
   text-align: center; }
 
+#propostas_container {
+  padding: 20px 0; }
+  #propostas_container .controles .search md-input-container {
+    width: 20%; }
+  #propostas_container .controles .search .selectContainer {
+    position: relative;
+    top: -12px; }
+  #propostas_container .controles .search > button {
+    position: relative;
+    top: -12px; }
+  #propostas_container .controles .novaPropBt {
+    position: relative;
+    top: 12px; }
+  #propostas_container table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 50px;
+    cursor: default; }
+    #propostas_container table tr {
+      outline: none; }
+    #propostas_container table td {
+      padding: 10px 0; }
+      #propostas_container table td:nth-child(1) {
+        width: 200px; }
+      #propostas_container table td:nth-child(2) {
+        text-align: center; }
+      #propostas_container table td:nth-child(3) {
+        text-align: center; }
+      #propostas_container table td:nth-child(5) {
+        text-align: center; }
+      #propostas_container table td:nth-child(6) {
+        text-align: center; }
+    #propostas_container table thead {
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 12px; }
+    #propostas_container table tbody {
+      cursor: pointer; }
+      #propostas_container table tbody tr:last-child td {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+      #propostas_container table tbody tr:hover td {
+        background-color: #FFF; }
+      #propostas_container table tbody td {
+        border-top: 1px solid rgba(0, 0, 0, 0.12); }
+        #propostas_container table tbody td span {
+          display: block;
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.54); }
+        #propostas_container table tbody td:nth-child(6) {
+          padding-top: 20px; }
+
 #senha_container {
   padding: 20px; }
 

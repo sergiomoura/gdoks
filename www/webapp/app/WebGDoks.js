@@ -31,6 +31,7 @@ var WebGDoks = angular.module('WebGDoks',
 								'VisaoGeral',
 								'Validacao',
 								'UA',
+								'Propostas',
 								'angularTrix',
 								]);
 
@@ -43,6 +44,13 @@ WebGDoks.config(
 			{
 				controller: 'SenhaController',
 				templateUrl: 'app/modules/Senha/senha.html'
+			}
+		)
+		.when(
+			'/propostas',
+			{
+				controller: 'PropostasController',
+				templateUrl: 'app/modules/Propostas/propostas.php'
 			}
 		)
 		.when(
