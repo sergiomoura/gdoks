@@ -54,6 +54,13 @@ WebGDoks.config(
 			}
 		)
 		.when(
+			'/propostas/:id',
+			{
+				controller: 'PropostaController',
+				templateUrl: 'app/modules/Propostas/proposta.php'
+			}
+		)
+		.when(
 			'/visaogeral',
 			{
 				controller: 'VisaoGeralController',

@@ -1,0 +1,3 @@
+<pre>
+{{proposta|json}}
+</pre>

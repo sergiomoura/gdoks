@@ -17,7 +17,8 @@
 			<md-input-container class="selectContainer">
 				<label>Cliente</label>
 				<md-select ng-model="busca.cliente">
-					<md-option ng-value="opt" ng-repeat="opt in options">{{ opt }}</md-option>
+					<md-option ng-value="null">Qualquer cliente</md-option>
+					<md-option ng-value="c" ng-repeat="c in clientes">{{ c.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-button class="md-raised md-primary" aria-label="Buscar proposta">
@@ -36,82 +37,18 @@
 				<td>Cliente</td>
 				<td>Criação</td>
 				<td>Emissão</td>
+				<td>Aprovação</td>
 				<td>Versão</td>
-				<td></td>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
-			</tr>
-			<tr>
-				<td>a</td>
-				<td>b</td>
-				<td>c</td>
-				<td>d</td>
-				<td>e</td>
-				<td> - - - -</td>
+			<tr ng-repeat="p in propostas" ng-click="goToProposta(p.id)">
+				<td>{{p.codigo}}</td>
+				<td>{{p.cliente.nome}}</td>
+				<td>{{p.criacao|date:'dd/MM/yyyy'}}</td>
+				<td>{{p.emissao|date:'dd/MM/yyyy'}}</td>
+				<td>{{p.aprovacao|date:'dd/MM/yyyy'}}</td>
+				<td>{{p.serial}}</td>
 			</tr>
 		</tbody>
 	</table>

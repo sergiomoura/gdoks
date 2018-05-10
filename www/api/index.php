@@ -5778,6 +5778,64 @@
 
 			});
 		// FIM DE TODAS PARA CONFIGURAÇÕES
+
+		// ROTAS PARA PROPOSTAS
+			$app->get('/propostas/ultimas',function() use ($app,$db,$token,$config){
+
+				// Levantando ultimas propostas
+				$sql = 'SELECT a.id,
+							   a.codigo,
+							   a.id_cliente,
+							   b.serial,
+						       b.criacao,
+							   b.emissao,
+						       b.aprovacao	   
+						FROM gdoks_propostas a
+						INNER JOIN
+						  (SELECT id_proposta,
+								  max(id) AS max_id
+						   FROM gdoks_versoes_de_propostas
+						   GROUP BY id_proposta) x ON a.id=x.id_proposta
+						INNER JOIN gdoks_versoes_de_propostas b ON b.id=x.max_id LIMIT 0,10';
+				$rs = array_map(function($a){return (object)$a;}, $db->query($sql));
+
+				// Preparando a resposta
+				$response = new response(0,'ok');
+				$response->ultimasPropostas = $rs;
+								
+				// Enviando o response para o cliente
+				$response->flush();
+			});
+			
+			$app->get('/propostas/:id',function($id_proposta) use ($app,$db,$token,$config){
+
+				// Levantando ultimas propostas
+				$sql = 'SELECT id,codigo,id_cliente FROM gdoks_propostas WHERE id=?';
+				$rs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_proposta));
+
+				// Verificando existência da proposta
+				if(sizeof($rs) == 0){
+					http_response_code(404);
+					$response = new response(1,'Proposta inexistente');
+					$response->flush();
+					exit(1);
+				} else {
+					$proposta = $rs[0];
+				}
+
+				// Levantando versões da proposta
+				$sql = 'SELECT id,serial,criacao,emissao,aprovacao FROM gdoks_versoes_de_propostas WHERE id_proposta=?';
+				$proposta->versoes =  $db->query($sql,'i',$id_proposta);
+
+				// Preparando a resposta
+				$response = new response(0,'ok');
+				$response->proposta = $proposta;
+								
+				// Enviando o response para o cliente
+				$response->flush();
+			});
+
+		// FIM DE ROTAS PARA PROPOSTAS
 	});
 
 	// running the app

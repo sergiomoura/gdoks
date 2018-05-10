@@ -1194,13 +1194,18 @@
       #propostas_container table td:nth-child(1) {
         width: 200px; }
       #propostas_container table td:nth-child(2) {
-        text-align: center; }
+        text-align: left; }
       #propostas_container table td:nth-child(3) {
         text-align: center; }
+      #propostas_container table td:nth-child(4) {
+        text-align: center;
+        width: 100px; }
       #propostas_container table td:nth-child(5) {
-        text-align: center; }
+        text-align: center;
+        width: 100px; }
       #propostas_container table td:nth-child(6) {
-        text-align: center; }
+        text-align: center;
+        width: 100px; }
     #propostas_container table thead {
       color: rgba(0, 0, 0, 0.54);
       font-size: 12px; }

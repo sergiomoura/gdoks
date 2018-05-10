@@ -584,6 +584,14 @@ WebGDoks.factory('GDoksFactory',
 			GDoksFactory.salvaDadosFinanceirosDoProjeto = function(idProjeto,dadosFinanceiros){
 				return $http.put(API_ROOT+'/projetos/'+idProjeto+'/dadosFinanceiros',dadosFinanceiros,buildHeaders());
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getUltimasPropostas = function(id){
+				return $http.get(API_ROOT+'/propostas/ultimas',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getProposta = function(id_proposta){
+				return $http.get(API_ROOT+'/propostas/'+id_proposta,buildHeaders());	
+			}
 			return GDoksFactory;
 		}
 	]
