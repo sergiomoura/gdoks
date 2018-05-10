@@ -39,6 +39,8 @@
 
 				// retornando instancia
 				return $instance;
+			} else {
+				throw new Exception("Usuário não tem acesso a tela", 1);
 			}
 		}
 
