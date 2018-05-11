@@ -2176,6 +2176,50 @@ textarea {
   border-radius: 5px;
   text-align: center; }
 
+#proposta_container .controles .search md-input-container {
+  width: 200px; }
+#proposta_container .controles .search .selectContainer {
+  position: relative;
+  top: -12px; }
+#proposta_container .controles button {
+  position: relative;
+  top: -16px; }
+#proposta_container table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 50px;
+  cursor: default; }
+  #proposta_container table tr {
+    outline: none; }
+  #proposta_container table td {
+    padding: 10px 0; }
+    #proposta_container table td:nth-child(1) {
+      text-align: center; }
+    #proposta_container table td:nth-child(2) {
+      text-align: center; }
+    #proposta_container table td:nth-child(3) {
+      text-align: center; }
+    #proposta_container table td:nth-child(4) {
+      text-align: center; }
+    #proposta_container table td:nth-child(5) {
+      text-align: right;
+      width: 250px; }
+  #proposta_container table thead {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px; }
+  #proposta_container table tbody tr:last-child td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  #proposta_container table tbody tr:hover td {
+    background-color: #FFF; }
+  #proposta_container table tbody td {
+    border-top: 1px solid rgba(0, 0, 0, 0.12); }
+    #proposta_container table tbody td span {
+      display: block;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.54); }
+    #proposta_container table tbody td:nth-child(6) {
+      padding-top: 20px; }
+
 #propostas_container {
   padding: 20px 0; }
   #propostas_container .controles .search md-input-container {
