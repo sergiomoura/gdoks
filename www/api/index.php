@@ -5835,6 +5835,233 @@
 				$response->flush();
 			});
 
+			$app->get('/propostas/:id_proposta/versoes/:serial_versao',function($id_proposta,$serial_versao) use ($app,$db,$token,$config,$empresa){
+
+				// Levantando informações do usuário
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				// Testando se o usuário está ok
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Token expirou ou usuário inválido');
+					$response->flush();
+					exit(1);
+				}
+				$id_usuario = $rs[0]['id'];
+
+				// Carregando informações da versão da proposta
+				$sql = 'SELECT arquivo,nome_cliente from gdoks_versoes_de_propostas WHERE serial=? AND id_proposta=?';
+				$rs = $db->query($sql,'ii',$serial_versao,$id_proposta);
+
+				// Verificando se versão existe
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Versão de proposta inexistente.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Lendo dados levantados da base
+				$nome_cliente = $rs[0]['nome_cliente'];
+				$arquivo = $rs[0]['arquivo'];
+
+				// Definindo arquivo a enviar
+				$file = CLIENT_DATA_PATH.$empresa.'/uploads/propostas/'.$arquivo;
+
+				// Verificando a existência do arquivo
+				if(!file_exists($file)) {
+					http_response_code(404);
+					$response = new response(1,'Arquivo não encontrado no servidor: '.$file);
+					$response->flush();
+					exit(1);
+				}
+
+				//header("Content-Type: application/zip");
+				header('Content-Disposition: attachment; filename='.$nome_cliente);
+				header("Content-Length: " . filesize(realpath($file))); 
+				header("Content-Transfer-Encoding: binary");
+				readfile($file);
+				die();
+			});
+
+			$app->post('/propostas',function() use ($app,$db,$token,$config){
+				
+				// Lendo conteúdo do COOKIE user
+				$user = json_decode($_COOKIE['user']);
+
+				// Verificando se o json foi decodificado
+				if(JSON_ERROR_NONE != json_last_error()){
+					http_response_code(400);
+					$response = new response(1,'Bad Request');
+					$response->flush();
+					exit(1);
+				}
+
+				// Validando usuário
+				$sql = 'SELECT count(*) as n FROM gdoks_usuarios WHERE id=? AND token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'is',$user->id,$user->token);
+				if(sizeof($rs) == 0){
+					http_response_code(403);
+					$response = new response(1,'Acesso não autorizado');
+					$response->flush();
+					exit(1);
+				}
+
+				// Verificando se houve algum erro no upload
+				$erro_n = $_FILES['profiles']['error'][0]['file'];
+				if(UPLOAD_ERR_OK != $erro_n){
+					$erro_msg = erroDeUpload($erro_n);
+					http_response_code(401);
+					$response = new response(1,$erro_msg);
+					$response->flush();
+					exit(1);
+				}
+
+				// Definindo nome do arquivo no servidor
+				$nomeNoServidor = uniqid('ppsta_');
+				$nomeNoCliente = $_FILES['profiles']['name'][0]['file'];
+				$nomeTemporario = $_FILES['profiles']['tmp_name'][0]['file'];
+
+				// Criando pasta de propostas caso ela não exista
+				$pastaPropostas = CLIENT_DATA_PATH.'/'.$user->empresa.'/uploads/propostas';
+				if(!is_dir($pastaPropostas)){
+					mkdir($pastaPropostas);
+				}
+
+				// Salvando o arquivo na pasta de uploads
+				$ok = move_uploaded_file($nomeTemporario, $pastaPropostas.'/'.$nomeNoServidor);
+				if(!$ok){
+					http_response_code(401);
+					$response = new response(1,'Impossível salvar arquivo no servidor.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Lendo dados do POST
+				$codigo = $_POST['profiles'][0]['codigo'];
+				$id_cliente = $_POST['profiles'][0]['id_cliente'];
+				$id_proposta = $_POST['profiles'][0]['id_proposta'];
+				$proximoSerial = 0;
+
+				// Verificando se é uma nova proposta
+				if($id_proposta === '0'){
+					// Nova proposta: INSERINDO
+					$sql = 'INSERT INTO gdoks_propostas (id_cliente,codigo) VALUES (?,?)';
+					try {
+						$db->query($sql,'is',$id_cliente,$codigo);
+					} catch (Exception $e) {
+						// Não conseguiu inserir a nova proposta: Apagando arquivo
+						unlink($pastaPropostas.'/'.$nomeNoServidor);
+						http_response_code(401);
+						$response = new response(1,'Código da proposta já existe.');
+						$response->flush();
+						exit(1);
+					}
+					$id_proposta = $db->insert_id;
+					$proximoSerial = 1;
+				} else 
+				/**/{
+					// Verificando se a proposta realmente existe
+					$sql = 'SELECT id FROM gdoks_propostas WHERE id=? AND codigo=?';
+					$rs = $db->query($sql,'is',$id_proposta,$codigo);
+					if(sizeof($rs)!=1){
+						http_response_code(401);
+						$response = new response(1,'Proposta a ser alterada não existe!');
+						$response->flush();
+						exit(1);
+					} else {
+						$sql = 'SELECT ifnull(max(serial),0)+1 as proximoSerial  FROM gdoks_versoes_de_propostas WHERE id_proposta=?';
+						$proximoSerial = $db->query($sql,'i',$id_proposta)[0]['proximoSerial'];
+					}
+				}
+
+				// Salvando informações versao de proposta
+				$sql = 'INSERT INTO gdoks_versoes_de_propostas (serial,id_proposta,criacao,arquivo,nome_cliente) VALUES (?,?,NOW(),?,?)';
+				$db->query($sql,'iiss',$proximoSerial, $id_proposta,$nomeNoServidor,$nomeNoCliente);
+
+				// Retonando para o usuário
+				$response = new response(0,'ok');
+				$response->id_proposta = $id_proposta;
+				$response->id_versao = $db->insert_id;
+				$response->serial = $proximoSerial;
+				$response->criacao = date('Y-m-d\TH:i:s');
+				$response->flush();
+			});
+
+			$app->delete('/propostas/:id_proposta/versoes/:serial_versao',function($id_proposta,$serial_versao) use ($app,$db,$token,$config,$empresa){
+
+				// Levantando informações do usuário
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				// Testando se o usuário está ok
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Token expirou ou usuário inválido');
+					$response->flush();
+					exit(1);
+				}
+				$id_usuario = $rs[0]['id'];
+
+				// Determinando o nome do arquivo da versão
+				$sql = 'SELECT arquivo FROM gdoks_versoes_de_propostas WHERE serial=? and id_proposta=?';
+				$arquivo = $db->query($sql,'ii',$serial_versao,$id_proposta)[0]['arquivo'];
+				unlink(CLIENT_DATA_PATH.'/'.$empresa.'/uploads/propostas/'.$arquivo);
+
+				// Removendo versão
+				$sql = 'DELETE from gdoks_versoes_de_propostas WHERE serial=? and id_proposta=?';
+				try {
+					$db->query($sql,'ii',$serial_versao,$id_proposta);
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,'Falha ao remover versão: '.$e->getMessage());
+					$response->flush();
+					exit(1);	
+				}
+
+				// Registrando ação no log
+				registrarAcao($db,$id_usuario,ACAO_REMOVEU_VERSAO,$serial_versao.','.$id_proposta);
+
+				// Retornando ao usuário
+				$response = new response(0,'ok');
+				$response->flush();
+			});
+
+			$app->delete('/propostas/:id_proposta',function($id_proposta) use ($app,$db,$token,$config){
+
+				// Levantando informações do usuário
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? and validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+
+				// Testando se o usuário está ok
+				if(sizeof($rs) == 0){
+					http_response_code(401);
+					$response = new response(1,'Token expirou ou usuário inválido');
+					$response->flush();
+					exit(1);
+				}
+				$id_usuario = $rs[0]['id'];
+
+				// Removendo versão
+				$sql = 'DELETE from gdoks_propostas WHERE id=?';
+				try {
+					$db->query($sql,'i',$id_proposta);
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,'Falha ao remover proposta: '.$e->getMessage());
+					$response->flush();
+					exit(1);	
+				}
+
+				// Registrando ação no log
+				registrarAcao($db,$id_usuario,ACAO_REMOVEU_PROPOSTA,$id_proposta);
+
+				// Retornando ao usuário
+				$response = new response(0,'ok');
+				$response->flush();
+			});
+
 		// FIM DE ROTAS PARA PROPOSTAS
 	});
 

@@ -27,7 +27,6 @@
 
 ?>
 <div class="bloco_central_80" id="proposta_container">
-	{{proposta|json}}	
 	<div layout="row" layout-align="space-between center" class="controles">
 		<div class="search">
 			<md-input-container>
@@ -49,10 +48,19 @@
 					ngf-model-invalid="errorFiles"
 					ng-model="proposta.arquivo"
 					aria-label="Selecione arquivos">Selecione Arquivo (Máximo <?php echo(ini_get('upload_max_filesize').'B)'); ?></md-button>
-			<md-button ng-if="proposta.id==0" class="md-raised md-primary" aria-label="Salvar proposta"><md-icon class="material-icons step">save</md-icon>Salvar</md-button>
-			<md-button ng-if="proposta.id!=0 && proposta.versoes.length==0" class="md-raised md-accent" aria-label="Remover proposta"><md-icon class="material-icons step">delete</md-icon>Apagar proposta</md-button>
+			<md-button ng-click="uploadVersaoDeProposta()" ng-disabled="proposta.cliente == null || proposta.arquivo == null" ng-if="proposta.id==0" class="md-raised md-primary" aria-label="Salvar proposta"><md-icon class="material-icons step">save</md-icon>Salvar</md-button>
+			<md-button ng-click="deleteProposta()" ng-if="proposta.id!=0 && proposta.versoes.length==0" class="md-raised md-accent" aria-label="Remover proposta"><md-icon class="material-icons step">delete</md-icon>Apagar proposta</md-button>
 		</div>
-		<md-button ng-disabled="proposta.id==0" class="md-raised md-primary" aria-label="Nova versão"><md-icon class="material-icons step">add</md-icon>Nova Versão</md-button>
+		<md-button
+			ngf-multiple="false"
+			ngf-select
+			ngf-change="uploadVersaoDeProposta()"
+			ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
+			ngf-model-invalid="errorFiles"
+			ng-model="proposta.arquivo"
+			ng-disabled="proposta.id==0"
+			class="md-raised md-primary"
+			aria-label="Nova versão"><md-icon class="material-icons step">add</md-icon>Nova Versão</md-button>
 	</div>
 
     <table ng-if="proposta.versoes.length > 0">
@@ -72,7 +80,7 @@
     			<td>{{v.emissao | date:'dd/MM/yyyy'}}</td>
     			<td>{{v.aprovacao | date:'dd/MM/yyyy'}}</td>
     			<td>
-    				<md-button ng-if="$last && (v.emissao==null)" class="md-icon-button" ng-disabled="false" aria-label="Emitir versão para cliente">
+    				<md-button ng-click="deleteVersao(v.serial)" ng-if="$last && (v.emissao==null)" class="md-icon-button" ng-disabled="false" aria-label="Emitir versão para cliente">
     					<md-icon class="material-icons step">delete</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Remover versão de proposta
@@ -86,7 +94,7 @@
     					</md-tooltip>
     				</md-button>
     				
-    				<md-button class="md-icon-button" ng-disabled="false" aria-label="Download de arquivo">
+    				<md-button ng-click="downloadVersaoDeProposta(v.serial)" class="md-icon-button" ng-disabled="false" aria-label="Download de arquivo">
     					<md-icon class="material-icons step">file_download</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Baixar arquivo

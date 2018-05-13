@@ -26130,6 +26130,33 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			GDoksFactory.getProposta = function(id_proposta){
 				return $http.get(API_ROOT+'/propostas/'+id_proposta,buildHeaders());	
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.downloadVersaoDeProposta = function(id_proposta,serial_versao){
+				return $http.get(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao, buildHeaders());
+				// Criando um formulário para enviar a requisição pelo arquivo
+				var form = document.createElement("form");
+				form.setAttribute('action',API_ROOT + '/propostas/' + id_proposta + '/versoes/'+serial_versao);
+				form.setAttribute('method','GET');
+				form.setAttribute('style','display:none');
+				form.setAttribute('target','_blank');
+
+				// adicionando form a dom
+				document.body.appendChild(form);
+
+				// submetendo o form
+				form.submit();
+
+				// removendo o form da dom
+				form.parentNode.removeChild(form);
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.deleteVersao = function(id_proposta,serial_versao){
+				return $http.delete(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao, buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.deleteProposta = function(id_proposta){
+				return $http.delete(API_ROOT+'/propostas/'+id_proposta, buildHeaders());
+			}
 			return GDoksFactory;
 		}
 	]
@@ -26500,7 +26527,7 @@ http://trix-editor.org/
 		
 	}
 
-	function PropostaController($scope,GDoksFactory,$routeParams,$mdToast){
+	function PropostaController($scope,GDoksFactory,Upload,$cookies,$routeParams,$location,$mdToast){
 
 		// Lendo id da proposta do routParam
 		var id_proposta = $routeParams.id;
@@ -26557,6 +26584,123 @@ http://trix-editor.org/
 			});
 		}
 
+		$scope.uploadVersaoDeProposta = function(){
+			// Verificando se files está definido e se seu tamanho é maior que zero.
+			if ($scope.proposta.arquivo) {
+
+				// salvando o id do cliente direto na proposta
+				$scope.proposta.id_cliente = $scope.proposta.cliente.id;
+
+				// mostrando barra de progresso de upload
+				$scope.mostrarProgressoUpload = true;
+				
+				// Criando pacote a enviar
+				var packToSend = [
+					{
+						file: $scope.proposta.arquivo,
+						codigo: $scope.proposta.codigo,
+						id_cliente: $scope.proposta.cliente.id,
+						id_proposta: $scope.proposta.id
+					}
+				];
+
+				// Enviando pacote
+				Upload.upload(
+					{
+	                	url: API_ROOT+'/propostas',
+	                	data: {profiles: packToSend},
+	                	headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
+	            	}
+	            ).then(
+	            	function(response){
+	            		if(response.status == 200){
+
+	            			// Escondendo o carregando
+	            			$scope.mostrarProgressoUpload = false;
+
+	            			// Alinhando a url da página caso seja uma nova proposta
+	            			if($scope.proposta.id == 0){
+	            				$location.path('/propostas/' + response.data.id_proposta).replace().reload(false);
+	            			}
+
+	            			// Atribuindo novos parâmetros para a proposta criada
+	            			$scope.proposta.id = response.data.id_proposta;
+
+	            			// Criando objeto "versao"
+	            			$scope.proposta.versoes.push({
+	            				aprovacao: null,
+	            				criacao:new Date(response.data.criacao),
+	            				emissao:null,
+	            				id: response.data.id_versao,
+	            				serial: response.data.serial
+	            			});
+	            		}
+	            	},
+	            	function(error){
+	            		// Imprimindo erro no console
+	            		console.warn(error);
+
+	            		// Retornando Toast para o usuário
+	            		$mdToast.show(
+	            			$mdToast.simple()
+	            			.textContent(error.data.msg)
+	            			.position('bottom left')
+	            			.hideDelay(5000)
+	            		);
+
+	            		// Esconde o carregando
+	            		$scope.mostrarProgressoUpload = false;
+	            	},
+	            	function (evt) {
+						$scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+					}
+	            )
+			}
+		}
+
+		$scope.deleteVersao = function(serial){
+			GDoksFactory.deleteVersao($scope.proposta.id,serial)
+			.success(function(response){
+				var v = $scope.proposta.versoes;
+				v.splice(v.findIndex(function(a){return a.serial==this},serial),1);
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Não foi possível remover versão: '+error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			})
+		}
+
+		$scope.deleteProposta = function(){
+			GDoksFactory.deleteProposta($scope.proposta.id)
+			.success(function(response){
+				$location.url('/propostas');
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Não foi possível remover proposta: '+error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			})
+		}
+
+		$scope.downloadVersaoDeProposta = function(serial){
+			GDoksFactory.downloadVersaoDeProposta($scope.proposta.id,serial);
+		}
+
 		function parseProposta(){
 			if($scope.proposta != null && $scope.clientes!= null){
 				// Atribuindo cliente
@@ -26571,7 +26715,7 @@ http://trix-editor.org/
 				for (var i = $scope.proposta.versoes.length - 1; i >= 0; i--) {
 					v = $scope.proposta.versoes[i];
 					v.criacao = new Date(v.criacao);
-					v.emissao = new Date(v.emissao);
+					v.emissao = (v.emissao == null ? null : new Date(v.emissao));
 					v.aprovacao = (v.aprovacao == null? null : new Date(v.aprovacao));
 				}
 			}
