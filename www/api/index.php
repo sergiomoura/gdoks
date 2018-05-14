@@ -5851,7 +5851,7 @@
 				$id_usuario = $rs[0]['id'];
 
 				// Carregando informações da versão da proposta
-				$sql = 'SELECT arquivo,nome_cliente from gdoks_versoes_de_propostas WHERE serial=? AND id_proposta=?';
+				$sql = 'SELECT arquivo,nome_cliente,contentType from gdoks_versoes_de_propostas WHERE serial=? AND id_proposta=?';
 				$rs = $db->query($sql,'ii',$serial_versao,$id_proposta);
 
 				// Verificando se versão existe
@@ -5865,6 +5865,7 @@
 				// Lendo dados levantados da base
 				$nome_cliente = $rs[0]['nome_cliente'];
 				$arquivo = $rs[0]['arquivo'];
+				$contentType = $rs[0]['contentType'];
 
 				// Definindo arquivo a enviar
 				$file = CLIENT_DATA_PATH.$empresa.'/uploads/propostas/'.$arquivo;
@@ -5877,8 +5878,8 @@
 					exit(1);
 				}
 
-				//header("Content-Type: application/zip");
-				header('Content-Disposition: attachment; filename='.$nome_cliente);
+				header("Content-Type: ".$contentType);
+				header('Content-Disposition: attachment; filename="'.$nome_cliente.'"');
 				header("Content-Length: " . filesize(realpath($file))); 
 				header("Content-Transfer-Encoding: binary");
 				readfile($file);
@@ -5922,6 +5923,7 @@
 				$nomeNoServidor = uniqid('ppsta_');
 				$nomeNoCliente = $_FILES['profiles']['name'][0]['file'];
 				$nomeTemporario = $_FILES['profiles']['tmp_name'][0]['file'];
+				$contentType = $_FILES['profiles']['type'][0]['file'];
 
 				// Criando pasta de propostas caso ela não exista
 				$pastaPropostas = CLIENT_DATA_PATH.'/'.$user->empresa.'/uploads/propostas';
@@ -5977,8 +5979,8 @@
 				}
 
 				// Salvando informações versao de proposta
-				$sql = 'INSERT INTO gdoks_versoes_de_propostas (serial,id_proposta,criacao,arquivo,nome_cliente) VALUES (?,?,NOW(),?,?)';
-				$db->query($sql,'iiss',$proximoSerial, $id_proposta,$nomeNoServidor,$nomeNoCliente);
+				$sql = 'INSERT INTO gdoks_versoes_de_propostas (serial,id_proposta,criacao,arquivo,nome_cliente,contentType,aprovada) VALUES (?,?,NOW(),?,?,?,0)';
+				$db->query($sql,'iisss',$proximoSerial, $id_proposta,$nomeNoServidor,$nomeNoCliente,$contentType);
 
 				// Retonando para o usuário
 				$response = new response(0,'ok');
@@ -6061,7 +6063,6 @@
 				$response = new response(0,'ok');
 				$response->flush();
 			});
-
 		// FIM DE ROTAS PARA PROPOSTAS
 	});
 

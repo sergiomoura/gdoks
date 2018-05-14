@@ -594,7 +594,6 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.downloadVersaoDeProposta = function(id_proposta,serial_versao){
-				return $http.get(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao, buildHeaders());
 				// Criando um formulário para enviar a requisição pelo arquivo
 				var form = document.createElement("form");
 				form.setAttribute('action',API_ROOT + '/propostas/' + id_proposta + '/versoes/'+serial_versao);
