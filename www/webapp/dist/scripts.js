@@ -26153,6 +26153,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 				return $http.delete(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao, buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.aprovarVersao = function(id_proposta,serial_versao){
+				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/aprovar', buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.deleteProposta = function(id_proposta){
 				return $http.delete(API_ROOT+'/propostas/'+id_proposta, buildHeaders());
 			}
@@ -26523,10 +26527,9 @@ http://trix-editor.org/
 				}
 			}
 		}
-		
 	}
 
-	function PropostaController($scope,GDoksFactory,Upload,$cookies,$routeParams,$location,$mdToast){
+	function PropostaController($scope,GDoksFactory,Upload,$cookies,$routeParams,$location,$mdToast,$mdDialog){
 
 		// Lendo id da proposta do routParam
 		var id_proposta = $routeParams.id;
@@ -26698,6 +26701,52 @@ http://trix-editor.org/
 
 		$scope.downloadVersaoDeProposta = function(serial){
 			GDoksFactory.downloadVersaoDeProposta($scope.proposta.id,serial);
+		}
+
+		$scope.onAprovarVersaoClick = function(evt,serial){
+			var algumaVersaoAprovada = false;
+			for (var i = $scope.proposta.versoes.length - 1; i >= 0; i--) {
+				algumaVersaoAprovada = algumaVersaoAprovada || ($scope.proposta.versoes[i].aprovacao!=null);
+			}
+
+			if(algumaVersaoAprovada){
+				var confirm = $mdDialog.confirm()
+				.title('Marcar esta versão como aprovada?')
+				.textContent('Isso fará com que as outras versões sejam reprovadas.')
+				.ariaLabel('Marcar como aprovada')
+				.targetEvent(evt)
+				.ok('Sim')
+				.cancel('Não');
+				
+				$mdDialog.show(confirm)
+				.then(function() {
+					aprovarVersao(serial);
+				});
+			} else {
+				aprovarVersao(serial);
+			}
+		}
+
+		function aprovarVersao(serial){
+			GDoksFactory.aprovarVersao($scope.proposta.id,serial)
+			.success(function(response){
+				for (var i = $scope.proposta.versoes.length - 1; i >= 0; i--) {
+					$scope.proposta.versoes[i].aprovacao = null;
+				}
+				$scope.proposta.versoes.find(function(a){return a.serial == this},serial).aprovacao = new Date(response.aprovacao);
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Não foi possível carregar a proposta: '+error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			})
 		}
 
 		function parseProposta(){

@@ -101,7 +101,7 @@
     					</md-tooltip>
     				</md-button>
 
-    				<md-button class="md-icon-button" ng-disabled="false" aria-label="Aprovar">
+    				<md-button ng-click="onAprovarVersaoClick(evt,v.serial)" class="md-icon-button" ng-disabled="false" aria-label="Aprovar">
     					<md-icon class="material-icons step">thumb_up_alt</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Aprovar versão de proposta

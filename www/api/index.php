@@ -5824,7 +5824,7 @@
 				}
 
 				// Levantando versões da proposta
-				$sql = 'SELECT id,serial,criacao,emissao,aprovacao FROM gdoks_versoes_de_propostas WHERE id_proposta=?';
+				$sql = 'SELECT id,serial,criacao,emissao,aprovacao,nome_cliente FROM gdoks_versoes_de_propostas WHERE id_proposta=?';
 				$proposta->versoes =  $db->query($sql,'i',$id_proposta);
 
 				// Preparando a resposta
@@ -5884,6 +5884,38 @@
 				header("Content-Transfer-Encoding: binary");
 				readfile($file);
 				die();
+			});
+
+			$app->post('/propostas/:id_proposta/versoes/:serial_versao/aprovar',function($id_proposta,$serial_versao) use ($app,$db,$token,$config,$empresa){
+				// Recuperando id do usuário
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					http_response_code(403);
+					$response = new response(1,'Token expirado ou usuário inválido');
+					$response->flush();
+					exit(1);
+				}
+				$id_usuario = $rs[0]['id'];
+
+				// Desaprovando TODAS as propostas
+				$sql = 'UPDATE gdoks_versoes_de_propostas SET aprovacao=NULL WHERE id_proposta=?';
+				$db->query($sql,'i',$id_proposta);
+
+				// Aprovando a resposta em questão
+				$sql = 'UPDATE gdoks_versoes_de_propostas SET aprovacao=now() WHERE id_proposta=? and serial=?';
+				$db->query($sql,'ii',$id_proposta,$serial_versao);
+
+				// Registrando no LOG
+				registrarAcao($db,$id_usuario,ACAO_APROVOU_VERSAO_DE_PROPOSTA,$serial_versao.','.$id_proposta);
+
+				// Enviando resposta para o cliente
+				$response = new response(0,'ok');
+				$response->aprovacao = date('Y-m-d\TH:i:s');
+				$response->flush();
+			});
+
+			$app->post('/propostas/:id_proposta/versoes/:serial_versao/enviar',function($id_proposta,$serial_versao) use ($app,$db,$token,$config,$empresa){
 			});
 
 			$app->post('/propostas',function() use ($app,$db,$token,$config){
@@ -6023,7 +6055,7 @@
 				}
 
 				// Registrando ação no log
-				registrarAcao($db,$id_usuario,ACAO_REMOVEU_VERSAO,$serial_versao.','.$id_proposta);
+				registrarAcao($db,$id_usuario,ACAO_REMOVEU_VERSAO,$id_proposta.','.$serial_versao);
 
 				// Retornando ao usuário
 				$response = new response(0,'ok');
