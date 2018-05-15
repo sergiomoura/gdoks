@@ -71,6 +71,8 @@
 			<div><span>$grd_codigo</span>: Código da GRD</div>
 			<div><span>$grd_url</span>: URL da GRD</div>
 			<div><span>$grd_link(texto)</span>: Link para GRD</div>
+			<div><span>$proposta_codigo</span>: Código da proposta</div>
+			<div><span>$proposta_versao</span>: Versão da proposta</div>
 		</div>
 	</div>
 </div>

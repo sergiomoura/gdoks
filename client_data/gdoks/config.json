@@ -23,6 +23,24 @@
         "valor": "<div><!--block-->Atenciosamente,<br><br>$usuario_nome<br>$usuario_email<br>$empresa_nome</div>",
         "tipo": "html"
     },
+    "ASSUNTO_PADRAO_ENVIO_PROPOSTA": {
+        "label": "Assunto padrão no envio de proposta por e-mail",
+        "desc": "O assunto do e-mail que aparece quando se envia uma proposta. Esse assunto pode ser alterada no momento do envio.",
+        "valor": "$empresa_nome - Proposta $proposta_codigo-v$proposta_versao",
+        "tipo": "string[0,256]"
+    },
+    "MSG_PADRAO_ENVIO_PROPOSTA": {
+        "label": "Mensagem padrão no envio de proposta",
+        "desc": "A mensagem que aparece quando se envia uma proposta. A mensagem a ser enviada pode ser alterada no momento do envio.",
+        "valor": "<div><!--block-->Prezado cliente,<br><br>A proposta $proposta_codigo-v$proposta_versao segue em anexo.</div>",
+        "tipo": "html"
+    },
+    "ASSINATURA_ENVIO_PROPOSTA": {
+        "label": "Assinatura da mensagem no envio de uma proposta",
+        "desc": "Assinatura da mensagem no envio de uma proposta",
+        "valor": "<div><!--block-->Atenciosamente,<br><br>$usuario_nome<br>$usuario_email<br>$empresa_nome</div>",
+        "tipo": "html"
+    },
     "NOTIFICA_VALIDADOR_POR_EMAIL": {
         "label": "Notificar Validador por E-mail",
         "desc": "Envia um e-mail para os validadores de uma disciplina que tenha um documento seu alterado.",
@@ -40,5 +58,5 @@
         "desc": "Somente documentos concluídos podem ser emitidos (Adicionados a GRD)",
         "valor": true,
         "tipo": "bool"
-    }    
+    }
 }
