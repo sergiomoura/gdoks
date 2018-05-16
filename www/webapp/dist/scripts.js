@@ -26128,7 +26128,7 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProposta = function(id_proposta){
-				return $http.get(API_ROOT+'/propostas/'+id_proposta,buildHeaders());	
+				return $http.get(API_ROOT+'/propostas/'+id_proposta,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.downloadVersaoDeProposta = function(id_proposta,serial_versao){
@@ -26160,9 +26160,26 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 			GDoksFactory.deleteProposta = function(id_proposta){
 				return $http.delete(API_ROOT+'/propostas/'+id_proposta, buildHeaders());
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.mailProposta = function(id_proposta,serial_versao,mail){
 				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/enviar',mail,buildHeaders());
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.buscarProposta = function(busca){
+				// Criando string de busca "qstring"
+				var parametros = []
+				for (i in busca) {
+					if(busca[i] instanceof Date) {
+						parametros.push(i+'='+busca[i].toISOString());
+					} else {
+						parametros.push(i+'='+busca[i]);
+					}
+				}
+
+				// Fazendo requisição de busca
+				return $http.get(API_ROOT+'/propostas/q?'+parametros.join('&'),buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]
@@ -26476,7 +26493,7 @@ http://trix-editor.org/
 			codigo:'',
 			de:null,
 			ate:null,
-			cliente:null
+			id_cliente:null
 		}
 		// Carregando clientes da base de dados
 		GDoksFactory.getClientes()
@@ -26500,7 +26517,7 @@ http://trix-editor.org/
 		// Carregando propostas
 		GDoksFactory.getUltimasPropostas()
 		.success(function(response){
-			$scope.propostas = response.ultimasPropostas;
+			$scope.propostas = response.propostas;
 			parsePropostas();
 		})
 		.error(function(error){
@@ -26518,6 +26535,33 @@ http://trix-editor.org/
 			$location.url('propostas/'+id_proposta);
 		}
 
+		// Função executada ao clicar no botão Nova Proposta
+		$scope.onNovaPropostaClick = function(){
+			$location.url('propostas/0');
+		}
+
+		// Função executada ao clicar no botão buscar
+		$scope.onBuscarClick = function(){
+			buscar();
+		}
+
+		// Função de busca
+		function buscar(){
+			GDoksFactory.buscarProposta($scope.busca)
+			.success(function(response){
+				$scope.propostas = response.propostas;
+				parsePropostas();
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao buscar propostas: '+error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+		}
 
 		// Definindo função que repassa as propostas atribuindo-lhes o cliente
 		function parsePropostas(){
@@ -26678,7 +26722,7 @@ http://trix-editor.org/
 			}
 		}
 
-		$scope.onDeleteVersaoClick = function(){
+		$scope.onDeleteVersaoClick = function(evt,serial){
 			var confirm = $mdDialog.confirm()
 			.title('Tem certeza que deseja remover esta versão da proposta?')
 			.textContent('Esta ação não poderá ser desfeita.')

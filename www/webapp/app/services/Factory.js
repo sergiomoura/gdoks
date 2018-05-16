@@ -590,7 +590,7 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProposta = function(id_proposta){
-				return $http.get(API_ROOT+'/propostas/'+id_proposta,buildHeaders());	
+				return $http.get(API_ROOT+'/propostas/'+id_proposta,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.downloadVersaoDeProposta = function(id_proposta,serial_versao){
@@ -622,9 +622,26 @@ WebGDoks.factory('GDoksFactory',
 			GDoksFactory.deleteProposta = function(id_proposta){
 				return $http.delete(API_ROOT+'/propostas/'+id_proposta, buildHeaders());
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.mailProposta = function(id_proposta,serial_versao,mail){
 				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/enviar',mail,buildHeaders());
 			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.buscarProposta = function(busca){
+				// Criando string de busca "qstring"
+				var parametros = []
+				for (i in busca) {
+					if(busca[i] instanceof Date) {
+						parametros.push(i+'='+busca[i].toISOString());
+					} else {
+						parametros.push(i+'='+busca[i]);
+					}
+				}
+
+				// Fazendo requisição de busca
+				return $http.get(API_ROOT+'/propostas/q?'+parametros.join('&'),buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

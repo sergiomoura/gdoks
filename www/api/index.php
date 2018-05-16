@@ -5780,6 +5780,49 @@
 		// FIM DE TODAS PARA CONFIGURAÇÕES
 
 		// ROTAS PARA PROPOSTAS
+			$app->get('/propostas/q',function() use ($db){
+
+				// Interpretando os dados pedidos
+				$codigo = '%'.$_GET['codigo'].'%';
+				$de = ($_GET['de'] == 'null'?null:substr($_GET['de'], 0,10));
+				$ate = ($_GET['ate'] == 'null'?null:substr($_GET['ate'], 0,10));
+				$id_cliente = ($_GET['id_cliente'] == 'null') ? null : (1*$_GET['id_cliente']);
+
+				// Montando restrições
+				$restricao_cliente = is_null($id_cliente) ? 'TRUE' : 'id_cliente='.$id_cliente;
+				$restricao_de = is_null($de) ? "TRUE" : "(aprovacao>='$de' or criacao>='$de' or emissao>='$de')";
+				$restricao_ate = is_null($ate) ? "TRUE" : "(aprovacao<='$ate' or criacao<='$ate' or emissao<='$ate')";
+
+				// Montando sql
+				$sql = "SELECT
+						  c.id,
+						  c.codigo,
+						  c.id_cliente,
+						  a.aprovacao,
+						  a.criacao,
+						  a.emissao,
+						  a.serial
+						FROM gdoks_versoes_de_propostas a
+						INNER JOIN
+						  (SELECT id_proposta AS id_proposta,
+						          max(serial) AS serial
+						   FROM gdoks_versoes_de_propostas
+						   GROUP BY id_proposta) b ON a.id_proposta=b.id_proposta
+						AND a.serial=b.serial
+						INNER JOIN gdoks_propostas c ON a.id_proposta=c.id
+						WHERE
+						$restricao_cliente
+						AND $restricao_de
+						AND $restricao_ate
+						AND codigo like ? ORDER BY criacao desc";
+				$propostas = array_map(function($a){return (object)$a;}, $db->query($sql,'s',$codigo));
+
+				// Retornando resultados para o cliente
+				$response = new response(0,'ok');
+				$response->propostas = $propostas;
+				$response->flush();
+			});
+
 			$app->get('/propostas/ultimas',function() use ($app,$db,$token,$config){
 
 				// Levantando ultimas propostas
@@ -5801,7 +5844,7 @@
 
 				// Preparando a resposta
 				$response = new response(0,'ok');
-				$response->ultimasPropostas = $rs;
+				$response->propostas = $rs;
 								
 				// Enviando o response para o cliente
 				$response->flush();
@@ -5998,7 +6041,6 @@
 				$response = new response(0,'ok');
 				$response->emissao = date("Y-m-d\TH:i:s");
 				$response->flush();
-
 			});
 
 			$app->post('/propostas',function() use ($app,$db,$token,$config){

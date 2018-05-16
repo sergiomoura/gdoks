@@ -12,24 +12,25 @@
 			</md-input-container>
 			<md-input-container>
 				<label>Até</label>
-				<md-datepicker ng-model="busca.de" md-hide-icons="calendar" md-open-on-focus></md-datepicker>
+				<md-datepicker ng-model="busca.ate" md-hide-icons="calendar" md-open-on-focus></md-datepicker>
 			</md-input-container>
 			<md-input-container class="selectContainer">
 				<label>Cliente</label>
-				<md-select ng-model="busca.cliente">
+				<md-select ng-model="busca.id_cliente">
 					<md-option ng-value="null">Qualquer cliente</md-option>
-					<md-option ng-value="c" ng-repeat="c in clientes">{{ c.nome }}</md-option>
+					<md-option ng-value="c.id" ng-repeat="c in clientes">{{ c.nome }}</md-option>
 				</md-select>
 			</md-input-container>
-			<md-button class="md-raised md-primary" aria-label="Buscar proposta">
+			<md-button ng-click="onBuscarClick()" class="md-raised md-primary" aria-label="Buscar proposta">
 				Buscar
 			</md-button>
 		</div>
-		<md-button class="md-raised md-accent novaPropBt" aria-label="Criar nova proposta">
+		<md-button ng-click="onNovaPropostaClick()" class="md-raised md-accent novaPropBt" aria-label="Criar nova proposta">
 			<md-icon class="material-icons step">add</md-icon>
 			Nova Proposta
 		</md-button>
 	</div>
+	
 	<table>
 		<thead>
 			<tr>
