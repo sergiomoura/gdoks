@@ -384,6 +384,10 @@
 			})
 		}
 
+		$scope.onFazerProjetoClick = function(evt,serial){
+			$location.url('/projetos/0?p='+$scope.proposta.id+'&v='+serial);
+		}
+
 		function parseProposta(){
 			if($scope.proposta != null && $scope.clientes!= null){
 				// Atribuindo cliente
