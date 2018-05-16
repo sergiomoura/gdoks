@@ -86,27 +86,41 @@
     						Remover versão de proposta
     					</md-tooltip>
     				</md-button>
+                    
+                    <md-button ng-click="onFazerProjetoClick(evt,v.serial)" class="md-icon-button md-primary" ng-if="v.aprovacao!= null" aria-label="Fazer Projeto">
+                        <md-icon class="material-icons step">group_work</md-icon>
+                        <md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
+                            Criar projeto a partir desta proposta
+                        </md-tooltip>
+                    </md-button>
 
-    				<md-button ng-click="openDialogEnviarProposta($event,v)" class="md-icon-button" ng-disabled="false" aria-label="Emitir versão para cliente">
+    				<md-button ng-click="openDialogEnviarProposta($event,v)" class="md-icon-button md-primary" ng-disabled="false" aria-label="Emitir versão para cliente">
     					<md-icon class="material-icons step">send</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Emitir versão para cliente
     					</md-tooltip>
     				</md-button>
     				
-    				<md-button ng-click="downloadVersaoDeProposta(v.serial)" class="md-icon-button" ng-disabled="false" aria-label="Download de arquivo">
+    				<md-button ng-click="downloadVersaoDeProposta(v.serial)" class="md-icon-button md-primary" ng-disabled="false" aria-label="Download de arquivo">
     					<md-icon class="material-icons step">file_download</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Baixar arquivo
     					</md-tooltip>
     				</md-button>
 
-    				<md-button ng-click="onAprovarVersaoClick(evt,v.serial)" class="md-icon-button" ng-disabled="v.aprovacao != null" aria-label="Aprovar">
+    				<md-button ng-click="onAprovarVersaoClick($event,v.serial)" class="md-icon-button md-primary" ng-if="v.aprovacao == null" aria-label="Aprovar">
     					<md-icon class="material-icons step">thumb_up_alt</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Aprovar versão de proposta
     					</md-tooltip>
     				</md-button>
+                    
+                    <md-button ng-click="onReprovarVersaoClick($event,v.serial)" class="md-icon-button" ng-if="v.aprovacao != null" aria-label="Reprovar">
+                        <md-icon class="material-icons step">thumb_down_alt</md-icon>
+                        <md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
+                            Reprovar versão de proposta
+                        </md-tooltip>
+                    </md-button>
     			</td>
     		</tr>
     	</tbody>

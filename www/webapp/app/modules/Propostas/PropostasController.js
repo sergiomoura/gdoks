@@ -340,7 +340,41 @@
 				// Retornando Toast para o usuário
 				$mdToast.show(
 					$mdToast.simple()
-					.textContent('Não foi possível carregar a proposta: '+error.msg)
+					.textContent('Não foi possível aprovar a versão da proposta: '+error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+				// Imprimindo erro no console
+				console.warn(error);
+			})
+		}
+
+		$scope.onReprovarVersaoClick = function(evt,serial){
+			var confirm = $mdDialog.confirm()
+				.title('Marcar esta versão da proposta como reprovada?')
+				.textContent('Essa versão está marcada como APROVADA pelo cliente. Tem certeza que deseja mudar isso?.')
+				.ariaLabel('Marcar como reprovada')
+				.targetEvent(evt)
+				.ok('Sim, marque versão como reprovada')
+				.cancel('Não');
+				
+				$mdDialog.show(confirm)
+				.then(function() {
+					reprovarVersao(serial);
+				});
+		}
+
+		function reprovarVersao(serial){
+			GDoksFactory.reprovarVersao($scope.proposta.id,serial)
+			.success(function(response){
+				$scope.proposta.versoes.find(function(a){return a.serial == this},serial).aprovacao = null;
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Não foi possível reprovar a versão da proposta: '+error.msg)
 					.position('bottom left')
 					.hideDelay(5000)
 				);

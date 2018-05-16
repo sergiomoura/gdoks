@@ -619,6 +619,10 @@ WebGDoks.factory('GDoksFactory',
 				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/aprovar',null, buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.reprovarVersao = function(id_proposta,serial_versao){
+				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/reprovar',null, buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.deleteProposta = function(id_proposta){
 				return $http.delete(API_ROOT+'/propostas/'+id_proposta, buildHeaders());
 			}

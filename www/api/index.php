@@ -5958,6 +5958,30 @@
 				$response->flush();
 			});
 
+			$app->post('/propostas/:id_proposta/versoes/:serial_versao/reprovar',function($id_proposta,$serial_versao) use ($app,$db,$token,$config,$empresa){
+				// Recuperando id do usuário
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					http_response_code(403);
+					$response = new response(1,'Token expirado ou usuário inválido');
+					$response->flush();
+					exit(1);
+				}
+				$id_usuario = $rs[0]['id'];
+
+				// Reprovando a versão da proposta em questão
+				$sql = 'UPDATE gdoks_versoes_de_propostas SET aprovacao=NULL WHERE id_proposta=? and serial=?';
+				$db->query($sql,'ii',$id_proposta,$serial_versao);
+
+				// Registrando no LOG
+				registrarAcao($db,$id_usuario,ACAO_REPROVOU_VERSAO_DE_PROPOSTA,$serial_versao.','.$id_proposta);
+
+				// Enviando resposta para o cliente
+				$response = new response(0,'ok');
+				$response->flush();
+			});
+
 			$app->post('/propostas/:id_proposta/versoes/:serial_versao/enviar',function($id_proposta,$serial_versao) use ($app,$db,$token,$config,$empresa){
 				// Recuperando id do usuário
 				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>now()';
