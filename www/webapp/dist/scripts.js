@@ -24104,31 +24104,38 @@ function ProjetosFinanceiroController($scope,GDoksFactory,$mdToast,$routeParams)
 	]
 
 	// Carregando dados financeiros do projeto
-	GDoksFactory.getDadosFinanceirosDoProjeto(id_projeto)
-	.success(function(response){
-		$scope.dadosFinanceiros = {};
-		if(response.dadosFinanceiros.forma_de_cobranca != undefined){
-			var idFormaDeCobranca = response.dadosFinanceiros.forma_de_cobranca;
-			$scope.dadosFinanceiros.forma_de_cobranca = $scope.opcoesDeFormaDeCobranca.find(function(a){
-				return a.id == this;
-			},idFormaDeCobranca);
-		}
-		if(response.dadosFinanceiros.valor != undefined){
-			$scope.dadosFinanceiros.valor = 1*response.dadosFinanceiros.valor;
-		}
-	})
-	.error(function(error){
-		// Retornando Toast para o usuário
-		$mdToast.show(
-			$mdToast.simple()
-			.textContent('Não foi possível carregar informações financeiras do projeto: ' + error.msg)
-			.position('bottom left')
-			.hideDelay(5000)
-		);
+	if(id_projeto != 0){
+		GDoksFactory.getDadosFinanceirosDoProjeto(id_projeto)
+		.success(function(response){
+			$scope.dadosFinanceiros = {};
+			if(response.dadosFinanceiros.forma_de_cobranca != undefined){
+				var idFormaDeCobranca = response.dadosFinanceiros.forma_de_cobranca;
+				$scope.dadosFinanceiros.forma_de_cobranca = $scope.opcoesDeFormaDeCobranca.find(function(a){
+					return a.id == this;
+				},idFormaDeCobranca);
+			}
+			if(response.dadosFinanceiros.valor != undefined){
+				$scope.dadosFinanceiros.valor = 1*response.dadosFinanceiros.valor;
+			}
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Não foi possível carregar informações financeiras do projeto: ' + error.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
 
-		// Imprimindo no console o erro retornado
-		console.warn(error);
-	});
+			// Imprimindo no console o erro retornado
+			console.warn(error);
+		});
+	} else {
+		$scope.dadosFinanceiros = {
+			forma_de_cobranca:$scope.opcoesDeFormaDeCobranca[1],
+			valor:undefined
+		};
+	}
 
 	// Definindo função que salva dados financeiros
 	$scope.salvar = function(){
