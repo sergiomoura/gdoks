@@ -17,7 +17,7 @@
 			codigo:'',
 			de:null,
 			ate:null,
-			cliente:null
+			id_cliente:null
 		}
 		// Carregando clientes da base de dados
 		GDoksFactory.getClientes()
@@ -41,7 +41,7 @@
 		// Carregando propostas
 		GDoksFactory.getUltimasPropostas()
 		.success(function(response){
-			$scope.propostas = response.ultimasPropostas;
+			$scope.propostas = response.propostas;
 			parsePropostas();
 		})
 		.error(function(error){
@@ -59,6 +59,33 @@
 			$location.url('propostas/'+id_proposta);
 		}
 
+		// Função executada ao clicar no botão Nova Proposta
+		$scope.onNovaPropostaClick = function(){
+			$location.url('propostas/0');
+		}
+
+		// Função executada ao clicar no botão buscar
+		$scope.onBuscarClick = function(){
+			buscar();
+		}
+
+		// Função de busca
+		function buscar(){
+			GDoksFactory.buscarProposta($scope.busca)
+			.success(function(response){
+				$scope.propostas = response.propostas;
+				parsePropostas();
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao buscar propostas: '+error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+		}
 
 		// Definindo função que repassa as propostas atribuindo-lhes o cliente
 		function parsePropostas(){
@@ -219,7 +246,7 @@
 			}
 		}
 
-		$scope.onDeleteVersaoClick = function(){
+		$scope.onDeleteVersaoClick = function(evt,serial){
 			var confirm = $mdDialog.confirm()
 			.title('Tem certeza que deseja remover esta versão da proposta?')
 			.textContent('Esta ação não poderá ser desfeita.')

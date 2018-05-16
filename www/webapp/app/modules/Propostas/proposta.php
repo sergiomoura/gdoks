@@ -80,7 +80,7 @@
     			<td>{{v.emissao | date:'dd/MM/yyyy'}}<span>{{v.emissao | date:'à\'s\' hh:mm:ss'}}</span></td>
     			<td>{{v.aprovacao | date:'dd/MM/yyyy'}}<span>{{v.aprovacao | date:'à\'s\' hh:mm:ss'}}</span></td>
     			<td>
-    				<md-button ng-click="deleteVersao(v.serial)" ng-if="$last && (v.emissao==null)" class="md-icon-button" ng-disabled="v.aprovacao != null" aria-label="Emitir versão para cliente">
+    				<md-button ng-click="onDeleteVersaoClick($event,v.serial)" ng-if="$last && (v.emissao==null)" class="md-icon-button" ng-disabled="v.aprovacao != null" aria-label="Emitir versão para cliente">
     					<md-icon class="material-icons step">delete</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Remover versão de proposta
