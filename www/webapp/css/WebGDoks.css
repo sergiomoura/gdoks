@@ -1212,6 +1212,10 @@
       color: rgba(0, 0, 0, 0.54); }
     #proposta_container table tbody td:nth-child(6) {
       padding-top: 20px; }
+  #proposta_container table tbody .aprovada td {
+    font-style: italic; }
+  #proposta_container table tbody .aprovada td:first-child:before, #proposta_container table tbody .aprovada td:first-child:after {
+    content: " * "; }
 
 #propostas_container {
   padding: 20px 0; }

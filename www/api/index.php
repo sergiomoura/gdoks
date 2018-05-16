@@ -5916,6 +5916,89 @@
 			});
 
 			$app->post('/propostas/:id_proposta/versoes/:serial_versao/enviar',function($id_proposta,$serial_versao) use ($app,$db,$token,$config,$empresa){
+				// Recuperando id do usuário
+				$sql = 'SELECT id FROM gdoks_usuarios WHERE token=? AND validade_do_token>now()';
+				$rs = $db->query($sql,'s',$token);
+				if(sizeof($rs) == 0){
+					http_response_code(403);
+					$response = new response(1,'Token expirado ou usuário inválido');
+					$response->flush();
+					exit(1);
+				}
+				$id_usuario = $rs[0]['id'];
+
+				// Lendo mail
+				$mail = json_decode($app->request->getBody());
+				
+				// Levantando o arquivo a anexar
+				$sql = 'SELECT arquivo,contentType FROM gdoks_versoes_de_propostas WHERE id_proposta=? AND serial=?';
+				$rs = $db->query($sql,'ii',$id_proposta,$serial_versao);
+				$filename = $rs[0]['arquivo'];
+				$filepath = CLIENT_DATA_PATH.$empresa.'/uploads/propostas/'.$filename;
+				$contentType = $rs[0]['contentType'];
+
+				// Verificando existência do arquivo
+				if(!file_exists($filepath)){
+					http_response_code(401);
+					$response = new response(1,'Arquivo da proposta não está no servidor.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Definindo o From
+				$sgFrom = new SendGrid\Email(SENDGRID_DEFAULT_FROM_NAME,SENDGRID_DEFAULT_FROM);
+
+				// Definindo Tos
+				$sgTos = array_map(
+							function($d){
+								return new SendGrid\Email($d->nome,$d->email);
+							},
+							$mail->destinatarios
+						);
+
+				// Definindo o conteúdo da mensagem
+				$content = new SendGrid\Content("text/html", ($mail->msg==''?'-':$mail->msg));
+
+				// Definindo o email
+				$sgMail = new SendGrid\Mail($sgFrom, $mail->assunto, $sgTos[0], $content);
+
+				// Definindo anexos
+				$sgAttachment = new SendGrid\Attachment();
+				$sgAttachment->setFilename($filename);
+				$sgAttachment->setDisposition("attachment");
+				$sgAttachment->setType($contentType);
+				$sgAttachment->setContent(base64_encode(file_get_contents($filepath)));
+
+				// Anexando arquivo
+				$sgMail->addAttachment($sgAttachment);
+
+				// Enviando o email
+				$sendgrid = new \SendGrid(SENDGRID_KEY);
+				$envio = $sendgrid->client->mail()->send()->post($sgMail);
+
+				// Verificando o status do envio
+				if($envio->statusCode() != 202){
+					http_response_code(401);
+					$response = new response(1,'Falha no envio da mensagem com a proposta');
+					$response->flush();
+					exit(1);
+				}
+
+				// Registrando o instante do envio na base
+				$sql = 'UPDATE gdoks_versoes_de_propostas SET emissao=NOW() where id_proposta=? and serial=?';
+				$db->query($sql,'ii',$id_proposta,$serial_versao);
+
+				// Levantando emails de destinatários para por no log
+				$emails = implode(';',array_map(function($d){return $d->email;},$mail->destinatarios));
+
+				// Registrando no LOG
+				registrarAcao($db,$id_usuario,ACAO_ENVIOU_VERSAO_DE_PROPOSTA,$serial_versao.','.$id_proposta.','.$emails);
+
+				// Enviando resposta para o cliente
+				$response = new response(0,'ok');
+				$response->emissao = date("Y-m-d\TH:i:s");
+				$response->flush();
+
 			});
 
 			$app->post('/propostas',function() use ($app,$db,$token,$config){

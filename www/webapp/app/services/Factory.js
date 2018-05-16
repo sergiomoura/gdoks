@@ -616,11 +616,14 @@ WebGDoks.factory('GDoksFactory',
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.aprovarVersao = function(id_proposta,serial_versao){
-				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/aprovar', buildHeaders());
+				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/aprovar',null, buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.deleteProposta = function(id_proposta){
 				return $http.delete(API_ROOT+'/propostas/'+id_proposta, buildHeaders());
+			}
+			GDoksFactory.mailProposta = function(id_proposta,serial_versao,mail){
+				return $http.post(API_ROOT+'/propostas/'+id_proposta+'/versoes/'+serial_versao+'/enviar',mail,buildHeaders());
 			}
 			return GDoksFactory;
 		}

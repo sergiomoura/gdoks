@@ -130,6 +130,21 @@
 			});
 		}
 
+		$scope.openDialogEnviarProposta = function(evt,versao){
+			$mdDialog.show(
+				{
+					controller: enviarPropostaDialogController,
+					locals:{
+						parentScope:$scope,
+						versao:versao
+					},
+					templateUrl: './app/modules/Propostas/enviarEmail.dialog.tmpl.html',
+					parent: angular.element(document.body),
+					targetEvent: evt,
+					clickOutsideToClose:false
+				});
+		}
+
 		$scope.uploadVersaoDeProposta = function(){
 			// Verificando se files está definido e se seu tamanho é maior que zero.
 			if ($scope.proposta.arquivo) {
@@ -204,7 +219,22 @@
 			}
 		}
 
-		$scope.deleteVersao = function(serial){
+		$scope.onDeleteVersaoClick = function(){
+			var confirm = $mdDialog.confirm()
+			.title('Tem certeza que deseja remover esta versão da proposta?')
+			.textContent('Esta ação não poderá ser desfeita.')
+			.ariaLabel('Remover versão')
+			.targetEvent(evt)
+			.ok('Sim')
+			.cancel('Não');
+			
+			$mdDialog.show(confirm)
+			.then(function() {
+				deleteVersao(serial);
+			});
+		}
+
+		function deleteVersao(serial){
 			GDoksFactory.deleteVersao($scope.proposta.id,serial)
 			.success(function(response){
 				var v = $scope.proposta.versoes;
@@ -255,8 +285,8 @@
 
 			if(algumaVersaoAprovada){
 				var confirm = $mdDialog.confirm()
-				.title('Marcar esta versão como aprovada?')
-				.textContent('Isso fará com que as outras versões sejam reprovadas.')
+				.title('Marcar esta versão da proposta como aprovada?')
+				.textContent('Isso fará com que as outras versões sejam reprovadas já que somente uma versão pode ser aprovada.')
 				.ariaLabel('Marcar como aprovada')
 				.targetEvent(evt)
 				.ok('Sim')
@@ -310,6 +340,146 @@
 					v.emissao = (v.emissao == null ? null : new Date(v.emissao));
 					v.aprovacao = (v.aprovacao == null? null : new Date(v.aprovacao));
 				}
+			}
+		}
+
+		function enviarPropostaDialogController($scope,parentScope,versao,GDoksFactory,$cookies,$mdToast)
+		{
+			// Definindo variável que manterá as configurações
+			var config = null;
+
+			// Carregando configurações do servidor
+			GDoksFactory.getConfiguracoes()
+			.success(function(response){
+				config = response.config;
+				$scope.mail = setUpMail();
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao carregar configurações. Assumindo comportamento padrão.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+				$scope.somenteConcluidosPodemSerAdd = true;
+			});
+
+			// Amarrando a grd deste scope com o parentScope
+			$scope.versao = versao;
+
+			// Carregando informaç~oes do usuário
+			var user = $cookies.getObject('user');
+
+			function setUpMail(){
+
+				// Construindo assunto a partir das configurações
+				var assunto = config.ASSUNTO_PADRAO_ENVIO_PROPOSTA.valor;
+				assunto = assunto
+							.replace('$proposta_codigo',parentScope.proposta.codigo)
+							.replace('$proposta_versao',versao.serial)
+							.replace('$empresa_nome',user.nome_empresa)
+							.replace('$usuario_nome',user.nome)
+							.replace('$usuario_email',user.email);
+
+				// Construindo menssagem a partir das configurações
+				var msg = config.MSG_PADRAO_ENVIO_PROPOSTA.valor;
+				msg = msg
+						.replace('$proposta_codigo',parentScope.proposta.codigo)
+						.replace('$proposta_versao',versao.serial)
+						.replace('$empresa_nome',user.nome_empresa)
+						.replace('$usuario_nome',user.nome)
+						.replace('$usuario_email',user.email);
+
+				// Contruindo assinatura de mensagem a partir das configurações
+				var ass = config.ASSINATURA_ENVIO_GRD.valor;
+				ass = ass
+						.replace('$proposta_codigo',parentScope.proposta.codigo)
+						.replace('$proposta_versao',versao.serial)
+						.replace('$empresa_nome',user.nome_empresa)
+						.replace('$usuario_nome',user.nome)
+						.replace('$usuario_email',user.email);
+
+				// Definindo MAIL
+				return {
+					destinatarios:[
+						{
+							nome:parentScope.proposta.cliente.contato_nome,
+							email:parentScope.proposta.cliente.contato_email
+						}
+					],
+					assunto:assunto,
+					msg:msg+ass
+				}
+			}
+
+			// Definindo função que adiciona um destinatário
+			$scope.addDestinatario = function(){
+				$scope.mail.destinatarios.push({nome:'','email':''});
+			}
+
+			$scope.removeDestinatario = function(index){
+				$scope.mail.destinatarios.splice(index,1);	
+			}
+
+			// Função que fecha caixa de diálogo.
+			$scope.cancelar = function(){
+				$mdDialog.hide();
+			}
+
+			$scope.enviar = function(){
+				
+				// mostra carregando
+				parentScope.root.carregando == true;
+
+				GDoksFactory.mailProposta(parentScope.proposta.id,versao.serial,$scope.mail)
+				.success(function(response){
+					// Esconde carregando
+					parentScope.root.carregando = false;
+
+					// Verificando se tem algum erro no envio
+					if(response.error == 0){
+						// Atualizando a datahora de envio da grd
+						versao.emissao = new Date(response.emissao);
+
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Proposta enviada com successo!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					} else {
+						// Retornando Toast para o usuário
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Falha no envio. Tente novamente mais tarde.')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+
+						// Imprimindo erro no console
+						console.warn(response.msg);
+					}
+
+					// Escondendo dialogo
+					$mdDialog.hide();
+				})
+				.error(function(error){
+					// Esconde carregando
+					parentScope.root.carregando = false;
+
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha no envio da proposta')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// imprimindo erro no console
+					console.warn(error);
+				});
 			}
 		}
 	}

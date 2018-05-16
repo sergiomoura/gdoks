@@ -74,20 +74,20 @@
     		</tr>
     	</thead>
     	<tbody>
-    		<tr ng-repeat="v in proposta.versoes">
+    		<tr ng-repeat="v in proposta.versoes" ng-class="{aprovada:(v.aprovacao != null)}">
     			<td>{{v.serial}}</td>
-    			<td>{{v.criacao | date:'dd/MM/yyyy'}}</td>
-    			<td>{{v.emissao | date:'dd/MM/yyyy'}}</td>
-    			<td>{{v.aprovacao | date:'dd/MM/yyyy'}}</td>
+    			<td>{{v.criacao | date:'dd/MM/yyyy'}}<span>{{v.criacao | date:'à\'s\' hh:mm:ss'}}</span></td>
+    			<td>{{v.emissao | date:'dd/MM/yyyy'}}<span>{{v.emissao | date:'à\'s\' hh:mm:ss'}}</span></td>
+    			<td>{{v.aprovacao | date:'dd/MM/yyyy'}}<span>{{v.aprovacao | date:'à\'s\' hh:mm:ss'}}</span></td>
     			<td>
-    				<md-button ng-click="deleteVersao(v.serial)" ng-if="$last && (v.emissao==null)" class="md-icon-button" ng-disabled="false" aria-label="Emitir versão para cliente">
+    				<md-button ng-click="deleteVersao(v.serial)" ng-if="$last && (v.emissao==null)" class="md-icon-button" ng-disabled="v.aprovacao != null" aria-label="Emitir versão para cliente">
     					<md-icon class="material-icons step">delete</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Remover versão de proposta
     					</md-tooltip>
     				</md-button>
 
-    				<md-button class="md-icon-button" ng-disabled="false" aria-label="Emitir versão para cliente">
+    				<md-button ng-click="openDialogEnviarProposta($event,v)" class="md-icon-button" ng-disabled="false" aria-label="Emitir versão para cliente">
     					<md-icon class="material-icons step">send</md-icon>
     					<md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
     						Emitir versão para cliente

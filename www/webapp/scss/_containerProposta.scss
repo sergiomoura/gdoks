@@ -1,23 +1,24 @@
 #proposta_container{
 
-		.controles {
-			.search {
+	.controles {
+		.search {
 
-				md-input-container {
-					width:200px;
-				}
-				.selectContainer {
-					position: relative;
-					top: -12px;
-				}
-				
-			}	
-			button {
-				position: relative;
-				top: -16px;
+			md-input-container {
+				width:200px;
 			}
+			.selectContainer {
+				position: relative;
+				top: -12px;
+			}
+			
+		}	
+		button {
+			position: relative;
+			top: -16px;
 		}
-		table {
+	}
+
+	table {
 		border-collapse: collapse;
 		width: 100%;
 		margin-bottom: 50px;
@@ -73,6 +74,14 @@
 					padding-top:20px;
 				}
 			}
-		}	
+			.aprovada {
+				td{
+					font-style: italic;
+				}
+				td:first-child:before,td:first-child:after{
+					content:" * ";
+				}
+			}
+		}
 	}
 }

@@ -1,14 +1,14 @@
-
-	☐	Registrar valor do documento
+Gerenciar Propostas:
+	☐	Fazer enviar proposta
+	☐	Criar projeto a partir de proposta aprovada
+	☐	Buscar proposta (por código e por cliente - listar ordenada por data de criação)
+	
 	☐	Gerenciar Propostas (Arquivo + Valor Total)
+	☐	Registrar valor do documento
 	☐	Boletim de Medição de Projeto.
 	☐	Editar / Excluir documento a partir da página do documento.
 	☐	Ver Esqueci minha senha
 
-	☐	Melhorar a tela de Atualizar documento.
-		☐	Adicionar Cliente
-		☐	Incorporar histórico de progresso à barra "Progresso"
-		☐	Mostrar arquivos que estão compondo o documento
 	☐	Fazer com que primeira revisão do documento possa ser inserida no ato do seu cadastro.
 	☐	Fazer Screencast de como atualizar um documento.
 	☐	Escolher baixar LDP em PDF ou excel.
@@ -120,6 +120,10 @@ Tabelas a serem preenchidas na instalação:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	Mostrar arquivos que estão compondo o documento @done (18-05-14 06:12) @project(Gerenciar Propostas)
+	✔	Melhorar a tela de Atualizar documento. @done (18-05-14 06:12) @project(Gerenciar Propostas)
+	✔	Incorporar histórico de progresso à barra "Progresso" @done (18-05-14 06:12) @project(Gerenciar Propostas)
+	✔	Adicionar Cliente @done (18-05-14 06:12) @project(Gerenciar Propostas)
 	✔	Conigurar para que somente documento completo vá em GRD ou não. @done (18-03-28 17:12) @project(H) Alterações sugeridas por Neiva e consequências)
 	✔	Alertar/Não permitir quando o novo progresso for menor ou igual ao anterior @done (18-03-28 14:11) @project(H) Alterações sugeridas por Neiva e consequências)
 	✔	Bloquear documento virgem para o atualizar se habilitar @done (18-03-28 13:47) @project(H) Alterações sugeridas por Neiva e consequências)

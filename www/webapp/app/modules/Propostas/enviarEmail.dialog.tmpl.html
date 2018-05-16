@@ -1,5 +1,6 @@
 <md-dialog class="enviarEmail_dialog">
 	<md-dialog-content>
+		<pre>{{config | json}}</pre>
 		<form name="form" layout="column">
 			<div class="destinatarios" layout="column">
 				<div class="destinatario" layout="row" ng-repeat="dest in mail.destinatarios">
@@ -41,10 +42,7 @@
 					<label>Assunto</label>
 					<input type="text" ng-model="mail.assunto">
 				</md-input-container>
-				<md-input-container>
-					<label>Mensagem</label>
-					<textarea ng-model="mail.msg"></textarea>
-				</md-input-container>
+				<trix-editor angular-trix ng-model="mail.msg"></trix-editor>
 			</div>
 		</form>
 		<div class="controles" layout="row" layout-align="space-between center">
