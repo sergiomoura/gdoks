@@ -1182,10 +1182,22 @@
 #proposta_container .controles button {
   position: relative;
   top: -16px; }
+#proposta_container .arquivoSelecionado {
+  color: rgba(0, 0, 0, 0.54);
+  text-align: center;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  position: absolute;
+  width: 80%;
+  top: 70px;
+  left: 10%; }
 #proposta_container table {
   border-collapse: collapse;
   width: 100%;
   margin-bottom: 50px;
+  position: relative;
+  top: 20px;
   cursor: default; }
   #proposta_container table tr {
     outline: none; }
