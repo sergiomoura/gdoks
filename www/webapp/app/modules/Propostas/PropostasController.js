@@ -389,8 +389,8 @@
 			})
 		}
 
-		$scope.onFazerProjetoClick = function(evt,serial){
-			$location.url('/projetos/0?p='+$scope.proposta.id+'&v='+serial);
+		$scope.onFazerProjetoClick = function(evt,id_versao_de_proposta){
+			$location.url('/projetos/0?c=' + $scope.proposta.id_cliente + '&ivdp=' + id_versao_de_proposta);
 		}
 
 		function parseProposta(){

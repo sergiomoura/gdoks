@@ -42,7 +42,7 @@
 								<label>Cliente</label>
 								<md-select ng-model="clientes.selecionado" ng-change="onClienteChange()" required> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
 								  <md-select-label>Selecione um cliente</md-select-label>
-								  <md-option ng-value="option" ng-repeat="option in clientes.dados|orderBy:'nome'">{{ option.nome }}</md-option>
+								  <md-option ng-value="option" ng-repeat="option in clientes|orderBy:'nome'">{{ option.nome }}</md-option>
 								</md-select>
 							</md-input-container>
 						</div>

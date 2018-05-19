@@ -88,7 +88,7 @@
     					</md-tooltip>
     				</md-button>
                     
-                    <md-button ng-click="onFazerProjetoClick($event,v.serial)" class="md-icon-button md-primary" ng-if="v.aprovacao!= null" aria-label="Fazer Projeto">
+                    <md-button ng-click="onFazerProjetoClick($event,v.id)" class="md-icon-button md-primary" ng-if="v.aprovacao!= null" aria-label="Fazer Projeto">
                         <md-icon class="material-icons step">group_work</md-icon>
                         <md-tooltip md-delay="400" md-direction="bottom" md-autohide="true">
                             Criar projeto a partir desta proposta

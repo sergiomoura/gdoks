@@ -150,15 +150,22 @@
 		var documentosCarregados = false;
 
 		// Carregando clientes da base local
-		$scope.clientes = {};
-		$scope.clientes.dados = [];
 		GDoksFactory.getClientes()
 		.success(function(response){
-			$scope.clientes.dados = response.clientes;
+			$scope.clientes = response.clientes;
+			$scope.clientes.selecionado = undefined;
 			clientesCarregados = true;
 	 		carregaProjeto();
 		})
-		.error(function(error){});
+		.error(function(error){
+			// Retornando Toast para usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao carregar clientes.')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		});
 
 		// Carregando usuarios da base local
 		$scope.usuarios = {};
@@ -174,7 +181,7 @@
 		.error(function(error){});
 
 
-		// Carregando disciplinas da base local
+		// Carregando disciplinas do servidor
 		$scope.disciplinas = [];
 		GDoksFactory.getDisciplinas()
 		.success(function(response){
@@ -198,14 +205,25 @@
 			if(clientesCarregados && usuariosCarregados && disciplinasCarregadas && cargosCarregados){
 				$scope.projeto = {};
 				$scope.projeto.id = $routeParams.id;
-				
+								
 				// Criando o projeto em questão
 				if($scope.projeto.id == 0 || $scope.projeto.id == undefined) {
+
+					// Verificando se o cliente está setado na URL
+					var search = $location.search();
+					var id_cliente;
+					if(search.c == undefined){
+						id_cliente = 0;
+					} else {
+						id_cliente = search.c;
+						$scope.clientes.selecionado = $scope.clientes.find(function(c){return c.id == this},id_cliente);
+					}
+					 
 					// Projeto novo
 					$scope.projeto.id = 0
 					$scope.projeto.nome = '';
 					$scope.projeto.codigo = '';
-					$scope.projeto.id_cliente = 0;
+					$scope.projeto.id_cliente = id_cliente;
 					$scope.projeto.id_responsavel = 0;
 					$scope.projeto.data_inicio_p = new Date();
 					$scope.projeto.data_final_p = new Date();
@@ -215,6 +233,11 @@
 					$scope.projeto.subareas = [];
 					$scope.projeto.documentos = [];
 					$scope.inicialmenteAtivo = true;
+
+					// Se o cliente for conhecido, carregue as propostas feitas a ele.
+					if(id_cliente != 0){
+						carregaPropostas();
+					}
 				} else {
 					GDoksFactory.getProjeto($scope.projeto.id)
 					.success(function(response){
@@ -337,6 +360,8 @@
 				$scope.propostas = $scope.propostas.filter(function(a){
 					return a.id_projeto_associado==null || a.id_projeto_associado==this
 				},$scope.projeto.id);
+
+				// Parsing datas
 				var p;
 				for (var i = 0; i < $scope.propostas.length; i++) {
 					p = $scope.propostas[i];
@@ -347,7 +372,10 @@
 			}
 
 			function associarPropostaAoProjeto(){
-				if($scope.projeto.id_versao_de_proposta != null){
+				if($scope.projeto.id_versao_de_proposta != null || ($scope.projeto.id_versao_de_proposta == null && $location.search().ivdp)){
+					if($scope.projeto.id_versao_de_proposta == null){
+						$scope.projeto.id_versao_de_proposta = $location.search().ivdp;
+					}
 					var achou = false;
 					var i = 0;
 					var j;
