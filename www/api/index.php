@@ -243,7 +243,8 @@
 				}
 			});
 		
-		// LOGIN REFRESH ROUTE DEFINITION - - - - - - - - -
+		
+			// LOGIN REFRESH ROUTE DEFINITION - - - - - - - - -
 			$app->get('/refresh',function() use ($app,$db,$token){
 				$rs = $db->query('select id from gdoks_usuarios where token=? and validade_do_token>now()','s',$token);
 				if(sizeof($rs) == 0){
@@ -319,7 +320,8 @@
 				}
 			});
 		
-		// ROTAS DE USUÁRIOS
+		
+			// ROTAS DE USUÁRIOS
 			$app->get('/usuarios',function() use ($app,$db,$token){
 				$sql = 'SELECT a.id,
 						       a.login,
@@ -1622,23 +1624,25 @@
 								id_responsavel=?,
                                 data_inicio_p=?,
                                 data_final_p=?,
-                                ativo=?
+                                ativo=?,
+								id_versao_de_proposta=?
                             WHERE id=?";
                     try {
-                    	$db->query($sql,'ssiissii',
+                    	$db->query($sql,'ssiissiii',
                     		$projeto->nome,
                     		$projeto->codigo,
                     		$projeto->id_cliente,
                     		$projeto->id_responsavel,
                     		$projeto->data_inicio_p,
                     		$projeto->data_final_p,
-                    		$projeto->ativo,
+							$projeto->ativo,
+							$projeto->id_versao_de_proposta,
                     		$id);
                     } catch (Exception $e) {
                     	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 						$response->flush();
 						exit(1);
-                    }
+					}
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não altera dados de outra empresa.');	

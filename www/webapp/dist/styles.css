@@ -2064,6 +2064,11 @@ textarea {
 #logs_container table tr:last-child td {
   border-bottom: 1px solid #999; }
 
+#addprojeto_dados_container a {
+  color: #2196F3;
+  text-decoration: underline;
+  cursor: pointer; }
+
 #addprojeto_dao_container md-input-container {
   position: relative;
   top: 20px; }

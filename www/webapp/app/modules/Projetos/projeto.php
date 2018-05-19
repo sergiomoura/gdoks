@@ -23,7 +23,7 @@
 <div class="bloco_conteudo bloco_central_80" md-whiteframe="1dp">
 	<md-tabs md-dynamic-height md-border-bottom>
 		<md-tab label="Dados">
-			<md-content class="md-padding">
+			<md-content id="addprojeto_dados_container" class="md-padding">
 				<h1 class="md-display-2">Dados do Projeto</h1>
 				<form name="form_projetoInfo" novalidate>
 					<div layout="column">

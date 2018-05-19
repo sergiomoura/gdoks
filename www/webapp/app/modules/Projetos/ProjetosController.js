@@ -398,12 +398,13 @@
 		$scope.salvarProjeto = function(){
 
 			// Mostra carregando
-			$scope.root.carregando = true;+'T00:00:00'
+			$scope.root.carregando = true;
 
 			// copiando o objeto projeto
 			var projeto = angular.copy($scope.projeto);
 			projeto.id_cliente = $scope.clientes.selecionado.id;
 			projeto.id_responsavel = $scope.usuarios.selecionado.id;
+			projeto.id_versao_de_proposta = $scope.propostas.selecionada ? $scope.propostas.selecionada.versoes.selecionada.id : null;
 			
 			// removendo campos que não serão enviados
 			delete projeto.daos;
