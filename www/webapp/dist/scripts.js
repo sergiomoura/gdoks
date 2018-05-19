@@ -26702,9 +26702,14 @@ http://trix-editor.org/
 
 		// Verificando se é uma nova proposta ou se é uma proposta existente
 		if(id_proposta == 0){
+
+			// Capturando um possível id de cliente passado na URL
+			var id_cliente = $location.search().id_cliente ? $location.search().id_cliente : 0;
+
+			// Criando proposta vazia.
 			$scope.proposta = {
 				id:0,
-				id_cliente:0,
+				id_cliente:id_cliente,
 				codigo:'',
 				versoes:[]
 			}
