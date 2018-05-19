@@ -646,6 +646,11 @@ WebGDoks.factory('GDoksFactory',
 				return $http.get(API_ROOT+'/propostas/q?'+parametros.join('&'),buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.getPropostasDeCliente = function(id_cliente){
+				// Fazendo requisição de busca
+				return $http.get(API_ROOT+'/clientes/'+id_cliente+'/propostas?',buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			return GDoksFactory;
 		}
 	]

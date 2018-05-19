@@ -40,7 +40,7 @@
 
 							<md-input-container flex="30">
 								<label>Cliente</label>
-								<md-select ng-model="clientes.selecionado" required> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+								<md-select ng-model="clientes.selecionado" ng-change="onClienteChange()" required> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
 								  <md-select-label>Selecione um cliente</md-select-label>
 								  <md-option ng-value="option" ng-repeat="option in clientes.dados|orderBy:'nome'">{{ option.nome }}</md-option>
 								</md-select>
@@ -70,8 +70,29 @@
 												ng-model="projeto.data_final_p"></md-datepicker>
 							</md-input-container>
 						</div>
-						<div layout="row">
-							<md-input-container flex="45">
+						<div layout="row" layout-align="space-between start">
+							<div flex="60" ng-if="clientes.selecionado!=undefined && propostas.length==0">
+								Não existe uma proposta realizada para este cliente.<br>
+								Clique <a ng-click="gotoNovaProposta()">aqui</a> para criar uma e depois associa-la a um projeto.
+							</div>
+							<md-input-container flex="30" ng-if="clientes.selecionado==undefined || propostas.length>0">
+								<label>Proposta</label>
+								<md-select
+									ng-model="propostas.selecionada"
+									ng-change="onPropostaChange()"
+									>
+								  <md-select-label>Selecione uma proposta</md-select-label>
+								  <md-option ng-value="option" ng-repeat="option in propostas">{{ option.codigo }}</md-option>
+								</md-select>
+							</md-input-container>
+							<md-input-container flex="30" ng-if="clientes.selecionado==undefined || propostas.length>0">
+								<label>Versão</label>
+								<md-select ng-model="propostas.selecionada.versoes.selecionada" ng-required="propostas.selecionada">
+								  <md-select-label>Selecione uma versão da proposta</md-select-label>
+								  <md-option ng-value="option" ng-repeat="option in propostas.selecionada.versoes">Versão {{ option.serial }}</md-option>
+								</md-select>
+							</md-input-container>
+							<md-input-container flex="30">
 								<md-checkbox name="ativo" ng-model="projeto.ativo" class="md-primary">
 									Ativo
 								</md-checkbox>

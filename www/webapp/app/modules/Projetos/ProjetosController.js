@@ -245,6 +245,9 @@
 
 						// Carrega documentos
 						carregaDocumentos();
+
+						// Carrega propostas do cliente deste projeto
+						carregaPropostas();
 						
 					})
 					.error(function(error){
@@ -253,6 +256,7 @@
 			}
 		}
 
+		// Função que carrega documentos de projeto
 		function carregaDocumentos(){
 			if ($scope.projeto.id != 0) {
 				GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
@@ -309,6 +313,81 @@
 				.error(function(err){});
 			}
 		}
+
+		// Função que carrega propostas de cliente
+		function carregaPropostas(){
+			GDoksFactory.getPropostasDeCliente($scope.clientes.selecionado.id)
+			.success(function(response){
+				$scope.propostas = response.propostas;
+				parsePropostas();
+				associarPropostaAoProjeto();
+			})
+			.error(function(error){
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao carregar propostas do cliente selecionado.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+
+			function parsePropostas(){
+				// removendo propostas que estejam já estejam associadas a outros projetos
+				$scope.propostas = $scope.propostas.filter(function(a){
+					return a.id_projeto_associado==null || a.id_projeto_associado==this
+				},$scope.projeto.id);
+				var p;
+				for (var i = 0; i < $scope.propostas.length; i++) {
+					p = $scope.propostas[i];
+					p.aprovacao = p.aprovacao==null ? null : new Date(p.aprovacao);
+					p.emissao = p.emissao==null ? null : new Date(p.emissao);
+					p.criacao = new Date(p.criacao);
+				}
+			}
+
+			function associarPropostaAoProjeto(){
+				if($scope.projeto.id_versao_de_proposta != null){
+					var achou = false;
+					var i = 0;
+					var j;
+					while(i < $scope.propostas.length && !achou){
+						j = 0;
+						p = $scope.propostas[i];
+						while(j < p.versoes.length && !achou){
+							if(p.versoes[j].id == $scope.projeto.id_versao_de_proposta){
+								$scope.propostas.selecionada = $scope.propostas[i];
+								$scope.propostas.selecionada.versoes.selecionada = p.versoes[j];
+								achou = true;
+							}
+							j++;
+						}
+						i++;
+					}
+				}
+			}
+		}
+
+		// Leva até a página de criar nova proposta
+		$scope.gotoNovaProposta = function(){
+			$location.url('/propostas/0?id_cliente='+$scope.clientes.selecionado.id);
+		}
+
+		// Função que é executada quando a proposta do projeto é alterada
+		$scope.onPropostaChange = function(){
+			$scope.projeto.id_versao_de_proposta = null;
+		}
+
+		// Função que é executada quando a versao da proposta é alterada
+		$scope.onVersaoChange = function(){
+			$scope.projeto.id_versao_de_proposta = $scope.propostas.selecionada.versoes.selecionada.id;
+		}
+
+		// Função que é executada quando o cliente é alterado
+		$scope.onClienteChange = function(){
+			carregaPropostas();
+		}
+
 
 		// definindo função Cancel
 		$scope.cancel = function(){

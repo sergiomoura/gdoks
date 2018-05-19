@@ -208,7 +208,7 @@
 
 	            			// Alinhando a url da página caso seja uma nova proposta
 	            			if($scope.proposta.id == 0){
-	            				$location.path('/propostas/' + response.data.id_proposta).replace().reload(false);
+	            				$location.url('/propostas/' + response.data.id_proposta);
 	            			}
 
 	            			// Atribuindo novos parâmetros para a proposta criada

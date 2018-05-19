@@ -1445,7 +1445,8 @@
 							    c.nome as nome_responsavel,
 							    a.data_inicio_p,
 							    a.data_final_p,
-							    a.ativo
+							    a.ativo,
+								a.id_versao_de_proposta
 							FROM
 								gdoks_projetos a
 								INNER JOIN gdoks_clientes b on a.id_cliente=b.id
@@ -3914,6 +3915,63 @@
 							ORDER by a.nome';
 				$response = new response(0,'ok');
 				$response->cliente = $db->query($sql,'si',$token,$id)[0];
+				$response->flush();
+			});
+
+			$app->get('/clientes/:id_cliente/propostas',function($id_cliente) use ($app,$db,$token){
+				
+				// Lendo id do cliente
+				$id_cliente = 1*$id_cliente;
+
+				// Listando propostas feitas ao cliente
+				$sql='SELECT
+						a.id,
+						a.codigo,
+						MAX(c.id) as id_projeto_associado
+					FROM
+						gdoks_propostas a
+						inner join gdoks_versoes_de_propostas b on a.id=b.id_proposta
+						left join gdoks_projetos c on b.id=c.id_versao_de_proposta
+					WHERE
+						a.id_cliente=?
+					GROUP BY a.id, a.codigo';
+				$propostas = array_map(function($a){
+					$a = (object)$a;
+					$a->versoes = Array();
+					return $a;
+				},$db->query($sql,'i',$id_cliente));
+
+				// Listando versões de proposta
+				$sql='SELECT
+						a.id,
+						a.serial,
+						a.id_proposta,
+						a.criacao,
+						a.emissao,
+						a.aprovacao,
+						a.nome_cliente
+					FROM gdoks_versoes_de_propostas a
+						INNER JOIN gdoks_propostas b on a.id_proposta=b.id
+					WHERE b.id_cliente=?';
+				$versoes = array_map(function($a){return (object)$a;},$db->query($sql,'i',$id_cliente));
+
+				// Associando versões de propostas às propostas
+				for ($i=0; $i < sizeof($versoes); $i++) { 
+					$achou = false;
+					$j = 0;
+					while($j < sizeof($propostas) && !$achou){
+						if($propostas[$j]->id == $versoes[$i]->id_proposta){
+							unset($versoes[$i]->id_proposta);
+							$propostas[$j]->versoes[] = $versoes[$i];
+							$achou = true;
+						}
+						$j++;
+					}
+				}
+
+				// Enviando resposta para o cliente
+				$response = new response(0,'ok');
+				$response->propostas = $propostas;
 				$response->flush();
 			});
 
