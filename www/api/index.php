@@ -1686,10 +1686,11 @@
 								id_empresa,
 								data_inicio_p,
 								data_final_p,
-								ativo
-							) VALUES (?,?,?,?,?,?,?,?)";
+								ativo,
+								id_versao_de_proposta
+							) VALUES (?,?,?,?,?,?,?,?,?)";
                     try {
-                    	$db->query($sql,'ssiiissi',
+                    	$db->query($sql,'ssiiissii',
                     		$projeto->nome,
                     		$projeto->codigo,
                     		$projeto->id_cliente,
@@ -1697,7 +1698,9 @@
                     		$id_empresa,
                     		substr($projeto->data_inicio_p, 0, 10),
                     		substr($projeto->data_final_p, 0, 10),
-                    		$projeto->ativo);
+							$projeto->ativo,
+							$projeto->id_versao_de_proposta
+						);
                     } catch (Exception $e) {
                     	$response = new response(1,'Erro na consulta: '.$e->getMessage());
 						$response->flush();
