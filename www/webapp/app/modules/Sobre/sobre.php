@@ -42,5 +42,6 @@
 	</div>
 
 	<div class="obs">* As datas e funcionalidades descritas aqui não estabelecem um compromisso com o cliente e podem ser alteradas sem aviso.</div>
-
+	<h3>Todo List</h3>
+	<pre><?php include('../../../../../gdoks.todo');	?></pre>
 </div>
