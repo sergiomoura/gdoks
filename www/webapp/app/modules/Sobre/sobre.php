@@ -21,11 +21,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>14/05/2018</td>
-					<td>Gerenciamento de Propostas</td>
-				</tr>
-				<tr>
-					<td>21/05/2018</td>
+					<td>04/06/2018</td>
 					<td>
 						Boletim de Medição de Projeto
 						<ul>
@@ -38,7 +34,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>28/05/2018</td>
+					<td>11/06/2018</td>
 					<td>Gerenciamento dos documentos de Fornecedor (GDF)</td>
 				</tr>
 			</tbody>
