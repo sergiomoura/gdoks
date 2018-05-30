@@ -1,3 +1,14 @@
+BUGS:
+	☐ Tela de editar projeto não mostra o cliente @bug 
+	☐ Documentos do projeto não estão aparecendo @bug 
+	☐ Quando insere um documento (via importação), o clicar no editar não leva até o editar @bug 
+	☐ Por na configuração do GDoks para númerar projeto automático
+	☐ No dashboard do projeto, na parte que lista os documentos, mostrar opções: Duplicar, Editar, excluir
+	☐ Adicionar campo de busca de propostas para exibirt somente aprovadas/somente reprovadas
+	☐ Adicionar campo Título a propostas
+	☐ Gerar Código da proposta automaticamente: FRY-2018NNNN (SEGUNDOU PADRÃO CONFIGURÁVEL) ou manual
+	☐ Começar versão de proposta a partir de ZERO
+
 A) Gerenciar Propostas:
 	☐ Gerenciar Propostas (Arquivo + Valor Total)
 	☐ Registrar valor do documento
