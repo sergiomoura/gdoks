@@ -168,12 +168,10 @@
 		});
 
 		// Carregando usuarios da base local
-		$scope.usuarios = {};
-		$scope.usuarios.dados = [];
 		GDoksFactory.loadUsuarios()
 		.success(function(response){
 				// Carregando usuários
-				$scope.usuarios.dados = response.usuarios;
+				$scope.usuarios = response.usuarios;
 				usuariosCarregados = true;
 				carregaProjeto();
 			}
@@ -244,8 +242,8 @@
 						$scope.projeto = response.projeto;
 						$scope.projeto.id_responsavel = ($scope.projeto.id_responsavel==null)?0:$scope.projeto.id_responsavel;
 						$scope.projeto.id_cliente = ($scope.projeto.id_cliente==null)?0:$scope.projeto.id_cliente;
-						$scope.clientes.selecionado = $scope.clientes.dados.filter(function(a){return a.id==this},$scope.projeto.id_cliente)[0];
-						$scope.usuarios.selecionado = $scope.usuarios.dados.filter(function(a){return a.id==this},$scope.projeto.id_responsavel)[0];
+						$scope.clientes.selecionado = $scope.clientes.filter(function(a){return a.id==this},$scope.projeto.id_cliente)[0];
+						$scope.usuarios.selecionado = $scope.usuarios.filter(function(a){return a.id==this},$scope.projeto.id_responsavel)[0];
 						$scope.projeto.ativo = ($scope.projeto.ativo == 1);
 						$scope.inicialmenteAtivo = $scope.projeto.ativo;
 

@@ -51,7 +51,7 @@
 								<label>Responsável</label>
 								<md-select ng-model="usuarios.selecionado" required>
 								  <md-select-label>Selecione um responsável</md-select-label>
-								  <md-option ng-value="option" ng-repeat="option in usuarios.dados|orderBy:'nome'">{{ option.nome }}</md-option>
+								  <md-option ng-value="option" ng-repeat="option in usuarios|orderBy:'nome'">{{ option.nome }}</md-option>
 								</md-select>
 							</md-input-container>
 							<md-input-container flex="30">

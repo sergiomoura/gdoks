@@ -1,5 +1,5 @@
 BUGS:
-	☐ Tela de editar projeto não mostra o cliente @bug 
+	✔ Tela de editar projeto não mostra o cliente @bug @done(31-05-18 07:05)
 	☐ Documentos do projeto não estão aparecendo @bug 
 	☐ Quando insere um documento (via importação), o clicar no editar não leva até o editar @bug 
 	☐ Por na configuração do GDoks para númerar projeto automático
