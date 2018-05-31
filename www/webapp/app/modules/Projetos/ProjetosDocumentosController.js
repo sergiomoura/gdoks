@@ -422,10 +422,7 @@
 
 		            	$timeout(function () {
 		            		$scope.criticas = response.data.criticas;
-		            		GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
-	            			.success(function(response){
-	            				$scope.projeto.documentos = response.documentos;
-	            			})
+		            		$scope.carregaDocumentos();
 
 	            			if($scope.criticas.length == 0){
 	            				// Retornando Toast para o usuário

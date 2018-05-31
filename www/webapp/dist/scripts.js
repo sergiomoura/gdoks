@@ -22874,7 +22874,7 @@ function NavController($scope){
 						}
 
 						// Carrega documentos
-						carregaDocumentos();
+						$scope.carregaDocumentos();
 
 						// Carrega propostas do cliente deste projeto
 						carregaPropostas();
@@ -22887,7 +22887,7 @@ function NavController($scope){
 		}
 
 		// Função que carrega documentos de projeto
-		function carregaDocumentos(){
+		$scope.carregaDocumentos = function (){
 			if ($scope.projeto.id != 0) {
 				GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
 				.success(function(response){
@@ -24148,10 +24148,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 
 		            	$timeout(function () {
 		            		$scope.criticas = response.data.criticas;
-		            		GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
-	            			.success(function(response){
-	            				$scope.projeto.documentos = response.documentos;
-	            			})
+		            		$scope.carregaDocumentos();
 
 	            			if($scope.criticas.length == 0){
 	            				// Retornando Toast para o usuário

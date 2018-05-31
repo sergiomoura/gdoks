@@ -265,7 +265,7 @@
 						}
 
 						// Carrega documentos
-						carregaDocumentos();
+						$scope.carregaDocumentos();
 
 						// Carrega propostas do cliente deste projeto
 						carregaPropostas();
@@ -278,7 +278,7 @@
 		}
 
 		// Função que carrega documentos de projeto
-		function carregaDocumentos(){
+		$scope.carregaDocumentos = function (){
 			if ($scope.projeto.id != 0) {
 				GDoksFactory.getDocumentosDoProjeto($scope.projeto.id)
 				.success(function(response){

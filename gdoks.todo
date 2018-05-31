@@ -1,7 +1,7 @@
 BUGS:
 	✔ Tela de editar projeto não mostra o cliente @bug @done(31-05-18 07:05)
-	☐ Documentos do projeto não estão aparecendo @bug 
-	☐ Quando insere um documento (via importação), o clicar no editar não leva até o editar @bug 
+	✘ Documentos do projeto não estão aparecendo @bug @cancelled(31-05-18 07:57)
+	✔ Quando insere um documento (via importação), o clicar no editar não leva até o editar @bug @done(31-05-18 10:19)
 	☐ Por na configuração do GDoks para númerar projeto automático
 	☐ No dashboard do projeto, na parte que lista os documentos, mostrar opções: Duplicar, Editar, excluir
 	☐ Adicionar campo de busca de propostas para exibirt somente aprovadas/somente reprovadas
