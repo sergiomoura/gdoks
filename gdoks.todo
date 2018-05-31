@@ -8,7 +8,8 @@ BUGS:
 	☐ Adicionar campo Título a propostas
 	☐ Gerar Código da proposta automaticamente: FRY-2018NNNN (SEGUNDOU PADRÃO CONFIGURÁVEL) ou manual
 	☐ Começar versão de proposta a partir de ZERO
-	☐ Lidar com situa.ão de GRD enviada com documento errado. Consertar sem subir revisão do documento
+	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento
+	☐ Lidar com situação de especialista atualizar documento sem disponibilizar para validação
 
 A) Gerenciar Propostas:
 	☐ Gerenciar Propostas (Arquivo + Valor Total)
