@@ -137,6 +137,13 @@ WebGDoks.config(
 			}
 		)
 		.when(
+			'/documentos/:id/edit',
+			{
+				controller: 'DocumentoEditController',
+				templateUrl: 'app/modules/Documentos/documento_edit.php'
+			}
+		)
+		.when(
 			'/dpvs',
 			{
 				controller: 'DocumentosParaValidacaoController',

@@ -1,0 +1,100 @@
+<div id="documentoEdit_container" class="container_80">
+	<form name="formdoc" layout="column" novalidate>
+		<pre>
+			{{doc | json}}
+		</pre>
+		<h3>Dados do Documento</h3>
+		<div layout="row" layout-align="space-between center">
+			<md-input-container flex="30">
+				<label>Código do Documento</label>
+				<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo" required>
+			</md-input-container>
+			<md-input-container flex="30">
+				<label>Código Alternativo</label>
+				<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_alternativo">
+			</md-input-container>
+			<md-input-container flex="30">
+				<label>Título do Documento</label>
+				<input md-maxlength="100" maxlength="100" type="text" ng-model="doc.nome" required>
+			</md-input-container>
+		</div>
+
+		<div layout="row" layout-align="space-between center" >
+			<md-input-container flex="20">
+				<label>Disciplina</label>
+				<md-select ng-model="disciplinaSelecionada" required>
+				  <md-option ng-value="opt" ng-repeat="opt in disciplinas|orderBy:'nome'">{{ opt.nome }}</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Subdisciplina</label>
+				<md-select ng-model="doc.subdisciplina" required>
+				  <md-option ng-value="opt" ng-repeat="opt in disciplinaSelecionada.subs|orderBy:'nome'">{{ opt.nome }}</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Área</label>
+				<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()" required>
+				  <md-option ng-value="opt" ng-repeat="opt in areas">{{opt.codigo}} - {{opt.nome}}</md-option>
+				</md-select>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Subárea</label>
+				<md-select ng-model="doc.subarea" required>
+					<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{opt.codigo}}{{(opt.nome!=null && opt.nome!='') ? (' - '+opt.nome):''}}</md-option>
+				</md-select>
+			</md-input-container>
+		</div>
+
+		<div layout="row" layout-align="space-between center">
+			<md-input-container flex="20" class="datepicker" >
+				<label>Data Limite</label>
+				<md-datepicker
+						ng-model="doc.data_limite"
+						md-open-on-focus
+						md-hide-icons="calendar"
+						required></md-datepicker>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Dependências</label>
+				<md-select
+					ng-model="doc.dependencias"
+					data-md-container-class="SelectDpsHeader"
+					multiple>
+					<md-option
+							ng-value="dp"
+							ng-repeat="dp in dependenciasPossiveis">{{dp.nome}}</md-option>
+				</md-select>
+			</md-input-container>
+			<div flex="20"></div>
+			<div flex="20"></div>
+		</div>
+		<div layout="row" layout-align="space-between center">
+			<h3>Trabalho (Homem x Hora)</h3>
+			<div ng-repeat="hh in doc.hhs" layout="row" layout-align="center start">
+				<md-input-container flex>
+					<label>Cargo</label>
+					<md-select
+						ng-model="hh.cargo"
+						name="hh_{{$index}}"
+						data-md-container-class="SelectDpsHeader">
+						<md-option
+								ng-value="cargo"
+								ng-repeat="cargo in cargos">{{cargo.nome}}
+						</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container flex>
+					<label>Qtde. de Horas</label>
+					<input type="number" min="0" max="1000" ng-model="hh.hh">
+				</md-input-container>
+				<md-button ng-if="!$last" ng-click="removeHH($index)" class="md-icon-button" aria-label="Excluir HHs"><md-icon class="material-icons step" aria-label="Excluir HHs">close</md-icon></md-button>
+				<md-button ng-if="$last" ng-click="addNewHH()" class="md-icon-button" aria-label="Adicionar HH"><md-icon class="material-icons step" aria-label="Adicionar HHs">add_circle_outline</md-icon></md-button>
+			</div>
+		</div>
+	</form>
+	<md-dialog-actions layout="row" layout-align="space-between center">
+		<md-button ng-click="cancelar(doc)" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
+		<md-button ng-disabled="!formdoc.$valid || !formdoc.$dirty" ng-click="salvar(doc)" class="md-raised md-primary" aria-label="Salvar Documento">Salvar Documento</md-button>
+	</md-dialog-actions>
+</div>

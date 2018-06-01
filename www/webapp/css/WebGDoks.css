@@ -393,6 +393,10 @@
   width: 192px;
   text-align: right; }
 
+#documentoEdit_container .datepicker {
+  position: relative;
+  top: 12px; }
+
 #docs_container {
   padding-top: 20px;
   position: relative; }

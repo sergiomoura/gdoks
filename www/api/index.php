@@ -1752,22 +1752,62 @@
 					// Tudo ok! A area a ser adicionada é do mesmo cliente do usuário
 					$sql = 'SELECT id,nome,codigo FROM gdoks_areas WHERE id_projeto=? ';
 					try {
-						$response = new response(0,'ok');
-						$response->areas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
-						$response->flush();
+						$areas = array_map(function($a){
+							$a = (object)$a;
+							$a->subareas = Array();
+							return $a;
+						}, $db->query($sql,'i',$id_projeto));
 					} catch (Exception $e) {
 						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
+
+					 // Levantando subáreas do projeto
+					$sql = 'SELECT a.id,
+							       a.nome,
+							       a.codigo,
+							       a.id_area
+							FROM gdoks_subareas a
+							INNER JOIN gdoks_areas b ON a.id_area=b.id
+							AND b.id_projeto=?';
+					try {
+						$subareas = $db->query($sql,'i',$id_projeto);
+					} catch (Exception $e) {
+						http_response_code(401);
+						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
+						$response->flush();
+						exit(1);
+					}
+
+					// parsing subareas
+					foreach ($subareas as $s) {
+
+						// Buscando área com o id 
+						$i = 0;
+						while ($i < sizeof($areas)) {
+							if($areas[$i]->id == $s['id_area']){
+								$sub = new stdClass();
+								$sub->id = $s['id'];
+								$sub->codigo = $s['codigo'];
+								$sub->nome = $s['nome'];
+
+								array_push($areas[$i]->subareas, $sub);
+							}
+							$i++;
+						}
+					}
+					$response = new response(0,'ok');
+					$response->areas = $areas;
+					$response->flush();
 				} else {
 					http_response_code(401);
 					$response = new response(1,'Não lê dados de outra empresa.');	
 				}
 			});
 
-			$app->get('/projetos/:id_projeto/areas/:id_area/subareas',function($id_projeto,$id_area) use ($app,$db,$token){
+			$app->get('/projetos/:id_projeto/areas/:id_area/subareas',function($id_projeto,$i;d_area) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
 				$id_projeto = 1*$id_projeto;
 				$id_area = 1*$id_area;
