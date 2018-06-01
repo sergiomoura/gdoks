@@ -1660,7 +1660,7 @@
 				registrarAcao($db,$id_usuario,ACAO_ALTEROU_PROJETO,implode(',',(array)$projeto));
 			});
 
-			$app->post('/projetos',function() use ($app,$db,$token,$empresa){
+			$app->post('/projetos',function() use ($app,$db,$token,$empresa,$config){
 				
 				// Lendo dados
 				$projeto = json_decode($app->request->getBody());
@@ -1676,6 +1676,39 @@
 
 				// Indo adiante
 				if($ok == 1) {
+
+					// Verificando se é ou não para gerar o código automaticamente
+					if($config->GERAR_CODIGOS_DE_PROJETOS_AUTOMATICAMENTE->valor === true){
+						
+						// Determinando o próximo código do projeto
+						$novo_codigo = $config->PADRAO_CODIGOS_DE_PROJETOS->valor;
+
+						// Substituindo ocorrências de código de ano
+						$novo_codigo = str_replace('$A',date('Y'),$novo_codigo);
+						$novo_codigo = str_replace('$a',date('y'),$novo_codigo);
+
+						// Substituindo sequencial
+						preg_match('/\$i\([0-9]+\)/',$novo_codigo,$m);
+						if(sizeof($m)==1){
+							// Determinando sequencial no ano corrente
+							$sql='SELECT count(*) as n FROM gdoks_projetos WHERE year(data_registro)=year(now());';
+							$n = $db->query($sql)[0]['n'] + 1;
+
+							// Determinando o tamanho da string sequencial definida no cod de substituição
+							preg_match('/[0-9]/',$m[0],$str_size);
+							$str_size = $str_size[0];
+
+							// Determinando sequencial
+							$sequencial = str_pad($n,$str_size,'0',STR_PAD_LEFT);
+
+							// Substituindo
+							$novo_codigo = preg_replace('/\$i\([0-9]+\)/',$sequencial,$novo_codigo);
+						}
+
+						// Definindo o código do projeto
+						$projeto->codigo = $novo_codigo;
+					}
+
 					$id_usuario = $query[0]['id'];
 					$id_empresa = $query[0]['id_empresa'];
 					$sql = "INSERT INTO gdoks_projetos (
@@ -1686,9 +1719,10 @@
 								id_empresa,
 								data_inicio_p,
 								data_final_p,
+								data_registro,
 								ativo,
 								id_versao_de_proposta
-							) VALUES (?,?,?,?,?,?,?,?,?)";
+							) VALUES (?,?,?,?,?,?,?,NOW(),?,?)";
                     try {
                     	$db->query($sql,'ssiiissii',
                     		$projeto->nome,
@@ -1697,7 +1731,7 @@
                     		$projeto->id_responsavel,
                     		$id_empresa,
                     		substr($projeto->data_inicio_p, 0, 10),
-                    		substr($projeto->data_final_p, 0, 10),
+							substr($projeto->data_final_p, 0, 10),
 							$projeto->ativo,
 							$projeto->id_versao_de_proposta
 						);
