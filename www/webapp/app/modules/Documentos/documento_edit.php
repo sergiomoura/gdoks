@@ -22,26 +22,26 @@
 		<div layout="row" layout-align="space-between center" >
 			<md-input-container flex="20">
 				<label>Disciplina</label>
-				<md-select ng-model="disciplinaSelecionada" required>
+				<md-select ng-model="disciplinas.selecionada" required>
 				  <md-option ng-value="opt" ng-repeat="opt in disciplinas|orderBy:'nome'">{{ opt.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Subdisciplina</label>
-				<md-select ng-model="doc.subdisciplina" required>
-				  <md-option ng-value="opt" ng-repeat="opt in disciplinaSelecionada.subs|orderBy:'nome'">{{ opt.nome }}</md-option>
+				<md-select ng-model="disciplinas.selecionada.subs.selecionada" required>
+				  <md-option ng-value="opt" ng-repeat="opt in disciplinas.selecionada.subs|orderBy:'nome'">{{ opt.nome }}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Área</label>
-				<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()" required>
+				<md-select ng-model="areas.selecionada" required>
 				  <md-option ng-value="opt" ng-repeat="opt in areas">{{opt.codigo}} - {{opt.nome}}</md-option>
 				</md-select>
 			</md-input-container>
 			<md-input-container flex="20">
 				<label>Subárea</label>
-				<md-select ng-model="doc.subarea" required>
-					<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{opt.codigo}}{{(opt.nome!=null && opt.nome!='') ? (' - '+opt.nome):''}}</md-option>
+				<md-select ng-model="areas.selecionada.subareas.selecionada" required>
+					<md-option ng-value="opt" ng-repeat="opt in areas.selecionada.subareas">{{opt.codigo}}{{(opt.nome!=null && opt.nome!='') ? (' - '+opt.nome):''}}</md-option>
 				</md-select>
 			</md-input-container>
 		</div>

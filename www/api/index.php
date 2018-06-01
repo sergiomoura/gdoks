@@ -1807,7 +1807,7 @@
 				}
 			});
 
-			$app->get('/projetos/:id_projeto/areas/:id_area/subareas',function($id_projeto,$i;d_area) use ($app,$db,$token){
+			$app->get('/projetos/:id_projeto/areas/:id_area/subareas',function($id_projeto,$id_area) use ($app,$db,$token){
 				// Lendo e saneando as informações da requisição
 				$id_projeto = 1*$id_projeto;
 				$id_area = 1*$id_area;
@@ -3242,6 +3242,10 @@
 
 					// Associando GRDs nas quais este documento consta
 					$doc->grds = $grds;
+
+					// Levantando ids de documentos dos quais este documento depende
+					$sql='SELECT id_dependencia FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
+					$doc->dependencias = array_map(function($a){return $a['id_dependencia'];},$db->query($sql,'i',$id_doc));
 
 					// Enviando resposta ao usuário
 					$response = new response(0,'ok');
