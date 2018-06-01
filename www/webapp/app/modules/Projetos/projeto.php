@@ -35,7 +35,7 @@
 							
 							<md-input-container flex="30">
 								<label>Código</label>
-								<input type="text" placeholder="Digite um código identificador para o projeto" ng-model="projeto.codigo" required>
+								<input ng-disabled="geraCodigosAutomaticamente" type="text" placeholder="{{geraCodigosAutomaticamente?'Será gerado automaticamente':'Digite um código identificador para o projeto'}}" ng-model="projeto.codigo" required>
 							</md-input-container>
 
 							<md-input-container flex="30">

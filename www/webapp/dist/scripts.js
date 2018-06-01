@@ -22806,6 +22806,22 @@ function NavController($scope){
 			carregaProjeto();
 		});
 
+		// Carregando configurações do GDoks
+		$scope.geraCodigosAutomaticamente = false;
+		GDoksFactory.getConfiguracoes().
+		success(function(response){
+			$scope.geraCodigosAutomaticamente = (response.config.GERAR_CODIGOS_DE_PROJETOS_AUTOMATICAMENTE.valor === true);
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao carregar configurações: ' + error.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		});
+
 		// Função a ser executada depois de carregados clientes e usuários da base
 		function carregaProjeto(){
 			// Só executa quando clientes e usuários foram carregados.

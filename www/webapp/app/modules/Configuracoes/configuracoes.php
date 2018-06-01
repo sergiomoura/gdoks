@@ -73,6 +73,8 @@
 			<div><span>$grd_link(texto)</span>: Link para GRD</div>
 			<div><span>$proposta_codigo</span>: Código da proposta</div>
 			<div><span>$proposta_versao</span>: Versão da proposta</div>
+			<div><span>$ano</span>: Ano corrente</div>
+			<div><span>$i(n)</span>: Sequencial com n caractreres</div>
 		</div>
 	</div>
 </div>
