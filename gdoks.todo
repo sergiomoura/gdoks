@@ -3,11 +3,12 @@ BUGS:
 	✘ Documentos do projeto não estão aparecendo @bug @cancelled(31-05-18 07:57)
 	✔ Quando insere um documento (via importação), o clicar no editar não leva até o editar @bug @done(31-05-18 10:19)
 	✔ Por na configuração do GDoks para númerar projeto automático @done(01-06-18 00:56)
+	☐ Fazer tela de edição de documento (independente da tela de edição do projeto)
 	☐ No dashboard do projeto, na parte que lista os documentos, mostrar opções: Duplicar, Editar, excluir
 	☐ Adicionar campo de busca de propostas para exibirt somente aprovadas/somente reprovadas
 	☐ Adicionar campo Título a propostas
 	☐ Gerar Código da proposta automaticamente: FRY-2018NNNN (SEGUNDOU PADRÃO CONFIGURÁVEL) ou manual
-	☐ Começar versão de proposta a partir de ZERO
+	✔ Começar versão de proposta a partir de ZERO @done(02-06-18 05:31)
 	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento
 	☐ Lidar com situação de especialista atualizar documento sem disponibilizar para validação
 

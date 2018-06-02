@@ -6241,9 +6241,8 @@
 						exit(1);
 					}
 					$id_proposta = $db->insert_id;
-					$proximoSerial = 1;
-				} else 
-				/**/{
+					$proximoSerial = 0;
+				} else {
 					// Verificando se a proposta realmente existe
 					$sql = 'SELECT id FROM gdoks_propostas WHERE id=? AND codigo=?';
 					$rs = $db->query($sql,'is',$id_proposta,$codigo);
