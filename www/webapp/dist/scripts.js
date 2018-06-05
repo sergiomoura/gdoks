@@ -20401,6 +20401,9 @@ module.exports = function(Chart) {
 			.success(function(response){
 				$scope.doc = response.documento;
 
+				// Parsing date
+				$scope.doc.revisoes[0].data_limite = new Date($scope.doc.revisoes[0].data_limite);
+
 				// Carregando áreas
 				GDoksFactory.getAreas($scope.doc.id_projeto)
 				.success(function(response){
@@ -20489,6 +20492,40 @@ module.exports = function(Chart) {
 
 		$scope.addNewHH = function(){
 			$scope.doc.hhs.push({id_cargo:undefined,hh:1});
+		}
+
+		$scope.salvar = function(){
+			// Mostra carregando
+			$scope.root.carregando = true;
+
+			GDoksFactory.alterarDocumento($scope.doc)
+			.success(function(response){
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Documento salvo!')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			})
+			.error(function(error){
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Exibe erro no console
+				console.warn(error);
+
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar salvar documento')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
 		}
 
 		// Funções auxiliares para determinação de dependências possíveis= = = = = = = = =

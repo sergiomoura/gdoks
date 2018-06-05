@@ -2202,6 +2202,7 @@
 					unset($documento->dependencias);
 					unset($documento->hhs);
 					unset($documento->revisoes);
+					unset($documento->grds);
 					
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DOCUMENTO,implode(',', (array)$documento));

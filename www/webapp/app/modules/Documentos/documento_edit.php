@@ -61,7 +61,7 @@
 			<md-input-container flex="20" class="datepicker" >
 				<label>Data Limite</label>
 				<md-datepicker
-						ng-model="doc.data_limite"
+						ng-model="doc.revisoes[0].data_limite"
 						md-open-on-focus
 						md-hide-icons="calendar"
 						required></md-datepicker>
@@ -105,6 +105,6 @@
 	</form>
 	<md-dialog-actions layout="row" layout-align="space-between center">
 		<md-button ng-click="cancelar(doc)" class="md-raised md-accent" aria-label="Cancelar">Cancelar</md-button>
-		<md-button ng-disabled="!formdoc.$valid || !formdoc.$dirty" ng-click="salvar(doc)" class="md-raised md-primary" aria-label="Salvar Documento">Salvar Documento</md-button>
+		<md-button ng-disabled="!formdoc.$valid || !formdoc.$dirty" ng-click="salvar()" class="md-raised md-primary" aria-label="Salvar Documento">Salvar Documento</md-button>
 	</md-dialog-actions>
 </div>
