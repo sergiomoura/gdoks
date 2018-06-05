@@ -3167,7 +3167,6 @@
 						$response->flush();
 						return;	
 					}
-					
 
 					// Levantando pacotes de arquivos (pdas)
 					$sql = 'SELECT
@@ -3246,6 +3245,10 @@
 					// Levantando ids de documentos dos quais este documento depende
 					$sql='SELECT id_dependencia FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
 					$doc->dependencias = array_map(function($a){return $a['id_dependencia'];},$db->query($sql,'i',$id_doc));
+
+					// Levantando trabalho do qual esse documento precisa
+					$sql = 'SELECT id_cargo,hh FROM gdoks_hhemdocs WHERE id_doc=?';
+					$doc->hhs = array_map(function($a){return (object)$a;},$db->query($sql,'i',$id_doc));
 
 					// Enviando resposta ao usuário
 					$response = new response(0,'ok');
