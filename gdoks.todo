@@ -11,6 +11,7 @@ BUGS:
 	✔ Começar versão de proposta a partir de ZERO @done(02-06-18 05:31)
 	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento
 	☐ Lidar com situação de especialista atualizar documento sem disponibilizar para validação
+	☐ Mostrar na tela do documento um aviso dizendo que o usuário não é especialista nem validador daquele documento.
 
 A) Gerenciar Propostas:
 	☐ Gerenciar Propostas (Arquivo + Valor Total)
