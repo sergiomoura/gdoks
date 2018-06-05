@@ -42,7 +42,8 @@
 				"ehEspecialista":false,
 				"ehValidador":true,
 				"revisoes":[],
-				"grds":[]
+				"grds":[],
+				"hhs":[]
 			}
 		} else {
 			// Carregando documento da base
@@ -84,21 +85,31 @@
 					);
 				});
 
+				// Carregando Cargos
+				GDoksFactory.getCargos()
+				.success(function(response){
+					$scope.cargos = response.cargos;
+				})
+				.error(function(error){
+					// Retornando Toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha ao tentar carregar cargos.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				});
+
 				// Carregando documentos de projeto
 				GDoksFactory.getDocumentosDoProjeto($scope.doc.id_projeto)
 				.success(function(response){
-					// removendo o próprio documento 
-					var index = response.documentos.findIndex(function(a){return a.id==this},$scope.doc.id);
-					response.documentos.splice(index,1);
-					documentos = response.documentos;
-					
-					// Determinando quais documentos são dependencias possíveis
-					$scope.dependenciasPossiveis = getDependenciasPossiveis($scope.doc);
 
-					// Linkando atuais dependencias às dependencias possíveis
-					for (var i = $scope.doc.dependencias.length - 1; i >= 0; i--) {
-						$scope.doc.dependencias[i] = $scope.dependenciasPossiveis.find(function(a){return a.id==this},$scope.doc.dependencias[i].id);
-					}
+					// Salvando resposta do servidor
+					documentos = response.documentos;
+
+					// Determinando quais documentos são dependencias possíveis
+					$scope.dependenciasPossiveis = getDependenciasPossiveis();
+
 				})
 				.error(function(error){
 					// Retornando Toast para usuário
@@ -121,47 +132,79 @@
 			});
 		}
 
+		// Funções de escopo
+		$scope.removeHH = function(i){
+			$scope.doc.hhs.splice(i,1);
+		}
+
+		$scope.addNewHH = function(){
+			$scope.doc.hhs.push({id_cargo:undefined,hh:1});
+		}
+
 		// Funções auxiliares para determinação de dependências possíveis= = = = = = = = =
 
 			// Determinando lista de possíveis dependentes
-			function getDependenciasPossiveis(doc){
-				var result = documentos.filter(
-					function(d){
-						// calculando condicao de nao ser ancestral
-						//var naoEAncestral = ancestraisDeDoc(this).indexOf(d.id) == -1;
+			function getDependenciasPossiveis(){
+				
+				// Determinando descendentes
+				var descendentes = descendentesDeDoc($scope.doc.id);
 
-						// calculando condição de não ser descendente
-						var naoEDescendente = descendentesDeDoc(this).indexOf(d.id) == -1;
+				// Nós impossíveis
+				var impossiveis = descendentes.concat([$scope.doc.id]);
 
-						// calculando condicao de evitar documento próprio
-						var docDiferente = d.id != this.id;
+				// Determinando os possíveis
+				var possiveis = [];
+				for (let i = 0; i < documentos.length; i++) {
+					if(impossiveis.indexOf(documentos[i].id) == -1){
+						possiveis.push(documentos[i]);
+					}					
+				}
 
-						return naoEDescendente && docDiferente;
-					},doc);
-				return result;
+				return possiveis;
 			}
 
 			// Função que retorna vetor com todos os ancestrais de um documento (dependências)
-			function ancestraisDeDoc(doc){
-				if(doc.dependencias.length == 0){
+			function ancestraisDeDoc(doc_id){
+				
+				// Determinando ancestrais diretos
+				var ancestrais = documentos.find(function(a){return a.id == this}, doc_id).dependencias;
+
+				// Recursão
+				if(ancestrais.length == 0){
+					
+					// Documento não possui ancestrais. Retornando vetor vazio. Fim da recursão
 					return [];
+
 				} else {
-					var dep = doc.dependencias.map(function(d){return d.id});
-					for (var i = doc.dependencias.length - 1; i >= 0; i--) {
-						dep = dep.concat(ancestraisDeDoc(doc.dependencias[i]));
-					}
-					return dep;
+					// Determinando ancestrais de ancestrais
+					var ada = ancestrais.map(ancestraisDeDoc);
+					ada = [].concat.apply([],ada);
+
+					return ancestrais.concat(ada);
 				}
 			}
 
-			function docEhAncestralDeFilho(pai,filho){
-				return ancestraisDeDoc(filho).indexOf(pai.id) != -1
-			}
+			function descendentesDeDoc(doc_id){
 
-			function descendentesDeDoc(doc){
-				return documentos.filter(function(filho){
-					return docEhAncestralDeFilho(this,filho)
-				},doc).map(function(a){return a.id});
+				// Definindo vetor de descendentes
+				var descendentes = [];
+
+				// Determinando os descendentes diretos
+				for (let i = 0; i < documentos.length; i++) {
+					if(documentos[i].dependencias.indexOf(doc_id) != -1){
+						descendentes.push(documentos[i].id);
+					}
+				}
+
+				// Recursão
+				if(descendentes.length == 0){
+					return [];
+				} else {
+					var ddd = descendentes.map(descendentesDeDoc); // Descendentes de Descendentes
+					ddd = [].concat.apply([], ddd);
+
+					return descendentes.concat(ddd);
+				}
 			}
 		// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		

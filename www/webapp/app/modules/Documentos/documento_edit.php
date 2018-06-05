@@ -1,19 +1,30 @@
 <div id="documentoEdit_container" class="container_80">
 	<form name="formdoc" layout="column" novalidate>
-		<pre>
+		<!-- <pre>
 			{{doc | json}}
-		</pre>
+		</pre> -->
 		<h3>Dados do Documento</h3>
 		<div layout="row" layout-align="space-between center">
-			<md-input-container flex="30">
+			<md-input-container flex="20">
+				<label>Cliente</label>
+				<input type="text" ng-model="doc.nome_cliente" disabled>
+			</md-input-container>
+			<md-input-container flex="20">
+				<label>Projeto</label>
+				<input type="text" ng-model="doc.nome_projeto" disabled>
+			</md-input-container>
+			<md-input-container flex="20">
 				<label>Código do Documento</label>
 				<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo" required>
 			</md-input-container>
-			<md-input-container flex="30">
+			<md-input-container flex="20">
 				<label>Código Alternativo</label>
 				<input md-maxlength="45" maxlength="45" type="text" ng-model="doc.codigo_alternativo">
 			</md-input-container>
-			<md-input-container flex="30">
+		</div>
+		<div layout="row" layout-align="space-between center">
+			
+			<md-input-container flex>
 				<label>Título do Documento</label>
 				<input md-maxlength="100" maxlength="100" type="text" ng-model="doc.nome" required>
 			</md-input-container>
@@ -62,31 +73,30 @@
 					data-md-container-class="SelectDpsHeader"
 					multiple>
 					<md-option
-							ng-value="dp"
-							ng-repeat="dp in dependenciasPossiveis">{{dp.nome}}</md-option>
+							ng-value="dp.id"
+							ng-repeat="dp in dependenciasPossiveis">{{dp.codigo}}</md-option>
 				</md-select>
 			</md-input-container>
 			<div flex="20"></div>
 			<div flex="20"></div>
 		</div>
-		<div layout="row" layout-align="space-between center">
-			<h3>Trabalho (Homem x Hora)</h3>
-			<div ng-repeat="hh in doc.hhs" layout="row" layout-align="center start">
-				<md-input-container flex>
+		<div class="trabalho">
+			<h3>Trabalho Estimado (Homem x Hora)</h3>
+			<div ng-repeat="trab in doc.hhs" layout="row" flex="50">
+				<md-input-container flex="50">
 					<label>Cargo</label>
 					<md-select
-						ng-model="hh.cargo"
-						name="hh_{{$index}}"
+						ng-model="trab.id_cargo"
 						data-md-container-class="SelectDpsHeader">
 						<md-option
-								ng-value="cargo"
+								ng-value="cargo.id"
 								ng-repeat="cargo in cargos">{{cargo.nome}}
 						</md-option>
 					</md-select>
 				</md-input-container>
-				<md-input-container flex>
+				<md-input-container flex="30">
 					<label>Qtde. de Horas</label>
-					<input type="number" min="0" max="1000" ng-model="hh.hh">
+					<input type="number" min="0" max="1000" ng-model="trab.hh">
 				</md-input-container>
 				<md-button ng-if="!$last" ng-click="removeHH($index)" class="md-icon-button" aria-label="Excluir HHs"><md-icon class="material-icons step" aria-label="Excluir HHs">close</md-icon></md-button>
 				<md-button ng-if="$last" ng-click="addNewHH()" class="md-icon-button" aria-label="Adicionar HH"><md-icon class="material-icons step" aria-label="Adicionar HHs">add_circle_outline</md-icon></md-button>
