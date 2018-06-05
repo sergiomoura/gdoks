@@ -2131,7 +2131,7 @@
 				$id_projeto = 1*$id_projeto;
 				$id_documento = 1*$id_documento;
 				$documento = json_decode($app->request->getBody());
-				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
+				$documento->revisoes[0]->data_limite = $documento->revisoes[0]->data_limite==null?'null':substr($documento->revisoes[0]->data_limite,0,10);
 
 				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
 				if($id_documento != $documento->id) {
@@ -2196,7 +2196,7 @@
 
 					// Atualizando a data limite da última revisão
 					$sql = "UPDATE gdoks_revisoes set data_limite=? WHERE id_documento=? and serial=?";
-					$db->query($sql,'sii',$documento->data_limite,$documento->id,$documento->rev_serial);
+					$db->query($sql,'sii',$documento->revisoes[0]->data_limite,$documento->id,$documento->revisoes[0]->serial);
 
 					// removendo dependencias e hhs do objeto para salvar no log
 					unset($documento->dependencias);
@@ -3061,6 +3061,8 @@
 								a.id,
 							    a.nome,
 							    a.codigo,
+								a.codigo_cliente,
+								a.codigo_alternativo,
 							    a.idu_checkout,
 							    h.sigla as sigla_checkout,
 							    a.datahora_do_checkout,
