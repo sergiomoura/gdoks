@@ -3076,7 +3076,9 @@
 							    g.id as id_projeto,
 							    g.nome as nome_projeto,
 							    g.ativo as projeto_ativo,
-                                ifnull(sum(f.hh),0) as trabalho_estimado
+                                ifnull(sum(f.hh),0) as trabalho_estimado,
+								i.id as id_cliente,
+								i.nome as nome_cliente
 
 							FROM
 								gdoks_documentos a
@@ -3087,6 +3089,7 @@
 							    INNER JOIN gdoks_projetos g ON g.id=e.id_projeto
                                 LEFT JOIN gdoks_hhemdocs f ON f.id_doc=a.id
                                 LEFT JOIN gdoks_usuarios h ON h.id=a.idu_checkout
+								INNER JOIN gdoks_clientes i ON i.id=g.id_cliente
 							WHERE
 								a.id=?
 							GROUP BY
