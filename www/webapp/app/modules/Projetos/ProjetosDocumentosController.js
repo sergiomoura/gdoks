@@ -284,7 +284,6 @@
 				
 				// Determinando descendentes
 				var descendentes = descendentesDeDoc($scope.doc.id);
-				console.dir(descendentes);
 
 				// Nós impossíveis
 				var impossiveis = descendentes.concat([$scope.doc.id]);
@@ -343,44 +342,27 @@
 					return descendentes.concat(ddd);
 				}
 			}
-			
 
 			// Função que cancela e esconde o dialog
 			$scope.cancelar = function(){
 				$mdDialog.hide();
 			}
 
-			$scope.salvar = function(documento){
+			$scope.salvar = function(){
 				// Mostrando carregando
 				parentScope.root.carregando = true;
 
 				// Fazendo cópia do objeto documento
-				doc = angular.copy(documento);
+				doc = angular.copy($scope.doc);
 
 				// Removendo campos desnecessários
-				doc.id_subdisciplina = doc.subdisciplina.id;
-				delete doc.subdisciplina;
-
-				doc.id_subarea = doc.subarea.id;
-				delete doc.subarea;
-
-				doc.dependencias = doc.dependencias.map(function(a){return a.id});
-
+				doc.id_subdisciplina = $scope.disciplinas.selecionada.subs.selecionada.id;
+				doc.id_subarea = $scope.areas.selecionada.subareas.selecionada.id;
 				doc.hhs = doc.hhs.filter(function(a){
 					return a.cargo != null;
 				});
-
-				doc.hhs = doc.hhs.map(function(a){
-					a.id_cargo = a.cargo.id;
-					delete a.cargo;
-					return a;
-				});
-
-				// Limpando HHs de cargo nulo do documento
-				documento.hhs = documento.hhs.filter(function(a){
-					return a.cargo != null;
-				});				
-
+				delete doc.grds;
+				
 				// Verificando se é inserção de documento ou atualização pelo id
 				if(doc.id == 0){
 					// Inserir novo documento
@@ -450,10 +432,10 @@
 						parentScope.root.carregando = false;
 						
 						// Determinando a posição do objeto atual
-						var pos = parentScope.projeto.documentos.findIndex(function(a){return a.id == this},documento.id);
+						var pos = parentScope.projeto.documentos.findIndex(function(a){return a.id == this},doc.id);
 
 						// Substituindo o objeto antigo pelo atualizado agora
-						parentScope.projeto.documentos.splice(pos,1,documento);
+						parentScope.projeto.documentos.splice(pos,1,doc);
 
 						// Fechando caixa de diálogo
 						$mdDialog.hide();
@@ -465,9 +447,6 @@
 							.position('bottom left')
 							.hideDelay(5000)
 						);
-
-						// Esconde carregando
-						parentScope.root.carregando = false;
 						
 					})
 					.error(function(err){
