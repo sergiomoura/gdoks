@@ -4904,10 +4904,9 @@
 				$grd->obs = (isset($grd->obs)?$grd->obs:'');
 
 				// Determinando o código da nova GRD
-				$sql = 'SELECT count(*) as n FROM gdoks_grds a INNER JOIN gdoks_projetos b on a.id_projeto=b.id INNER JOIN gdoks_clientes c ON c.id=b.id_cliente INNER JOIN gdoks_empresas d on d.id=c.id_empresa WHERE d.id=? and YEAR(a.datahora_registro)=YEAR(NOW())';
-				$n = $db->query($sql,'i',$id_empresa)[0]['n'] + 1;
+				$sql = 'SELECT ifnull(1*MAX(replace(codigo,"GRD'.date('Y').'",""))+1,1) as n FROM gdoks001.gdoks_grds WHERE CODIGO LIKE "GRD-'.date('Y').'-%"';
+				$n = $db->query($sql)[0]['n'];
 				$newCodigo = 'GRD-'.date('Y').'-'.str_pad($n, 6, "0", STR_PAD_LEFT);
-
 				
 				// Inserindo nova grd.
 				$sql = 'INSERT INTO gdoks_grds (id_projeto,codigo,obs,datahora_registro) VALUES (?,?,?,NOW())';

@@ -12,6 +12,7 @@ BUGS:
 	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento
 	☐ Lidar com situação de especialista atualizar documento sem disponibilizar para validação
 	☐ Mostrar na tela do documento um aviso dizendo que o usuário não é especialista nem validador daquele documento.
+	✔ BUGFIX: Gerando o código da GRD com base no último código @bug @done(06-06-18 15:45)
 
 A) Gerenciar Propostas:
 	☐ Gerenciar Propostas (Arquivo + Valor Total)
