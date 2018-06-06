@@ -18,26 +18,26 @@
 			<div layout="column" flex="33">
 				<md-input-container>
 					<label>Disciplina</label>
-					<md-select ng-model="disciplinaSelecionada" required>
+					<md-select ng-model="disciplinas.selecionada" required>
 					  <md-option ng-value="opt" ng-repeat="opt in disciplinas|orderBy:'nome'">{{ opt.nome }}</md-option>
 					</md-select>
 				</md-input-container>
 				<md-input-container>
 					<label>Subdisciplina</label>
-					<md-select ng-model="doc.subdisciplina" required>
-					  <md-option ng-value="opt" ng-repeat="opt in disciplinaSelecionada.subs|orderBy:'nome'">{{ opt.nome }}</md-option>
+					<md-select ng-model="disciplinas.selecionada.subs.selecionada" required>
+					  <md-option ng-value="opt" ng-repeat="opt in disciplinas.selecionada.subs|orderBy:'nome'">{{ opt.nome }}</md-option>
 					</md-select>
 				</md-input-container>
 				<md-input-container>
 					<label>Área</label>
-					<md-select ng-model="areaSelecionada" ng-change="setSubareasDeAreaSelecionada()" required>
+					<md-select ng-model="areas.selecionada" required>
 					  <md-option ng-value="opt" ng-repeat="opt in areas">{{opt.codigo}} - {{opt.nome}}</md-option>
 					</md-select>
 				</md-input-container>
 				<md-input-container>
 					<label>Subárea</label>
-					<md-select ng-model="doc.subarea" required>
-						<md-option ng-value="opt" ng-repeat="opt in subareasDeAreaSelecionada">{{opt.codigo}}{{(opt.nome!=null && opt.nome!='') ? (' - '+opt.nome):''}}</md-option>
+					<md-select ng-model="areas.selecionada.subareas.selecionada" required>
+						<md-option ng-value="opt" ng-repeat="opt in areas.selecionada.subareas">{{opt.codigo}}{{(opt.nome!=null && opt.nome!='') ? (' - '+opt.nome):''}}</md-option>
 					</md-select>
 				</md-input-container>
 			</div>
@@ -45,39 +45,33 @@
 				<md-input-container>
 					<label>Data Limite</label>
 					<md-datepicker
-							ng-model="doc.data_limite"
+							ng-model="doc.revisoes[0].data_limite"
 							md-open-on-focus
 							md-hide-icons="calendar"
 							required></md-datepicker>
 				</md-input-container>
 				<md-input-container>
 					<label>Dependências</label>
-					<md-select
-						ng-model="doc.dependencias"
-						data-md-container-class="SelectDpsHeader"
-						multiple>
+					<md-select ng-model="doc.dependencias" multiple>
 						<md-option
-								ng-value="dp"
+								ng-value="dp.id"
 								ng-repeat="dp in dependenciasPossiveis">{{dp.codigo}}</md-option>
 					</md-select>
 				</md-input-container>
 				<div class="section-title">Trabalho (Homem x Hora)</div>
-				<div ng-repeat="hh in doc.hhs" layout="row" layout-align="center start">
+				<div ng-repeat="trabalho in doc.hhs" layout="row" layout-align="center start">
 					<md-input-container flex>
 						<label>Cargo</label>
-						<md-select
-							ng-model="hh.cargo"
-							name="hh_{{$index}}"
-							data-md-container-class="SelectDpsHeader">
+						<md-select ng-model="trabalho.id_cargo">
 							<md-option
-									ng-value="cargo"
+									ng-value="cargo.id"
 									ng-repeat="cargo in cargos">{{cargo.nome}}
 							</md-option>
 						</md-select>
 					</md-input-container>
 					<md-input-container flex>
 						<label>Qtde. de Horas</label>
-						<input type="number" min="0" max="1000" ng-model="hh.hh">
+						<input type="number" min="0" max="1000" ng-model="trabalho.hh">
 					</md-input-container>
 					<md-button ng-if="!$last" ng-click="removeHH($index)" class="md-icon-button" aria-label="Excluir HHs"><md-icon class="material-icons step" aria-label="Excluir HHs">close</md-icon></md-button>
 					<md-button ng-if="$last" ng-click="addNewHH()" class="md-icon-button" aria-label="Adicionar HH"><md-icon class="material-icons step" aria-label="Adicionar HHs">add_circle_outline</md-icon></md-button>
