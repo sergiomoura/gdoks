@@ -254,11 +254,13 @@
 							));
 
 				// Linkando doc.subdisciplina a um elemento de disciplinaSelecionada.subs
-				$scope.disciplinas.selecionada.subs.selecionada = ( (id_doc==0 && !copy) ? null : $scope.disciplinas.selecionada.subs.find(
-						function(a){
-							return a.id==this;
-						},$scope.doc.id_subdisciplina
-					));
+				if($scope.disciplinas.selecionada != null){
+					$scope.disciplinas.selecionada.subs.selecionada = ( (id_doc==0 && !copy) ? null : $scope.disciplinas.selecionada.subs.find(
+							function(a){
+								return a.id==this;
+							},$scope.doc.id_subdisciplina
+						));
+				}
 				
 				// Determinando o valor da area selecionada
 				$scope.areas.selecionada = ( (id_doc==0 && !copy) ? null : $scope.areas.find(
@@ -267,10 +269,12 @@
 					}, $scope.doc.id_area));
 				
 				// Determinando subárea selecionada
-				$scope.areas.selecionada.subareas.selecionada = ( (id_doc==0 && !copy) ? null : $scope.areas.selecionada.subareas.find(
-					function(a){
-						return a.id == this
-					}, $scope.doc.id_subarea));
+				if($scope.areas.selecionada != null){
+					$scope.areas.selecionada.subareas.selecionada = ( (id_doc==0 && !copy) ? null : $scope.areas.selecionada.subareas.find(
+						function(a){
+							return a.id == this
+						}, $scope.doc.id_subarea));
+				}
 					
 				// Determinando quais documentos são dependencias possíveis
 				$scope.dependenciasPossiveis = getDependenciasPossiveis();
