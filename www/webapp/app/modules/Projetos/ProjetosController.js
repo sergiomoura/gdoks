@@ -555,7 +555,7 @@
 		}
 	};
 
-	function DashProjetoController($scope,GDoksFactory,$location,$routeParams){
+	function DashProjetoController($scope,GDoksFactory,$location,$routeParams,$mdToast,$mdDialog){
 		
 		// Definindo variáveis de scope
 		$scope.projeto = {};
@@ -678,6 +678,64 @@
 		$scope.onAlterarDocumentoClick = function(id_doc,evt){
 			evt.stopPropagation();
 			$location.url('/documentos/'+id_doc+'/edit');
+		}
+
+		// Função executada ao clicar em Remover Documento
+		$scope.onRemoverDocumentoClick = function(documento,evt){
+			
+			// Parando a propagação do click
+			evt.stopPropagation();
+
+			// Appending dialog to document.body to cover sidenav in docs app
+			var confirm = $mdDialog.confirm()
+				.title('Tem certeza que deseja remover o cadastro deste documento?')
+				.textContent('A ação não poderá ser desfeita.')
+				.ariaLabel('Deseja remover cadastro de documento?')
+				.targetEvent(evt)
+				.ok('Sim')
+				.cancel('Não');
+
+			$mdDialog.show(confirm).then(
+				function() {
+					// Mostra carregando
+					$scope.root.carregando = true;
+
+					documento.id_projeto = $scope.projeto.id;
+					GDoksFactory.removerDocumento(documento)
+					.success(function(response){
+
+						// Esconde carregando
+						$scope.root.carregando = false;
+						
+						// Localizando o index do documento excluído do projeto
+						var pos = $scope.documentos.findIndex(function(a){return a.id==this},documento.id);
+						
+						// Removendo o documento do vetor de documentos do projeto
+						$scope.documentos.splice(pos,1);
+
+						// Retornando Toast para usuário!
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Documento removido com sucesso!')
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					})
+					.error(function(error){
+						
+						// Esconde carregando
+						$scope.root.carregando = false;
+
+						// Retornando Toast para usuário!
+						$mdToast.show(
+							$mdToast.simple()
+							.textContent('Falha ao tentar remover documento: ' + error.msg)
+							.position('bottom left')
+							.hideDelay(5000)
+						);
+					});
+				}
+			);
 		}
 
 	};

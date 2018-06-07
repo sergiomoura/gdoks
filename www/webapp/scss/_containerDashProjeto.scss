@@ -26,19 +26,34 @@
 		td {
 			padding: 10px 0;
 			&:nth-child(1){
-				width: 400px;
+				
 			}
 			&:nth-child(2){
 				text-align: center;
+				width: 80px;
 			}
 			&:nth-child(3){
 				text-align: center;
+				width: 80px;
+			}
+			&:nth-child(4){
+				text-align: center;
+				width: 100px;
 			}
 			&:nth-child(5){
 				text-align: center;
+				width: 100px;
 			}
 			&:nth-child(6){
 				text-align: center;
+				width: 150px;
+			}
+			&:nth-child(7){
+				text-align: right;
+				width: 150px;
+				span {
+					display: inline;
+				}
 			}
 		}
 		thead {

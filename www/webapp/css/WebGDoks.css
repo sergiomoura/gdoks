@@ -1505,16 +1505,26 @@
     outline: none; }
   #dashprojeto_container .documentos td {
     padding: 10px 0; }
-    #dashprojeto_container .documentos td:nth-child(1) {
-      width: 400px; }
     #dashprojeto_container .documentos td:nth-child(2) {
-      text-align: center; }
+      text-align: center;
+      width: 80px; }
     #dashprojeto_container .documentos td:nth-child(3) {
-      text-align: center; }
+      text-align: center;
+      width: 80px; }
+    #dashprojeto_container .documentos td:nth-child(4) {
+      text-align: center;
+      width: 100px; }
     #dashprojeto_container .documentos td:nth-child(5) {
-      text-align: center; }
+      text-align: center;
+      width: 100px; }
     #dashprojeto_container .documentos td:nth-child(6) {
-      text-align: center; }
+      text-align: center;
+      width: 150px; }
+    #dashprojeto_container .documentos td:nth-child(7) {
+      text-align: right;
+      width: 150px; }
+      #dashprojeto_container .documentos td:nth-child(7) span {
+        display: inline; }
   #dashprojeto_container .documentos thead {
     color: rgba(0, 0, 0, 0.54);
     font-size: 12px; }
