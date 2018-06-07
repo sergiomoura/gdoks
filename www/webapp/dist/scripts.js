@@ -23522,13 +23522,19 @@ function NavController($scope){
 		});
 
 		// Função que leva a página do documento
-		$scope.goToDoc = function(idDoc){
-			$location.url('/documentos/'+idDoc);
+		$scope.goToDoc = function(id_doc){
+			$location.url('/documentos/'+id_doc);
 		}
 
 		// Função que leva a página da GRD
-		$scope.goToGrd = function(idGrd){
-			$location.url('/grds/'+idGrd);
+		$scope.goToGrd = function(id_grd){
+			$location.url('/grds/'+id_grd);
+		}
+
+		// Função executada ao clicar em Alterar Documento
+		$scope.onAlterarDocumentoClick = function(id_doc,evt){
+			evt.stopPropagation();
+			$location.url('/documentos/'+id_doc+'/edit');
 		}
 
 	};

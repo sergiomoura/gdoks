@@ -34,6 +34,7 @@
 				<td>Área</td>
 				<td>Data Limite</td>
 				<td>Progresso</td>
+				<td></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -58,6 +59,17 @@
 				</td>
 				<td>
 					<progresso progress="[doc.progresso]" colors="['#2196F3']" fcolors="['#FFF']" width="100" height="20"></progresso>
+				</td>
+				<td>
+					<md-button
+						class="md-fab md-mini md-primary"
+						ng-click="onAlterarDocumentoClick(doc.id,$event)"
+						aria-label="Alterar Documento">
+							<md-icon class="material-icons step">mode_edit</md-icon>
+							<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+								Alterar Documento
+							</md-tooltip>
+					</md-button>
 				</td>
 			</tr>
 		</tbody>
