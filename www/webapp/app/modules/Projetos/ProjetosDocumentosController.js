@@ -375,30 +375,8 @@
 						// Esconde carregando
 						parentScope.root.carregando = false;
 
-						// Atribuindo id ao novo documento
-						documento.id = response.newId;
-						documento.rev_serial = 1;
-
-						// Se for uma clonagem, anulando o ultimo pda
-						if(copy) {documento.ultimo_pda=null;}
-
-						// Parsing subdisciplina do documento
-						var achouSub = false;
-						var j = 0;
-						while(j<$scope.disciplinas.length && !achouSub){
-							k = 0;
-							while(k<$scope.disciplinas[j].subs.length && !achouSub){
-								achouSub = ($scope.disciplinas[j].subs[k].id == documento.subdisciplina.id);
-								if(achouSub){
-									documento.subdisciplina.disciplina = $scope.disciplinas[j];
-								}
-								k++;
-							}
-							j++;
-						}
-
-						// Adicionando novo documento ao vetor de documentos do projeto
-						parentScope.projeto.documentos.push(documento)
+						// Mandando o parentScope recarregar documentos
+						parentScope.carregaDocumentos();
 
 						// Fechando caixa de diálogo
 						$mdDialog.hide();

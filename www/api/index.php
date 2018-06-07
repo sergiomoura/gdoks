@@ -2366,7 +2366,13 @@
 				// Lendo e saneando as informações da requisição
 				$id_projeto = 1*$id_projeto;
 				$documento = json_decode($app->request->getBody());
-				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
+
+				// Tratando data_limite
+				if($documento->revisoes[0]->data_limite==null){
+					$documento->revisoes[0]->data_limite = 'null';
+				} else {
+					$documento->revisoes[0]->data_limite = substr($documento->revisoes[0]->data_limite,0,10);
+				}
 
 				// verificando se o usário enviado é do mesmo cliente da projeto atual
 				$sql = 'SELECT A.id AS id_usuario,
@@ -2407,7 +2413,14 @@
 
 						// Criando a primeira revisão do documento
 						$sql = "insert into gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) values (0,?,?,0,0,null)";
-						$db->query($sql,'is',$newId,$documento->data_limite);
+						try {
+							$db->query($sql,'is',$newId,$documento->revisoes[0]->data_limite);
+						} catch (Exception $e){
+							http_response_code(401);
+							$response = new response(1,'Falha ao criar revisão de novo documento.');
+							$response->flush();
+							exit(1);
+						}
 
 						// registrando no log
 						registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,$newId.','.$documento->nome.','.$documento->id_subdisciplina.','.$documento->id_subarea);
