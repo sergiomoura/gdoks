@@ -23998,10 +23998,6 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 
 		// Definindo criticas
 		$scope.criticas = [];
-		
-		$scope.collapsePanel = function(index){
-			$mdExpansionPanel('panel_'+index).collapse();
-		}
 
 		$scope.openDocumentoDialog = function(evt,idDoc,clonar){
 
@@ -24230,13 +24226,14 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 			 * Função a ser executada quando o documento é definido.
 			 */
 			function onDocumentoCarregado(){
+				
 				// Parsing datas das revisões
 				for (let i = 0; i < $scope.doc.revisoes.length; i++) {
 					$scope.doc.revisoes[i].data_limite = new Date($scope.doc.revisoes[i].data_limite);					
 				}
 
 				// inserindo um objeto hh ao final do vetor de hh's
-				$scope.doc.hhs.push({cargo:null,hh:1});
+				$scope.doc.hhs.push({id_cargo:null,hh:1});
 
 				// Determinando o valor da disciplina selecionada
 				$scope.disciplinas.selecionada = ( (id_doc==0 && !copy) ? null : $scope.disciplinas.find(
@@ -24310,6 +24307,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 				}
 			}
 
+			// Função que retorna vetor com os descendentes de um documento
 			function descendentesDeDoc(doc_id){
 
 				// Definindo vetor de descendentes
@@ -24344,13 +24342,15 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 
 				// Fazendo cópia do objeto documento
 				doc = angular.copy($scope.doc);
-
+				
 				// Removendo campos desnecessários
 				doc.id_subdisciplina = $scope.disciplinas.selecionada.subs.selecionada.id;
 				doc.id_subarea = $scope.areas.selecionada.subareas.selecionada.id;
 				doc.hhs = doc.hhs.filter(function(a){
-					return a.cargo != null;
+					return a.id_cargo != null;
 				});
+				
+				// Apagando info de GRDs a quais doc pertence
 				delete doc.grds;
 				
 				// Verificando se é inserção de documento ou atualização pelo id
@@ -24424,8 +24424,8 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 						// Determinando a posição do objeto atual
 						var pos = parentScope.projeto.documentos.findIndex(function(a){return a.id == this},doc.id);
 
-						// Substituindo o objeto antigo pelo atualizado agora
-						parentScope.projeto.documentos.splice(pos,1,doc);
+						// Mandando o parent scope recarregar documentos
+						parentScope.carregaDocumentos();
 
 						// Fechando caixa de diálogo
 						$mdDialog.hide();
