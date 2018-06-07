@@ -23999,32 +23999,8 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 		// Definindo criticas
 		$scope.criticas = [];
 
-		$scope.openDocumentoDialog = function(evt,idDoc,clonar){
+		$scope.openDocumentoDialog = function(evt,id_doc,clonar){
 
-			// Definindo o objeto documento que foi clicado
-			if(idDoc == 0) {
-				$scope.docSelecionado = {
-					id:0,
-					nome:null,
-					codigo:null,
-					codigo_cliente:null,
-					codigo_alternativo:null,
-					dependencias:[],
-					hhs: [],
-					subdisciplina:null,
-					subarea:null,
-					data_limite:null
-				};
-			} else if(clonar == undefined || clonar==false) {
-				$scope.docSelecionado = $scope.projeto.documentos.find(function(d){return d.id == this},idDoc);
-			} else {
-				$scope.docSelecionado = angular.copy($scope.projeto.documentos.find(function(d){return d.id == this},idDoc));
-				$scope.docSelecionado.id = 0;
-				$scope.docSelecionado.codigo = "[CÓPIA] "+$scope.docSelecionado.codigo;
-			}
-
-			// Atribuindo o id_projeto ao documento
-			$scope.docSelecionado.id_projeto = $scope.projeto.id;
 
 			$mdDialog.show(
 				{
@@ -24032,7 +24008,7 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 					locals:{
 						disciplinas: angular.copy($scope.disciplinas),
 						areas: angular.copy($scope.projeto.areas),
-						id_doc: angular.copy($scope.docSelecionado.id),
+						id_doc: id_doc,
 						documentos: angular.copy($scope.projeto.documentos),
 						cargos:$scope.cargos,
 						parentScope:$scope,
@@ -24198,6 +24174,12 @@ function ProjetosAreasController($scope,GDoksFactory,$mdDialog,$mdToast){
 
 					// Lendo resposta para o escopo
 					$scope.doc = response.documento;
+
+					// Se for para clonar documento, alterando o seu código e zerando id
+					if(copy){
+						$scope.doc.id = 0;
+						$scope.doc.codigo = '[CÓPIA]-' + $scope.doc.codigo;
+					}
 
 					// Executando função documento carregado
 					onDocumentoCarregado();
