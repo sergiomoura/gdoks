@@ -1895,18 +1895,42 @@
 						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
 					}
 
-					// Levantando subareas do projeto
-					$sql = 'SELECT a.id,a.nome,a.codigo,id_area FROM gdoks_subareas a INNER JOIN gdoks_areas b ON (a.id_area=b.id AND b.id_projeto=?)';
+					 // Levantando subáreas do projeto
+					$sql = 'SELECT a.id,
+							       a.nome,
+							       a.codigo,
+							       a.id_area
+							FROM gdoks_subareas a
+							INNER JOIN gdoks_areas b ON a.id_area=b.id
+							AND b.id_projeto=?';
 					try {
 						$subareas = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_projeto));
 					} catch (Exception $e) {
 						http_response_code(401);
 						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
 						$response->flush();
-						return;
+						exit(1);
+					}
+
+					// parsing subareas
+					foreach ($subareas as $s) {
+
+						// Buscando área com o id 
+						$i = 0;
+						while ($i < sizeof($areas)) {
+							if($areas[$i]->id == $s->id_area){
+								$sub = new stdClass();
+								$sub->id = $s->id;
+								$sub->codigo = $s->codigo;
+								$sub->nome = $s->nome;
+
+								array_push($areas[$i]->subareas, $sub);
+							}
+							$i++;
+						}
 					}
 
 					// Atribuindo subareas às áreas
@@ -2256,7 +2280,7 @@
 				$id_projeto = 1*$id_projeto;
 				$id_documento = 1*$id_documento;
 				$documento = json_decode($app->request->getBody());
-				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
+				$documento->revisoes[0]->data_limite = $documento->revisoes[0]->data_limite==null?'null':substr($documento->revisoes[0]->data_limite,0,10);
 
 				// parando caso haja inconscistência entre o id_projeto vindo no corpo da requisição e o da url
 				if($id_documento != $documento->id) {
@@ -2321,12 +2345,13 @@
 
 					// Atualizando a data limite da última revisão
 					$sql = "UPDATE gdoks_revisoes set data_limite=? WHERE id_documento=? and serial=?";
-					$db->query($sql,'sii',$documento->data_limite,$documento->id,$documento->rev_serial);
+					$db->query($sql,'sii',$documento->revisoes[0]->data_limite,$documento->id,$documento->revisoes[0]->serial);
 
 					// removendo dependencias e hhs do objeto para salvar no log
 					unset($documento->dependencias);
 					unset($documento->hhs);
 					unset($documento->revisoes);
+					unset($documento->grds);
 					
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_ALTEROU_DOCUMENTO,implode(',', (array)$documento));
@@ -2341,7 +2366,13 @@
 				// Lendo e saneando as informações da requisição
 				$id_projeto = 1*$id_projeto;
 				$documento = json_decode($app->request->getBody());
-				$documento->data_limite = $documento->data_limite==null?'null':substr($documento->data_limite,0,10);
+
+				// Tratando data_limite
+				if($documento->revisoes[0]->data_limite==null){
+					$documento->revisoes[0]->data_limite = 'null';
+				} else {
+					$documento->revisoes[0]->data_limite = substr($documento->revisoes[0]->data_limite,0,10);
+				}
 
 				// verificando se o usário enviado é do mesmo cliente da projeto atual
 				$sql = 'SELECT A.id AS id_usuario,
@@ -2382,7 +2413,14 @@
 
 						// Criando a primeira revisão do documento
 						$sql = "insert into gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) values (0,?,?,0,0,null)";
-						$db->query($sql,'is',$newId,$documento->data_limite);
+						try {
+							$db->query($sql,'is',$newId,$documento->revisoes[0]->data_limite);
+						} catch (Exception $e){
+							http_response_code(401);
+							$response = new response(1,'Falha ao criar revisão de novo documento.');
+							$response->flush();
+							exit(1);
+						}
 
 						// registrando no log
 						registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,$newId.','.$documento->nome.','.$documento->id_subdisciplina.','.$documento->id_subarea);
@@ -3209,6 +3247,8 @@
 								a.id,
 							    a.nome,
 							    a.codigo,
+								a.codigo_cliente,
+								a.codigo_alternativo,
 							    a.idu_checkout,
 							    h.sigla as sigla_checkout,
 							    a.datahora_do_checkout,
@@ -3224,10 +3264,10 @@
 							    g.id as id_projeto,
 							    g.nome as nome_projeto,
 							    g.ativo as projeto_ativo,
-							    i.nome as nome_cliente,
-							    i.nome_fantasia as fantasia_cliente,
-							    i.id as id_cliente,
-                                ifnull(sum(f.hh),0) as trabalho_estimado
+                                ifnull(sum(f.hh),0) as trabalho_estimado,
+								i.id as id_cliente,
+								i.nome as nome_cliente,
+							    i.nome_fantasia as fantasia_cliente
 
 							FROM
 								gdoks_documentos a
@@ -3236,9 +3276,9 @@
 							    INNER JOIN gdoks_subareas d ON a.id_subarea=d.id
 							    INNER JOIN gdoks_areas e ON d.id_area=e.id
 							    INNER JOIN gdoks_projetos g ON g.id=e.id_projeto
-							    INNER JOIN gdoks_clientes i ON i.id=g.id_cliente
                                 LEFT JOIN gdoks_hhemdocs f ON f.id_doc=a.id
                                 LEFT JOIN gdoks_usuarios h ON h.id=a.idu_checkout
+								INNER JOIN gdoks_clientes i ON i.id=g.id_cliente
 							WHERE
 								a.id=?
 							GROUP BY
@@ -3319,7 +3359,6 @@
 						$response->flush();
 						return;	
 					}
-					
 
 					// Levantando pacotes de arquivos (pdas)
 					$sql = 'SELECT
@@ -3394,6 +3433,14 @@
 
 					// Associando GRDs nas quais este documento consta
 					$doc->grds = $grds;
+
+					// Levantando ids de documentos dos quais este documento depende
+					$sql='SELECT id_dependencia FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
+					$doc->dependencias = array_map(function($a){return $a['id_dependencia'];},$db->query($sql,'i',$id_doc));
+
+					// Levantando trabalho do qual esse documento precisa
+					$sql = 'SELECT id_cargo,hh FROM gdoks_hhemdocs WHERE id_doc=?';
+					$doc->hhs = array_map(function($a){return (object)$a;},$db->query($sql,'i',$id_doc));
 
 					// Enviando resposta ao usuário
 					$response = new response(0,'ok');

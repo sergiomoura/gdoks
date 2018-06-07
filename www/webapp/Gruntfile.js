@@ -29,6 +29,7 @@ module.exports = function(grunt) {
 					'app/modules/Configuracoes/ConfiguracoesController.js',
 					'app/modules/Documentos/DocumentosController.js',
 					'app/modules/Documentos/DocumentoController.js',
+					'app/modules/Documentos/DocumentoEditController.js',
 					'app/modules/Disciplinas/DisciplinasController.js',
 					'app/modules/Grds/GrdsController.js',
 					'app/modules/Nav/NavController.js',

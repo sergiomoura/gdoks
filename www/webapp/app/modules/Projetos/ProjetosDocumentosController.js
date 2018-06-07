@@ -8,37 +8,9 @@
 
 		// Definindo criticas
 		$scope.criticas = [];
-		
-		$scope.collapsePanel = function(index){
-			$mdExpansionPanel('panel_'+index).collapse();
-		}
 
-		$scope.openDocumentoDialog = function(evt,idDoc,clonar){
+		$scope.openDocumentoDialog = function(evt,id_doc,clonar){
 
-			// Definindo o objeto documento que foi clicado
-			if(idDoc == 0) {
-				$scope.docSelecionado = {
-					id:0,
-					nome:null,
-					codigo:null,
-					codigo_cliente:null,
-					codigo_alternativo:null,
-					dependencias:[],
-					hhs: [],
-					subdisciplina:null,
-					subarea:null,
-					data_limite:null
-				};
-			} else if(clonar == undefined || clonar==false) {
-				$scope.docSelecionado = $scope.projeto.documentos.find(function(d){return d.id == this},idDoc);
-			} else {
-				$scope.docSelecionado = angular.copy($scope.projeto.documentos.find(function(d){return d.id == this},idDoc));
-				$scope.docSelecionado.id = 0;
-				$scope.docSelecionado.codigo = "[CÓPIA] "+$scope.docSelecionado.codigo;
-			}
-
-			// Atribuindo o id_projeto ao documento
-			$scope.docSelecionado.id_projeto = $scope.projeto.id;
 
 			$mdDialog.show(
 				{
@@ -46,8 +18,7 @@
 					locals:{
 						disciplinas: angular.copy($scope.disciplinas),
 						areas: angular.copy($scope.projeto.areas),
-						subareas: angular.copy($scope.projeto.subareas),
-						doc: angular.copy($scope.docSelecionado),
+						id_doc: id_doc,
 						documentos: angular.copy($scope.projeto.documentos),
 						cargos:$scope.cargos,
 						parentScope:$scope,
@@ -121,124 +92,238 @@
 			);
 		};
 
-		function dialogController($scope,disciplinas,areas,subareas,doc,documentos,cargos,parentScope,copy){
-			
-			// Copiando doc para o scope
-			$scope.doc = doc;
-			delete doc;
+		function dialogController($scope,disciplinas,id_doc,documentos,cargos,parentScope,copy,GDoksFactory){
 
 			// Copiando as disciplinas para o scope
 			$scope.disciplinas = disciplinas;
 			delete disciplinas;
-
-			// Copiando áreas para scope
-			$scope.areas = areas;
-			delete areas;
-
-			// Copiando subareas para o scope
-			$scope.subareas = subareas;
-			delete subareas;
-
+			
 			// Copiando cargos para o scope
 			$scope.cargos = cargos;
 			delete cargos;
 
-			// inserindo um objeto hh ao final do vetor de hh's
-			$scope.doc.hhs.push({cargo:null,hh:1});
+			// Associoando áreas e subáreas do parentScope no scope local
+			(function(){
 
-			// Determinando o valor da disciplina selecionada
-			$scope.disciplinaSelecionada = ( (doc.id==0 && !copy) ? null : $scope.disciplinas.find(
-																					function(a){
-																						return a.id == this
-																					},
-																					$scope.doc.subdisciplina.disciplina.id
-																				 ));
-			// Linkando doc.subdisciplina a um elemento de disciplinaSelecionada.subs
-			$scope.doc.subdisciplina = ( (doc.id==0 && !copy) ? null : $scope.disciplinaSelecionada.subs.find(
-																			function(a){
-																				return a.id==this;
-																			},$scope.doc.subdisciplina.id
-																		));
+				// Copiando áreas e subáreas do parentScope
+				var areas = angular.copy(parentScope.projeto.areas);
+				var subareas = angular.copy(parentScope.projeto.subareas);
 
+				// Criando propriedade subareas em cada área
+				areas = areas.map(function(a){
+					a.subareas = [];
+					return a;
+				})
 
-			// Determinando o valor da area selecionada
-			$scope.areaSelecionada = ( (doc.id==0 && !copy) ? null : $scope.areas.find(
-													function(a){
-														return a.id == this
-													}, $scope.doc.subarea.area.id));
-			
-
-			// Construindo vertor de subareas de area selecionada
-			$scope.subareasDeAreaSelecionada = [{}];
-			$scope.setSubareasDeAreaSelecionada = function(){
-				if($scope.areaSelecionada != null){
-					$scope.subareasDeAreaSelecionada = $scope.subareas.filter(function(a){return a.area.id==this},$scope.areaSelecionada.id);
-				} else {
-					$scope.subareasDeAreaSelecionada = [];
+				// Percorrendo subáreas e associando cada uma delas a sua área
+				var sub;
+				for (var i = 0; i < subareas.length; i++) {
+					sub = subareas[i];
+					areas.find(function(a){return a.id == this},sub.area.id).subareas.push(sub);
 				}
+
+				// Definindo o vetor de áreas com subareas no scope local
+				$scope.areas = areas;
+				
+			})();
+
+			// Mapeando vetor de dependências para somente ids
+			for (let i = 0; i < documentos.length; i++) {
+				documentos[i].dependencias = documentos[i].dependencias.map(function(a){return a.id});
 			}
-			$scope.setSubareasDeAreaSelecionada();
+			
+			if(id_doc == 0){
 
-			// Linkando doc.subarea com um elemento de subareasDeAreaSelecionada
-			$scope.doc.subarea = ($scope.doc.subarea==null ? null : $scope.subareasDeAreaSelecionada.find(
-													function(a){
-														return a.id == this
-													},$scope.doc.subarea.id
-			));
+				// Criando documento vazio
+				$scope.doc = {
+					"id":0,
+					"nome":null,
+					"codigo":null,
+					"codigo_cliente":null,
+					"codigo_alternativo":null,
+					"idu_checkout":null,
+					"sigla_checkout":null,
+					"datahora_do_checkout":null,
+					"id_subdisciplina":null,
+					"nome_subdisciplina":null,
+					"id_disciplina":null,
+					"nome_disciplina":null,
+					"id_subarea":null,
+					"nome_subarea":null,
+					"cod_subarea":null,
+					"id_area":null,
+					"nome_area":null,
+					"id_projeto":parentScope.projeto.id,
+					"nome_projeto":parentScope.projeto.nome,
+					"projeto_ativo":parentScope.projeto.ativo,
+					"trabalho_estimado":"0",
+					"id_cliente":null,
+					"nome_cliente":null,
+					"fantasia_cliente":null,
+					"ehEspecialista":null,
+					"ehValidador":null,
+					"revisoes":[],
+					"grds":[],
+					"dependencias":[],
+					"hhs":[]
+				}
 
-			// Determinando quais documentos são dependencias possíveis
-			$scope.dependenciasPossiveis = getDependenciasPossiveis($scope.doc);
+				// Executando função de documento carregado
+				onDocumentoCarregado();
 
-			// Linkando atuais dependencias às dependencias possíveis
-			for (var i = $scope.doc.dependencias.length - 1; i >= 0; i--) {
-				$scope.doc.dependencias[i] = $scope.dependenciasPossiveis.find(function(a){return a.id==this},$scope.doc.dependencias[i].id);
+			} else {
+				
+				// Mostra carregando
+				parentScope.carregando = true;
+
+				GDoksFactory.getDocumento(id_doc)
+				.success(function(response){
+					
+					// Esconde carregando
+					parentScope.carregando = false;
+
+					// Lendo resposta para o escopo
+					$scope.doc = response.documento;
+
+					// Se for para clonar documento, alterando o seu código e zerando id
+					if(copy){
+						$scope.doc.id = 0;
+						$scope.doc.codigo = '[CÓPIA]-' + $scope.doc.codigo;
+					}
+
+					// Executando função documento carregado
+					onDocumentoCarregado();
+
+				})
+				.error(function(error){
+
+					// Esconde carregando
+					parentScope.carregando = false;
+
+					// Escondendo diálogo
+					$mdDialog.hide();
+
+					// Retornando Toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Não foi possível carregar documento.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				});
+				
+			}
+
+			/**
+			 * Função a ser executada quando o documento é definido.
+			 */
+			function onDocumentoCarregado(){
+				
+				// Parsing datas das revisões
+				for (let i = 0; i < $scope.doc.revisoes.length; i++) {
+					$scope.doc.revisoes[i].data_limite = new Date($scope.doc.revisoes[i].data_limite);					
+				}
+
+				// inserindo um objeto hh ao final do vetor de hh's
+				$scope.doc.hhs.push({id_cargo:null,hh:1});
+
+				// Determinando o valor da disciplina selecionada
+				$scope.disciplinas.selecionada = ( (id_doc==0 && !copy) ? null : $scope.disciplinas.find(
+								function(a){
+									return a.id == this
+								},
+								$scope.doc.id_disciplina
+							));
+
+				// Linkando doc.subdisciplina a um elemento de disciplinaSelecionada.subs
+				if($scope.disciplinas.selecionada != null){
+					$scope.disciplinas.selecionada.subs.selecionada = ( (id_doc==0 && !copy) ? null : $scope.disciplinas.selecionada.subs.find(
+							function(a){
+								return a.id==this;
+							},$scope.doc.id_subdisciplina
+						));
+				}
+				
+				// Determinando o valor da area selecionada
+				$scope.areas.selecionada = ( (id_doc==0 && !copy) ? null : $scope.areas.find(
+					function(a){
+						return a.id == this
+					}, $scope.doc.id_area));
+				
+				// Determinando subárea selecionada
+				if($scope.areas.selecionada != null){
+					$scope.areas.selecionada.subareas.selecionada = ( (id_doc==0 && !copy) ? null : $scope.areas.selecionada.subareas.find(
+						function(a){
+							return a.id == this
+						}, $scope.doc.id_subarea));
+				}
+					
+				// Determinando quais documentos são dependencias possíveis
+				$scope.dependenciasPossiveis = getDependenciasPossiveis();
 			}
 
 			// Determinando lista de possíveis dependentes
-			function getDependenciasPossiveis(doc){
-				var result = documentos.filter(
-					function(d){
-						// calculando condicao de nao ser ancestral
-						//var naoEAncestral = ancestraisDeDoc(this).indexOf(d.id) == -1;
+			function getDependenciasPossiveis(){
+				
+				// Determinando descendentes
+				var descendentes = descendentesDeDoc($scope.doc.id);
 
-						// calculando condição de não ser descendente
-						var naoEDescendente = descendentesDeDoc(this).indexOf(d.id) == -1;
+				// Nós impossíveis
+				var impossiveis = descendentes.concat([$scope.doc.id]);
 
-						// calculando condicao de evitar documento próprio
-						var docDiferente = d.id != this.id;
+				// Determinando os possíveis
+				var possiveis = [];
+				for (let i = 0; i < documentos.length; i++) {
+					if(impossiveis.indexOf(documentos[i].id) == -1){
+						possiveis.push(documentos[i]);
+					}					
+				}
 
-						return naoEDescendente && docDiferente;
-					},doc);
-				return result;
+				return possiveis;
 			}
 
 			// Função que retorna vetor com todos os ancestrais de um documento (dependências)
-			function ancestraisDeDoc(doc){
-				if(doc.dependencias.length == 0){
+			function ancestraisDeDoc(doc_id){
+				
+				// Determinando ancestrais diretos
+				var ancestrais = documentos.find(function(a){return a.id == this}, doc_id).dependencias;
+
+				// Recursão
+				if(ancestrais.length == 0){
+					
+					// Documento não possui ancestrais. Retornando vetor vazio. Fim da recursão
 					return [];
+
 				} else {
-					var dep = doc.dependencias.map(function(d){return d.id});
-					for (var i = doc.dependencias.length - 1; i >= 0; i--) {
-						dep = dep.concat(ancestraisDeDoc(doc.dependencias[i]));
-					}
-					return dep;
+					// Determinando ancestrais de ancestrais
+					var ada = ancestrais.map(ancestraisDeDoc);
+					ada = [].concat.apply([],ada);
+
+					return ancestrais.concat(ada);
 				}
 			}
 
-			function docEhAncestralDeFilho(pai,filho){
-				return ancestraisDeDoc(filho).indexOf(pai.id) != -1
-			}
+			// Função que retorna vetor com os descendentes de um documento
+			function descendentesDeDoc(doc_id){
 
-			function descendentesDeDoc(doc){
-				return documentos.filter(function(filho){
-					return docEhAncestralDeFilho(this,filho)
-				},doc).map(function(a){return a.id});
-			}
+				// Definindo vetor de descendentes
+				var descendentes = [];
 
-			// Linkando Cargos das HHs com os elementos do vetor de cargos
-			for (var i = $scope.doc.hhs.length - 1; i >= 0; i--) {
-				if($scope.doc.hhs[i].cargo!=null){
-					$scope.doc.hhs[i].cargo = $scope.cargos.find(function(a){return a.id==this},$scope.doc.hhs[i].cargo.id);
+				// Determinando os descendentes diretos
+				for (let i = 0; i < documentos.length; i++) {
+					if(documentos[i].dependencias.indexOf(doc_id) != -1){
+						descendentes.push(documentos[i].id);
+					}
+				}
+
+				// Recursão
+				if(descendentes.length == 0){
+					return [];
+				} else {
+					var ddd = descendentes.map(descendentesDeDoc); // Descendentes de Descendentes
+					ddd = [].concat.apply([], ddd);
+
+					return descendentes.concat(ddd);
 				}
 			}
 
@@ -247,37 +332,23 @@
 				$mdDialog.hide();
 			}
 
-			$scope.salvar = function(documento){
+			$scope.salvar = function(){
 				// Mostrando carregando
 				parentScope.root.carregando = true;
 
 				// Fazendo cópia do objeto documento
-				doc = angular.copy(documento);
-
+				doc = angular.copy($scope.doc);
+				
 				// Removendo campos desnecessários
-				doc.id_subdisciplina = doc.subdisciplina.id;
-				delete doc.subdisciplina;
-
-				doc.id_subarea = doc.subarea.id;
-				delete doc.subarea;
-
-				doc.dependencias = doc.dependencias.map(function(a){return a.id});
-
+				doc.id_subdisciplina = $scope.disciplinas.selecionada.subs.selecionada.id;
+				doc.id_subarea = $scope.areas.selecionada.subareas.selecionada.id;
 				doc.hhs = doc.hhs.filter(function(a){
-					return a.cargo != null;
+					return a.id_cargo != null;
 				});
-
-				doc.hhs = doc.hhs.map(function(a){
-					a.id_cargo = a.cargo.id;
-					delete a.cargo;
-					return a;
-				});
-
-				// Limpando HHs de cargo nulo do documento
-				documento.hhs = documento.hhs.filter(function(a){
-					return a.cargo != null;
-				});				
-
+				
+				// Apagando info de GRDs a quais doc pertence
+				delete doc.grds;
+				
 				// Verificando se é inserção de documento ou atualização pelo id
 				if(doc.id == 0){
 					// Inserir novo documento
@@ -286,30 +357,8 @@
 						// Esconde carregando
 						parentScope.root.carregando = false;
 
-						// Atribuindo id ao novo documento
-						documento.id = response.newId;
-						documento.rev_serial = 1;
-
-						// Se for uma clonagem, anulando o ultimo pda
-						if(copy) {documento.ultimo_pda=null;}
-
-						// Parsing subdisciplina do documento
-						var achouSub = false;
-						var j = 0;
-						while(j<$scope.disciplinas.length && !achouSub){
-							k = 0;
-							while(k<$scope.disciplinas[j].subs.length && !achouSub){
-								achouSub = ($scope.disciplinas[j].subs[k].id == documento.subdisciplina.id);
-								if(achouSub){
-									documento.subdisciplina.disciplina = $scope.disciplinas[j];
-								}
-								k++;
-							}
-							j++;
-						}
-
-						// Adicionando novo documento ao vetor de documentos do projeto
-						parentScope.projeto.documentos.push(documento)
+						// Mandando o parentScope recarregar documentos
+						parentScope.carregaDocumentos();
 
 						// Fechando caixa de diálogo
 						$mdDialog.hide();
@@ -347,10 +396,10 @@
 						parentScope.root.carregando = false;
 						
 						// Determinando a posição do objeto atual
-						var pos = parentScope.projeto.documentos.findIndex(function(a){return a.id == this},documento.id);
+						var pos = parentScope.projeto.documentos.findIndex(function(a){return a.id == this},doc.id);
 
-						// Substituindo o objeto antigo pelo atualizado agora
-						parentScope.projeto.documentos.splice(pos,1,documento);
+						// Mandando o parent scope recarregar documentos
+						parentScope.carregaDocumentos();
 
 						// Fechando caixa de diálogo
 						$mdDialog.hide();
@@ -362,9 +411,6 @@
 							.position('bottom left')
 							.hideDelay(5000)
 						);
-
-						// Esconde carregando
-						parentScope.root.carregando = false;
 						
 					})
 					.error(function(err){

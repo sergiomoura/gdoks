@@ -1439,6 +1439,13 @@ textarea {
     #documento_container .historico .revisao:last-child {
       border-bottom: none; }
 
+#documentoEdit_container .datepicker {
+  position: relative;
+  top: 12px; }
+#documentoEdit_container .trabalho .md-icon-button {
+  position: relative;
+  top: 12px; }
+
 #docs_container {
   padding-top: 20px;
   position: relative; }
