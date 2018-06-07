@@ -1505,6 +1505,8 @@
     outline: none; }
   #dashprojeto_container .documentos td {
     padding: 10px 0; }
+    #dashprojeto_container .documentos td:nth-child(1) {
+      text-align: left; }
     #dashprojeto_container .documentos td:nth-child(2) {
       text-align: center;
       width: 80px; }
