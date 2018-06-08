@@ -1346,20 +1346,53 @@
 		
 		// ROTAS DE PROJETOS 
 			$app->get('/projetos',function() use ($app,$db,$token){
-				// Lendo o token
+				// Verificando se tem filtro para cliente
+				if(array_key_exists('id_cliente',$_GET)){
+					$id_cliente = 1*$_GET['id_cliente'];
 
-				// Levantando os projetos que este usuário possui pemissão
-				$sql = 'SELECT p.id,
-						       p.nome,
-						       p.codigo,
-						       p.ativo,
-						       p.id_cliente
-						FROM gdoks_usuarios u
-						INNER JOIN gdoks_projetos p ON p.id_empresa=u.id_empresa
-						WHERE u.token=? and p.ativo';
-
+					// Levantando os projetos deste cliente que este usuário possui pemissão
+					$sql = 'SELECT p.id,
+									p.nome,
+									p.codigo,
+									p.ativo,
+									p.id_cliente
+							FROM gdoks_usuarios u
+							INNER JOIN gdoks_projetos p ON p.id_empresa=u.id_empresa
+							WHERE u.token=? and p.ativo and p.id_cliente=?';
+					
+					// Realizando consulta
+					try {
+						$projetos = $db->query($sql,'si',$token,$id_cliente);
+					} catch (Esception $e) {
+						http_response_code(401);
+						$response = new response(1,'Falha ao tentar carregar projetos');
+						$response->flush();
+						exit(1);
+					}
+				} else {
+					// Levantando os projetos que este usuário possui pemissão
+					$sql = 'SELECT p.id,
+									p.nome,
+									p.codigo,
+									p.ativo,
+									p.id_cliente
+							FROM gdoks_usuarios u
+							INNER JOIN gdoks_projetos p ON p.id_empresa=u.id_empresa
+							WHERE u.token=? and p.ativo';
+					
+					// Realizando consulta
+					try {
+						$projetos = $db->query($sql,'s',$token);
+					} catch (Esception $e) {
+						http_response_code(401);
+						$response = new response(1,'Falha ao tentar carregar projetos');
+						$response->flush();
+						exit(1);
+					}
+				}
+				
 				$response = new response(0,'ok');
-				$response->projetos = $db->query($sql,'s',$token);
+				$response->projetos = $projetos;
 				$response->flush();
 			});
 

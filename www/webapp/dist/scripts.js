@@ -21655,12 +21655,34 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 
 		// Define função a ser executada quando o cliente é alterado
 		$scope.onClienteChange = function(){
+			// Mostra carregando
+			$scope.root.carregando = true;
+
 			// Carrega os projetos daquele cliente
-			indexedDB.open('gdoks').onsuccess = function(evt){
-				evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
-					$scope.projetos = evt.target.result.filter(function(a){return a.id_cliente==this},$scope.grd.cliente.id);
-				}
-			}
+			GDoksFactory.getProjetos($scope.grd.cliente.id)
+			.success(function(response){
+
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Escreve os projetos requisitados no escopo
+				$scope.projetos = response.projetos;
+			})
+			.error(function(error){
+
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar carregar projetos deste cliente')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+			});
+			
 			// Anula o projeto do cliente selecionado
 			$scope.grd.projeto = null;
 			$scope.grd.alterada = true;
@@ -26151,8 +26173,12 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 				return $http.put(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/',ids_validadores,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.getProjetos = function(){
-				return $http.get(API_ROOT+'/projetos',buildHeaders());
+			GDoksFactory.getProjetos = function(id_cliente){
+				if(id_cliente == undefined){
+					return $http.get(API_ROOT+'/projetos',buildHeaders());
+				} else {
+					return $http.get(API_ROOT+'/projetos?id_cliente='+id_cliente,buildHeaders());
+				}
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjetosDetalhados = function(listarInativos){

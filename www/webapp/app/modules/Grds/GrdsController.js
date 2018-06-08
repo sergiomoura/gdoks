@@ -221,12 +221,34 @@
 
 		// Define função a ser executada quando o cliente é alterado
 		$scope.onClienteChange = function(){
+			// Mostra carregando
+			$scope.root.carregando = true;
+
 			// Carrega os projetos daquele cliente
-			indexedDB.open('gdoks').onsuccess = function(evt){
-				evt.target.result.transaction('projetos').objectStore('projetos').getAll().onsuccess = function(evt){
-					$scope.projetos = evt.target.result.filter(function(a){return a.id_cliente==this},$scope.grd.cliente.id);
-				}
-			}
+			GDoksFactory.getProjetos($scope.grd.cliente.id)
+			.success(function(response){
+
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Escreve os projetos requisitados no escopo
+				$scope.projetos = response.projetos;
+			})
+			.error(function(error){
+
+				// Esconde carregando
+				$scope.root.carregando = false;
+
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar carregar projetos deste cliente')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+
+			});
+			
 			// Anula o projeto do cliente selecionado
 			$scope.grd.projeto = null;
 			$scope.grd.alterada = true;

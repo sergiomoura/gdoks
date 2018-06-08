@@ -87,8 +87,12 @@ WebGDoks.factory('GDoksFactory',
 				return $http.put(API_ROOT+'/disciplinas/'+id_disciplina+'/validadores/',ids_validadores,buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			GDoksFactory.getProjetos = function(){
-				return $http.get(API_ROOT+'/projetos',buildHeaders());
+			GDoksFactory.getProjetos = function(id_cliente){
+				if(id_cliente == undefined){
+					return $http.get(API_ROOT+'/projetos',buildHeaders());
+				} else {
+					return $http.get(API_ROOT+'/projetos?id_cliente='+id_cliente,buildHeaders());
+				}
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getProjetosDetalhados = function(listarInativos){
