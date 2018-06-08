@@ -21618,16 +21618,24 @@ function OldDisciplinaController($scope,$routeParams,GDoksFactory){
 
 		// Carregando clientes
 		$scope.clientes = [];
-		indexedDB.open('gdoks').onsuccess = function(evt){
-			evt.target.result.transaction('clientes').objectStore('clientes').getAll().onsuccess = function(evt){
-				$scope.clientes = evt.target.result;
+		GDoksFactory.getClientes()
+		.success(function(response){
+			$scope.clientes = response.clientes;
 
-				// atribuindo cliente da grd  caso ela tenha sido carregada primeiro
-				if($scope.grd != null){
-					$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.id_cliente);
-				}
+			// atribuindo cliente da grd  caso ela tenha sido carregada primeiro
+			if($scope.grd != null){
+				$scope.grd.cliente = $scope.clientes.find(function(a){return a.id==this},$scope.grd.id_cliente);
 			}
-		}
+		})
+		.error(function(error){
+			// Retornando Toast para usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao tentar carregar clientes')
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		});
 
 		// Carregando configurações do GDoks
 		var config = null;
