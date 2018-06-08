@@ -754,6 +754,11 @@
 			$location.url('/documentos/0/edit?id_projeto='+$scope.projeto.id);
 		}
 
+		$scope.onCriarGrdClick = function(){
+			// Indo para criação de uma GRD
+			$location.url('/grds/0?id_projeto='+$scope.projeto.id);
+		}
+
 	};
 
 })();

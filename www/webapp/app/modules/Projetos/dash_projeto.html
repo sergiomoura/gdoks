@@ -110,7 +110,14 @@
 	
 	<div class="grds">
 		<h3>GRD's</h3>
-		<div class="aviso" ng-if="grds.length==0">Ainda não existem GRD's neste projeto. Deseja <a href="#/grds/0">criar uma</a>?</div>
+		<md-button
+			class="md-raised md-primary btn-add-grd"
+			ng-click="onCriarGrdClick()"
+			aria-label="Criar GRD">
+				<md-icon class="material-icons step">add</md-icon>
+				Criar GRD
+		</md-button>
+		<div class="aviso" ng-if="grds.length==0">Ainda não existem GRD's neste projeto. Deseja <a href="" ng-click="onCriarGrdClick()">criar uma</a>?</div>
 		<table class="tb-grds" ng-if="grds.length>0">
 			<thead>
 				<tr>
