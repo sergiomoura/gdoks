@@ -2504,87 +2504,101 @@ textarea {
     #dashprojeto_container .cabecalho item value {
       display: block; }
 #dashprojeto_container .documentos {
-  border-collapse: collapse;
-  width: 100%;
-  margin-bottom: 50px;
-  cursor: default; }
-  #dashprojeto_container .documentos tr {
-    outline: none; }
-  #dashprojeto_container .documentos td {
-    padding: 10px 0; }
-    #dashprojeto_container .documentos td:nth-child(1) {
-      text-align: left; }
-    #dashprojeto_container .documentos td:nth-child(2) {
-      text-align: center;
-      width: 80px; }
-    #dashprojeto_container .documentos td:nth-child(3) {
-      text-align: center;
-      width: 80px; }
-    #dashprojeto_container .documentos td:nth-child(4) {
-      text-align: center;
-      width: 100px; }
-    #dashprojeto_container .documentos td:nth-child(5) {
-      text-align: center;
-      width: 100px; }
-    #dashprojeto_container .documentos td:nth-child(6) {
-      text-align: center;
-      width: 150px; }
-    #dashprojeto_container .documentos td:nth-child(7) {
-      text-align: right;
-      width: 150px; }
-      #dashprojeto_container .documentos td:nth-child(7) span {
-        display: inline; }
-  #dashprojeto_container .documentos thead {
-    color: rgba(0, 0, 0, 0.54);
-    font-size: 12px; }
-  #dashprojeto_container .documentos tbody {
-    cursor: pointer; }
-    #dashprojeto_container .documentos tbody tr:last-child td {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-    #dashprojeto_container .documentos tbody tr:hover td {
-      background-color: #FFF; }
-    #dashprojeto_container .documentos tbody td {
-      border-top: 1px solid rgba(0, 0, 0, 0.12); }
-      #dashprojeto_container .documentos tbody td span {
-        display: block;
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.54); }
-      #dashprojeto_container .documentos tbody td:nth-child(6) {
-        padding-top: 20px; }
-#dashprojeto_container .grds {
-  border-collapse: collapse;
-  width: 100%;
-  cursor: default; }
-  #dashprojeto_container .grds td {
-    padding: 10px 0; }
-    #dashprojeto_container .grds td:nth-child(2) {
-      text-align: center; }
-    #dashprojeto_container .grds td:nth-child(3) {
-      text-align: center; }
-    #dashprojeto_container .grds td:nth-child(4) {
-      text-align: center; }
-    #dashprojeto_container .grds td:nth-child(5) {
-      text-align: center; }
-    #dashprojeto_container .grds td:nth-child(6) {
-      text-align: center;
-      width: 40px; }
-  #dashprojeto_container .grds thead {
-    color: rgba(0, 0, 0, 0.54);
-    font-size: 12px; }
-  #dashprojeto_container .grds tbody {
-    cursor: pointer; }
-    #dashprojeto_container .grds tbody tr {
+  position: relative;
+  padding-top: 10px; }
+  #dashprojeto_container .documentos .btn-add-documento {
+    position: absolute;
+    right: 0px;
+    top: 15px; }
+  #dashprojeto_container .documentos .tb-documentos {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 50px;
+    cursor: default; }
+    #dashprojeto_container .documentos .tb-documentos tr {
       outline: none; }
-      #dashprojeto_container .grds tbody tr:last-child td {
+    #dashprojeto_container .documentos .tb-documentos td {
+      padding: 10px 0; }
+      #dashprojeto_container .documentos .tb-documentos td:nth-child(1) {
+        text-align: left; }
+      #dashprojeto_container .documentos .tb-documentos td:nth-child(2) {
+        text-align: center;
+        width: 80px; }
+      #dashprojeto_container .documentos .tb-documentos td:nth-child(3) {
+        text-align: center;
+        width: 80px; }
+      #dashprojeto_container .documentos .tb-documentos td:nth-child(4) {
+        text-align: center;
+        width: 100px; }
+      #dashprojeto_container .documentos .tb-documentos td:nth-child(5) {
+        text-align: center;
+        width: 100px; }
+      #dashprojeto_container .documentos .tb-documentos td:nth-child(6) {
+        text-align: center;
+        width: 150px; }
+      #dashprojeto_container .documentos .tb-documentos td:nth-child(7) {
+        text-align: right;
+        width: 180px; }
+        #dashprojeto_container .documentos .tb-documentos td:nth-child(7) span {
+          display: inline; }
+    #dashprojeto_container .documentos .tb-documentos thead {
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 12px; }
+    #dashprojeto_container .documentos .tb-documentos tbody {
+      cursor: pointer; }
+      #dashprojeto_container .documentos .tb-documentos tbody tr:last-child td {
         border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
-      #dashprojeto_container .grds tbody tr:hover td {
+      #dashprojeto_container .documentos .tb-documentos tbody tr:hover td {
         background-color: #FFF; }
-    #dashprojeto_container .grds tbody td {
-      border-top: 1px solid rgba(0, 0, 0, 0.12); }
-      #dashprojeto_container .grds tbody td span {
-        display: block;
-        font-size: 12px;
-        color: rgba(0, 0, 0, 0.54); }
+      #dashprojeto_container .documentos .tb-documentos tbody td {
+        border-top: 1px solid rgba(0, 0, 0, 0.12); }
+        #dashprojeto_container .documentos .tb-documentos tbody td span {
+          display: block;
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.54); }
+        #dashprojeto_container .documentos .tb-documentos tbody td:nth-child(6) {
+          padding-top: 20px; }
+#dashprojeto_container .grds {
+  position: relative;
+  padding-top: 10px; }
+  #dashprojeto_container .grds .btn-add-grd {
+    position: absolute;
+    right: 0px;
+    top: 15px; }
+  #dashprojeto_container .grds .tb-grds {
+    border-collapse: collapse;
+    width: 100%;
+    cursor: default; }
+    #dashprojeto_container .grds .tb-grds td {
+      padding: 10px 0; }
+      #dashprojeto_container .grds .tb-grds td:nth-child(2) {
+        text-align: center; }
+      #dashprojeto_container .grds .tb-grds td:nth-child(3) {
+        text-align: center; }
+      #dashprojeto_container .grds .tb-grds td:nth-child(4) {
+        text-align: center; }
+      #dashprojeto_container .grds .tb-grds td:nth-child(5) {
+        text-align: center; }
+      #dashprojeto_container .grds .tb-grds td:nth-child(6) {
+        text-align: center;
+        width: 40px; }
+    #dashprojeto_container .grds .tb-grds thead {
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 12px; }
+    #dashprojeto_container .grds .tb-grds tbody {
+      cursor: pointer; }
+      #dashprojeto_container .grds .tb-grds tbody tr {
+        outline: none; }
+        #dashprojeto_container .grds .tb-grds tbody tr:last-child td {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+        #dashprojeto_container .grds .tb-grds tbody tr:hover td {
+          background-color: #FFF; }
+      #dashprojeto_container .grds .tb-grds tbody td {
+        border-top: 1px solid rgba(0, 0, 0, 0.12); }
+        #dashprojeto_container .grds .tb-grds tbody td span {
+          display: block;
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.54); }
 #dashprojeto_container .aviso {
   text-align: center;
   margin-bottom: 50px; }

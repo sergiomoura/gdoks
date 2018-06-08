@@ -18,11 +18,13 @@
 		var documentos = null;
 		
 		if(id == 0){
-			// Criando documento vazio para salvamento
+			// Criando documento vazio
 			$scope.doc = {
 				"id":0,
-				"nome":"",
-				"codigo":"",
+				"nome":null,
+				"codigo":null,
+				"codigo_cliente":null,
+				"codigo_alternativo":null,
 				"idu_checkout":null,
 				"sigla_checkout":null,
 				"datahora_do_checkout":null,
@@ -35,14 +37,18 @@
 				"cod_subarea":null,
 				"id_area":null,
 				"nome_area":null,
-				"id_projeto":$routeParams.id_projeto,
-				"nome_projeto":"",
-				"projeto_ativo":1,
-				"trabalho_estimado":0,
-				"ehEspecialista":false,
-				"ehValidador":true,
+				"id_projeto":parentScope.projeto.id,
+				"nome_projeto":parentScope.projeto.nome,
+				"projeto_ativo":parentScope.projeto.ativo,
+				"trabalho_estimado":"0",
+				"id_cliente":null,
+				"nome_cliente":null,
+				"fantasia_cliente":null,
+				"ehEspecialista":null,
+				"ehValidador":null,
 				"revisoes":[],
 				"grds":[],
+				"dependencias":[],
 				"hhs":[]
 			}
 		} else {

@@ -23,106 +23,126 @@
 		</item>
 	</div>
 
-	<h3>Documentos</h3>
-	<div class="aviso" ng-if="documentos.length==0">Ainda não existem documentos cadastrados neste projeto.</div>
-	<table class="documentos" ng-if="documentos.length>0">
-		<thead>
-			<tr>
-				<td>Documento</td>
-				<td>Revisão</td>
-				<td>Disciplina</td>
-				<td>Área</td>
-				<td>Data Limite</td>
-				<td>Progresso</td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="doc in documentos" ng-click="goToDoc(doc.id)">
-				<td>
-					{{doc.codigo}}
-					<span>{{doc.nome}}</span>
-				</td>
-				<td>Rev {{doc.rev_serial}}</td>
-				<td>
-					{{doc.sigla_disciplina}}
-					<md-tooltip md-visible="false" md-delay="400" md-direction="bottom" md-autohide="true">
-						{{doc.nome_subdisciplina}}
-					</md-tooltip>
-				</td>
-				<td>
-					{{doc.cod_area}}
-					<span>{{doc.cod_subarea}}</span>
-				</td>
-				<td>
-					{{doc.data_limite|date:"dd/MM/yyyy"}}
-				</td>
-				<td>
-					<progresso progress="[doc.progresso]" colors="['#2196F3']" fcolors="['#FFF']" width="100" height="20"></progresso>
-				</td>
-				<td>
-					<md-button
-						class="md-fab md-mini md-primary"
-						ng-click="onAlterarDocumentoClick(doc.id,$event)"
-						aria-label="Alterar Documento">
-							<md-icon class="material-icons step">mode_edit</md-icon>
-							<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
-								Alterar Documento
-							</md-tooltip>
-					</md-button>
-					<span>
+	<div class="documentos">
+		<h3>Documentos</h3>
+		<md-button
+			class="md-raised md-primary btn-add-documento"
+			ng-click="onAdicionarDocumentoClick()"
+			aria-label="Adicionar Documento">
+				<md-icon class="material-icons step">add</md-icon>
+				Adicionar Documento
+		</md-button>
+		<div class="aviso" ng-if="documentos.length==0">Ainda não existem documentos cadastrados neste projeto.</div>
+		<table class="tb-documentos" ng-if="documentos.length>0">
+			<thead>
+				<tr>
+					<td>Documento</td>
+					<td>Revisão</td>
+					<td>Disciplina</td>
+					<td>Área</td>
+					<td>Data Limite</td>
+					<td>Progresso</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="doc in documentos" ng-click="goToDoc(doc.id)">
+					<td>
+						{{doc.codigo}}
+						<span>{{doc.nome}}</span>
+					</td>
+					<td>Rev {{doc.rev_serial}}</td>
+					<td>
+						{{doc.sigla_disciplina}}
+						<md-tooltip md-visible="false" md-delay="400" md-direction="bottom" md-autohide="true">
+							{{doc.nome_subdisciplina}}
+						</md-tooltip>
+					</td>
+					<td>
+						{{doc.cod_area}}
+						<span>{{doc.cod_subarea}}</span>
+					</td>
+					<td>
+						{{doc.data_limite|date:"dd/MM/yyyy"}}
+					</td>
+					<td>
+						<progresso progress="[doc.progresso]" colors="['#2196F3']" fcolors="['#FFF']" width="100" height="20"></progresso>
+					</td>
+					<td>
 						<md-button
-							class="md-fab md-mini md-accent"
-							aria-label="Remover Documento"
-							ng-click="onRemoverDocumentoClick(doc,$event)"
-							ng-disabled="doc.ultimo_pda!=null">
-								<md-icon class="material-icons step" aria-label="Remover documento">delete</md-icon>
+							class="md-fab md-mini md-primary"
+							ng-click="onDuplicarDocumentoClick(doc.id,$event)"
+							aria-label="Duplicar Documento">
+								<md-icon class="material-icons step">content_copy</md-icon>
 								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
-									Remover Documento
+									Duplicar Documento
 								</md-tooltip>
 						</md-button>
-						<md-tooltip ng-if="doc.ultimo_pda!=null" md-delay="0" md-direction="bottom" md-autohide="true">
-							Impossível remover documento que já foi atualizado/alterado.
-						</md-tooltip>
-					</span>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+						<md-button
+							class="md-fab md-mini md-primary"
+							ng-click="onAlterarDocumentoClick(doc.id,$event)"
+							aria-label="Alterar Documento">
+								<md-icon class="material-icons step">mode_edit</md-icon>
+								<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+									Alterar Documento
+								</md-tooltip>
+						</md-button>
+						<span>
+							<md-button
+								class="md-fab md-mini md-accent"
+								aria-label="Remover Documento"
+								ng-click="onRemoverDocumentoClick(doc,$event)"
+								ng-disabled="doc.ultimo_pda!=null">
+									<md-icon class="material-icons step" aria-label="Remover documento">delete</md-icon>
+									<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+										Remover Documento
+									</md-tooltip>
+							</md-button>
+							<md-tooltip ng-if="doc.ultimo_pda!=null" md-delay="0" md-direction="bottom" md-autohide="true">
+								Impossível remover documento que já foi atualizado/alterado.
+							</md-tooltip>
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
-	<h3>GRD's</h3>
-	<div class="aviso" ng-if="grds.length==0">Ainda não existem GRD's neste projeto. Deseja <a href="#/grds/0">criar uma</a>?</div>
-	<table class="grds" ng-if="grds.length>0">
-		<thead>
-			<tr>
-				<td>Código</td>
-				<td>Data de Registro</td>
-				<td>Data de Envio</td>
-				<td>N de Doc's</td>
-				<td>Enviada Por</td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="grd in grds" ng-click="goToGrd(grd.id)">
-				<td>{{grd.codigo}}</td>
-				<td>{{grd.datahora_registro|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_registro|date:'hh:mm'}}</span></td>
-				<td ng-if="grd.datahora_enviada!=null">{{grd.datahora_enviada|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_enviada|date:'hh:mm'}}</span></td>
-				<td ng-if="grd.datahora_enviada==null"><span>Não enviada</span></td>
-				<td>{{grd.nDocs}}</td>
-				<td>{{grd.sigla_remetente}}</td>
-				<td>
-					<md-button
-						class="md-icon-button"
-						aria-label="Ir para GRD"
-						ng-click="goToGrd(grd.id)">
-						<md-icon
-							class="material-icons step"
-							aria-label="Ir para GRD">open_in_new</md-icon>
-						<md-tooltip md-direction="bottom">Ir para Página da GRD</md-tooltip>
-					</md-button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="grds">
+		<h3>GRD's</h3>
+		<div class="aviso" ng-if="grds.length==0">Ainda não existem GRD's neste projeto. Deseja <a href="#/grds/0">criar uma</a>?</div>
+		<table class="tb-grds" ng-if="grds.length>0">
+			<thead>
+				<tr>
+					<td>Código</td>
+					<td>Data de Registro</td>
+					<td>Data de Envio</td>
+					<td>N de Doc's</td>
+					<td>Enviada Por</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="grd in grds" ng-click="goToGrd(grd.id)">
+					<td>{{grd.codigo}}</td>
+					<td>{{grd.datahora_registro|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_registro|date:'hh:mm'}}</span></td>
+					<td ng-if="grd.datahora_enviada!=null">{{grd.datahora_enviada|date:'dd/MM/yyyy'}}<span>às {{grd.datahora_enviada|date:'hh:mm'}}</span></td>
+					<td ng-if="grd.datahora_enviada==null"><span>Não enviada</span></td>
+					<td>{{grd.nDocs}}</td>
+					<td>{{grd.sigla_remetente}}</td>
+					<td>
+						<md-button
+							class="md-icon-button"
+							aria-label="Ir para GRD"
+							ng-click="goToGrd(grd.id)">
+							<md-icon
+								class="material-icons step"
+								aria-label="Ir para GRD">open_in_new</md-icon>
+							<md-tooltip md-direction="bottom">Ir para Página da GRD</md-tooltip>
+						</md-button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

@@ -738,6 +738,22 @@
 			);
 		}
 
+		// Função executada ao clicar no Duplicar Documento
+		$scope.onDuplicarDocumentoClick = function(id_doc,evt){
+
+			// Parando a propagação do click
+			evt.stopPropagation();
+
+			// Indo para edição do documento
+			$location.url('/documentos/0/edit?clone='+id_doc);
+		}
+
+		// Função executada ao clicar no Adicionar Documento
+		$scope.onAdicionarDocumentoClick = function(){
+			// Indo para edição do documento
+			$location.url('/documentos/0/edit?id_projeto='+$scope.projeto.id);
+		}
+
 	};
 
 })();
