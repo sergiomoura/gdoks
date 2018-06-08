@@ -1107,6 +1107,28 @@
 						alterada:false,
 						projeto_ativo:true
 					};
+
+					let id_cliente = $location.search().id_cliente;
+					if(id_cliente != undefined && !isNaN(id_cliente)){
+						$scope.grd.id_cliente = id_cliente;
+
+						// Carregando os projetos deste cliente
+						GDoksFactory.getProjetos(id_cliente)
+						.success(function(response){
+							$scope.projetos = response.projetos;
+
+							// Determinando o projeto se ele também estiver definido na url
+							let id_projeto = $location.search().id_projeto;
+							if(id_projeto != undefined && !isNaN(id_projeto)){
+								$scope.grd.projeto = $scope.projetos.find(function(p){return p.id==this},id_projeto);
+							}
+						})
+						.error(function(error){
+							
+						});
+					}
+
+					
 				} else {
 					// verificando se tipos de documento e codigos emi estão carregados
 					if(codigosEmiCarregados && tiposDeDocumentoCarregados){

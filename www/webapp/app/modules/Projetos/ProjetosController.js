@@ -756,7 +756,7 @@
 
 		$scope.onCriarGrdClick = function(){
 			// Indo para criação de uma GRD
-			$location.url('/grds/0?id_projeto='+$scope.projeto.id);
+			$location.url('/grds/0?id_cliente='+$scope.projeto.id_cliente+'&id_projeto='+$scope.projeto.id);
 		}
 
 	};
