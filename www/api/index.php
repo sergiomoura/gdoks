@@ -1948,24 +1948,6 @@
 						exit(1);
 					}
 
-					// parsing subareas
-					foreach ($subareas as $s) {
-
-						// Buscando área com o id 
-						$i = 0;
-						while ($i < sizeof($areas)) {
-							if($areas[$i]->id == $s->id_area){
-								$sub = new stdClass();
-								$sub->id = $s->id;
-								$sub->codigo = $s->codigo;
-								$sub->nome = $s->nome;
-
-								array_push($areas[$i]->subareas, $sub);
-							}
-							$i++;
-						}
-					}
-
 					// Atribuindo subareas às áreas
 					for ($i=0; $i < sizeof($subareas); $i++) { 
 						$sub = $subareas[$i];
@@ -1974,6 +1956,7 @@
 						while(!$achou && $j<sizeof($areas)){
 							$achou = ($areas[$j]->id == $sub->id_area);
 							if($achou){
+								unset($sub->id_area);
 								array_push($areas[$j]->subareas, $sub);
 							}
 							$j++;
@@ -2407,7 +2390,7 @@
 					$documento->revisoes[0]->data_limite = substr($documento->revisoes[0]->data_limite,0,10);
 				}
 
-				// verificando se o usário enviado é do mesmo cliente da projeto atual
+				// Verificando se o usário enviado é do mesmo cliente da projeto atual
 				$sql = 'SELECT A.id AS id_usuario,
 						       count(*) AS ok
 						FROM
@@ -2422,62 +2405,128 @@
 				$rs = $db->query($sql,'si',$token,$id_projeto)[0];
 				$ok = $rs['ok'];
 				$id_usuario = $rs['id_usuario'];
+
+
 				if($ok == 1){
 					// Tudo ok! A documento a ser adicionada é do mesmo cliente do usuário
+
+					// Salvando o documento
 					$sql = 'INSERT INTO gdoks_documentos (nome,codigo,codigo_cliente,codigo_alternativo,id_subarea,id_subdisciplina) VALUES (?,?,?,?,?,?)';
 					try {
+
 						// Salvando documento
 						$db->query($sql,'ssssii',$documento->nome,$documento->codigo,$documento->codigo_cliente,$documento->codigo_alternativo,$documento->id_subarea,$documento->id_subdisciplina);
 
 						// Salvando o novo id do documento recém adicionado
 						$newId = $db->insert_id;
 
-						// salvando vínculos de dependencia
-						$sql = 'INSERT INTO gdoks_documentos_x_dependencias (id_documento,id_dependencia) VALUES (?,?)';
-						foreach ($documento->dependencias as $id_dependencia) {
-							$db->query($sql,'ii',$newId,$id_dependencia);
-						}
+					} catch (Exception $e1) {
 
-						// salvando horas de trabalho para este documento
-						$sql = 'INSERT INTO gdoks_hhemdocs (id_doc,id_cargo,hh) VALUES (?,?,?)';
-						foreach ($documento->hhs as $hh) {
-							$db->query($sql,'iii',$newId,$hh->id_cargo,$hh->hh);
-						}
+						// Retornando erro ao usuário
+						http_response_code(401);
+						$response = new response(1,'Falha ao salvar documento: '.$e1->getMessage());
+						$response->flush();
+						exit(1);
 
-						// Criando a primeira revisão do documento
-						$sql = "insert into gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) values (0,?,?,0,0,null)";
+					}
+
+					// Salvando vínculos de dependencia
+					$sql = 'INSERT INTO gdoks_documentos_x_dependencias (id_documento,id_dependencia) VALUES (?,?)';
+					foreach ($documento->dependencias as $id_dependencia) {
 						try {
-							$db->query($sql,'is',$newId,$documento->revisoes[0]->data_limite);
-						} catch (Exception $e){
+							$db->query($sql,'ii',$newId,$id_dependencia);
+						} catch (Exception $e2) {
+
+							// Removendo dependências inseridas
+							$sql = 'DELETE FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
+							$db->query($sql,'i',$newId);
+
+							// Removendo documento
+							$sql='DELETE FROM gdoks_documentos WHERE id=?';
+							$db->query($sql,'i',$newId);
+
+							// Retornando erro ao usuário
 							http_response_code(401);
-							$response = new response(1,'Falha ao criar revisão de novo documento.');
+							$response = new response(1,'Falha ao salvar dependências: '.$e2->getMessage());
 							$response->flush();
 							exit(1);
 						}
-
-						// registrando no log
-						registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,$newId.','.$documento->nome.','.$documento->id_subdisciplina.','.$documento->id_subarea);
-
-						$response = new response(0,'Documento adicionado com sucesso.');
-						$response->newId = $newId;
-						$response->flush();
-					} catch (Exception $e) {
-						http_response_code(401);
-						$response = new response(1,'Erro na execução do comando SQL: '.$e->getMessage());
-						$response->flush();
-						return;
 					}
 
-					// removendo dependencias do objeto para salvar no log
+					// salvando horas de trabalho para este documento
+					$sql = 'INSERT INTO gdoks_hhemdocs (id_doc,id_cargo,hh) VALUES (?,?,?)';
+					foreach ($documento->hhs as $hh) {
+						try {
+							$db->query($sql,'iii',$newId,$hh->id_cargo,$hh->hh);
+						} catch (Exception $e3) {
+
+							// Removendo hhs
+							$sql='DELETE FROM gdoks_hhemdocs WHERE id_doc=?';
+							$db->query($sql,'i',$newId);
+							
+							// Removendo dependências inseridas
+							$sql = 'DELETE FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
+							$db->query($sql,'i',$newId);
+
+							// Removendo documento
+							$sql='DELETE FROM gdoks_documentos WHERE id=?';
+							$db->query($sql,'i',$newId);
+
+							// Retornando erro ao usuário
+							http_response_code(401);
+							$response = new response(1,'Falha ao salvar trabalho estimado: '.$e3->getMessage());
+							$response->flush();
+							exit(1);
+						}
+					}
+
+					// Criando a primeira revisão do documento
+					$sql = "INSERT INTO gdoks_revisoes (serial,id_documento,data_limite,progresso_validado,progresso_a_validar,ua) VALUES (0,?,?,0,0,NULL)";
+					try {
+						$db->query($sql,'is',$newId,$documento->revisoes[0]->data_limite);
+					} catch (Exception $e){
+						
+						// Removendo hhs
+						$sql='DELETE FROM gdoks_hhemdocs WHERE id_doc=?';
+						$db->query($sql,'i',$newId);
+						
+						// Removendo dependências inseridas
+						$sql = 'DELETE FROM gdoks_documentos_x_dependencias WHERE id_documento=?';
+						$db->query($sql,'i',$newId);
+
+						// Removendo documento
+						$sql='DELETE FROM gdoks_documentos WHERE id=?';
+						$db->query($sql,'i',$newId);
+
+						// Retornando erro ao usuário
+						http_response_code(401);
+						$response = new response(1,'Falha ao criar revisão de novo documento.');
+						$response->flush();
+						exit(1);
+					}
+
+					// Removendo dependencias do objeto para salvar no log
 					unset($documento->dependencias);
 					unset($documento->hhs);
 					unset($documento->revisoes);
+					unset($documento->grds);
 					
 					// Registrando a ação
 					registrarAcao($db,$id_usuario,ACAO_CRIOU_DOCUMENTO,implode(',', (array)$documento));
+
+					// Retornando sucesso para o usuário
+					$response = new response(0,'Documento adicionado com sucesso.');
+					$response->newId = $newId;
+					$response->flush();
+
 				} else {
+
+					// Retornando erro para usuário
 					http_response_code(401);
-					$response = new response(1,'Não altera dados de outra empresa.');	
+					$response = new response(1,'Não altera dados de outra empresa.');
+					$response->flush();
+					exit(1);
+					
 				}
 			});
 

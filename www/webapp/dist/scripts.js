@@ -20440,117 +20440,36 @@ module.exports = function(Chart) {
 		var documentos = null;
 		
 		if(id == 0){
+
 			// Criando documento vazio
-			$scope.doc = {
-				"id":0,
-				"nome":null,
-				"codigo":null,
-				"codigo_cliente":null,
-				"codigo_alternativo":null,
-				"idu_checkout":null,
-				"sigla_checkout":null,
-				"datahora_do_checkout":null,
-				"id_subdisciplina":null,
-				"nome_subdisciplina":null,
-				"id_disciplina":null,
-				"nome_disciplina":null,
-				"id_subarea":null,
-				"nome_subarea":null,
-				"cod_subarea":null,
-				"id_area":null,
-				"nome_area":null,
-				"id_projeto":parentScope.projeto.id,
-				"nome_projeto":parentScope.projeto.nome,
-				"projeto_ativo":parentScope.projeto.ativo,
-				"trabalho_estimado":"0",
-				"id_cliente":null,
-				"nome_cliente":null,
-				"fantasia_cliente":null,
-				"ehEspecialista":null,
-				"ehValidador":null,
-				"revisoes":[],
-				"grds":[],
-				"dependencias":[],
-				"hhs":[]
+			$scope.doc = novoDocumentoVazio();
+			
+			// Verificando se o id_projeto está definido na url
+			let id_projeto = $location.search().id_projeto;
+			if(id_projeto != undefined && !isNaN(id_projeto)){
+				GDoksFactory.getProjeto(id_projeto)
+				.success(function(response){
+					$scope.doc.id_cliente = response.projeto.id_cliente
+					$scope.doc.nome_cliente = response.projeto.nome_cliente;
+					$scope.doc.id_projeto = id_projeto;
+					$scope.doc.nome_projeto = response.projeto.nome;
+
+					// Executa conjunto de ações depois de carregamento de documento
+					onDocumentoCarregado();
+				})
 			}
+
 		} else {
 			// Carregando documento da base
 			GDoksFactory.getDocumento(id)
 			.success(function(response){
+
+				// Escrevento resultado da requisição no escopo
 				$scope.doc = response.documento;
-
-				// Parsing date
-				$scope.doc.revisoes[0].data_limite = new Date($scope.doc.revisoes[0].data_limite);
-
-				// Carregando áreas
-				GDoksFactory.getAreas($scope.doc.id_projeto)
-				.success(function(response){
-					$scope.areas = response.areas;
-					$scope.areas.selecionada = $scope.areas.find(function(a){return a.id == this},$scope.doc.id_area);
-					$scope.areas.selecionada.subareas.selecionada = $scope.areas.selecionada.subareas.find(function(a){return a.id == this},$scope.doc.id_subarea);
-				})
-				.error(function(error){
-					// Retornando Toast para usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Falha ao tentar carregar áreas do projeto')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-				});
-
-				// Carregando disciplinas
-				GDoksFactory.getDisciplinas()
-				.success(function(response){
-					$scope.disciplinas = response.disciplinas;
-					$scope.disciplinas.selecionada = $scope.disciplinas.find(function(a){return a.id==this},$scope.doc.id_disciplina);
-					$scope.disciplinas.selecionada.subs.selecionada = $scope.disciplinas.selecionada.subs.find(function(a){return a.id==this},$scope.doc.id_subdisciplina);
-				})
-				.error(function(error){
-					// Retornando Toast para usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Falha ao tentar carregar disciplinas.')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-				});
-
-				// Carregando Cargos
-				GDoksFactory.getCargos()
-				.success(function(response){
-					$scope.cargos = response.cargos;
-				})
-				.error(function(error){
-					// Retornando Toast para usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Falha ao tentar carregar cargos.')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-				});
-
-				// Carregando documentos de projeto
-				GDoksFactory.getDocumentosDoProjeto($scope.doc.id_projeto)
-				.success(function(response){
-
-					// Salvando resposta do servidor
-					documentos = response.documentos;
-
-					// Determinando quais documentos são dependencias possíveis
-					$scope.dependenciasPossiveis = getDependenciasPossiveis();
-
-				})
-				.error(function(error){
-					// Retornando Toast para usuário
-					$mdToast.show(
-						$mdToast.simple()
-						.textContent('Falha ao carregar documentos de projeto')
-						.position('bottom left')
-						.hideDelay(5000)
-					);
-				});
+				
+				// Executa conjunto de ações depois de carregamento de documento
+				onDocumentoCarregado();
+				
 			})
 			.error(function(error){
 				// Retornando Toast para o usuário
@@ -20576,38 +20495,196 @@ module.exports = function(Chart) {
 			// Mostra carregando
 			$scope.root.carregando = true;
 
-			GDoksFactory.alterarDocumento($scope.doc)
-			.success(function(response){
-				// Esconde carregando
-				$scope.root.carregando = false;
+			// Verificando se é ou não um documento novo
+			if($scope.doc.id == 0){
 
-				// Retornando Toast para usuário
-				$mdToast.show(
-					$mdToast.simple()
-					.textContent('Documento salvo!')
-					.position('bottom left')
-					.hideDelay(5000)
-				);
+				// Atribuindo subarea e subdisciplina
+				$scope.doc.id_subarea = $scope.areas.selecionada.subareas.selecionada.id;
+				$scope.doc.id_subdisciplina = $scope.disciplinas.selecionada.subs.selecionada.id;
+
+				// Documento NOVO. Proceder criação
+				GDoksFactory.adicionarDocumento($scope.doc)
+				.success(function(response){
+					// Esconde carregando
+					$scope.root.carregando = false;
+
+					// Retornando Toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Documento salvo com sucesso!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+
+					// Redirecionando para a tela de edição de documento
+					$location.url('/documentos/'+ response.newId +'/edit');
+				})
+				.error(function(error){
+					// Retornando Toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha ao tentar adicionar documento.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				});
+	
+			} else {
+
+				// Documento já existente. Proceder alteração
+				GDoksFactory.alterarDocumento($scope.doc)
+				.success(function(response){
+					// Esconde carregando
+					$scope.root.carregando = false;
+	
+					// Retornando Toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Documento salvo!')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				})
+				.error(function(error){
+					// Esconde carregando
+					$scope.root.carregando = false;
+	
+					// Exibe erro no console
+					console.warn(error);
+	
+					// Retornando Toast para usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha ao tentar salvar documento')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				});
+
+			}
+		}
+
+		function onDocumentoCarregado(){
+			// Parsing date
+			$scope.doc.revisoes[0].data_limite = new Date($scope.doc.revisoes[0].data_limite);
+
+			// Carregando áreas
+			GDoksFactory.getAreas($scope.doc.id_projeto)
+			.success(function(response){
+				$scope.areas = response.areas;
+				if($scope.doc.id_area != undefined) {
+					$scope.areas.selecionada = $scope.areas.find(function(a){return a.id == this},$scope.doc.id_area);
+					$scope.areas.selecionada.subareas.selecionada = $scope.areas.selecionada.subareas.find(function(a){return a.id == this},$scope.doc.id_subarea);
+				}
 			})
 			.error(function(error){
-				// Esconde carregando
-				$scope.root.carregando = false;
-
-				// Exibe erro no console
-				console.warn(error);
-
 				// Retornando Toast para usuário
 				$mdToast.show(
 					$mdToast.simple()
-					.textContent('Falha ao tentar salvar documento')
+					.textContent('Falha ao tentar carregar áreas do projeto')
 					.position('bottom left')
 					.hideDelay(5000)
 				);
 			});
+
+			// Carregando disciplinas
+			GDoksFactory.getDisciplinas()
+			.success(function(response){
+				$scope.disciplinas = response.disciplinas;
+				if($scope.doc.id_disciplina != undefined){
+					$scope.disciplinas.selecionada = $scope.disciplinas.find(function(a){return a.id==this},$scope.doc.id_disciplina);
+					$scope.disciplinas.selecionada.subs.selecionada = $scope.disciplinas.selecionada.subs.find(function(a){return a.id==this},$scope.doc.id_subdisciplina);
+				}
+			})
+			.error(function(error){
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar carregar disciplinas.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+
+			// Carregando Cargos
+			GDoksFactory.getCargos()
+			.success(function(response){
+				$scope.cargos = response.cargos;
+			})
+			.error(function(error){
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao tentar carregar cargos.')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+
+			// Carregando documentos de projeto
+			GDoksFactory.getDocumentosDoProjeto($scope.doc.id_projeto)
+			.success(function(response){
+
+				// Salvando resposta do servidor
+				documentos = response.documentos;
+
+				// Determinando quais documentos são dependencias possíveis
+				$scope.dependenciasPossiveis = getDependenciasPossiveis();
+
+			})
+			.error(function(error){
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao carregar documentos de projeto')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+
+			// Inserindo cargo vazio para interface
+			$scope.doc.hhs.push({id_cargo:null,hh:0});
 		}
 
+		
 		// Funções auxiliares para determinação de dependências possíveis= = = = = = = = =
 
+			// Função que retorna um documento vazio.
+			function novoDocumentoVazio() {
+				return {
+					"id": 0,
+					"nome": null,
+					"codigo": null,
+					"codigo_cliente": null,
+					"codigo_alternativo": null,
+					"idu_checkout": null,
+					"sigla_checkout": null,
+					"datahora_do_checkout": null,
+					"id_subdisciplina": null,
+					"nome_subdisciplina": null,
+					"id_disciplina": null,
+					"nome_disciplina": null,
+					"id_subarea": null,
+					"nome_subarea": null,
+					"cod_subarea": null,
+					"id_area": null,
+					"nome_area": null,
+					"id_projeto": null,
+					"nome_projeto": null,
+					"projeto_ativo": null,
+					"trabalho_estimado": "0",
+					"id_cliente": null,
+					"nome_cliente": null,
+					"fantasia_cliente": null,
+					"ehEspecialista": null,
+					"ehValidador": null,
+					"revisoes": [{data_limite:new Date()}],
+					"grds": [],
+					"dependencias": [],
+					"hhs": []
+				};
+			}
+		
 			// Determinando lista de possíveis dependentes
 			function getDependenciasPossiveis(){
 				

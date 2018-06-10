@@ -1,8 +1,5 @@
 <div id="documentoEdit_container" class="container_80">
 	<form name="formdoc" layout="column" novalidate>
-		<!-- <pre>
-			{{doc | json}}
-		</pre> -->
 		<h3>Dados do Documento</h3>
 		<div layout="row" layout-align="space-between center">
 			<md-input-container flex="20">
