@@ -20522,15 +20522,21 @@ module.exports = function(Chart) {
 			// Mostra carregando
 			$scope.root.carregando = true;
 
+			// Fazendo cópia de documento local
+			let doc = angular.copy($scope.doc);
+
+			// Removendo Trabalho estimados com cargos nulos ou indefinidos
+			doc.hhs = doc.hhs.filter(function(t){return t.id_cargo!= undefined && !isNaN(t.id_cargo)});
+
 			// Verificando se é ou não um documento novo
-			if($scope.doc.id == 0){
+			if(doc.id == 0){
 
 				// Atribuindo subarea e subdisciplina
-				$scope.doc.id_subarea = $scope.areas.selecionada.subareas.selecionada.id;
-				$scope.doc.id_subdisciplina = $scope.disciplinas.selecionada.subs.selecionada.id;
+				doc.id_subarea = $scope.areas.selecionada.subareas.selecionada.id;
+				doc.id_subdisciplina = $scope.disciplinas.selecionada.subs.selecionada.id;
 
 				// Documento NOVO. Proceder criação
-				GDoksFactory.adicionarDocumento($scope.doc)
+				GDoksFactory.adicionarDocumento(doc)
 				.success(function(response){
 					// Esconde carregando
 					$scope.root.carregando = false;
@@ -20559,7 +20565,7 @@ module.exports = function(Chart) {
 			} else {
 
 				// Documento já existente. Proceder alteração
-				GDoksFactory.alterarDocumento($scope.doc)
+				GDoksFactory.alterarDocumento(doc)
 				.success(function(response){
 					// Esconde carregando
 					$scope.root.carregando = false;
@@ -20587,7 +20593,6 @@ module.exports = function(Chart) {
 						.hideDelay(5000)
 					);
 				});
-
 			}
 		}
 
