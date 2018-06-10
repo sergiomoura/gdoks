@@ -20446,6 +20446,8 @@ module.exports = function(Chart) {
 			
 			// Verificando se o id_projeto está definido na url
 			let id_projeto = $location.search().id_projeto;
+			let clone = $location.search().clone;
+
 			if(id_projeto != undefined && !isNaN(id_projeto)){
 				GDoksFactory.getProjeto(id_projeto)
 				.success(function(response){
@@ -20457,6 +20459,31 @@ module.exports = function(Chart) {
 					// Executa conjunto de ações depois de carregamento de documento
 					onDocumentoCarregado();
 				})
+			} else if (clone != undefined && !isNaN(clone)){
+				// Carregando documento da base
+				GDoksFactory.getDocumento(clone)
+				.success(function(response){
+					
+					// Escrevento resultado da requisição no escopo
+					$scope.doc = response.documento;
+					
+					// Executa conjunto de ações depois de carregamento de documento
+					onDocumentoCarregado();
+
+					// Alterando o id e o código do documento
+					$scope.doc.id = 0;
+					$scope.doc.codigo = '[COPIA] ' + $scope.doc.codigo;
+					
+				})
+				.error(function(error){
+					// Retornando Toast para o usuário
+					$mdToast.show(
+						$mdToast.simple()
+						.textContent('Falha ao tentar carregar documento.')
+						.position('bottom left')
+						.hideDelay(5000)
+					);
+				});
 			}
 
 		} else {
