@@ -171,12 +171,13 @@
 
 				// Escrevendo linha
 				$sheet->setCellValue('A'.$linha,$this->documentos[$i]->codigo);
-				$sheet->setCellValue('B'.$linha,$this->documentos[$i]->nome);
-				$sheet->setCellValue('C'.$linha,$this->documentos[$i]->area_nome);
-				$sheet->setCellValue('D'.$linha,$this->documentos[$i]->subarea_nome);
-				$sheet->setCellValue('E'.$linha,$this->documentos[$i]->disciplina_nome);
-				$sheet->setCellValue('F'.$linha,$this->documentos[$i]->subdisciplina_nome);
-				$sheet->setCellValue('G'.$linha,'rev' . $this->documentos[$i]->serial);
+				$sheet->setCellValue('B'.$linha,$this->documentos[$i]->codigo_alternativo);
+				$sheet->setCellValue('C'.$linha,$this->documentos[$i]->nome);
+				$sheet->setCellValue('D'.$linha,$this->documentos[$i]->area_nome);
+				$sheet->setCellValue('E'.$linha,$this->documentos[$i]->subarea_nome);
+				$sheet->setCellValue('F'.$linha,$this->documentos[$i]->disciplina_nome);
+				$sheet->setCellValue('G'.$linha,$this->documentos[$i]->subdisciplina_nome);
+				$sheet->setCellValue('H'.$linha,'rev' . $this->documentos[$i]->serial);
 
 				// Alterando altura da linha
 				$sheet->getRowDimension($linha)->setRowHeight(20);
