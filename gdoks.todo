@@ -3,8 +3,8 @@ BUGS:
 	☐ Adicionar campo Título a propostas @1h
 	☐ Adicionar campo Valor a propostas @1h
 	☐ Gerar Código da proposta automaticamente: FRY-2018NNNN (SEGUNDOU PADRÃO CONFIGURÁVEL) ou manual
-		☐ Adicionar campo de padrão de código de proposta nas configurações @30m
-		☐ Adicionar campo de "gerar código da proposta automaticamente" @30m @started(18-06-26 05:43)
+		✔ Adicionar campo de padrão de código de proposta nas configurações @30m @started(18-06-26 05:43) @done(18-06-26 06:00) @lasted(17m12s)
+		✔ Adicionar campo de "gerar código da proposta automaticamente" @30m @started(18-06-26 05:43) @done(18-06-26 06:00) @lasted(17m16s)
 		☐ Fazer com que tela de proposta leia a informação da configuração e se comporte de acordo @2h
 	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento
 	☐ Lidar com situação de especialista atualizar documento sem disponibilizar para validação
