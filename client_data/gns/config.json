@@ -1,3 +1,4 @@
+git add --all
 {
     "MAX_HIST_PRJS": {
         "label": "M\u00e1ximo de projetos no hist\u00f3rico",
@@ -80,7 +81,7 @@
     "PADRAO_CODIGOS_DE_PROPOSTA": {
         "label": "Padr\u00e3o de c\u00f3digo de proposta (quando gerado automaticamente)",
         "desc": "Padr\u00e3o de c\u00f3digo de proposta (quando gerado automaticamente)",
-        "valor": "FRY-$a$i(4)",
+        "valor": "GNS-$a$i(4)",
         "tipo": "string[0,40]"
     }
 }
