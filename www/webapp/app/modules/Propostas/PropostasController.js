@@ -141,6 +141,23 @@
 				codigo:'',
 				versoes:[]
 			}
+
+			// Carregando configurações para gerar ou não código automaticamente
+			$scope.geraCodigosAutomaticamente = false;
+			GDoksFactory.getConfiguracoes().
+			success(function(response){
+				$scope.geraCodigosAutomaticamente = (response.config.GERAR_CODIGOS_DE_PROPOSTAS_AUTOMATICAMENTE.valor === true);
+			})
+			.error(function(error){
+				// Retornando Toast para o usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Falha ao carregar configurações: ' + error.msg)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+
 		} else {
 			// Carregando proposta da base de dados
 			GDoksFactory.getProposta(id_proposta)

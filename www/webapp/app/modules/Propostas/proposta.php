@@ -31,7 +31,7 @@
 		<div class="search">
 			<md-input-container>
 				<label>Código da Proposta</label>
-				<input type="text" ng-model="proposta.codigo" ng-disabled="proposta.id!=0" require focus>
+				<input type="text" placeholder="{{geraCodigosAutomaticamente ? 'Geração automática' : ''}}" ng-model="proposta.codigo" ng-disabled="proposta.id!=0 || geraCodigosAutomaticamente" require focus>
 			</md-input-container>
 			<md-input-container class="selectContainer">
 				<label>Cliente</label>

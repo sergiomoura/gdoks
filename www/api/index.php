@@ -6295,7 +6295,7 @@
 			});
 
 			$app->post('/propostas',function() use ($app,$db,$token,$config){
-				
+
 				// Lendo conteúdo do COOKIE user
 				$user = json_decode($_COOKIE['user']);
 
@@ -6356,7 +6356,41 @@
 
 				// Verificando se é uma nova proposta
 				if($id_proposta === '0'){
-					// Nova proposta: INSERINDO
+					
+					// Nova proposta
+
+					// Verificando se o código deve ser gerado automaticamente
+					if($config->GERAR_CODIGOS_DE_PROPOSTAS_AUTOMATICAMENTE->valor){
+						// Determinando o próximo código da proposta
+						$novo_codigo = $config->PADRAO_CODIGOS_DE_PROPOSTA->valor;
+						
+						// Substituindo ocorrências de código de ano
+						$novo_codigo = str_replace('$A',date('Y'),$novo_codigo);
+						$novo_codigo = str_replace('$a',date('y'),$novo_codigo);
+	
+						// Substituindo sequencial
+						preg_match('/\$i\([0-9]+\)/',$novo_codigo,$m);
+						if(sizeof($m)==1){
+							// Determinando sequencial no ano corrente
+							$sql = 'SELECT count(*) as n FROM (SELECT a.id, min(criacao) as criacao FROM gdoks_propostas a inner join gdoks_versoes_de_propostas b on a.id=b.id_proposta group by a.id) X WHERE YEAR(X.criacao)=year(now());';
+							$n = $db->query($sql)[0]['n'] + 1;
+	
+							// Determinando o tamanho da string sequencial definida no cod de substituição
+							preg_match('/[0-9]/',$m[0],$str_size);
+							$str_size = $str_size[0];
+	
+							// Determinando sequencial
+							$sequencial = str_pad($n,$str_size,'0',STR_PAD_LEFT);
+	
+							// Substituindo
+							$novo_codigo = preg_replace('/\$i\([0-9]+\)/',$sequencial,$novo_codigo);
+						}
+
+						$codigo = $novo_codigo;
+
+					}
+					
+					// Inserindo na base
 					$sql = 'INSERT INTO gdoks_propostas (id_cliente,codigo) VALUES (?,?)';
 					try {
 						$db->query($sql,'is',$id_cliente,$codigo);
@@ -6395,6 +6429,7 @@
 				$response->id_versao = $db->insert_id;
 				$response->serial = $proximoSerial;
 				$response->criacao = date('Y-m-d\TH:i:s');
+				$response->codigo = $codigo;
 				$response->flush();
 			});
 

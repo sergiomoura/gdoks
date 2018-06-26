@@ -5,8 +5,8 @@ BUGS:
 	☐ Gerar Código da proposta automaticamente: FRY-2018NNNN (SEGUNDOU PADRÃO CONFIGURÁVEL) ou manual
 		✔ Adicionar campo de padrão de código de proposta nas configurações @30m @started(18-06-26 05:43) @done(18-06-26 06:00) @lasted(17m12s)
 		✔ Adicionar campo de "gerar código da proposta automaticamente" @30m @started(18-06-26 05:43) @done(18-06-26 06:00) @lasted(17m16s)
-		☐ Fazer com que tela de proposta leia a informação da configuração e se comporte de acordo @2h
-	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento
+		✔ Fazer com que tela de proposta leia a informação da configuração e se comporte de acordo @2h @started(26-06-18 09:00) @done(26-06-18 10:57) @lasted(1h57m19s)
+	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento 
 	☐ Lidar com situação de especialista atualizar documento sem disponibilizar para validação
 	☐ Mostrar na tela do documento um aviso dizendo que o usuário não é especialista nem validador daquele documento. @1h
 
