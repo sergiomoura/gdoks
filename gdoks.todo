@@ -1,20 +1,14 @@
 BUGS:
-	✔ Tela de editar projeto não mostra o cliente @bug @done(31-05-18 07:05)
-	✘ Documentos do projeto não estão aparecendo @bug @cancelled(31-05-18 07:57)
-	✔ Quando insere um documento (via importação), o clicar no editar não leva até o editar @bug @done(31-05-18 10:19)
-	✔ Por na configuração do GDoks para númerar projeto automático @done(01-06-18 00:56)
-	✔ Fazer tela de edição de documento (independente da tela de edição do projeto) @done(07-06-18 03:51)
-	✔ No dashboard do projeto, na parte que lista os documentos, mostrar opções: Editar e excluir @done(07-06-18 05:35)
-	✔ No dashboard do projeto, na parte que lista os documentos, mostrar opções: Duplicar @done(10-06-18 03:59)
-	☐ Adicionar campo de busca de propostas para exibir somente aprovadas/somente reprovadas
-	☐ Adicionar campo Título a propostas
-	☐ Adicionar campo Valor a propostas
+	☐ Adicionar campo de busca de propostas para exibir somente aprovadas/somente reprovadas @2h
+	☐ Adicionar campo Título a propostas @1h
+	☐ Adicionar campo Valor a propostas @1h
 	☐ Gerar Código da proposta automaticamente: FRY-2018NNNN (SEGUNDOU PADRÃO CONFIGURÁVEL) ou manual
-	✔ Começar versão de proposta a partir de ZERO @done(02-06-18 05:31)
+		☐ Adicionar campo de padrão de código de proposta nas configurações @30m
+		☐ Adicionar campo de "gerar código da proposta automaticamente" @30m @started(18-06-26 05:43)
+		☐ Fazer com que tela de proposta leia a informação da configuração e se comporte de acordo @2h
 	☐ Lidar com situação de GRD enviada com documento errado. Consertar sem subir revisão do documento
 	☐ Lidar com situação de especialista atualizar documento sem disponibilizar para validação
-	☐ Mostrar na tela do documento um aviso dizendo que o usuário não é especialista nem validador daquele documento.
-	✔ BUGFIX: Gerando o código da GRD com base no último código @bug @done(06-06-18 15:45)
+	☐ Mostrar na tela do documento um aviso dizendo que o usuário não é especialista nem validador daquele documento. @1h
 
 A) Gerenciar Propostas:
 	☐ Gerenciar Propostas (Arquivo + Valor Total)
@@ -33,8 +27,6 @@ A) Gerenciar Propostas:
 	☐ Por informações de custos de HH na LD segundo modelo enviado por Anthony
 	☐ Controle de pendências por documento e vice-versa
 	☐ Pensar relatórios de pendências de documentos.
-	✔ Melhorar texto padrão do email de envio de GRD @done(18-05-19 06:43)
-	✔ Tornar o texto padrão do envio de GRD configurável @done(18-05-19 06:43)
 	☐ Logo depois que envia a grd a aba retorno GRD fica habilitada mas o botão de inserir observação não aparece. @bug
 	☐ Logo depois de salvar a observação, o título e o código do documento não aparecem. @bug
 	☐ Excluir revisão que seja última (não única) e não conste em nenhuma GRD
@@ -49,7 +41,6 @@ B) GDF:
 	☐ Totalmente integrado ao Gdoks
 	☐ Obedece ao perfil de segurança do usuário
 	
-
 C) Bloqueio de Telas:
 	☐ Usuários
 	☐ Documentos
@@ -113,6 +104,17 @@ G) Outros Bug a serem resolvidos:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+  ✔ Tela de editar projeto não mostra o cliente @bug @done(31-05-18 07:05) @project(BUGS)
+  ✔ Começar versão de proposta a partir de ZERO @done(02-06-18 05:31) @project(BUGS)
+  ✔ BUGFIX: Gerando o código da GRD com base no último código @bug @done(06-06-18 15:45) @project(BUGS)
+  ✘ Documentos do projeto não estão aparecendo @bug @cancelled(31-05-18 07:57) @project(BUGS)
+  ✔ Quando insere um documento (via importação), o clicar no editar não leva até o editar @bug @done(31-05-18 10:19) @project(BUGS)
+  ✔ Melhorar texto padrão do email de envio de GRD @done(18-05-19 06:43) @project(A) Gerenciar Propostas)
+  ✔ Tornar o texto padrão do envio de GRD configurável @done(18-05-19 06:43) @project(A) Gerenciar Propostas)
+  ✔ Por na configuração do GDoks para númerar projeto automático @done(01-06-18 00:56) @project(BUGS)
+  ✔ Fazer tela de edição de documento (independente da tela de edição do projeto) @done(07-06-18 03:51) @project(BUGS)
+  ✔ No dashboard do projeto, na parte que lista os documentos, mostrar opções: Editar e excluir @done(07-06-18 05:35) @project(BUGS)
+  ✔ No dashboard do projeto, na parte que lista os documentos, mostrar opções: Duplicar @done(10-06-18 03:59) @project(BUGS)
 ✔ Fazer enviar proposta @done(18-05-22 06:31)
 ✔ Criar projeto a partir de proposta aprovada @done(18-05-22 06:31)
 ✔ Buscar proposta (por código e por cliente - listar ordenada por data de criação) @done(18-05-22 06:31)
