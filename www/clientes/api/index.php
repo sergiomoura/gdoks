@@ -136,9 +136,6 @@
 				# : : : : : : : : : : : : : : : : : : : : : : : : : : :
 				$app->get('/grds/ultimas',function() use ($app,$db,$id_cliente){
 
-					// Definindo a quantidade de GRDs
-					$quantasGrds = 5;
-
 					try {
 
 						// Tentando executar consulta
@@ -158,8 +155,8 @@
 								         a.datahora_registro,
 								         a.datahora_enviada,
 								         b.nome
-								ORDER BY datahora_enviada DESC LIMIT 0,?';
-						$rs = $db->query($sql,'ii',$id_cliente,$quantasGrds);
+								ORDER BY datahora_enviada';
+						$rs = $db->query($sql,'i',$id_cliente);
 
 					} catch (Exception $e) {
 
