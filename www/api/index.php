@@ -6024,6 +6024,7 @@
 				$sql = "SELECT
 						  c.id,
 						  c.codigo,
+						  c.titulo,
 						  c.id_cliente,
 						  a.aprovacao,
 						  a.criacao,
@@ -6055,6 +6056,7 @@
 				// Levantando ultimas propostas
 				$sql = 'SELECT a.id,
 							   a.codigo,
+							   a.titulo,
 							   a.id_cliente,
 							   b.serial,
 						       b.criacao,
@@ -6080,7 +6082,7 @@
 			$app->get('/propostas/:id',function($id_proposta) use ($app,$db,$token,$config){
 
 				// Levantando ultimas propostas
-				$sql = 'SELECT id,codigo,id_cliente FROM gdoks_propostas WHERE id=?';
+				$sql = 'SELECT id,codigo,titulo,id_cliente FROM gdoks_propostas WHERE id=?';
 				$rs = array_map(function($a){return (object)$a;}, $db->query($sql,'i',$id_proposta));
 
 				// Verificando existência da proposta
