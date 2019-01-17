@@ -1623,4 +1623,11 @@
       #configuracoes_container .codSubstituicao div span {
         font-weight: bold; }
 
+#nova_proposta_container {
+  padding: 30px; }
+  #nova_proposta_container .selectContainer {
+    margin-bottom: 40px; }
+  #nova_proposta_container .controles {
+    margin-top: 30px; }
+
 /*# sourceMappingURL=WebGDoks.css.map */

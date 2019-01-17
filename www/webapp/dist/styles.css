@@ -305,7 +305,7 @@ h2 {
 
 #view .bt_limpo {
   border: none;
-  background-color: transparent !important;
+  background-color: rgba(0, 0, 0, 0) !important;
   text-decoration: underline;
   padding: 0 10px;
   color: #999;
@@ -2629,6 +2629,13 @@ textarea {
       padding-left: 10px; }
       #configuracoes_container .codSubstituicao div span {
         font-weight: bold; }
+
+#nova_proposta_container {
+  padding: 30px; }
+  #nova_proposta_container .selectContainer {
+    margin-bottom: 40px; }
+  #nova_proposta_container .controles {
+    margin-top: 30px; }
 
 
 /*# sourceMappingURL=styles.css.map */

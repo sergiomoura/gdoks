@@ -6355,6 +6355,7 @@
 				$codigo = $_POST['profiles'][0]['codigo'];
 				$id_cliente = $_POST['profiles'][0]['id_cliente'];
 				$id_proposta = $_POST['profiles'][0]['id_proposta'];
+				$titulo_proposta = $_POST['profiles'][0]['titulo_proposta'];
 				$proximoSerial = 0;
 
 				// Verificando se é uma nova proposta
@@ -6394,14 +6395,15 @@
 					}
 					
 					// Inserindo na base
-					$sql = 'INSERT INTO gdoks_propostas (id_cliente,codigo) VALUES (?,?)';
+					$sql = 'INSERT INTO gdoks_propostas (id_cliente,codigo,titulo) VALUES (?,?,?)';
+					
 					try {
-						$db->query($sql,'is',$id_cliente,$codigo);
+						$db->query($sql,'iss',$id_cliente,$codigo,$titulo_proposta);
 					} catch (Exception $e) {
 						// Não conseguiu inserir a nova proposta: Apagando arquivo
 						unlink($pastaPropostas.'/'.$nomeNoServidor);
 						http_response_code(401);
-						$response = new response(1,'Código da proposta já existe.');
+						$response = new response(1,'Código da proposta '.$codigo.' já existe');
 						$response->flush();
 						exit(1);
 					}

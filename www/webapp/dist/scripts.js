@@ -25694,6 +25694,13 @@ WebGDoks.config(
 			}
 		)
 		.when(
+			'/propostas/0',
+			{
+				controller: 'NovaPropostaController',
+				templateUrl: 'app/modules/Propostas/nova_proposta.php'
+			}
+		)
+		.when(
 			'/propostas/:id',
 			{
 				controller: 'PropostaController',
@@ -27167,13 +27174,14 @@ http://trix-editor.org/
 !function(){"use strict";angular.module("angularTrix",[]).directive("angularTrix",function(){return{restrict:"A",require:"ngModel",scope:{trixInitialize:"&",trixChange:"&",trixSelectionChange:"&",trixFocus:"&",trixBlur:"&",trixFileAccept:"&",trixAttachmentAdd:"&",trixAttachmentRemove:"&"},link:function(a,b,c,d){b.on("trix-initialize",function(){d.$modelValue&&b[0].editor.loadHTML(d.$modelValue)}),d.$render=function(){b[0].editor&&b[0].editor.loadHTML(d.$modelValue),b.on("trix-change",function(){d.$setViewValue(b.html())})};var e=function(d,e){b[0].addEventListener(d,function(f){"trix-file-accept"===d&&"true"===c.preventTrixFileAccept&&f.preventDefault(),a[e]({e:f,editor:b[0].editor})})};e("trix-initialize","trixInitialize"),e("trix-change","trixChange"),e("trix-selection-change","trixSelectionChange"),e("trix-focus","trixFocus"),e("trix-blur","trixBlur"),e("trix-file-accept","trixFileAccept"),e("trix-attachment-add","trixAttachmentAdd"),e("trix-attachment-remove","trixAttachmentRemove")}}})}();;angular.module('UA',[])
 .controller('UAController',function($scope){});
 ;(function(){
-
+	
 	// Definindo o módulo
 	var module = angular.module('Propostas',[]);
 
 	// Atribuindo controllers
 	module.controller('PropostasController', PropostasController);
 	module.controller('PropostaController',PropostaController);
+	module.controller('NovaPropostaController',NovaPropostaController);
 
 	// Definindo o controller
 	function PropostasController($scope,GDoksFactory,$mdToast,$location){
@@ -27735,6 +27743,111 @@ http://trix-editor.org/
 					// imprimindo erro no console
 					console.warn(error);
 				});
+			}
+		}
+	}
+
+	function NovaPropostaController($scope,GDoksFactory,Upload,$cookies,$routeParams,$location,$mdToast){
+		
+		// Definindo proposta vazia
+		$scope.proposta = {
+			id:0,
+			codigo:'',
+			cliente:null,
+			titulo:''
+		}
+
+		// Carregando clientes
+		GDoksFactory.getClientes()
+		.success(function(response){
+			$scope.clientes = response.clientes;
+		})
+		.error(function(error){
+			// Retornando Toast para usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao carregar clientes')
+				.position('bottom left')
+				.hideDelay(5000)
+			);			
+		});
+
+		// Carregando configurações para gerar ou não código automaticamente
+		$scope.geraCodigosAutomaticamente = false;
+		GDoksFactory.getConfiguracoes().
+		success(function(response){
+			$scope.geraCodigosAutomaticamente = (response.config.GERAR_CODIGOS_DE_PROPOSTAS_AUTOMATICAMENTE.valor === true);
+		})
+		.error(function(error){
+			// Retornando Toast para o usuário
+			$mdToast.show(
+				$mdToast.simple()
+				.textContent('Falha ao carregar configurações: ' + error.msg)
+				.position('bottom left')
+				.hideDelay(5000)
+			);
+		});
+
+		$scope.createVersaoDeProposta = function(){
+
+			// Verificando se files está definido e se seu tamanho é maior que zero.
+			if ($scope.proposta.arquivo) {
+
+				// salvando o id do cliente direto na proposta
+				$scope.proposta.id_cliente = $scope.proposta.cliente.id;
+
+				// mostrando barra de progresso de upload
+				$scope.mostrarProgressoUpload = true;
+				
+				// Criando pacote a enviar
+				var packToSend = [
+					{
+						file: $scope.proposta.arquivo,
+						codigo: $scope.proposta.codigo,
+						id_cliente: $scope.proposta.cliente.id,
+						id_proposta: $scope.proposta.id,
+						titulo_proposta: $scope.proposta.titulo
+					}
+				];
+
+				// Enviando pacote
+				Upload.upload(
+					{
+	                	url: API_ROOT+'/propostas',
+	                	data: {profiles: packToSend},
+	                	headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
+	            	}
+	            ).then(
+	            	function(response){
+	            		if(response.status == 200){
+
+	            			// Escondendo o carregando
+	            			$scope.mostrarProgressoUpload = false;
+
+	            			// Alinhando a url da página
+	            			$location.url('/propostas/' + response.data.id_proposta);
+
+	            		}
+	            	},
+	            	function(error){
+	            		// Imprimindo erro no console
+	            		console.warn(error);
+
+	            		// Retornando Toast para o usuário
+	            		$mdToast.show(
+	            			$mdToast.simple()
+	            			.textContent(error.data.msg)
+	            			.position('bottom left')
+	            			.hideDelay(5000)
+	            		);
+
+	            		// Esconde o carregando
+	            		$scope.mostrarProgressoUpload = false;
+	            	},
+	            	function (evt) {
+						$scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+					}
+	            )
 			}
 		}
 	}

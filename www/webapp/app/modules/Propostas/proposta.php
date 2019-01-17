@@ -39,6 +39,10 @@
 				  <md-option ng-value="c" ng-repeat="c in clientes">{{ c.nome }}</md-option>
 				</md-select>
 			</md-input-container>
+			<md-input-container>
+				<label>Título</label>
+				<input type="text" ng-model="proposta.titulo" md-maxlength="45" maxlength="45" require>
+			</md-input-container>
 			<md-button
 					class="md-raised md-primary"
 					ng-if="proposta.id==0"
@@ -77,8 +81,8 @@
     	<tbody>
     		<tr ng-repeat="v in proposta.versoes" ng-class="{aprovada:(v.aprovacao != null)}">
     			<td>{{v.serial}}</td>
-    			<td>{{v.criacao | date:'dd/MM/yyyy'}}<span>{{v.criacao | date:'à\'s\' hh:mm:ss'}}</span></td>
-    			<td>{{v.emissao | date:'dd/MM/yyyy'}}<span>{{v.emissao | date:'à\'s\' hh:mm:ss'}}</span></td>
+    			<td>{{v.criacao | date:'dd/MM/yyyy'}}<span>{{v.criacao | date:'à\'s\' HH:mm:ss'}}</span></td>
+    			<td>{{v.emissao | date:'dd/MM/yyyy'}}<span>{{v.emissao | date:'à\'s\' HH:mm:ss'}}</span></td>
     			<td>{{v.aprovacao | date:'dd/MM/yyyy'}}<span>{{v.aprovacao | date:'à\'s\' hh:mm:ss'}}</span></td>
     			<td>
     				<md-button ng-click="onDeleteVersaoClick($event,v.serial)" ng-if="$last && (v.emissao==null)" class="md-icon-button" ng-disabled="v.aprovacao != null" aria-label="Emitir versão para cliente">

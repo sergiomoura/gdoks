@@ -54,6 +54,13 @@ WebGDoks.config(
 			}
 		)
 		.when(
+			'/propostas/0',
+			{
+				controller: 'NovaPropostaController',
+				templateUrl: 'app/modules/Propostas/nova_proposta.php'
+			}
+		)
+		.when(
 			'/propostas/:id',
 			{
 				controller: 'PropostaController',
