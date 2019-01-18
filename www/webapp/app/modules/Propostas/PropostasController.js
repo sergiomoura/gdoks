@@ -570,6 +570,28 @@
 				});
 			}
 		}
+
+		$scope.onSalvarClick = function(){
+			
+			GDoksFactory.alterarProposta($scope.proposta)
+			.success(function(){
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Proposta alterada com sucesso')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			})
+			.error(function(error){
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent(error)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
+		}
 	}
 
 	function NovaPropostaController($scope,GDoksFactory,Upload,$cookies,$routeParams,$location,$mdToast){

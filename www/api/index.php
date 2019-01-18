@@ -6510,6 +6510,28 @@
 				$response = new response(0,'ok');
 				$response->flush();
 			});
+
+			$app->put('/propostas/:id_proposta', function($id_proposta) use ($app,$db,$token,$config) {
+
+				// Lendo a proposta do corpo da requisição
+				$proposta = json_decode($app->request->getBody());
+
+				// Salvando o título da proposta
+				$sql='UPDATE gdoks_propostas SET titulo=? WHERE id=?';
+				try {
+					$db->query($sql,'si',$proposta->titulo,$id_proposta);
+				} catch (Exception $e) {
+					http_response_code(401);
+					$response = new response(1,'Falha ao tentar alterar a proposta');
+					$response->flush();
+					exit(1);
+				}
+				
+				// Retornando resposta para o cliente
+				$response = new response(0,'ok');
+				$response->flush();
+				
+			});
 		// FIM DE ROTAS PARA PROPOSTAS
 	});
 

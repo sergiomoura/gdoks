@@ -26874,6 +26874,10 @@ function RootController($scope,$interval,$cookies,GDoksFactory,$mdSidenav,$mdMen
 				return $http.get(API_ROOT+'/propostas/q?'+parametros.join('&'),buildHeaders());
 			}
 			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			GDoksFactory.alterarProposta = function(proposta){
+				return $http.put(API_ROOT+'/propostas/'+proposta.id,proposta,buildHeaders());
+			}
+			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 			GDoksFactory.getPropostasDeCliente = function(id_cliente){
 				// Fazendo requisição de busca
 				return $http.get(API_ROOT+'/clientes/'+id_cliente+'/propostas?',buildHeaders());
@@ -27744,6 +27748,28 @@ http://trix-editor.org/
 					console.warn(error);
 				});
 			}
+		}
+
+		$scope.onSalvarClick = function(){
+			
+			GDoksFactory.alterarProposta($scope.proposta)
+			.success(function(){
+				// Retornando Toast para usuário
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent('Proposta alterada com sucesso')
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			})
+			.error(function(error){
+				$mdToast.show(
+					$mdToast.simple()
+					.textContent(error)
+					.position('bottom left')
+					.hideDelay(5000)
+				);
+			});
 		}
 	}
 

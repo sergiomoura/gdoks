@@ -44,14 +44,14 @@
 				<input type="text" ng-model="proposta.titulo" md-maxlength="45" maxlength="45" require>
 			</md-input-container>
 			<md-button
-					class="md-raised md-primary"
-					ng-if="proposta.id==0"
-					ngf-multiple="false"
-					ngf-select
-					ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
-					ngf-model-invalid="errorFiles"
-					ng-model="proposta.arquivo"
-					aria-label="Selecione arquivo">Selecione Arquivo (Máximo <?php echo(ini_get('upload_max_filesize').'B)'); ?></md-button>
+				ng-click="onSalvarClick()"
+				class="md-icon-button md-primary"
+				aria-label="Salvr Alteração">
+					<md-icon class="material-icons step">save</md-icon>
+					<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+						Salvar Alteração
+					</md-tooltip>
+			</md-button>
 					
 			<md-button ng-click="uploadVersaoDeProposta()" ng-disabled="proposta.cliente == null || proposta.arquivo == null" ng-if="proposta.id==0" class="md-raised md-primary" aria-label="Salvar proposta"><md-icon class="material-icons step">save</md-icon>Salvar</md-button>
 			<md-button ng-click="deleteProposta()" ng-if="proposta.id!=0 && proposta.versoes.length==0" class="md-raised md-accent" aria-label="Remover proposta"><md-icon class="material-icons step">delete</md-icon>Apagar proposta</md-button>
@@ -64,8 +64,13 @@
 			ngf-model-invalid="errorFiles"
 			ng-model="proposta.arquivo"
 			ng-disabled="proposta.id==0"
-			class="md-raised md-primary"
-			aria-label="Nova versão"><md-icon class="material-icons step">add</md-icon>Nova Versão</md-button>
+			class="md-mini md-fab md-primary"
+			aria-label="Nova versão">
+				<md-icon class="material-icons step">add</md-icon>
+				<md-tooltip md-delay="0" md-direction="bottom" md-autohide="true">
+					Adicionar nova versão a proposta
+				</md-tooltip>
+		</md-button>
 	</div>
 	<div ng-if="proposta.arquivo" class="arquivoSelecionado">Arquivo Selecionado: {{proposta.arquivo.name}} </div>
     <table ng-if="proposta.versoes.length > 0">

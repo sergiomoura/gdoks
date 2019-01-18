@@ -1,6 +1,6 @@
 BUGS:
 	☐ Adicionar campo de busca de propostas para exibir somente aprovadas/somente reprovadas @2h
-	☐ Alterar título de uma proposta
+	✔ Alterar título de uma proposta @done(18-01-19 15:22)
 	✔ Adicionar campo Título a propostas @1h @done(17-01-19 16:23)
 	☐ Adicionar campo Valor a propostas @1h
 	✔ Gerar Código da proposta automaticamente: FRY-2018NNNN (SEGUNDOU PADRÃO CONFIGURÁVEL) ou manual @done(26-06-18 11:13)
