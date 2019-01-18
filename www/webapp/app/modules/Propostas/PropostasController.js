@@ -675,6 +675,10 @@
 	            )
 			}
 		}
+
+		$scope.onCancelarClick = function(){
+			$location.url('propostas');
+		}
 	}
 
 })();

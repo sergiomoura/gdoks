@@ -27850,6 +27850,10 @@ http://trix-editor.org/
 	            )
 			}
 		}
+
+		$scope.onCancelarClick = function(){
+			$location.url('propostas');
+		}
 	}
 
 })();
