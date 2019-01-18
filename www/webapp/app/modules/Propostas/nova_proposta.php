@@ -13,6 +13,10 @@
         <label>Título</label>
         <input type="text" ng-model="proposta.titulo" md-maxlength="45" maxlength="45" require>
     </md-input-container>
+    <md-input-container>
+        <label>Valor</label>
+        <input type="number" step="0.01" ng-model="proposta.valor" require>
+    </md-input-container>
     <div layout="row" layout-align="space-between center">
         <md-button
                 class="md-raised md-primary"

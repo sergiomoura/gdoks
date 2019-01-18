@@ -27780,7 +27780,8 @@ http://trix-editor.org/
 			id:0,
 			codigo:'',
 			cliente:null,
-			titulo:''
+			titulo:'',
+			valor:undefined
 		}
 
 		// Carregando clientes
@@ -27832,7 +27833,8 @@ http://trix-editor.org/
 						codigo: $scope.proposta.codigo,
 						id_cliente: $scope.proposta.cliente.id,
 						id_proposta: $scope.proposta.id,
-						titulo_proposta: $scope.proposta.titulo
+						titulo_proposta: $scope.proposta.titulo,
+						valor_proposta:$scope.proposta.valor
 					}
 				];
 

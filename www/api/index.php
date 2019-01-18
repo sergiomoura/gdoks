@@ -6356,6 +6356,7 @@
 				$id_cliente = $_POST['profiles'][0]['id_cliente'];
 				$id_proposta = $_POST['profiles'][0]['id_proposta'];
 				$titulo_proposta = $_POST['profiles'][0]['titulo_proposta'];
+				$valor_proposta = 1*$_POST['profiles'][0]['valor_proposta'];
 				$proximoSerial = 0;
 
 				// Verificando se é uma nova proposta
@@ -6425,8 +6426,8 @@
 				}
 
 				// Salvando informações versao de proposta
-				$sql = 'INSERT INTO gdoks_versoes_de_propostas (serial,id_proposta,criacao,arquivo,nome_cliente,contentType,aprovada) VALUES (?,?,NOW(),?,?,?,0)';
-				$db->query($sql,'iisss',$proximoSerial, $id_proposta,$nomeNoServidor,$nomeNoCliente,$contentType);
+				$sql = 'INSERT INTO gdoks_versoes_de_propostas (serial,id_proposta,criacao,arquivo,nome_cliente,contentType,aprovada,valor) VALUES (?,?,NOW(),?,?,?,0,?)';
+				$db->query($sql,'iisssd',$proximoSerial, $id_proposta,$nomeNoServidor,$nomeNoCliente,$contentType,$valor_proposta);
 
 				// Retonando para o usuário
 				$response = new response(0,'ok');
