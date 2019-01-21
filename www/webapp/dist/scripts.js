@@ -27390,14 +27390,15 @@ http://trix-editor.org/
 						file: $scope.proposta.arquivo,
 						codigo: $scope.proposta.codigo,
 						id_cliente: $scope.proposta.cliente.id,
-						id_proposta: $scope.proposta.id
+						id_proposta: $scope.proposta.id,
+						valor_proposta: $scope.proposta.valor
 					}
 				];
 
 				// Enviando pacote
 				Upload.upload(
 					{
-	                	url: API_ROOT+'/propostas',
+	                	url: API_ROOT+'/propostas/'+$scope.proposta.id+'/versoes',
 	                	data: {profiles: packToSend},
 	                	headers: {'Authorization':$cookies.getObject('user').empresa + '-' + $cookies.getObject('user').token}
 	            	}
@@ -27408,22 +27409,26 @@ http://trix-editor.org/
 	            			// Escondendo o carregando
 	            			$scope.mostrarProgressoUpload = false;
 
-	            			// Alinhando a url da página caso seja uma nova proposta
-	            			if($scope.proposta.id == 0){
-	            				$location.url('/propostas/' + response.data.id_proposta);
-	            			}
-
-	            			// Atribuindo novos parâmetros para a proposta criada
-	            			$scope.proposta.id = response.data.id_proposta;
-
 	            			// Criando objeto "versao"
 	            			$scope.proposta.versoes.push({
 	            				aprovacao: null,
 	            				criacao:new Date(response.data.criacao),
 	            				emissao:null,
 	            				id: response.data.id_versao,
-	            				serial: response.data.serial
-	            			});
+								serial: response.data.serial,
+								valor: $scope.proposta.valor
+							});
+							
+							// Exibindo mensagem de sucesso para o usuário
+							$mdToast.show(
+								$mdToast.simple()
+								.textContent('Versão de proposta salva!')
+								.position('bottom left')
+								.hideDelay(5000)
+							);
+
+							// Zerando arquivo de proposta
+							$scope.proposta.arquivo = null;
 	            		}
 	            	},
 	            	function(error){

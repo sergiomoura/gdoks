@@ -2198,14 +2198,12 @@ textarea {
   top: -16px; }
 #proposta_container .arquivoSelecionado {
   color: rgba(0, 0, 0, 0.54);
-  text-align: center;
-  padding: 5px;
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
-  position: absolute;
-  width: 80%;
-  top: 70px;
-  left: 10%; }
+  padding: 40px 20px 10px 40px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, 0.03); }
+  #proposta_container .arquivoSelecionado button {
+    position: relative;
+    top: 8px; }
 #proposta_container table {
   border-collapse: collapse;
   width: 100%;
@@ -2226,6 +2224,8 @@ textarea {
     #proposta_container table td:nth-child(4) {
       text-align: center; }
     #proposta_container table td:nth-child(5) {
+      text-align: center; }
+    #proposta_container table td:nth-child(6) {
       text-align: right;
       width: 300px; }
   #proposta_container table thead {

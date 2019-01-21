@@ -59,7 +59,6 @@
 		<md-button
 			ngf-multiple="false"
 			ngf-select
-			ngf-change="uploadVersaoDeProposta()"
 			ngf-max-size="<?php echo(ini_get('upload_max_filesize').'B'); ?>"
 			ngf-model-invalid="errorFiles"
 			ng-model="proposta.arquivo"
@@ -72,11 +71,29 @@
 				</md-tooltip>
 		</md-button>
 	</div>
-	<div ng-if="proposta.arquivo" class="arquivoSelecionado">Arquivo Selecionado: {{proposta.arquivo.name}} </div>
+
+	<div ng-if="proposta.arquivo" class="arquivoSelecionado">
+		<div>Arquivo Selecionado: {{proposta.arquivo.name}} </div>
+		<div layout="row" layout-align="space-between start">
+			<md-input-container>
+				<label>Valor</label>
+				<input type="number" step="0.01" ng-model="proposta.valor" require>
+			</md-input-container>
+			<md-button
+				ng-click="uploadVersaoDeProposta()"
+				ng-disabled="!proposta.valor"
+				class="md-raised md-primary"
+				aria-label="Upload de Versão">
+					Enviar versão de proposta
+			</md-button>
+		</div>
+	</div>
+	
     <table ng-if="proposta.versoes.length > 0">
     	<thead>
     		<tr>
-    			<td>Versão</td>
+				<td>Versão</td>
+				<td>Valor</td>
     			<td>Criação</td>
     			<td>Emissão</td>
     			<td>Aprovação</td>
@@ -85,7 +102,8 @@
     	</thead>
     	<tbody>
     		<tr ng-repeat="v in proposta.versoes" ng-class="{aprovada:(v.aprovacao != null)}">
-    			<td>{{v.serial}}</td>
+				<td>{{v.serial}}</td>
+				<td>{{v.valor|currency}}</td>
     			<td>{{v.criacao | date:'dd/MM/yyyy'}}<span>{{v.criacao | date:'à\'s\' HH:mm:ss'}}</span></td>
     			<td>{{v.emissao | date:'dd/MM/yyyy'}}<span>{{v.emissao | date:'à\'s\' HH:mm:ss'}}</span></td>
     			<td>{{v.aprovacao | date:'dd/MM/yyyy'}}<span>{{v.aprovacao | date:'à\'s\' hh:mm:ss'}}</span></td>

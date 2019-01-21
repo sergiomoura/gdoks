@@ -6097,7 +6097,7 @@
 				}
 
 				// Levantando versões da proposta
-				$sql = 'SELECT id,serial,criacao,emissao,aprovacao,nome_cliente FROM gdoks_versoes_de_propostas WHERE id_proposta=?';
+				$sql = 'SELECT id,serial,criacao,emissao,aprovacao,nome_cliente,valor FROM gdoks_versoes_de_propostas WHERE id_proposta=?';
 				$proposta->versoes =  $db->query($sql,'i',$id_proposta);
 
 				// Preparando a resposta
@@ -6294,6 +6294,93 @@
 				// Enviando resposta para o cliente
 				$response = new response(0,'ok');
 				$response->emissao = date("Y-m-d\TH:i:s");
+				$response->flush();
+			});
+
+			$app->post('/propostas/:id_proposta/versoes',function() use ($app,$db,$token,$config){
+
+				// Lendo conteúdo do COOKIE user
+				$user = json_decode($_COOKIE['user']);
+
+				// Verificando se o json foi decodificado
+				if(JSON_ERROR_NONE != json_last_error()){
+					http_response_code(400);
+					$response = new response(1,'Bad Request');
+					$response->flush();
+					exit(1);
+				}
+
+				// Validando usuário
+				$sql = 'SELECT count(*) as n FROM gdoks_usuarios WHERE id=? AND token=? AND validade_do_token>NOW()';
+				$rs = $db->query($sql,'is',$user->id,$user->token);
+				if(sizeof($rs) == 0){
+					http_response_code(403);
+					$response = new response(1,'Acesso não autorizado');
+					$response->flush();
+					exit(1);
+				}
+
+				// Verificando se houve algum erro no upload
+				$erro_n = $_FILES['profiles']['error'][0]['file'];
+				if(UPLOAD_ERR_OK != $erro_n){
+					$erro_msg = erroDeUpload($erro_n);
+					http_response_code(401);
+					$response = new response(1,$erro_msg);
+					$response->flush();
+					exit(1);
+				}
+
+				// Definindo nome do arquivo no servidor
+				$nomeNoServidor = uniqid('ppsta_');
+				$nomeNoCliente = $_FILES['profiles']['name'][0]['file'];
+				$nomeTemporario = $_FILES['profiles']['tmp_name'][0]['file'];
+				$contentType = $_FILES['profiles']['type'][0]['file'];
+
+				// Criando pasta de propostas caso ela não exista
+				$pastaPropostas = CLIENT_DATA_PATH.'/'.$user->empresa.'/uploads/propostas';
+				if(!is_dir($pastaPropostas)){
+					mkdir($pastaPropostas);
+				}
+
+				// Salvando o arquivo na pasta de uploads
+				$ok = move_uploaded_file($nomeTemporario, $pastaPropostas.'/'.$nomeNoServidor);
+				if(!$ok){
+					http_response_code(401);
+					$response = new response(1,'Impossível salvar arquivo no servidor.');
+					$response->flush();
+					exit(1);
+				}
+
+				// Lendo dados do POST
+				$codigo = $_POST['profiles'][0]['codigo'];
+				$id_cliente = $_POST['profiles'][0]['id_cliente'];
+				$id_proposta = $_POST['profiles'][0]['id_proposta'];
+				$valor_proposta = 1*$_POST['profiles'][0]['valor_proposta'];
+
+				// Verificando se a proposta realmente existe
+				$sql = 'SELECT id FROM gdoks_propostas WHERE id=? AND codigo=?';
+				$rs = $db->query($sql,'is',$id_proposta,$codigo);
+				if(sizeof($rs)!=1){
+					http_response_code(401);
+					$response = new response(1,'Proposta a ser alterada não existe!');
+					$response->flush();
+					exit(1);
+				} else {
+					$sql = 'SELECT ifnull(max(serial),0)+1 as proximoSerial  FROM gdoks_versoes_de_propostas WHERE id_proposta=?';
+					$proximoSerial = $db->query($sql,'i',$id_proposta)[0]['proximoSerial'];
+				}
+
+				// Salvando informações versao de proposta
+				$sql = 'INSERT INTO gdoks_versoes_de_propostas (serial,id_proposta,criacao,arquivo,nome_cliente,contentType,aprovada,valor) VALUES (?,?,NOW(),?,?,?,0,?)';
+				$db->query($sql,'iisssd',$proximoSerial, $id_proposta,$nomeNoServidor,$nomeNoCliente,$contentType,$valor_proposta);
+
+				// Retonando para o usuário
+				$response = new response(0,'ok');
+				$response->id_proposta = $id_proposta;
+				$response->id_versao = $db->insert_id;
+				$response->serial = $proximoSerial;
+				$response->criacao = date('Y-m-d\TH:i:s');
+				$response->codigo = $codigo;
 				$response->flush();
 			});
 
