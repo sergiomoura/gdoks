@@ -6544,7 +6544,10 @@
 				// Determinando o nome do arquivo da versão
 				$sql = 'SELECT arquivo FROM gdoks_versoes_de_propostas WHERE serial=? and id_proposta=?';
 				$arquivo = $db->query($sql,'ii',$serial_versao,$id_proposta)[0]['arquivo'];
-				unlink(CLIENT_DATA_PATH.'/'.$empresa.'/uploads/propostas/'.$arquivo);
+				$caminho = CLIENT_DATA_PATH.'/'.$empresa.'/uploads/propostas/'.$arquivo;
+				if(file_exists($caminho)) {
+					unlink($caminho);
+				}
 
 				// Removendo versão
 				$sql = 'DELETE from gdoks_versoes_de_propostas WHERE serial=? and id_proposta=?';
