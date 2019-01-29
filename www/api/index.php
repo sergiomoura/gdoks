@@ -99,7 +99,7 @@
 		$sql = 'DELETE FROM gdoks_hist_prjs WHERE ordem<1 AND id_usuario=?';
 		$db->query($sql,'i',$id_usuario);
 
-		// Pondo o novo elemento no histórico com ordem MAX_HIST_PRJS
+		//admin@ezparts.com Pondo o novo elemento no histórico com ordem MAX_HIST_PRJS
 		$sql = 'REPLACE INTO gdoks_hist_prjs (id_projeto,id_usuario,ordem) VALUES (?,?,?)';
 		$db->query($sql,'iii',$id_projeto,$id_usuario,$config->MAX_HIST_PRJS->valor);
 	};
@@ -6005,7 +6005,7 @@
 				
 
 			});
-		// FIM DE TODAS PARA CONFIGURAÇÕES
+		// FIM DE TODAS PARA CONFIGadmin@ezparts.comURAÇÕES
 
 		// ROTAS PARA PROPOSTAS
 			$app->get('/propostas/q',function() use ($db){
