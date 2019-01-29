@@ -6022,28 +6022,36 @@
 				$restricao_ate = is_null($ate) ? "TRUE" : "(aprovacao<='$ate' or criacao<='$ate' or emissao<='$ate')";
 
 				// Montando sql
-				$sql = "SELECT
-						  c.id,
-						  c.codigo,
-						  c.titulo,
-						  c.id_cliente,
-						  a.aprovacao,
-						  a.criacao,
-						  a.emissao,
-						  a.serial
-						FROM gdoks_versoes_de_propostas a
+				$sql = "SELECT a.id,
+								a.codigo,
+								a.titulo,
+								a.id_cliente,
+								b.serial,
+								b.valor,
+								b.criacao,
+								b.emissao,
+								b.aprovacao
+						FROM gdoks_propostas a
 						INNER JOIN
-						  (SELECT id_proposta AS id_proposta,
-						          max(serial) AS serial
-						   FROM gdoks_versoes_de_propostas
-						   GROUP BY id_proposta) b ON a.id_proposta=b.id_proposta
-						AND a.serial=b.serial
-						INNER JOIN gdoks_propostas c ON a.id_proposta=c.id
+						(SELECT va.id_proposta,
+								ifnull(idap, idva) AS id_versao_principal
+							FROM
+							(SELECT id_proposta,
+									max(id) AS idva
+							FROM gdoks_versoes_de_propostas
+							GROUP BY id_proposta) va
+							LEFT JOIN
+							( SELECT id_proposta,
+									id AS idap
+							FROM gdoks_versoes_de_propostas
+							WHERE aprovacao IS NOT NULL ) ap ON va.id_proposta=ap.id_proposta) x ON a.id=x.id_proposta
+						INNER JOIN gdoks_versoes_de_propostas b ON b.id=x.id_versao_principal
 						WHERE
-						$restricao_cliente
-						AND $restricao_de
-						AND $restricao_ate
-						AND codigo like ? ORDER BY criacao desc";
+							$restricao_cliente
+							AND $restricao_de
+							AND $restricao_ate
+							AND codigo like ?
+						ORDER BY criacao desc";
 				$propostas = array_map(function($a){return (object)$a;}, $db->query($sql,'s',$codigo));
 
 				// Retornando resultados para o cliente
@@ -6056,20 +6064,29 @@
 
 				// Levantando ultimas propostas
 				$sql = 'SELECT a.id,
-							   a.codigo,
-							   a.titulo,
-							   a.id_cliente,
-							   b.serial,
-						       b.criacao,
-							   b.emissao,
-						       b.aprovacao	   
+								a.codigo,
+								a.titulo,
+								a.id_cliente,
+								b.serial,
+								b.criacao,
+								b.emissao,
+								b.valor,
+								b.aprovacao
 						FROM gdoks_propostas a
 						INNER JOIN
-						  (SELECT id_proposta,
-								  max(id) AS max_id
-						   FROM gdoks_versoes_de_propostas
-						   GROUP BY id_proposta) x ON a.id=x.id_proposta
-						INNER JOIN gdoks_versoes_de_propostas b ON b.id=x.max_id LIMIT 0,10';
+						(SELECT va.id_proposta,
+								ifnull(idap, idva) AS id_versao_principal
+							FROM
+							(SELECT id_proposta,
+									max(id) AS idva
+							FROM gdoks_versoes_de_propostas
+							GROUP BY id_proposta) va
+							LEFT JOIN
+							( SELECT id_proposta,
+									id AS idap
+							FROM gdoks_versoes_de_propostas
+							WHERE aprovacao IS NOT NULL ) ap ON va.id_proposta=ap.id_proposta) x ON a.id=x.id_proposta
+						INNER JOIN gdoks_versoes_de_propostas b ON b.id=x.id_versao_principal LIMIT 0,10';
 				$rs = array_map(function($a){return (object)$a;}, $db->query($sql));
 
 				// Preparando a resposta

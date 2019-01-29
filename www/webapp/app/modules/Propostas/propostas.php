@@ -36,6 +36,7 @@
 			<tr>
 				<td>Código/Título</td>
 				<td>Cliente</td>
+				<td>Valor</td>
 				<td>Criação</td>
 				<td>Emissão</td>
 				<td>Aprovação</td>
@@ -46,6 +47,7 @@
 			<tr ng-repeat="p in propostas" ng-click="goToProposta(p.id)">
 				<td>{{p.codigo}}<span>{{p.titulo}}</span> </td>
 				<td>{{p.cliente.nome}}</td>
+				<td>{{p.valor | currency }}</td>
 				<td>{{p.criacao|date:'dd/MM/yyyy'}}</td>
 				<td>{{p.emissao|date:'dd/MM/yyyy'}}</td>
 				<td>{{p.aprovacao|date:'dd/MM/yyyy'}}</td>
